@@ -7,6 +7,8 @@ interface Meld {
     isExposed(): boolean;
 }
 
+// TODO should pong and kong have info about who they ate from?
+
 export class Chow implements Meld {
     private tiles: SuitedTile[];
     exposed: boolean;
@@ -28,6 +30,29 @@ export class Chow implements Meld {
     }
 
     getTiles(): SuitedTile[] {
+        return this.tiles;
+    }
+
+    isExposed(): boolean {
+        return this.exposed;
+    }
+}
+
+export class Pair implements Meld {
+    private tiles: GameTile[];
+    exposed: boolean;
+
+    constructor(tiles: [GameTile, GameTile]) {
+        assertTilesNonNull(tiles);
+        assertTilesAreNotFlowerAndAreSameType(tiles);
+        assertTilesSameValue(tiles);
+
+        var copiedTiles = JSON.parse(JSON.stringify(tiles));
+        this.tiles = copiedTiles;
+        this.exposed = false;
+    }
+
+    getTiles(): GameTile[] {
         return this.tiles;
     }
 
@@ -93,8 +118,8 @@ function assertTilesNonNull(tiles: GameTile[]) {
 }
 
 function assertTilesAreNotFlowerAndAreSameType(tiles: GameTile[]) {
-    if (tiles.length < 3 || tiles.length > 4) {
-        throw new TypeError("Tiles in a meld must be of length 3 or 4.");
+    if (tiles.length < 2 || tiles.length > 4) {
+        throw new TypeError("Tiles in a meld must be of length 2, 3, or 4.");
     }
     var tileType: TileType = tiles[0].getType();
     tiles.forEach(function (tile: GameTile) {

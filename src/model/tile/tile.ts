@@ -47,16 +47,9 @@ export enum WindTileValue {
     NORTH = 'NORTH'
 }
 
-/* For certain winning hands (e.g. in HK scoring), a dragon is associated with a suit.*/
-export const dragonTileToTileType : ReadonlyMap<DragonTileValue, TileType> = new Map<DragonTileValue, TileType>([
-    [DragonTileValue.FAAT, TileType.BAMBOO],
-    [DragonTileValue.BAAK, TileType.CIRCLE],
-    [DragonTileValue.ZONG, TileType.CHARACTER],
-])
-
 type TileValue = SuitedTileValue | WindTileValue | GentlemenTileValue | SeasonTileValue | DragonTileValue;
 
- interface Tile {
+interface Tile {
     getType(): TileType;
     getValue(): TileValue;
 }
@@ -193,3 +186,11 @@ export type SuitedOrHonorTile = HonorTile | SuitedTile;
 export type SuitedOrHonorTileValue = HonorTileValue | SuitedTileValue;
 
 export type MahjongTile = SuitedOrHonorTile | FlowerTile;  
+
+// TODO move this into an HK Scoring evaluator. It doesn't belong here.
+/* For certain winning hands (e.g. in HK scoring), a dragon is associated with a suit.*/
+export const dragonTileToTileType : ReadonlyMap<DragonTileValue, TileType> = new Map<DragonTileValue, TileType>([
+    [DragonTileValue.FAAT, TileType.BAMBOO],
+    [DragonTileValue.BAAK, TileType.CIRCLE],
+    [DragonTileValue.ZONG, TileType.CHARACTER],
+])

@@ -1,24 +1,23 @@
 "use strict";
 
-import { SuitedTile, GameTile, TileType, GameTileValue } from "./tile.js";
+import { TileType, SuitedOrHonorTile, SuitedOrHonorTileValue } from "./tile.js";
 
 interface Meld {
-    getTiles(): GameTile[];
+    getTiles(): SuitedOrHonorTile[];
     isExposed(): boolean;
 }
 
 // TODO should pong and kong have info about who they ate from?
 
 export class Chow implements Meld {
-    private tiles: SuitedTile[];
+    private tiles: SuitedOrHonorTile[];
     exposed: boolean;
 
-    constructor(tiles: [SuitedTile, SuitedTile, SuitedTile], exposed?: boolean) {
-        assertTilesNonNull(tiles);
+    constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile], exposed?: boolean) {
         assertTilesAreNotFlowerAndAreSameType(tiles);
         
         var copiedTiles = JSON.parse(JSON.stringify(tiles));
-        copiedTiles.sort(function(tile1: SuitedTile, tile2: SuitedTile){return tile1.getValue().valueOf() - tile2.getValue().valueOf()})
+        copiedTiles.sort(function(tile1: SuitedOrHonorTile, tile2: SuitedOrHonorTile){return tile1.getValue().valueOf() - tile2.getValue().valueOf()})
         if (copiedTiles[0].getValue().valueOf() +1 !== copiedTiles[1].getValue().valueOf() || 
             copiedTiles[1].getValue().valueOf() +1 !== copiedTiles[2].getValue().valueOf()
         ) {
@@ -29,7 +28,7 @@ export class Chow implements Meld {
         this.exposed = (exposed ? exposed : false);
     }
 
-    getTiles(): SuitedTile[] {
+    getTiles(): SuitedOrHonorTile[] {
         return this.tiles;
     }
 
@@ -39,11 +38,10 @@ export class Chow implements Meld {
 }
 
 export class Pair implements Meld {
-    private tiles: GameTile[];
+    private tiles: SuitedOrHonorTile[];
     exposed: boolean;
 
-    constructor(tiles: [GameTile, GameTile]) {
-        assertTilesNonNull(tiles);
+    constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile]) {
         assertTilesAreNotFlowerAndAreSameType(tiles);
         assertTilesSameValue(tiles);
 
@@ -52,7 +50,7 @@ export class Pair implements Meld {
         this.exposed = false;
     }
 
-    getTiles(): GameTile[] {
+    getTiles(): SuitedOrHonorTile[] {
         return this.tiles;
     }
 
@@ -62,11 +60,10 @@ export class Pair implements Meld {
 }
 
 export class Pong implements Meld {
-    private tiles: GameTile[];
+    private tiles: SuitedOrHonorTile[];
     exposed: boolean;
 
-    constructor(tiles: [GameTile, GameTile, GameTile], exposed?: boolean) {
-        assertTilesNonNull(tiles);
+    constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile], exposed?: boolean) {
         assertTilesAreNotFlowerAndAreSameType(tiles);
         assertTilesSameValue(tiles);
 
@@ -75,7 +72,7 @@ export class Pong implements Meld {
         this.exposed = (exposed ? exposed : false);
     }
 
-    getTiles(): GameTile[] {
+    getTiles(): SuitedOrHonorTile[] {
         return this.tiles;
     }
 
@@ -85,11 +82,10 @@ export class Pong implements Meld {
 }
 
 export class Kong implements Meld {
-    private tiles: GameTile[];
+    private tiles: SuitedOrHonorTile[];
     exposed: boolean;
 
-    constructor(tiles: [GameTile, GameTile, GameTile, GameTile], exposed?: boolean) {
-        assertTilesNonNull(tiles);
+    constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile], exposed?: boolean) {
         assertTilesAreNotFlowerAndAreSameType(tiles);
         assertTilesSameValue(tiles);
 
@@ -98,7 +94,7 @@ export class Kong implements Meld {
         this.exposed = (exposed ? exposed : false);
     }
 
-    getTiles(): GameTile[] {
+    getTiles(): SuitedOrHonorTile[] {
         return this.tiles;
     }
 
@@ -108,34 +104,41 @@ export class Kong implements Meld {
 }
 
 /** Assertion functions for Meld constructors to use. */
-function assertTilesNonNull(tiles: GameTile[]) {
-    if (!tiles) {
+function assertTilesAreNotFlowerAndAreSameType(tiles: SuitedOrHonorTile[]) {
+    if (!tiles || !tiles[0]) {
         throw new TypeError("Tiles cannot be null.");
     }
-    tiles.forEach(function (tile: GameTile) {
+    tiles.forEach(function (tile: SuitedOrHonorTile) {
         if (!tile) throw new TypeError("Each tile must be defined and non-null."); 
     });
-}
-
-function assertTilesAreNotFlowerAndAreSameType(tiles: GameTile[]) {
     if (tiles.length < 2 || tiles.length > 4) {
         throw new TypeError("Tiles in a meld must be of length 2, 3, or 4.");
     }
-    var tileType: TileType = tiles[0].getType();
-    tiles.forEach(function (tile: GameTile) {
+    
+    const tileType: TileType = tiles[0].getType();
+    tiles.forEach(function (tile: SuitedOrHonorTile) {
         // tileType will be valid (i.e. a GameTile TileType) because the tiles are of type GameTile.
+        if (!tile) {
+            throw new TypeError("Tiles cannot be null");
+        }
         if (tile.getType() !== tileType) {
             throw new TypeError("Each tile in a meld must be of the same TileType."); 
         }
     });
 }
 
-function assertTilesSameValue(tiles: GameTile[]) {
-    if (tiles.length < 3 || tiles.length > 4) {
-        throw new TypeError("Tiles in a meld must be of length 3 or 4.");
+function assertTilesSameValue(tiles: SuitedOrHonorTile[]) {
+    if (!tiles || !tiles[0]) {
+        throw new TypeError("Tiles cannot be null.");
     }
-    var tileValue: GameTileValue = tiles[0].getValue();
-    tiles.forEach(function (tile: GameTile) {
+    if (tiles.length < 2 || tiles.length > 4) {
+        throw new TypeError("Tiles in a meld must be of length 2, 3, or 4.");
+    }
+    const tileValue: SuitedOrHonorTileValue = tiles[0].getValue();
+    tiles.forEach(function (tile: SuitedOrHonorTile) {
+        if (!tile) {
+            throw new TypeError("Tiles cannot be null");
+        }
         if (tile.getValue() !== tileValue) {
             throw new TypeError("Each tile in a Pong/Kong must have an equal TileValue.");
         }

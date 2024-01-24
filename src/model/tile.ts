@@ -1,5 +1,3 @@
-"use strict";
-
 export enum TileType {
     GENTLEMEN = 'GENTLEMEN',
     SEASON = 'SEASON',
@@ -58,7 +56,7 @@ export const dragonTileToTileType : ReadonlyMap<DragonTileValue, TileType> = new
 
 type TileValue = SuitedTileValue | WindTileValue | GentlemenTileValue | SeasonTileValue | DragonTileValue;
 
-export interface Tile {
+ interface Tile {
     getType(): TileType;
     getValue(): TileValue;
 }
@@ -190,6 +188,8 @@ export class CharacterTile implements Tile {
 
 export type SuitedTile = BambooTile | CircleTile | CharacterTile;
 
-export type GameTile = HonorTile | SuitedTile;
+export type SuitedOrHonorTile = HonorTile | SuitedTile;
 
-export type GameTileValue = HonorTileValue | SuitedTileValue;
+export type SuitedOrHonorTileValue = HonorTileValue | SuitedTileValue;
+
+export type MahjongTile = SuitedOrHonorTile | FlowerTile;  

@@ -1,6 +1,6 @@
 {
   "name": "mahjong-scoring",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Typescript Utilities to calculate a given hand's Mahjong score.",
   "main": "index.js",
   "scripts": {

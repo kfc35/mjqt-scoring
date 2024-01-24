@@ -1,11 +1,12 @@
 "use strict";
 
-import { Tile } from "./tile.js";
+import { MahjongTile } from "./tile.js";
 
 export class Hand {
-    tiles: Tile[];
+    tiles: MahjongTile[];
 
-    constructor(tiles: Tile[]) {
+    constructor(tiles: MahjongTile[]) {
+        // assert each tile is not null
         this.tiles = tiles!;
     }
 }

@@ -12,9 +12,7 @@ export class Pong implements Meld {
         exposed?: boolean) {
         assertTilesAreSameType(tiles, new Set(suitedAndHonorTileTypes));
         assertTilesSameValue(tiles);
-
-        var copiedTiles = JSON.parse(JSON.stringify(tiles));
-        this.tiles = copiedTiles;
+        this.tiles = [...tiles];
         this.exposed = (exposed ? exposed : false);
     }
 

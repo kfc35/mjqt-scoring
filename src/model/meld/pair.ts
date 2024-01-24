@@ -10,9 +10,7 @@ export class Pair implements Meld {
     constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile]) {
         assertTilesAreSameType(tiles, suitedAndHonorTileTypes);
         assertTilesSameValue(tiles);
-
-        var copiedTiles = JSON.parse(JSON.stringify(tiles));
-        this.tiles = copiedTiles;
+        this.tiles = tiles;
         this.exposed = false;
     }
 

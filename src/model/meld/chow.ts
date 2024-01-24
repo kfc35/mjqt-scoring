@@ -13,19 +13,19 @@ export class Chow implements Meld {
         exposed?: boolean) {
         assertTilesAreSameType(tiles, suitedTileTypes);
         
-        // Ascending order
-        var copiedTiles = JSON.parse(JSON.stringify(tiles));
-        copiedTiles.sort(function(tile1: SuitedTile, tile2: SuitedTile){
+        // Ascending order. 
+        const tilesShallowCopy : [SuitedTile, SuitedTile, SuitedTile] = [...tiles];
+        tilesShallowCopy.sort(function(tile1: SuitedTile, tile2: SuitedTile){
             return tile1.getValue().valueOf() - tile2.getValue().valueOf()
         });
 
-        if (copiedTiles[0].getValue().valueOf() +1 !== copiedTiles[1].getValue().valueOf() || 
-            copiedTiles[1].getValue().valueOf() +1 !== copiedTiles[2].getValue().valueOf()
+        if (tilesShallowCopy[0].getValue().valueOf() +1 !== tilesShallowCopy[1].getValue().valueOf() || 
+        tilesShallowCopy[1].getValue().valueOf() +1 !== tilesShallowCopy[2].getValue().valueOf()
         ) {
             throw new TypeError("Tiles in a Chow must be a consecutive run (e.g. 1,2,3 or 2,3,4 ... or 7,8,9).");
         }
 
-        this.tiles = copiedTiles;
+        this.tiles = tilesShallowCopy;
         this.exposed = (exposed ? exposed : false);
     }
 

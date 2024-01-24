@@ -17,7 +17,7 @@ export class FaanResult {
         this.awardFaan = awardFaan;
         this.faan = faan;
         this.baseFaan = baseFaan;
-        this.overrideEvaluators = (overrideEvaluators ? overrideEvaluators : new Set<FaanEvaluator>();
+        this.overrideEvaluators = (overrideEvaluators ? overrideEvaluators : new Set<FaanEvaluator>());
     }
 
     shouldAwardFaan(): boolean {

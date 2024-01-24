@@ -4,7 +4,7 @@ import { Hand } from "./hand.js";
 import { Meld } from "../meld/meld.js";
 import { MahjongTile, FlowerTile } from "../tile/tile.js";
 
-/** A WinningHand is a Hand that has been analyzed for a wind condition. */
+/** A WinningHand is a Hand that has been analyzed for a win condition. */
 export class WinningHand extends Hand {
     melds: Meld[];
     bonusTiles: FlowerTile[];
@@ -23,5 +23,4 @@ export class WinningHand extends Hand {
     }
 
     // several candidate hand objects? you try to see if hand can be converted into a candidate hand object.
-    
 }

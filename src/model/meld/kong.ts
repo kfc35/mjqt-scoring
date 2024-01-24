@@ -11,9 +11,7 @@ export class Kong implements Meld {
         SuitedOrHonorTile], exposed?: boolean) {
         assertTilesAreSameType(tiles, suitedAndHonorTileTypes);
         assertTilesSameValue(tiles);
-
-        var copiedTiles = JSON.parse(JSON.stringify(tiles));
-        this.tiles = copiedTiles;
+        this.tiles = tiles;
         this.exposed = (exposed ? exposed : false);
     }
 

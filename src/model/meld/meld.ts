@@ -1,5 +1,8 @@
 import { SuitedOrHonorTile } from "model/tile/tile.js";
 
+export const meldMinLength = 2;
+export const meldMaxLength = 4;
+
 export abstract class Meld {
     private _tiles: SuitedOrHonorTile[];
     private _exposed: boolean;

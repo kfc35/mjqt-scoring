@@ -70,7 +70,7 @@ export abstract class Tile {
             && this.value === otherTile.value;
     }
 
-    compare(otherTile : Tile) : number {
+    compareTo(otherTile : Tile) : number {
         if (this.getType() === otherTile.getType()) {
             if (this.value === otherTile.value) {
                 return 0;
@@ -159,6 +159,11 @@ export class CharacterTile extends SuitedTile {
 export type SuitedOrHonorTile = HonorTile | SuitedTile;
 
 export type SuitedOrHonorTileValue = HonorTileValue | SuitedTileValue;
+
+export const flowerTileTypes: ReadonlySet<TileType> = new Set([TileType.GENTLEMEN, TileType.SEASON]);
+export const suitedTileTypes: ReadonlySet<TileType> = new Set([TileType.BAMBOO, TileType.CIRCLE, TileType.CHARACTER]);
+export const suitedAndHonorTileTypes: ReadonlySet<TileType> = new Set([TileType.DRAGON, TileType.WIND, 
+    ...suitedTileTypes]);
 
 // TODO move this into an HK Scoring evaluator. It doesn't belong here.
 /* For certain winning hands (e.g. in HK scoring), a dragon is associated with a suit.*/

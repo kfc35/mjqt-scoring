@@ -14,7 +14,7 @@ export class Chow extends Meld {
         // Ascending order. Shallow copy is ok here since tiles are immutable.
         const tilesShallowCopy : [SuitedTile, SuitedTile, SuitedTile] = [...tiles];
         tilesShallowCopy.sort(function(tile1: SuitedTile, tile2: SuitedTile){
-            return tile1.compare(tile2);
+            return tile1.compareTo(tile2);
         });
         if (!tilesShallowCopy[0].isOneBefore(tilesShallowCopy[1])
             || !tilesShallowCopy[1].isOneBefore(tilesShallowCopy[2])) {

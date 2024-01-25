@@ -1,6 +1,6 @@
-import { SuitedOrHonorTile } from "model/tile/tile.js";
+import { SuitedOrHonorTile, suitedAndHonorTileTypes } from "model/tile/tile.js";
 import { Meld, MeldType } from "model/meld/meld.js";
-import { suitedAndHonorTileTypes, assertTilesHaveSameTypeAndValue } from "model/meld/meldUtils.js";
+import { assertTilesHaveSameTypeAndValue } from "model/meld/meldUtils.js";
 
 export class Pong extends Meld {
     private meldType: MeldType = MeldType.PONG;

@@ -4,14 +4,14 @@ import { suitedAndHonorTileTypes, assertTilesAreSameType, assertTilesSameValue }
 
 export class Kong implements Meld {
     private meldType: MeldType = MeldType.KONG;
-    private tiles: SuitedOrHonorTile[];
+    private tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile];
     exposed: boolean;
 
     constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile, 
         SuitedOrHonorTile], exposed?: boolean) {
         assertTilesAreSameType(tiles, suitedAndHonorTileTypes);
         assertTilesSameValue(tiles);
-        this.tiles = tiles;
+        this.tiles = [...tiles];
         this.exposed = (exposed ? exposed : false);
     }
 

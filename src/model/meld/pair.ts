@@ -4,13 +4,13 @@ import { suitedAndHonorTileTypes, assertTilesAreSameType, assertTilesSameValue }
 
 export class Pair implements Meld {
     private meldType: MeldType = MeldType.PAIR;
-    private tiles: SuitedOrHonorTile[];
+    private tiles: [SuitedOrHonorTile, SuitedOrHonorTile];
     exposed: boolean;
 
     constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile]) {
         assertTilesAreSameType(tiles, suitedAndHonorTileTypes);
         assertTilesSameValue(tiles);
-        this.tiles = tiles;
+        this.tiles = [...tiles];
         this.exposed = false;
     }
 

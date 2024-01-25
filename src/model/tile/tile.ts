@@ -49,133 +49,93 @@ export enum WindTileValue {
 
 type TileValue = SuitedTileValue | WindTileValue | GentlemenTileValue | SeasonTileValue | DragonTileValue;
 
-interface Tile {
-    getType(): TileType;
-    getValue(): TileValue;
+abstract class Tile {
+    private _value: TileValue;
+
+    constructor(value: TileValue) {
+        this._value = value!;
+    }
+
+    abstract getType(): TileType;
+
+    get value(): TileValue {
+        return this._value;
+    }
 }
 
-export class GentlemenTile implements Tile {
-    private tileType: TileType = TileType.GENTLEMEN;
-    private value: GentlemenTileValue;
-
+export class GentlemenTile extends Tile {
     constructor(value: GentlemenTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): GentlemenTileValue {
-        return this.value;
+    getType(): TileType.GENTLEMEN {
+        return TileType.GENTLEMEN;
     }
 }
 
-export class SeasonTile implements Tile {
-    private tileType: TileType = TileType.SEASON;
-    private value: SeasonTileValue;
-
+export class SeasonTile extends Tile {
     constructor(value: SeasonTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): SeasonTileValue {
-        return this.value;
+    getType(): TileType.SEASON {
+        return TileType.SEASON;
     }
 }
 
 export type FlowerTile = GentlemenTile | SeasonTile;
+export type FlowerTileValue = GentlemenTileValue | SeasonTileValue;
 
-export class DragonTile implements Tile {
-    private tileType: TileType = TileType.DRAGON;
-    private value: DragonTileValue;
-
+export class DragonTile extends Tile {
     constructor(value: DragonTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): DragonTileValue {
-        return this.value;
+    getType(): TileType.DRAGON {
+        return TileType.DRAGON;
     }
 }
 
-export class WindTile implements Tile {
-    private tileType: TileType = TileType.WIND;
-    private value: WindTileValue;
-
+export class WindTile extends Tile {
     constructor(value: WindTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): WindTileValue {
-        return this.value;
+    getType(): TileType.WIND {
+        return TileType.WIND;
     }
 }
 
 export type HonorTile = DragonTile | WindTile;
-
 export type HonorTileValue = DragonTileValue | WindTileValue;
 
-export class BambooTile implements Tile {
-    private tileType: TileType = TileType.BAMBOO;
-    private value: SuitedTileValue;
-
+export class BambooTile extends Tile {
     constructor(value: SuitedTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): SuitedTileValue {
-        return this.value;
+    getType(): TileType.BAMBOO {
+        return TileType.BAMBOO;
     }
 }
 
-export class CircleTile implements Tile {
-    private tileType: TileType = TileType.CIRCLE;
-    private value!: SuitedTileValue;
-
+export class CircleTile extends Tile {
     constructor(value: SuitedTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): SuitedTileValue {
-        return this.value;
+    getType(): TileType.CIRCLE {
+        return TileType.CIRCLE;
     }
 }
 
-export class CharacterTile implements Tile {
-    private tileType: TileType = TileType.CHARACTER;
-    private value: SuitedTileValue;
-
+export class CharacterTile extends Tile {
     constructor(value: SuitedTileValue) {
-        this.value = value!;
+        super(value);
     }
 
-    getType(): TileType {
-        return this.tileType;
-    }
-
-    getValue(): SuitedTileValue {
-        return this.value;
+    getType(): TileType.CHARACTER {
+        return TileType.CHARACTER;
     }
 }
 
@@ -185,7 +145,7 @@ export type SuitedOrHonorTile = HonorTile | SuitedTile;
 
 export type SuitedOrHonorTileValue = HonorTileValue | SuitedTileValue;
 
-export type MahjongTile = SuitedOrHonorTile | FlowerTile;  
+export type MahjongTile = SuitedOrHonorTile | FlowerTile;
 
 // TODO move this into an HK Scoring evaluator. It doesn't belong here.
 /* For certain winning hands (e.g. in HK scoring), a dragon is associated with a suit.*/

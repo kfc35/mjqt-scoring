@@ -1,8 +1,8 @@
 "use strict";
 
-import { Hand } from "./hand.js";
-import { Meld } from "../meld/meld.js";
-import { MahjongTile, FlowerTile } from "../tile/tile.js";
+import { Hand } from "model/hand/hand.js";
+import { Meld } from "model/meld/meld.js";
+import { MahjongTile, FlowerTile } from "model/tile/tile.js";
 
 /** A WinningHand is a Hand that has been analyzed for a win condition. */
 export class WinningHand extends Hand {

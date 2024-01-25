@@ -1,7 +1,9 @@
 import { TileType, SuitedOrHonorTile, SuitedOrHonorTileValue } from "../tile/tile.js";
 
-export const suitedAndHonorTileTypes: ReadonlySet<TileType> = new Set([TileType.DRAGON, TileType.WIND, TileType.BAMBOO, TileType.CIRCLE, TileType.CHARACTER]);
+
 export const suitedTileTypes: ReadonlySet<TileType> = new Set([TileType.BAMBOO, TileType.CIRCLE, TileType.CHARACTER]);
+export const suitedAndHonorTileTypes: ReadonlySet<TileType> = new Set([TileType.DRAGON, TileType.WIND, 
+    ...suitedTileTypes]);
 
 /** Assertion functions for Meld constructors to use. */
 export function assertTilesAreSameType(tiles: SuitedOrHonorTile[], includedTypes: ReadonlySet<TileType>) {
@@ -40,12 +42,12 @@ export function assertTilesSameValue(tiles: SuitedOrHonorTile[]) {
     if (tiles.length < 2 || tiles.length > 4) {
         throw new TypeError("Tiles in a meld must be of length 2, 3, or 4.");
     }
-    const tileValue: SuitedOrHonorTileValue = tiles[0].getValue();
+    const tileValue: SuitedOrHonorTileValue = tiles[0].value as SuitedOrHonorTileValue;
     tiles.forEach(function (tile: SuitedOrHonorTile) {
         if (!tile) {
             throw new TypeError("Tiles cannot be null");
         }
-        if (tile.getValue() !== tileValue) {
+        if (tile.value !== tileValue) {
             throw new TypeError("Each tile in a Pong/Kong must have an equal TileValue.");
         }
     });

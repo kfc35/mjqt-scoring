@@ -2,14 +2,14 @@
 
 import { Hand } from "model/hand/hand.js";
 import { Meld } from "model/meld/meld.js";
-import { MahjongTile, FlowerTile } from "model/tile/tile.js";
+import { Tile, FlowerTile } from "model/tile/tile.js";
 
 /** A WinningHand is a Hand that has been analyzed for a win condition. */
 export class WinningHand extends Hand {
     melds: Meld[];
     bonusTiles: FlowerTile[];
 
-    constructor(tiles: MahjongTile[], melds: Meld[], bonusTiles: FlowerTile[]) {
+    constructor(tiles: Tile[], melds: Meld[], bonusTiles: FlowerTile[]) {
         super(tiles);
         // assert each tile is not null
         // must have at least 14 non bonus tiles.

@@ -1,29 +1,17 @@
-import { SuitedOrHonorTile } from "../tile/tile.js";
-import { Meld, MeldType } from "./meld.js";
-import { suitedAndHonorTileTypes, assertTilesAreSameType, assertTilesSameValue } from "./meldUtils.js";
+import { SuitedOrHonorTile } from "model/tile/tile.js";
+import { Meld, MeldType } from "model/meld/meld.js";
+import { suitedAndHonorTileTypes, assertTilesHaveSameTypeAndValue } from "model/meld/meldUtils.js";
 
-export class Pong implements Meld {
+export class Pong extends Meld {
     private meldType: MeldType = MeldType.PONG;
-    private tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile];
-    exposed: boolean;
 
     constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile], 
         exposed?: boolean) {
-        assertTilesAreSameType(tiles, new Set(suitedAndHonorTileTypes));
-        assertTilesSameValue(tiles);
-        this.tiles = [...tiles];
-        this.exposed = (exposed ? exposed : false);
+        assertTilesHaveSameTypeAndValue(tiles, suitedAndHonorTileTypes);
+        super([...tiles], exposed);
     }
 
     getType(): MeldType {
         return this.meldType;
-    }
-
-    getTiles(): SuitedOrHonorTile[] {
-        return this.tiles;
-    }
-
-    isExposed(): boolean {
-        return this.exposed;
     }
 }

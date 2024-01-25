@@ -1,12 +1,12 @@
 "use strict";
 
-import { MahjongTile } from "../tile/tile.js";
+import { Tile } from "../tile/tile.js";
 
 /** A Hand is an unsorted collection of Mahjong Tiles. It may or may not be a winning hand. */
 export class Hand {
-    tiles: MahjongTile[];
+    tiles: Tile[];
 
-    constructor(tiles: MahjongTile[]) {
+    constructor(tiles: Tile[]) {
         // assert each tile is not null
         // must have at least 14 non bonus tiles.
         // each individual mahjong tile can only appear max 4 times.

@@ -1,8 +1,8 @@
 "use strict";
 
-import { SuitedTile } from "model/tile/tile.js";
+import { SuitedTile, suitedTileTypes } from "model/tile/tile.js";
 import { Meld, MeldType } from "model/meld/meld.js";
-import { suitedTileTypes, assertTilesHaveSameType } from "model/meld/meldUtils.js";
+import { assertTilesHaveSameType } from "model/meld/meldUtils.js";
 
 export class Chow extends Meld {
     private meldType: MeldType = MeldType.CHOW;

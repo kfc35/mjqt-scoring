@@ -1,11 +1,11 @@
 import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
-import { TileType, SuitedOrHonorTile } from "model/tile/tile.js";
+import { Tile, TileType } from "model/tile/tile.js";
 
 export const meldMinLength = 2;
 export const meldMaxLength = 4;
 
 /** Assertion functions that Meld constructors use. */
-export function assertTilesHaveSameType(tiles: SuitedOrHonorTile[], allowedTypes: ReadonlySet<TileType>) {
+export function assertTilesHaveSameType(tiles: Tile[], allowedTypes: ReadonlySet<TileType>) {
     assertTilesNotNullAndCorrectLength(tiles, meldMinLength, meldMaxLength);
     if (!tiles.map((tile) => tile.getType())
             .every((tileType) => allowedTypes.has(tileType) && tileType === tiles[0]!.getType())) {
@@ -14,7 +14,7 @@ export function assertTilesHaveSameType(tiles: SuitedOrHonorTile[], allowedTypes
     }
 }
 
-export function assertTilesHaveSameTypeAndValue(tiles: SuitedOrHonorTile[], allowedTypes: ReadonlySet<TileType>) {
+export function assertTilesHaveSameTypeAndValue(tiles: Tile[], allowedTypes: ReadonlySet<TileType>) {
     assertTilesNotNullAndCorrectLength(tiles, meldMinLength, meldMaxLength);
     if (!tiles.every((tile) => allowedTypes.has(tile.getType()) && tile.value === tiles[0]!.value)) {
         throw new TypeError("Each tile in a meld must be of the same TileType " + 

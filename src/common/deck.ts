@@ -1,14 +1,17 @@
-import { GentlemenTile, GentlemenTileValue, 
-    SeasonTile, SeasonTileValue, 
-    DragonTile, DragonTileValue, 
-    WindTileValue, WindTile, 
-    BambooTile, CircleTile, CharacterTile, SuitedTileValue } from "model/tile/tile.js";
+import GentlemanTile from "model/tile/group/gentlemanTile";
+import SeasonTile from "model/tile/group/seasonTile";
+import DragonTile from "model/tile/group/dragonTile";
+import WindTile from "model/tile/group/windTile";
+import BambooTile from "model/tile/group/bambooTile";
+import CharacterTile from "model/tile/group/characterTile";
+import CircleTile from "model/tile/group/circleTile";
+import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue } from "model/tile/tileValue";
 
 export const 
-    PLUM_GENTLEMAN = new GentlemenTile(GentlemenTileValue.PLUM),
-    ORCHID_GENTLEMAN = new GentlemenTile(GentlemenTileValue.ORCHID),
-    BAMBOO_GENTLEMAN = new GentlemenTile(GentlemenTileValue.BAMBOO),
-    CHRYSANTHEMUM_GENTLEMAN = new GentlemenTile(GentlemenTileValue.CHRYSANTHEMUM),
+    PLUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.PLUM),
+    ORCHID_GENTLEMAN = new GentlemanTile(GentlemanTileValue.ORCHID),
+    BAMBOO_GENTLEMAN = new GentlemanTile(GentlemanTileValue.BAMBOO),
+    CHRYSANTHEMUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.CHRYSANTHEMUM),
     SPRING_SEASON = new SeasonTile(SeasonTileValue.SPRING),
     SUMMER_SEASON = new SeasonTile(SeasonTileValue.SUMMER),
     AUTUMN_SEASON = new SeasonTile(SeasonTileValue.AUTUMN),

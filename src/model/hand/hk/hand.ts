@@ -1,7 +1,10 @@
 "use strict";
 
 import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
-import { DragonTileValue, FlowerTile, GentlemenTileValue, SeasonTileValue, SuitedOrHonorTile, SuitedOrHonorTileValue, SuitedTileValue, Tile, TileType, TileValue, WindTileValue, flowerTileTypes } from "model/tile/tile";
+import { TileGroup } from "model/tile/tileGroup";
+import { type TileValue } from "model/tile/tileValue";
+import { FlowerTile, flowerTileGroups, HongKongTile } from "model/tile/hk/hongKongTile";
+import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { WinningHand } from "model/hand/hk/winningHand";
 
 export const handMinLength = 14;
@@ -16,15 +19,14 @@ export const maxUniqueTilePerHand = 4;
  * It represents an instance when it is the player's turn (i.e. there are a minimum of 14 tiles instead of 13.)
  * It may or may not represent a winning hand. */
 export class Hand {
-    private _sortedTiles: Tile[];
-    private _tileToQuantity: ReadonlyMap<TileType, Map<TileValue, number>>;
+    private _tileToQuantity: ReadonlyMap<TileGroup, Map<TileValue, number>>;
     private _winningHands: WinningHand[];
 
-    constructor(unsortedTiles: Tile[]) {
+    constructor(unsortedTiles: HongKongTile[]) {
         assertTilesNotNullAndCorrectLength(unsortedTiles, handMinLength, handMaxLength);
         const sortedCopy = [...unsortedTiles].sort((tile1, tile2) => tile1.compareTo(tile2));
 
-        const flowerTiles : FlowerTile[] = sortedCopy.filter(tile => flowerTileTypes.has(tile.getType())) as FlowerTile[];
+        const flowerTiles : FlowerTile[] = sortedCopy.filter(tile => flowerTileGroups.has(tile.getGroup())) as FlowerTile[];
         if (flowerTiles.length > handMaxNumFlowers) {
             throw new TypeError("A Hand can only have max " + handMaxNumFlowers + " number of flower tiles.");
         }
@@ -32,11 +34,12 @@ export class Hand {
             index + 1 > flowerTiles.length ? hasDup : hasDup || tile.equals(flowerTiles[index+1]!), false)) {
             throw new TypeError("A Hand cannot have duplicate flower tiles.");
         }
-        const nonFlowerTiles : SuitedOrHonorTile[] = sortedCopy.filter(tile => !flowerTileTypes.has(tile.getType())) as SuitedOrHonorTile[];
+        const nonFlowerTiles : SuitedOrHonorTile[] = sortedCopy.filter(tile => !flowerTileTypes.has(tile.getGroup())) as SuitedOrHonorTile[];
         if (nonFlowerTiles.length < handMinLength) {
             throw new TypeError("A Hand must have at least " + handMinLength + " non flower tiles.");
         }
 
+        // TODO this should be a util and connected with what types are possible for hk hands.
         const tileToQuantity : Map<TileType, Map<TileValue, number>>= new Map([
             [TileType.BAMBOO, new Map<SuitedTileValue, number>()],
             [TileType.CIRCLE, new Map<SuitedTileValue, number>()],
@@ -44,10 +47,10 @@ export class Hand {
         ]);
         tileToQuantity.set(TileType.DRAGON, new Map<DragonTileValue, number>());
         tileToQuantity.set(TileType.WIND, new Map<WindTileValue, number>());
-        tileToQuantity.set(TileType.GENTLEMEN, new Map<GentlemenTileValue, number>());
+        tileToQuantity.set(TileType.GENTLEMAN, new Map<GentlemanTileValue, number>());
         tileToQuantity.set(TileType.SEASON, new Map<SeasonTileValue, number>());
         sortedCopy.forEach(tile => {
-            const quantityMap: Map<TileValue, number> = tileToQuantity.get(tile.getType())!;
+            const quantityMap: Map<TileValue, number> = tileToQuantity.get(tile.getGroup())!;
             quantityMap.set(tile.value as TileValue, 
                 !quantityMap.get(tile.value as TileValue) ? 1 : quantityMap.get(tile.value as SuitedOrHonorTileValue)! + 1);
         });
@@ -67,13 +70,8 @@ export class Hand {
         // if there is a 4 of a tile, it could be a kong OR a pong and a chi
         // it's possible for 3 consecutive pongs to also be 3 identical chi
         // need to also check 7 pairs, any bespoke hands.
-        this._sortedTiles = sortedCopy;
         this._tileToQuantity = tileToQuantity;
         this._winningHands = [];
-    }
-
-    get sortedTiles() {
-        return this._sortedTiles;
     }
 
     get tileToQuantity() {
@@ -85,7 +83,6 @@ export class Hand {
     }
 
     // returning "this" allows for chaining multiple analyzers.
-    // an analyzer, upon 
     analyzeHandForWinCondition(analyzer: (hand: Hand) => WinningHand | undefined) : this {
         const winningHand = analyzer(this);
         if (winningHand) {

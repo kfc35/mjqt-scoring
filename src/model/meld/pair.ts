@@ -1,16 +1,15 @@
-import { SuitedOrHonorTile, suitedAndHonorTileTypes } from "model/tile/tile.js";
-import { Meld, MeldType } from "model/meld/meld.js";
+import { type SuitedOrHonorTile, suitedOrHonorTileGroups } from "model/tile/group/suitedOrHonorTile";
+import Meld  from "model/meld/meld.js";
+import { MeldType } from "model/meld/meldType";
 import { assertTilesHaveSameTypeAndValue } from "model/meld/meldUtils.js";
 
-export class Pair extends Meld {
-    private meldType: MeldType = MeldType.PAIR;
-
+export default class Pair extends Meld {
     constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile]) {
-        assertTilesHaveSameTypeAndValue(tiles, suitedAndHonorTileTypes);
+        assertTilesHaveSameTypeAndValue(tiles, suitedOrHonorTileGroups);
         super([...tiles], false);
     }
 
-    getType(): MeldType {
-        return this.meldType;
+    getType(): MeldType.PAIR {
+        return MeldType.PAIR
     }
 }

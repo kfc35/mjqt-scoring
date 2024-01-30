@@ -1,15 +1,15 @@
-"use strict";
-
-import { SuitedTile, suitedTileTypes } from "model/tile/tile.js";
-import { Meld, MeldType } from "model/meld/meld.js";
+import SuitedTile from "model/tile/group/suitedTile";
+import Meld  from "model/meld/meld.js";
+import { MeldType } from "model/meld/meldType";
+import { suitedTileGroups } from "model/tile/group/suitedTile";
 import { assertTilesHaveSameType } from "model/meld/meldUtils.js";
 
-export class Chow extends Meld {
-    private meldType: MeldType = MeldType.CHOW;
+export default class Chow extends Meld {
+    declare protected _tiles: SuitedTile[];
 
     constructor(tiles: [SuitedTile, SuitedTile, SuitedTile], 
         exposed?: boolean) {
-        assertTilesHaveSameType(tiles, suitedTileTypes);
+        assertTilesHaveSameType(tiles, suitedTileGroups);
         
         // Ascending order. Shallow copy is ok here since tiles are immutable.
         const tilesShallowCopy : [SuitedTile, SuitedTile, SuitedTile] = [...tiles];
@@ -24,7 +24,7 @@ export class Chow extends Meld {
         super(tilesShallowCopy, exposed);
     }
 
-    getType(): MeldType {
-        return this.meldType;
+    getType(): MeldType.CHOW {
+        return MeldType.CHOW;
     }
 }

@@ -1,4 +1,4 @@
-import { Hand } from "../../model/hand/hand.js";
+import { Hand } from "../../model/hand/hk/hand.js";
 
 export interface FaanEvaluator {
     getFaan(): number;

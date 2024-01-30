@@ -1,7 +1,8 @@
-import { SuitedOrHonorTile } from "model/tile/tile.js";
+import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { MeldType } from "model/meld/meldType";
 
-export abstract class Meld {
-    private _tiles: SuitedOrHonorTile[];
+export default abstract class Meld {
+    protected _tiles: SuitedOrHonorTile[];
     private _exposed: boolean;
 
     constructor(tiles: SuitedOrHonorTile[], exposed?: boolean) {
@@ -11,18 +12,11 @@ export abstract class Meld {
 
     abstract getType(): MeldType;
 
-    get tiles(): SuitedOrHonorTile[] {
+    get tiles(): typeof this._tiles {
         return this._tiles;
     }
 
     get exposed(): boolean {
         return this._exposed;
     }
-}
-
-export enum MeldType {
-    PAIR = 'PAIR',
-    CHOW = 'CHOW',
-    PONG = 'PONG',
-    KONG = 'KONG'
 }

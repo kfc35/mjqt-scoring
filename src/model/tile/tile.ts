@@ -1,34 +1,42 @@
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
 
-export abstract class Tile {
+export class Tile {
+    protected _group: TileGroup;
     protected _value: TileValue;
 
-    constructor(value: TileValue) {
-        if (!value) {
-            throw new TypeError("value cannot be null.")
+    constructor(group: TileGroup, value: TileValue) {
+        if (!group || !value) {
+            throw new TypeError("group and value cannot be null.")
         }
+        this._group = group;
         this._value = value;
     }
 
-    abstract getGroup(): TileGroup;
+    get group(): TileGroup {
+        return this._group;
+    }
 
-    get value(): TileValue {
+    get value(): typeof this._value {
         return this._value;
     }
 
     equals(otherTile : Tile) : boolean {
-        return this.getGroup() === otherTile.getGroup() 
-            && this.value === otherTile.value;
+        return this._group === otherTile.group 
+            && this._value === otherTile.value;
     }
 
     compareTo(otherTile : Tile) : number {
-        if (this.getGroup() === otherTile.getGroup()) {
-            if (this.value === otherTile.value) {
+        if (this._group === otherTile.group) {
+            if (this._value === otherTile.value) {
                 return 0;
             }
-            return this.value < otherTile.value ? -1 : +1
+            return this._value < otherTile.value ? -1 : +1
         }
-        return this.getGroup() < otherTile.getGroup() ? -1 : +1
+        return this._group < otherTile.group ? -1 : +1
+    }
+
+    copy(): Tile {
+        return new Tile(this._group, this._value);
     }
 }

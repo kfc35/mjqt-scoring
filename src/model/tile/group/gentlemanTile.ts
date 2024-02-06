@@ -6,10 +6,10 @@ export default class GentlemanTile extends Tile {
     declare protected _value: GentlemanTileValue;
 
     constructor(value: GentlemanTileValue) {
-        super(value);
+        super(TileGroup.GENTLEMAN, value);
     }
-
-    getGroup(): TileGroup.GENTLEMAN {
-        return TileGroup.GENTLEMAN;
+    
+    override copy(): GentlemanTile {
+        return new GentlemanTile(this._value);
     }
 }

@@ -6,10 +6,10 @@ export default class WindTile extends Tile {
     declare protected _value: WindTileValue;
     
     constructor(value: WindTileValue) {
-        super(value);
+        super(TileGroup.WIND, value);
     }
 
-    getGroup(): TileGroup.WIND {
-        return TileGroup.WIND;
+    override copy(): WindTile {
+        return new WindTile(this._value);
     }
 }

@@ -5,6 +5,7 @@ import { suitedTileGroups } from "model/tile/group/suitedTile";
 import { assertTilesHaveSameType } from "model/meld/meldUtils.js";
 
 export default class Chow extends Meld {
+    // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"
     declare protected _tiles: SuitedTile[];
 
     constructor(tiles: [SuitedTile, SuitedTile, SuitedTile], 

@@ -6,10 +6,14 @@ export default class SeasonTile extends Tile {
     declare protected _value: SeasonTileValue;
 
     constructor(value: SeasonTileValue) {
-        super(value);
+        super(TileGroup.SEASON, value);
     }
 
     getGroup(): TileGroup.SEASON {
         return TileGroup.SEASON;
+    }
+
+    override copy(): SeasonTile {
+        return new SeasonTile(this._value);
     }
 }

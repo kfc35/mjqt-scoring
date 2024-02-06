@@ -14,6 +14,8 @@ export const dragonTileToTileGroup : ReadonlyMap<DragonTileValue, TileGroup> = n
     [DragonTileValue.BAAK, TileGroup.CIRCLE],
     [DragonTileValue.ZONG, TileGroup.CHARACTER],
 ])
+export const hongKongTileGroups : ReadonlySet<TileGroup> = new Set([TileGroup.GENTLEMAN, TileGroup.SEASON, 
+    TileGroup.DRAGON, TileGroup.WIND, TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE]);
 
 export type HongKongTile = FlowerTile | SuitedOrHonorTile;
 export type HongKongTileValue = FlowerTileValue | SuitedOrHonorTileValue;

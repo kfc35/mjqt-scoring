@@ -6,10 +6,10 @@ export default class DragonTile extends Tile {
     declare protected _value: DragonTileValue;
 
     constructor(value: DragonTileValue) {
-        super(value);
+        super(TileGroup.DRAGON, value);
     }
 
-    getGroup(): TileGroup.DRAGON {
-        return TileGroup.DRAGON;
+    override copy(): DragonTile {
+        return new DragonTile(this._value);
     }
 }

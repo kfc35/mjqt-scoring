@@ -2,47 +2,66 @@ import { Hand } from "model/hand/hk/hand";
 import { WinningHand } from "model/hand/hk/WinningHand";
 import { FlowerTile } from "model/tile/hk/hongKongTile";
 import { Tile } from "model/tile/tile";
-import { TileGroup } from "model/tile/tileGroup";
-import { DragonTileValue } from "model/tile/tileValue";
+import { dragonTileValues, TileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
-import DragonTile from "model/tile/group/dragonTile";
-import { honorTileGroups } from "model/tile/group/honorTile";
+import { HonorTile } from "model/tile/group/honorTile";
+import { TileGroup } from "model/tile/tileGroup";
+
 
 export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
     const flowerTiles: FlowerTile[] = hand.flowerTiles;
 
-    // First check for bespoke hands.
+    // TODO: First check for bespoke hands.
 
     const melds: Meld[] = [];
+    //const dragonTileQuantities = hand.tileToQuantity.get(TileGroup.DRAGON);
+   getHonorMelds(hand, TileGroup.DRAGON, dragonTileValues);
+    /*if (dragonTileQuantities) {
+        for (const tileValue of getEnumKeys(DragonTileValue).map(key => DragonTileValue[key].valueOf())) {
+            const meld: Meld | undefined = getHonorMeld(dragonTileQuantities, TileGroup.DRAGON, tileValue);
+            if (meld) {
+                melds.push(meld);
+            } 
+        }
+    }*/
+};
 
-    for (const tileGroup of honorTileGroups) {
-        const tileGroupQuantities = hand.tileToQuantity.get(tileGroup);
-        if (tileGroupQuantities) {
-            for (const meow of Object.keys(DragonTileValue)) {
-
-            }
-            //for (tileValues in TileValues for TileGroup.)
-            const quantity = tileGroupQuantities.get(DragonTileValue.BAAK);
-            if (!quantity) {
-                // no-op
-            } else if (quantity === 1) {
-                return [] as WinningHand[];
-            } else if (quantity === 2) {
-                melds.push(new Pair(new Tile(tileGroup, DragonTileValue.BAAK) as DragonTile));
-            } else if (quantity === 3) {
-                melds.push(new Pong(new DragonTile(DragonTileValue.BAAK)));
-            } else if (quantity === 4) {
-                melds.push(new Kong(new DragonTile(DragonTileValue.BAAK)));
-            } else {
-                throw new Error("Hand is malformed. Found quantity " + quantity);
-            }
+function getHonorMelds(hand: Hand, tileGroup: TileGroup, tileValues: TileValue[]) : Meld[] | undefined {
+    const melds : Meld[] = [];
+    for (const tileValue of tileValues) {
+        const meld: Meld | undefined = getHonorMeld(hand.tileToQuantity.get(tileGroup), tileGroup, tileValue);
+        if (meld) {
+            melds.push(meld);
         }
     }
+    return melds;
+}
 
-};
+function getHonorMeld(tileGroupQuantities: Map<string | number, number> | undefined, tileGroup: TileGroup, tileValue: TileValue) : Meld | undefined {
+    if (!tileGroupQuantities) {
+        return undefined;
+    }
+    const quantity = tileGroupQuantities.get(tileValue.valueOf());
+    if (!quantity) {
+        // no-op
+        return undefined;
+    } else if (quantity === 1) {
+        // not possible in a winning hand.
+        // return undefined;?
+        throw new Error(`Hand has no winning hand. Found only one honor tile for ${tileGroup} ${tileValue}`);
+    } else if (quantity === 2) {
+        return new Pair(new Tile(tileGroup, tileValue) as HonorTile);
+    } else if (quantity === 3) {
+        return new Pong(new Tile(tileGroup, tileValue) as HonorTile);
+    } else if (quantity === 4) {
+        return new Kong(new Tile(tileGroup, tileValue) as HonorTile);
+    } else {
+        throw new Error("Hand is malformed. Found quantity greater than 4: " + quantity);
+    }
+}
 
 // algorithm for processing a hand into melds:
 // check for all pairs - seven tiles with quantity 2 if not, you can assume there is only one pair in the hand.

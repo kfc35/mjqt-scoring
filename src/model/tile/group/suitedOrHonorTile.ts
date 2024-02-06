@@ -6,5 +6,5 @@ import { TileGroup } from "model/tile/tileGroup";
 
 export type SuitedOrHonorTile = HonorTile | SuitedTile;
 export type SuitedOrHonorTileValue = HonorTileValue | SuitedTileValue;
-export const suitedOrHonorTileGroups: ReadonlySet<TileGroup> = new Set([...honorTileGroups, 
+export const suitedOrHonorTileGroups: ReadonlySet<[TileGroup, object]> = new Set([...honorTileGroups, 
     ...suitedTileGroups]);

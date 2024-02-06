@@ -22,13 +22,13 @@ export const maxUniqueTilePerHand = 4;
  * It represents an instance when it is the player's turn (i.e. there are a minimum of 14 tiles instead of 13.)
  * It may or may not represent a winning hand. */
 export class Hand {
-    private _tileToQuantity: ReadonlyMap<TileGroup, Map<TileValue, number>>;
+    private _tileToQuantity: ReadonlyMap<TileGroup, Map<string | number, number>>;
     private _winningHands: WinningHand[];
     private _flowerTiles: FlowerTile[];
 
     constructor(tiles: HongKongTile[]) {
         assertTilesNotNullAndCorrectLength(tiles, handMinLength, handMaxLength);
-        this._flowerTiles = tiles.filter(tile => flowerTileGroups.has(tile.getGroup())) as FlowerTile[];
+        this._flowerTiles = tiles.filter(tile => flowerTileGroups.has(tile.group)) as FlowerTile[];
         if (this._flowerTiles.length > handMaxNumFlowers) {
             throw new TypeError("A HK Hand can only have max " + handMaxNumFlowers + " number of flower tiles. Found " + this._flowerTiles.length);
         }
@@ -36,12 +36,12 @@ export class Hand {
             index + 1 >= this._flowerTiles.length ? hasDup : hasDup || tile.equals(this._flowerTiles[index+1]!), false)) {
             throw new TypeError("A HK Hand cannot have duplicate flower tiles.");
         }
-        const nonFlowerTiles : SuitedOrHonorTile[] = tiles.filter(tile => !flowerTileGroups.has(tile.getGroup())) as SuitedOrHonorTile[];
+        const nonFlowerTiles : SuitedOrHonorTile[] = tiles.filter(tile => !flowerTileGroups.has(tile.group)) as SuitedOrHonorTile[];
         if (nonFlowerTiles.length < handMinLength) {
             throw new TypeError("A HK Hand must have at least " + handMinLength + " non flower tiles. Found " + nonFlowerTiles.length);
         }
 
-        const tileToQuantity : ReadonlyMap<TileGroup, Map<TileValue, number>>= createTileToQuantityMap(tiles);
+        const tileToQuantity : ReadonlyMap<TileGroup, Map<string | number, number>>= createTileToQuantityMap(tiles);
         const quantityCounts : number[] = [...tileToQuantity.values()] // Map<TileValue,Number>[]
             .map((v) => [...v.values()]) // number[][]
             .reduce<number[]>((accum, numberArray) => accum.concat(numberArray), []);

@@ -33,7 +33,6 @@ export enum DragonTileValue {
 export const dragonTileValues : DragonTileValue[] = 
     getEnumKeys(DragonTileValue).map(key => DragonTileValue[key]);
 
-
 export enum WindTileValue {
     EAST = 'EAST',
     SOUTH = 'SOUTH',

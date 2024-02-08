@@ -12,17 +12,21 @@ export const
     ORCHID_GENTLEMAN = new GentlemanTile(GentlemanTileValue.ORCHID),
     BAMBOO_GENTLEMAN = new GentlemanTile(GentlemanTileValue.BAMBOO),
     CHRYSANTHEMUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.CHRYSANTHEMUM),
+    
     SPRING_SEASON = new SeasonTile(SeasonTileValue.SPRING),
     SUMMER_SEASON = new SeasonTile(SeasonTileValue.SUMMER),
     AUTUMN_SEASON = new SeasonTile(SeasonTileValue.AUTUMN),
     WINTER_SEASON = new SeasonTile(SeasonTileValue.WINTER),
+
     FAAT_DRAGON = new DragonTile(DragonTileValue.FAAT),
     BAAK_DRAGON = new DragonTile(DragonTileValue.BAAK),
     ZONG_DRAGON = new DragonTile(DragonTileValue.ZONG),
+
     EAST_WIND = new WindTile(WindTileValue.EAST),
     SOUTH_WIND = new WindTile(WindTileValue.SOUTH),
     WEST_WIND = new WindTile(WindTileValue.WEST),
     NORTH_WIND = new WindTile(WindTileValue.NORTH),
+
     ONE_BAMBOO = new BambooTile(SuitedTileValue.ONE),
     TWO_BAMBOO = new BambooTile(SuitedTileValue.TWO),
     THREE_BAMBOO = new BambooTile(SuitedTileValue.THREE),
@@ -32,6 +36,7 @@ export const
     SEVEN_BAMBOO = new BambooTile(SuitedTileValue.SEVEN),
     EIGHT_BAMBOO  = new BambooTile(SuitedTileValue.EIGHT),
     NINE_BAMBOO = new BambooTile(SuitedTileValue.NINE),
+
     ONE_CIRCLE = new CircleTile(SuitedTileValue.ONE),
     TWO_CIRCLE = new CircleTile(SuitedTileValue.TWO),
     THREE_CIRCLE = new CircleTile(SuitedTileValue.THREE),
@@ -41,6 +46,7 @@ export const
     SEVEN_CIRCLE = new CircleTile(SuitedTileValue.SEVEN),
     EIGHT_CIRCLE  = new CircleTile(SuitedTileValue.EIGHT),
     NINE_CIRCLE = new CircleTile(SuitedTileValue.NINE),
+
     ONE_CHARACTER = new CharacterTile(SuitedTileValue.ONE),
     TWO_CHARACTER = new CharacterTile(SuitedTileValue.TWO),
     THREE_CHARACTER = new CharacterTile(SuitedTileValue.THREE),

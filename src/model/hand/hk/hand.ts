@@ -2,6 +2,7 @@
 
 import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
 import { createTileToQuantityMap } from "model/hand/hk/handUtils";
+import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
 import { FlowerTile, flowerTileGroups, HongKongTile } from "model/tile/hk/hongKongTile";
@@ -22,7 +23,7 @@ export const maxUniqueTilePerHand = 4;
  * It represents an instance when it is the player's turn (i.e. there are a minimum of 14 tiles instead of 13.)
  * It may or may not represent a winning hand. */
 export class Hand {
-    private _tileToQuantity: ReadonlyMap<TileGroup, Map<string | number, number>>;
+    private _tileToQuantity: ReadonlyMap<TileGroup, Map<TileValue, number>>;
     private _winningHands: WinningHand[];
     private _flowerTiles: FlowerTile[];
 
@@ -41,7 +42,7 @@ export class Hand {
             throw new TypeError("A HK Hand must have at least " + handMinLength + " non flower tiles. Found " + nonFlowerTiles.length);
         }
 
-        const tileToQuantity : ReadonlyMap<TileGroup, Map<string | number, number>>= createTileToQuantityMap(tiles);
+        const tileToQuantity : ReadonlyMap<TileGroup, Map<TileValue, number>>= createTileToQuantityMap(tiles);
         const quantityCounts : number[] = [...tileToQuantity.values()] // Map<TileValue,Number>[]
             .map((v) => [...v.values()]) // number[][]
             .reduce<number[]>((accum, numberArray) => accum.concat(numberArray), []);
@@ -60,6 +61,22 @@ export class Hand {
 
     get tileToQuantity() {
         return this._tileToQuantity;
+    }
+
+    getQuantity(tile: Tile) : number {
+        const groupMap = this._tileToQuantity.get(tile.group);
+        if (!groupMap) {
+            return 0;
+        }
+        return groupMap.get(tile.value) ?? 0;
+    }
+
+    getQuantityNonFlowerTiles() : number {
+        return [...this._tileToQuantity.entries()]
+        .filter(([tileGroup,]) => !flowerTileGroups.has(tileGroup))
+        .map(([, map]) => [...map.values()]) // number[][]
+        .reduce<number[]>((accum, numberArray) => accum.concat(numberArray), [])
+        .reduce<number>((sum, quantity) => sum + quantity, 0);
     }
 
     get winningHands() {

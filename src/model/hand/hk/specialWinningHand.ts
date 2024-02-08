@@ -2,10 +2,10 @@ import { Tile, FlowerTile } from "model/tile/tile.js";
 import Pair from "model/meld/pair";
 import { HongKongTile } from "model/tile/hk/hongKongTile";
 
-/** A SpecialWinningHand has a rigid combination for all the tiles. */
+/** A SpecialWinningHand has a combination of tiles that does not fit the "meld" structure. */
 export class SpecialWinningHand {
-    tiles: HongKongTile[];
-    pair: Pair;
+    tiles: SuitedOrHonorTile[];
+    pair?: Pair;
     bonusTiles: FlowerTile[];
 
     constructor(hand: Hand) {
@@ -16,8 +16,6 @@ export class SpecialWinningHand {
         // if there is a 4 of a tile, it could be a kong OR a pong and a chi
         // it's possible for 3 consecutive pongs to also be 3 identical chi
         // need to also check 7 pairs, any bespoke hands.
-        this.melds = melds!;
-        this.bonusTiles = bonusTiles!;
     }
 
     analyzeWinningHandForFaan(analyzer: (winningHand: WinningHand) => void) : this {

@@ -13,6 +13,11 @@ export enum GentlemanTileValue {
 export const gentlemanTileValues : GentlemanTileValue[] = 
     getEnumKeys(GentlemanTileValue).map(key => GentlemanTileValue[key]);
 
+export function isGentlemanTileValue(tileValue: TileValue): tileValue is GentlemanTileValue {
+    const acceptableTileValues: TileValue[] = gentlemanTileValues;
+    return acceptableTileValues.indexOf(tileValue) !== -1;
+}
+
 export enum SeasonTileValue {
     SPRING = 'SPRING',
     SUMMER = 'SUMMER',
@@ -23,6 +28,10 @@ export enum SeasonTileValue {
 export const seasonTileValues : SeasonTileValue[] = 
     getEnumKeys(SeasonTileValue).map(key => SeasonTileValue[key]);
 
+export function isSeasonTileValue(tileValue: TileValue): tileValue is SeasonTileValue {
+    const acceptableTileValues: TileValue[] = seasonTileValues;
+    return acceptableTileValues.indexOf(tileValue) !== -1;
+}
 
 export enum DragonTileValue {
     FAAT = 'FAAT',
@@ -33,6 +42,11 @@ export enum DragonTileValue {
 export const dragonTileValues : DragonTileValue[] = 
     getEnumKeys(DragonTileValue).map(key => DragonTileValue[key]);
 
+export function isDragonTileValue(tileValue: TileValue): tileValue is DragonTileValue {
+    const acceptableTileValues: TileValue[] = dragonTileValues;
+    return acceptableTileValues.indexOf(tileValue) !== -1;
+}
+
 export enum WindTileValue {
     EAST = 'EAST',
     SOUTH = 'SOUTH',
@@ -42,6 +56,11 @@ export enum WindTileValue {
 
 export const windTileValues : WindTileValue[] = 
     getEnumKeys(WindTileValue).map(key => WindTileValue[key]);
+
+export function isWindTileValue(tileValue: TileValue): tileValue is WindTileValue {
+    const acceptableTileValues: TileValue[] = windTileValues;
+    return acceptableTileValues.indexOf(tileValue) !== -1;
+}
 
 export enum SuitedTileValue {
     ONE = 1, 
@@ -58,6 +77,11 @@ export enum SuitedTileValue {
 export const suitedTileValues : SuitedTileValue[] = 
     getEnumKeys(SuitedTileValue).map(key => SuitedTileValue[key])
     .sort((v1, v2) => v1.valueOf() - v2.valueOf()); // just in case, sort explicitly by value.
+
+export function isSuitedTileValue(tileValue: TileValue): tileValue is SuitedTileValue {
+    const acceptableTileValues: TileValue[] = suitedTileValues;
+    return acceptableTileValues.indexOf(tileValue) !== -1;
+}
 
 export function getNextTileValue(suitedTileValue : SuitedTileValue) : SuitedTileValue | undefined {
     if (suitedTileValue < SuitedTileValue.NINE && suitedTileValue >= SuitedTileValue.ONE) {

@@ -17,6 +17,8 @@ export default abstract class SuitedTile extends Tile {
     abstract override copy() : SuitedTile;
 }
 
+export type SuitedTileGroup = TileGroup.BAMBOO | TileGroup.CHARACTER | TileGroup.CIRCLE
+
 export const suitedTileGroups: ReadonlySet<TileGroup> = new Set([TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE]);
 
 export function isSuitedTile(tile: Tile): tile is SuitedTile {

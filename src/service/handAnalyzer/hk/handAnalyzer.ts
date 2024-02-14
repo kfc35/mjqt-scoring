@@ -7,10 +7,11 @@ import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
-import { HonorTile } from "model/tile/group/honorTile";
+import { HonorTile, HonorTileGroup, HonorTileValue, constructHonorTile } from "model/tile/group/honorTile";
 import { TileGroup } from "model/tile/tileGroup";
 import { handMinLength } from "model/hand/hk/handUtils";
-import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { constructTile } from "model/tile/hk/hongKongTile";
 
 export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
 
@@ -25,16 +26,16 @@ export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
         for (const [quantity, tileArray] of hand.getQuantityToTileMap()) {
             if (quantity === 2) {
                 for (const tile of tileArray) {
-                    if (!flowerTileGroups.has(tile.group)) {
-                        melds.push(new Pair(tile as SuitedOrHonorTile));
+                    if (isSuitedOrHonorTile(tile)) {
+                        melds.push(new Pair(tile));
                     }
                 }
             }
             if (quantity === 4) {
                 for (const tile of tileArray) {
-                    if (!flowerTileGroups.has(tile.group)) {
-                        melds.push(new Pair(tile as SuitedOrHonorTile));
-                        melds.push(new Pair(tile as SuitedOrHonorTile));
+                    if (isSuitedOrHonorTile(tile)) {
+                        melds.push(new Pair(tile));
+                        melds.push(new Pair(tile));
                     }
                 }
             }
@@ -61,10 +62,10 @@ function getSevenPairsStandardWinningHand(hand: Hand) : Meld[] {
     hand.
 }
 
-function getHonorMelds(hand: Hand, tileGroup: TileGroup, tileValues: TileValue[]) : Meld[] | undefined {
+function getHonorMelds(hand: Hand, tileGroup: HonorTileGroup, tileValues: HonorTileValue[]) : Meld[] | undefined {
     const melds : Meld[] = [];
     for (const tileValue of tileValues) {
-        const meld: Meld | undefined = getHonorMeld(hand.tileToQuantity.get(tileGroup), tileGroup, tileValue);
+        const meld: Meld | undefined = getHonorMeld(hand, tileGroup, tileValue);
         if (meld) {
             melds.push(meld);
         }
@@ -72,11 +73,8 @@ function getHonorMelds(hand: Hand, tileGroup: TileGroup, tileValues: TileValue[]
     return melds;
 }
 
-function getHonorMeld(tileGroupQuantities: Map<TileValue, number> | undefined, tileGroup: TileGroup, tileValue: TileValue) : Meld | undefined {
-    if (!tileGroupQuantities) {
-        return undefined;
-    }
-    const quantity = tileGroupQuantities.get(tileValue);
+function getHonorMeld(hand: Hand, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
+    const quantity = hand.getQuantity(tileGroup, tileValue);
     if (!quantity) {
         // no-op
         return undefined;
@@ -85,11 +83,11 @@ function getHonorMeld(tileGroupQuantities: Map<TileValue, number> | undefined, t
         // return undefined;?
         throw new Error(`Hand has no winning hand. Found only one honor tile for ${tileGroup} ${tileValue}`);
     } else if (quantity === 2) {
-        return new Pair(new Tile(tileGroup, tileValue) as HonorTile);
+        return new Pair(constructHonorTile(tileGroup, tileValue));
     } else if (quantity === 3) {
-        return new Pong(new Tile(tileGroup, tileValue) as HonorTile);
+        return new Pong(constructHonorTile(tileGroup, tileValue));
     } else if (quantity === 4) {
-        return new Kong(new Tile(tileGroup, tileValue) as HonorTile);
+        return new Kong(constructHonorTile(tileGroup, tileValue));
     } else {
         throw new Error("Hand is malformed. Found quantity greater than 4: " + quantity);
     }

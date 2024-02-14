@@ -1,6 +1,6 @@
 import { TileGroup } from "model/tile/tileGroup";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue, type TileValue } from "model/tile/tileValue";
-import { flowerTileGroups } from "model/tile/hk/hongKongTile";
+import { flowerTileGroups, constructTile } from "model/tile/hk/hongKongTile";
 import { Tile } from "model/tile/tile";
 import { tileArrayDoesNotContain } from "common/tileUtils";
 
@@ -60,8 +60,7 @@ export class TileToQuantityMap {
         for (const [tileGroup, innerMap] of this._tileToQuantityMap.entries()) {
             for (const [tileValue, quantity] of innerMap.entries()) {
                 const tileArray = invertedMap.get(quantity);
-                // TODO replace with constructor
-                const tile = new Tile(tileGroup, tileValue);
+                const tile = constructTile(tileGroup, tileValue);
                 if (tileArray) {
                     if (tileArrayDoesNotContain(tileArray, tile)) {
                         tileArray.push(tile);

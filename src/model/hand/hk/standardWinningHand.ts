@@ -1,7 +1,10 @@
 import { Meld } from "model/meld/meld.js";
 import { Tile, FlowerTile } from "model/tile/tile.js";
 
-/** A WinningHand is a Hand that has been analyzed for a win condition i.e. processed into melds. */
+/** A StandardWinningHand is a Hand that has been successfully analyzed to be a complete winning hand. i.e. processed into melds. 
+ * A hand can have multipe standard winning hands depending on the arrangement of the melds.
+ * Seven pairs counts as a standard winning hand.
+*/
 export class StandardWinningHand {
     melds: Meld[];
     bonusTiles: FlowerTile[];

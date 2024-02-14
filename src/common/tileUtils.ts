@@ -8,3 +8,7 @@ export function assertTilesNotNullAndCorrectLength(tiles: Tile[], minLength: num
         throw new TypeError("tiles must have length between " + minLength + " and " + maxLength);
     }
 }
+
+export function tileArrayDoesNotContain(tiles: Tile[], tile: Tile): boolean {
+    return tiles.every(tileInArray => !tileInArray.equals(tile));
+}

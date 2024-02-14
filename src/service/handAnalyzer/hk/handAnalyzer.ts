@@ -1,6 +1,6 @@
-import { Hand, handMinLength } from "model/hand/hk/hand";
+import { Hand } from "model/hand/hk/hand";
 import { WinningHand } from "model/hand/hk/WinningHand";
-import { FlowerTile } from "model/tile/hk/hongKongTile";
+import { FlowerTile, flowerTileGroups } from "model/tile/hk/hongKongTile";
 import { Tile } from "model/tile/tile";
 import { dragonTileValues, windTileValues, TileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
@@ -9,8 +9,8 @@ import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
 import { HonorTile } from "model/tile/group/honorTile";
 import { TileGroup } from "model/tile/tileGroup";
-import { TileToQuantityMap } from "model/hand/hk/tileQuantityMap";
-import { BAAK_DRAGON, EAST_WIND, FAAT_DRAGON, NINE_BAMBOO, NINE_CHARACTER, NINE_CIRCLE, NORTH_WIND, ONE_BAMBOO, ONE_CHARACTER, ONE_CIRCLE, SOUTH_WIND, WEST_WIND, ZONG_DRAGON } from "common/deck";
+import { handMinLength } from "model/hand/hk/handUtils";
+import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 
 export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
 
@@ -18,7 +18,31 @@ export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
 
     const flowerTiles: FlowerTile[] = hand.flowerTiles;
     const melds: Meld[] = [];
-    //const dragonTileQuantities = hand.tileToQuantity.get(TileGroup.DRAGON);
+
+    const quantityOfTiles : number[] = hand.getQuantityPerUniqueTile();
+    if (quantityOfTiles.every(quantity => quantity % 2 === 0)) {
+        // all pairs hand.
+        for (const [quantity, tileArray] of hand.getQuantityToTileMap()) {
+            if (quantity === 2) {
+                for (const tile of tileArray) {
+                    if (!flowerTileGroups.has(tile.group)) {
+                        melds.push(new Pair(tile as SuitedOrHonorTile));
+                    }
+                }
+            }
+            if (quantity === 4) {
+                for (const tile of tileArray) {
+                    if (!flowerTileGroups.has(tile.group)) {
+                        melds.push(new Pair(tile as SuitedOrHonorTile));
+                        melds.push(new Pair(tile as SuitedOrHonorTile));
+                    }
+                }
+            }
+        }
+    }
+    // short circuit out
+    
+    const numKongs = hand.getQuantityNonFlowerTiles() - handMinLength;
     getHonorMelds(hand, TileGroup.DRAGON, dragonTileValues);
     getHonorMelds(hand, TileGroup.WIND, windTileValues);
     /*if (dragonTileQuantities) {
@@ -31,45 +55,11 @@ export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
     }*/
 }
 
-type HandAnalyzer = (hand: Hand) => WinningHand | undefined
+export type HandAnalyzer = (hand: Hand) => WinningHand | undefined
 
-function constructAnalyzerForExactThirteenWithAnyPair(exactThirteenTiles: Tile[]): HandAnalyzer {
-    if (exactThirteenTiles.length !== 13) {
-        throw new Error("There must be exactly 13 tiles in exactThirteenTiles");
-    }
-
-    const exactThirteenTilesQuantityMap = new TileToQuantityMap(exactThirteenTiles);
-    for (const tile of exactThirteenTiles) {
-        if (exactThirteenTilesQuantityMap.getQuantity(tile) !== 1) {
-            throw new Error("There can only be exactly one of each tile in exactThirteenTiles");
-        }
-    }
-
-    return (hand: Hand) => {
-        let hasOnePair: boolean = false;
-        if (hand.getQuantityNonFlowerTiles() !== handMinLength) {
-            return undefined;
-        }
-        for (const tile of exactThirteenTiles) {
-            const quantity = hand.getQuantity(tile);
-            if (quantity < 1 || quantity > 2) {
-                return undefined;
-            }
-            if (quantity === 2 && hasOnePair) { // has more than one pair
-                return undefined;
-            }
-            if (quantity === 2) {
-                hasOnePair = true
-            }
-        }
-        return undefined // TODO return something meaningful here
-    };
+function getSevenPairsStandardWinningHand(hand: Hand) : Meld[] {
+    hand.
 }
-
-export const thirteenOrphansAnalyzer = constructAnalyzerForExactThirteenWithAnyPair([
-    ONE_BAMBOO, NINE_BAMBOO, ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE,
-    FAAT_DRAGON, BAAK_DRAGON, ZONG_DRAGON, EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND
-]);
 
 function getHonorMelds(hand: Hand, tileGroup: TileGroup, tileValues: TileValue[]) : Meld[] | undefined {
     const melds : Meld[] = [];

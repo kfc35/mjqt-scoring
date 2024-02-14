@@ -7,6 +7,7 @@ import CharacterTile from "model/tile/group/characterTile";
 import CircleTile from "model/tile/group/circleTile";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue } from "model/tile/tileValue";
 
+export const maxQuantityPerTile = 4;
 export const 
     PLUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.PLUM),
     ORCHID_GENTLEMAN = new GentlemanTile(GentlemanTileValue.ORCHID),
@@ -56,3 +57,4 @@ export const
     SEVEN_CHARACTER = new CharacterTile(SuitedTileValue.SEVEN),
     EIGHT_CHARACTER = new CharacterTile(SuitedTileValue.EIGHT),
     NINE_CHARACTER = new CharacterTile(SuitedTileValue.NINE);
+    

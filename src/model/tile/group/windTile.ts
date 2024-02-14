@@ -9,7 +9,7 @@ export default class WindTile extends Tile {
         super(TileGroup.WIND, value);
     }
 
-    override copy(): WindTile {
+    copy(): WindTile {
         return new WindTile(this._value);
     }
 }

@@ -1,7 +1,7 @@
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
 
-export class Tile {
+export abstract class Tile {
     protected _group: TileGroup;
     protected _value: TileValue;
 
@@ -35,8 +35,6 @@ export class Tile {
         }
         return this._group < otherTile.group ? -1 : +1
     }
-
-    copy(): Tile {
-        return new Tile(this._group, this._value);
-    }
+    
+    abstract copy(): Tile;
 }

@@ -9,7 +9,7 @@ export default class GentlemanTile extends Tile {
         super(TileGroup.GENTLEMAN, value);
     }
     
-    override copy(): GentlemanTile {
+    copy(): GentlemanTile {
         return new GentlemanTile(this._value);
     }
 }

@@ -13,7 +13,7 @@ export default class SeasonTile extends Tile {
         return TileGroup.SEASON;
     }
 
-    override copy(): SeasonTile {
+    copy(): SeasonTile {
         return new SeasonTile(this._value);
     }
 }

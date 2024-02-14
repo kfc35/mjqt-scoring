@@ -1,14 +1,12 @@
-import { type SuitedOrHonorTile, suitedOrHonorTileGroups } from "model/tile/group/suitedOrHonorTile";
+import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Meld  from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
-import { assertTileHasGroup } from "model/meld/meldUtils";
+import { assertIsSuitedOrHonor } from "model/meld/meldUtils";
 
 export default class Pong extends Meld {
     constructor(tile: SuitedOrHonorTile, exposed?: boolean) {
-        assertTileHasGroup(tile, suitedOrHonorTileGroups);
-        super([tile.copy() as SuitedOrHonorTile, 
-            tile.copy() as SuitedOrHonorTile, 
-            tile.copy() as SuitedOrHonorTile], exposed);
+        assertIsSuitedOrHonor(tile);
+        super([tile.copy(), tile.copy(), tile.copy()], exposed);
     }
 
     getType(): MeldType.PONG {

@@ -11,8 +11,14 @@ export default abstract class SuitedTile extends Tile {
 
     isOneBefore(otherTile: SuitedTile): boolean {
         return this._group === otherTile.group && 
-            (this.value as SuitedTileValue).valueOf() + 1 === (otherTile.value as SuitedTileValue).valueOf();
+            this._value.valueOf() + 1 === otherTile.value.valueOf();
     }
+
+    abstract override copy() : SuitedTile;
 }
 
 export const suitedTileGroups: ReadonlySet<TileGroup> = new Set([TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE]);
+
+export function isSuitedTile(tile: Tile): tile is SuitedTile {
+    return suitedTileGroups.has(tile.group) && "isOneBefore" in tile;
+}

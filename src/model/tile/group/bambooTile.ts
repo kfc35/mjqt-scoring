@@ -7,7 +7,7 @@ export default class BambooTile extends SuitedTile {
         super(TileGroup.BAMBOO, value);
     }
 
-    override copy(): BambooTile {
+    copy(): BambooTile {
         return new BambooTile(this._value);
     }
 }

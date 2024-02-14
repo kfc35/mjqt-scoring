@@ -1,3 +1,5 @@
+import { getEnumKeys } from "common/enumUtils";
+
 export enum TileGroup {
     GENTLEMAN = 'GENTLEMAN',
     SEASON = 'SEASON',
@@ -7,3 +9,6 @@ export enum TileGroup {
     CIRCLE = 'CIRCLE',
     CHARACTER = 'CHARACTER'
 }
+
+export const tileGroups : TileGroup[] = 
+    getEnumKeys(TileGroup).map(key => TileGroup[key]);

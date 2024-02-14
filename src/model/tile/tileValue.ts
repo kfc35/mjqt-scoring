@@ -1,6 +1,4 @@
-function getEnumKeys<T extends object, K = keyof T>(tileValueEnum: T): K[] {
-    return Object.keys(tileValueEnum).filter(k => isNaN(Number(k))) as K[];
-}
+import { getEnumKeys } from "common/enumUtils"
 
 export enum GentlemanTileValue {
     PLUM = 'PLUM',

@@ -9,10 +9,6 @@ export default class SeasonTile extends Tile {
         super(TileGroup.SEASON, value);
     }
 
-    getGroup(): TileGroup.SEASON {
-        return TileGroup.SEASON;
-    }
-
     copy(): SeasonTile {
         return new SeasonTile(this._value);
     }

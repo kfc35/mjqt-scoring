@@ -17,11 +17,10 @@ export class TileToQuantityMap {
         tileToQuantityMap.set(TileGroup.BAMBOO, new Map<SuitedTileValue, number>());
         tileToQuantityMap.set(TileGroup.CHARACTER, new Map<SuitedTileValue, number>());
         tileToQuantityMap.set(TileGroup.CIRCLE, new Map<SuitedTileValue, number>());
-        // TODO ensure all TileGroups exhausted?
         tiles.forEach(tile => {
             const tileValToQuantityMap: Map<TileValue, number> | undefined = tileToQuantityMap.get(tile.group);
             if (!tileValToQuantityMap) {
-                throw new Error("Invalid tile group: " + tile.group);
+                throw new Error("Unsupported tile group: " + tile.group);
             }
             const prevValue: number | undefined = tileValToQuantityMap.get(tile.value);
             if (prevValue) {
@@ -33,31 +32,48 @@ export class TileToQuantityMap {
         this._tileToQuantityMap = tileToQuantityMap;
     }
 
-    getQuantityPerUniqueTile(): number[] {
-        return [...this._tileToQuantityMap.values()] // Map<TileValue,Number>[]
-            .map((v) => [...v.values()]) // number[][]
-            .reduce<number[]>((accum, numberArray) => accum.concat(numberArray), []);
-    }
-
-    getQuantity(tile: Tile) : number {
-        const groupMap = this._tileToQuantityMap.get(tile.group);
+    getQuantity(tile: Tile) : number;
+    getQuantity(group: TileGroup, value: TileValue) : number;
+    getQuantity(tileOrGroup: Tile | TileGroup, valueArg?: TileValue) : number {
+        let group: TileGroup;
+        let value: TileValue | undefined;
+        if (tileOrGroup instanceof Tile) {
+            group = tileOrGroup.group;
+            value = tileOrGroup.value;
+        } else if (!valueArg) {
+            throw new Error("value cannot be null or undefined");
+        } else {
+            group = tileOrGroup
+            value = valueArg;
+        }
+        const groupMap = this._tileToQuantityMap.get(group);
         if (!groupMap) {
             return 0;
         }
-        return groupMap.get(tile.value) ?? 0;
+        return groupMap.get(value) ?? 0;
     }
 
-    getQuantityNonFlowerTiles() : number {
+    getQuantityPerUniqueTile(includeFlowerTiles?: boolean): number[] {
         return [...this._tileToQuantityMap.entries()]
-        .filter(([tileGroup,]) => !flowerTileGroups.has(tileGroup))
+            .filter(([tileGroup,]) => (includeFlowerTiles ? true : !flowerTileGroups.has(tileGroup)))
+            .map(([, map]) => [...map.values()]) // number[][]
+            .reduce<number[]>((accum, numberArray) => accum.concat(numberArray), []);
+    }
+
+    getTotalQuantity(includeFlowerTiles?: boolean) : number {
+        return [...this._tileToQuantityMap.entries()]
+        .filter(([tileGroup,]) => (includeFlowerTiles ? true : !flowerTileGroups.has(tileGroup)))
         .map(([, map]) => [...map.values()]) // number[][]
         .reduce<number[]>((accum, numberArray) => accum.concat(numberArray), [])
         .reduce<number>((sum, quantity) => sum + quantity, 0);
     }
 
-    getQuantityToTileMap() : ReadonlyMap<number, Tile[]> {
+    getQuantityToTileMap(includeFlowerTiles?: boolean) : ReadonlyMap<number, Tile[]> {
         const invertedMap = new Map<number, Tile[]>();
         for (const [tileGroup, innerMap] of this._tileToQuantityMap.entries()) {
+            if (!includeFlowerTiles && flowerTileGroups.has(tileGroup)) {
+                continue;
+            }
             for (const [tileValue, quantity] of innerMap.entries()) {
                 const tileArray = invertedMap.get(quantity);
                 const tile = constructTile(tileGroup, tileValue);

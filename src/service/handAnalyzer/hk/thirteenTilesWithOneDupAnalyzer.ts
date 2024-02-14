@@ -1,10 +1,12 @@
 import { TileToQuantityMap } from "model/hand/hk/tileQuantityMap";
-import { Tile } from "model/tile/tile";
 import { Hand } from "model/hand/hk/hand";
 import { handMinLength } from "model/hand/hk/handUtils";
 import { type HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
+import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import Pair from "model/meld/pair";
+import { SpecialWinningHand } from "model/hand/hk/specialWinningHand";
 
-export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Tile[]): HandAnalyzer {
+export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: SuitedOrHonorTile[]): HandAnalyzer {
     if (thirteenUniqueTiles.length !== 13) {
         throw new Error("There must be exactly 13 tiles in thirteenUniqueTiles");
     }
@@ -17,8 +19,9 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Ti
     }
 
     return (hand: Hand) => {
-        let hasOnePair: boolean = false;
-        if (hand.getQuantityNonFlowerTiles() !== handMinLength) {
+        let pair: Pair | undefined = undefined;
+        const tiles: SuitedOrHonorTile[] = [];
+        if (hand.getTotalQuantity() !== handMinLength) {
             return undefined;
         }
         for (const tile of thirteenUniqueTiles) {
@@ -26,13 +29,16 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Ti
             if (quantity < 1 || quantity > 2) {
                 return undefined;
             }
-            if (quantity === 2 && hasOnePair) { // has more than one pair
+            if (quantity === 2 && !!pair) { // has more than one pair
                 return undefined;
             }
             if (quantity === 2) {
-                hasOnePair = true
+                pair = new Pair(tile);
+            }
+            else { // quantity === 1
+                tiles.push(tile);
             }
         }
-        return undefined // TODO return something meaningful here
+        return new SpecialWinningHand(tiles, hand.flowerTiles, pair);
     };
 }

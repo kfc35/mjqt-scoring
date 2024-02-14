@@ -5,7 +5,9 @@ import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { WinningHand } from "model/hand/hk/winningHand";
 import { TileToQuantityMap } from "model/hand/hk/tileQuantityMap";
 import { handMinLength, handMaxLength, handMaxNumUniqueFlowers } from "model/hand/hk/handUtils";
-import { maxQuantityPerTile } from "common/deck";
+import { maxQuantityPerNonFlowerTile } from "common/deck";
+import { TileGroup } from "model/tile/tileGroup";
+import { type TileValue } from "model/tile/tileValue";
 
 /** A Hand is an unsorted collection of Mahjong Tiles during play.
  * It represents an instance when it is the player's turn (i.e. there are a minimum of 14 tiles instead of 13.)
@@ -33,9 +35,9 @@ export class Hand {
 
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
         const quantityPerUniqueTile : number[] = tileToQuantity.getQuantityPerUniqueTile();
-        const everyTileQuantityLessThanMaxUniqueTilePerHand = quantityPerUniqueTile.every(quantity => quantity < maxQuantityPerTile);
+        const everyTileQuantityLessThanMaxUniqueTilePerHand = quantityPerUniqueTile.every(quantity => quantity < maxQuantityPerNonFlowerTile);
         if (!everyTileQuantityLessThanMaxUniqueTilePerHand) {
-            throw new TypeError("A Hand can only have max " + maxQuantityPerTile + " of each unique suited or honor tile.");
+            throw new TypeError("A Hand can only have max " + maxQuantityPerNonFlowerTile + " of each unique suited or honor tile.");
         }
         
         // need a function that returns potential winning combinations -- e.g. pong first or chi first
@@ -50,20 +52,28 @@ export class Hand {
         return this._tileToQuantity;
     }
 
-    getQuantityPerUniqueTile(): number[] {
-        return this._tileToQuantity.getQuantityPerUniqueTile();
+    getQuantity(tile: Tile) : number;
+    getQuantity(group: TileGroup, value: TileValue) : number;
+    getQuantity(tileOrGroup: Tile | TileGroup, valueArg?: TileValue) : number {
+        if (tileOrGroup instanceof Tile) {
+            return this._tileToQuantity.getQuantity(tileOrGroup);
+        } else if (!valueArg) {
+            throw new Error("value cannot be null or undefined");
+        } else {
+            return this._tileToQuantity.getQuantity(tileOrGroup, valueArg);
+        }
     }
 
-    getQuantity(tile: Tile) : number {
-        return this._tileToQuantity.getQuantity(tile);
+    getQuantityPerUniqueTile(includeFlowerTiles?: boolean): number[] {
+        return this._tileToQuantity.getQuantityPerUniqueTile(includeFlowerTiles);
     }
 
-    getQuantityNonFlowerTiles() : number {
-        return this._tileToQuantity.getQuantityNonFlowerTiles();
+    getTotalQuantity(includeFlowerTiles?: boolean) : number {
+        return this._tileToQuantity.getTotalQuantity(includeFlowerTiles);
     }
 
-    getQuantityToTileMap() : ReadonlyMap<number, Tile[]> {
-        return this._tileToQuantity.getQuantityToTileMap();
+    getQuantityToTileMap(includeFlowerTiles?: boolean) : ReadonlyMap<number, Tile[]> {
+        return this._tileToQuantity.getQuantityToTileMap(includeFlowerTiles);
     }
 
     get winningHands() {

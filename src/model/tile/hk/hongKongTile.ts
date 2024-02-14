@@ -17,7 +17,8 @@ export const flowerTileGroups: ReadonlySet<TileGroup> = new Set([TileGroup.GENTL
 export type FlowerTileValue = GentlemanTileValue | SeasonTileValue;
 
 export function isFlowerTile(tile: Tile) : tile is FlowerTile {
-    return flowerTileGroups.has(tile.group);
+    return flowerTileGroups.has(tile.group) && 
+    (tile.group === TileGroup.GENTLEMAN ? isGentlemanTileValue(tile.value) : isSeasonTileValue(tile.value));
 }
 
 /* For certain winning hands (e.g. in HK scoring), a dragon is associated with a suit.*/

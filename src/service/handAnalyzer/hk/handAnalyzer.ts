@@ -1,66 +1,42 @@
 import { Hand } from "model/hand/hk/hand";
 import { WinningHand } from "model/hand/hk/WinningHand";
-import { FlowerTile, flowerTileGroups } from "model/tile/hk/hongKongTile";
-import { Tile } from "model/tile/tile";
-import { dragonTileValues, windTileValues, TileValue } from "model/tile/tileValue";
+import { dragonTileValues, windTileValues } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
-import { HonorTile, HonorTileGroup, HonorTileValue, constructHonorTile } from "model/tile/group/honorTile";
+import { HonorTileGroup, HonorTileValue, constructHonorTile, isHonorTile } from "model/tile/group/honorTile";
 import { TileGroup } from "model/tile/tileGroup";
 import { handMinLength } from "model/hand/hk/handUtils";
-import { SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { constructTile } from "model/tile/hk/hongKongTile";
+import { thirteenOrphansAnalyzer } from "service/handAnalyzer/hk/thirteenOrphansAnalyzer";
+import { sevenPairsAnalyzer } from "service/handAnalyzer/hk/sevenPairsAnalyzer";
+import { StandardWinningHand } from "model/hand/hk/standardWinningHand";
 
 export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
-
-    // TODO: First check for bespoke hands.
-
-    const flowerTiles: FlowerTile[] = hand.flowerTiles;
-    const melds: Meld[] = [];
-
-    const quantityOfTiles : number[] = hand.getQuantityPerUniqueTile();
-    if (quantityOfTiles.every(quantity => quantity % 2 === 0)) {
-        // all pairs hand.
-        for (const [quantity, tileArray] of hand.getQuantityToTileMap()) {
-            if (quantity === 2) {
-                for (const tile of tileArray) {
-                    if (isSuitedOrHonorTile(tile)) {
-                        melds.push(new Pair(tile));
-                    }
-                }
-            }
-            if (quantity === 4) {
-                for (const tile of tileArray) {
-                    if (isSuitedOrHonorTile(tile)) {
-                        melds.push(new Pair(tile));
-                        melds.push(new Pair(tile));
-                    }
-                }
-            }
-        }
+    const thirteenOrphansHand = thirteenOrphansAnalyzer(hand);
+    if (thirteenOrphansHand) {
+        return [thirteenOrphansHand];
     }
-    // short circuit out
+    const sevenPairsHand = sevenPairsAnalyzer(hand);
+    if (sevenPairsHand) {
+        return [sevenPairsHand];
+    }
+    // TODO smelly?
+    // if there are any honor tiles that have quantity 1, it is not a winning hand.
+    if (hand.getQuantityToTileMap().get(1)?.every(tile => !isHonorTile(tile))) {
+        return [];
+     }
     
-    const numKongs = hand.getQuantityNonFlowerTiles() - handMinLength;
+    const possibleMeldCombinations: Meld[][] = [];
+    let numKongs = hand.getTotalQuantity() - handMinLength;
     getHonorMelds(hand, TileGroup.DRAGON, dragonTileValues);
     getHonorMelds(hand, TileGroup.WIND, windTileValues);
-    /*if (dragonTileQuantities) {
-        for (const tileValue of getEnumKeys(DragonTileValue).map(key => DragonTileValue[key].valueOf())) {
-            const meld: Meld | undefined = getHonorMeld(dragonTileQuantities, TileGroup.DRAGON, tileValue);
-            if (meld) {
-                melds.push(meld);
-            } 
-        }
-    }*/
+    // for knitted straights, this algo will need to be changed
+
+    return possibleMeldCombinations.map(melds => new StandardWinningHand(melds,hand.flowerTiles))
 }
 
 export type HandAnalyzer = (hand: Hand) => WinningHand | undefined
-
-function getSevenPairsStandardWinningHand(hand: Hand) : Meld[] {
-    hand.
-}
 
 function getHonorMelds(hand: Hand, tileGroup: HonorTileGroup, tileValues: HonorTileValue[]) : Meld[] | undefined {
     const melds : Meld[] = [];
@@ -94,11 +70,8 @@ function getHonorMeld(hand: Hand, tileGroup: HonorTileGroup, tileValue: HonorTil
 }
 
 // algorithm for processing a hand into melds:
-// check for all pairs - seven tiles with quantity 2 if not, you can assume there is only one pair in the hand.
-        // TODO however there can be quantity 4. 3 quantity 4's and a 2 would also count as seven pairs...
 // honors - easily check for pairs, pongs, and kongs. these will always be valid.
 // suited - for 1-7, check quantity. 
-// TODO - this doesn't work for knitted, but knitted isnt a thing in HK.
 // MAYBE PROCESS KONGS FIRST GIVEN HOW MANY KONGS WE SHOULD EXPECT?
   // if quantity is 1:
     // can only be a chow for certain. if it cannot be made, invalid hand.

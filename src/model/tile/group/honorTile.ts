@@ -10,7 +10,8 @@ export type HonorTileGroup = TileGroup.DRAGON | TileGroup.WIND;
 export const honorTileGroups: ReadonlySet<TileGroup> = new Set([TileGroup.DRAGON, TileGroup.WIND]);
 
 export function isHonorTile(tile: Tile): tile is HonorTile {
-    return honorTileGroups.has(tile.group);
+    return honorTileGroups.has(tile.group) &&
+        (tile.group === TileGroup.DRAGON ? isDragonTileValue(tile.value) : isWindTileValue(tile.value));
 }
 
 export function constructHonorTile(group: HonorTileGroup, value: HonorTileValue) : HonorTile {

@@ -1,5 +1,5 @@
 import { WinCondition } from "model/hand/hk/winCondition";
 
 export interface WinningHand {
-    get winConditions() : WinCondition[];
+    //get winConditions() : WinCondition[];
 }

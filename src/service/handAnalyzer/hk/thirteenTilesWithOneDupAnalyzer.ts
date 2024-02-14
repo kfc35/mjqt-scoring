@@ -1,23 +1,18 @@
-import { TileToQuantityMap } from "model/hand/hk/tileQuantityMap";
 import { Hand } from "model/hand/hk/hand";
-import { handMinLength } from "model/hand/hk/handUtils";
+import { handMinLength } from "model/hand/hk/handConstants";
 import { type HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Pair from "model/meld/pair";
 import { SpecialWinningHand } from "model/hand/hk/specialWinningHand";
+import { assertTilesSuitedOrHonor, tilesUnique } from "common/tileUtils";
+import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
 
 export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: SuitedOrHonorTile[]): HandAnalyzer {
-    if (thirteenUniqueTiles.length !== 13) {
-        throw new Error("There must be exactly 13 tiles in thirteenUniqueTiles");
+    assertTilesSuitedOrHonor(thirteenUniqueTiles);
+    assertTilesNotNullAndCorrectLength(thirteenUniqueTiles, handMinLength - 1, handMinLength - 1);
+    if (!tilesUnique(thirteenUniqueTiles)) {
+        throw new Error("There can only be one of each tile in thirteenUniqueTiles");
     }
-
-    const exactThirteenTilesQuantityMap = new TileToQuantityMap(thirteenUniqueTiles);
-    for (const tile of thirteenUniqueTiles) {
-        if (exactThirteenTilesQuantityMap.getQuantity(tile) !== 1) {
-            throw new Error("There can only be one of each tile in thirteenUniqueTiles");
-        }
-    }
-
     return (hand: Hand) => {
         let pair: Pair | undefined = undefined;
         const tiles: SuitedOrHonorTile[] = [];
@@ -38,6 +33,9 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
             else { // quantity === 1
                 tiles.push(tile);
             }
+        }
+        if (pair === undefined || tiles.length !== handMinLength - 1) {
+            return undefined;
         }
         return new SpecialWinningHand(tiles, hand.flowerTiles, pair);
     };

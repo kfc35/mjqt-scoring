@@ -1,7 +1,7 @@
 import SuitedTile from "model/tile/group/suitedTile";
 import Meld  from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
-import { assertTilesHaveSameSuitedGroup } from "model/meld/meldUtils.js";
+import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
 
 export default class Chow extends Meld {
     // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"
@@ -19,10 +19,6 @@ export default class Chow extends Meld {
             throw new TypeError("Tiles in a Chow must be a consecutive run (e.g. 1,2,3 or 2,3,4 ... or 7,8,9).");
         }
 
-        super(tilesCopy, exposed);
-    }
-
-    getType(): MeldType.CHOW {
-        return MeldType.CHOW;
+        super(tilesCopy, MeldType.CHOW, exposed);
     }
 }

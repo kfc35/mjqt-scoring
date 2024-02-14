@@ -11,7 +11,7 @@ export enum WinCondition {
     GREAT_DRAGONS = 'GREAT_DRAGONS',
     SMALL_WINDS = 'SMALL_WINDS',
     GREAT_WINDS = 'GREAT_WINDS',
-    THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS',
+    THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', //special win condition.
     ALL_KONGS = 'ALL_KONGS',
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.
     // can win from self-pick but no bonus for winning from wall

@@ -1,10 +1,11 @@
-import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
+import { assertTilesHongKongTile, assertTilesNotNullAndCorrectLength, tilesUnique } from "common/tileUtils";
 import { Tile } from "model/tile/tile";
-import { type FlowerTile, flowerTileGroups, type HongKongTile } from "model/tile/hk/hongKongTile";
-import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { type HongKongTile } from "model/tile/hk/hongKongTile";
+import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
+import { type SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { WinningHand } from "model/hand/hk/winningHand";
 import { TileToQuantityMap } from "model/hand/hk/tileQuantityMap";
-import { handMinLength, handMaxLength, handMaxNumUniqueFlowers } from "model/hand/hk/handUtils";
+import { handMinLength, handMaxLength, handMaxNumUniqueFlowers } from "model/hand/hk/handConstants";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
@@ -19,18 +20,29 @@ export class Hand {
 
     constructor(tiles: HongKongTile[]) {
         assertTilesNotNullAndCorrectLength(tiles, handMinLength, handMaxLength);
-        this._flowerTiles = tiles.filter(tile => flowerTileGroups.has(tile.group)) as FlowerTile[];
-        if (this._flowerTiles.reduce((hasDup, tile, index) => 
-            index + 1 >= this._flowerTiles.length ? hasDup : hasDup || tile.equals(this._flowerTiles[index+1]!), false)) {
+        assertTilesHongKongTile(tiles)
+
+        this._flowerTiles = []; 
+        for (const tile of tiles) {
+            if (isFlowerTile(tile)) {
+                this._flowerTiles.push(tile);
+            }
+        }
+        if (!tilesUnique(this._flowerTiles)) {
             throw new TypeError("A HK Hand cannot have duplicate flower tiles.");
         }
         if (this._flowerTiles.length > handMaxNumUniqueFlowers) {
             throw new TypeError("A HK Hand can only have max " + handMaxNumUniqueFlowers + " number of flower tiles. Found " + this._flowerTiles.length);
         }
         
-        const nonFlowerTiles : SuitedOrHonorTile[] = tiles.filter(tile => !flowerTileGroups.has(tile.group)) as SuitedOrHonorTile[];
-        if (nonFlowerTiles.length < handMinLength) {
-            throw new TypeError("A HK Hand must have at least " + handMinLength + " non flower tiles. Found " + nonFlowerTiles.length);
+        const suitedOrHonorTiles : SuitedOrHonorTile[] = [];
+        for (const tile of tiles) {
+            if (isSuitedOrHonorTile(tile)) {
+                suitedOrHonorTiles.push(tile);
+            }
+        }
+        if (suitedOrHonorTiles.length < handMinLength) {
+            throw new TypeError("A HK Hand must have at least " + handMinLength + " suited or honor tiles. Found " + suitedOrHonorTiles.length);
         }
 
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
@@ -39,11 +51,7 @@ export class Hand {
         if (!everyTileQuantityLessThanMaxUniqueTilePerHand) {
             throw new TypeError("A Hand can only have max " + maxQuantityPerNonFlowerTile + " of each unique suited or honor tile.");
         }
-        
-        // need a function that returns potential winning combinations -- e.g. pong first or chi first
-        // if there is a 4 of a tile, it could be a kong OR a pong and a chi
-        // it's possible for 3 consecutive pongs to also be 3 identical chi
-        // need to also check 7 pairs, any bespoke hands. 7 pairs can have a kong as two pairs.
+
         this._tileToQuantity = tileToQuantity;
         this._winningHands = [];
     }
@@ -92,7 +100,4 @@ export class Hand {
         }
         return this;
     }
-
-    // several candidate hand objects? you try to see if hand can be converted into a candidate hand object.
-    
 }

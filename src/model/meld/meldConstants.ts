@@ -13,6 +13,13 @@ export function assertTilesHaveSameSuitedGroup(tiles: Tile[]) {
     }
 }
 
+export function assertIsSuitedOrHonors(tiles: Tile[]): tiles is SuitedOrHonorTile[] {
+    if (!tiles.every(tile => isSuitedOrHonorTile(tile))) {
+        throw new TypeError("Tiles in this meld must be suited or honor tiles."); 
+    }
+    return true;
+}
+
 export function assertIsSuitedOrHonor(tile: Tile): tile is SuitedOrHonorTile {
     if (!isSuitedOrHonorTile(tile)) {
         throw new TypeError("Tiles in this meld must be suited or honor tiles."); 

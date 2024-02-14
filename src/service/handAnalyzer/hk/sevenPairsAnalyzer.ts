@@ -4,6 +4,7 @@ import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import { isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { StandardWinningHand } from "model/hand/hk/standardWinningHand";
+import { meldsNotNullAndCorrectLength } from "common/meldUtils";
 
 export const sevenPairsAnalyzer = constructSevenPairsAnalyzer();
 
@@ -27,6 +28,9 @@ function constructSevenPairsAnalyzer() : HandAnalyzer {
                         }
                     }
                 }
+            }
+            if (meldsNotNullAndCorrectLength(melds, 7)) {
+                return undefined;
             }
             return new StandardWinningHand(melds, hand.flowerTiles);
         }

@@ -1,12 +1,13 @@
 import { TileGroup } from "model/tile/tileGroup";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue, type TileValue } from "model/tile/tileValue";
-import { flowerTileGroups, constructTile } from "model/tile/hk/hongKongTile";
+import { flowerTileGroups } from "model/tile/group/flowerTile";
 import { Tile } from "model/tile/tile";
-import { tileArrayDoesNotContain } from "common/tileUtils";
+import { constructTile } from "model/tile/group/tileConstructor";
+import { tilesDoesNotContainTile } from "common/tileUtils";
 
 // Wrapper class for mapping a tile to its quantity in a hand.
 export class TileToQuantityMap {
-    _tileToQuantityMap: ReadonlyMap<TileGroup, ReadonlyMap<TileValue, number>>;
+    private _tileToQuantityMap: Map<TileGroup, Map<TileValue, number>>;
 
     constructor(tiles: Tile[]) {
         const tileToQuantityMap: Map<TileGroup, Map<TileValue, number>>= new Map();
@@ -78,7 +79,7 @@ export class TileToQuantityMap {
                 const tileArray = invertedMap.get(quantity);
                 const tile = constructTile(tileGroup, tileValue);
                 if (tileArray) {
-                    if (tileArrayDoesNotContain(tileArray, tile)) {
+                    if (tilesDoesNotContainTile(tileArray, tile)) {
                         tileArray.push(tile);
                     } // else no-op, array already containes tile.
                 } else {

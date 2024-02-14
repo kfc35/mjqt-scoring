@@ -21,7 +21,10 @@ export abstract class Tile {
         return this._value;
     }
 
-    equals(otherTile : Tile) : boolean {
+    equals(otherTile : Tile | undefined) : boolean {
+        if (otherTile === undefined) {
+            return false;
+        }
         return this._group === otherTile.group 
             && this._value === otherTile.value;
     }

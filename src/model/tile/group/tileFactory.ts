@@ -47,6 +47,6 @@ export function constructTile(group: TileGroup, value: TileValue) : Tile {
             }
             throw new Error(`Unsupported Tile Combination: ${group} ${value}`);
         default:
-            throw new Error("Non exhaustive TileGroup Check");
+            throw new Error("Dev Error: Non exhaustive TileGroup Check");
     }
 }

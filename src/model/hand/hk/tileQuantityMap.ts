@@ -2,12 +2,12 @@ import { TileGroup } from "model/tile/tileGroup";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue, type TileValue } from "model/tile/tileValue";
 import { flowerTileGroups } from "model/tile/group/flowerTile";
 import { Tile } from "model/tile/tile";
-import { constructTile } from "model/tile/group/tileConstructor";
+import { constructTile } from "model/tile/group/tileFactory";
 import { tilesDoesNotContainTile } from "common/tileUtils";
 
 // Wrapper class for mapping a tile to its quantity in a hand.
 export class TileToQuantityMap {
-    private _tileToQuantityMap: Map<TileGroup, Map<TileValue, number>>;
+    private _tileToQuantityMap: ReadonlyMap<TileGroup, ReadonlyMap<TileValue, number>>;
 
     constructor(tiles: Tile[]) {
         const tileToQuantityMap: Map<TileGroup, Map<TileValue, number>>= new Map();
@@ -52,6 +52,14 @@ export class TileToQuantityMap {
             return 0;
         }
         return groupMap.get(value) ?? 0;
+    }
+
+    getQuantitiesForTileGroup(group: TileGroup) : ReadonlyMap<TileValue, number> {
+        const quantities = this._tileToQuantityMap.get(group);
+        if (!quantities) {
+            throw new Error(`Unsupported tile group: ${group}`);
+        }
+        return quantities;
     }
 
     getQuantityPerUniqueTile(includeFlowerTiles?: boolean): number[] {

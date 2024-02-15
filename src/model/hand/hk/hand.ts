@@ -72,6 +72,10 @@ export class Hand {
         }
     }
 
+    getQuantitiesForTileGroup(group: TileGroup): ReadonlyMap<TileValue, number> {
+        return this._tileToQuantity.getQuantitiesForTileGroup(group);
+    }
+
     getQuantityPerUniqueTile(includeFlowerTiles?: boolean): number[] {
         return this._tileToQuantity.getQuantityPerUniqueTile(includeFlowerTiles);
     }

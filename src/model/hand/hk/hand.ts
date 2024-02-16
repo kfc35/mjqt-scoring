@@ -9,16 +9,23 @@ import { handMinLength, handMaxLength, handMaxNumUniqueFlowers } from "model/han
 import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
+import Meld from "model/meld/meld";
+import { toTiles } from "common/meldUtils";
 
 /** A Hand is an unsorted collection of Mahjong Tiles during play.
  * It represents an instance when it is the player's turn (i.e. there are a minimum of 14 tiles instead of 13.)
  * It may or may not represent a winning hand. */
 export class Hand {
     private _tileToQuantity: TileToQuantityMap;
+    /* preSpecifiedMelds are melds that must be present in every derived winning hand.
+       preSpecifiedMelds = [] means that there are no restrictions on any derived winning hands.
+       e.g. if preSpeciedMelds has a concealed pong, every winning hand must have that pong. 
+       Ideally, the tiles in the meld are also duplicated in _tileToQuantity */ 
+    private _preSpecifiedMelds: Meld[];
     private _winningHands: WinningHand[];
     private _flowerTiles: FlowerTile[];
 
-    constructor(tiles: HongKongTile[]) {
+    constructor(tiles: HongKongTile[], preSpecifiedMelds?: Meld[]) {
         assertTilesNotNullAndCorrectLength(tiles, handMinLength, handMaxLength);
         assertTilesHongKongTile(tiles)
 
@@ -52,6 +59,19 @@ export class Hand {
             throw new TypeError("A Hand can only have max " + maxQuantityPerNonFlowerTile + " of each unique suited or honor tile.");
         }
 
+        if (preSpecifiedMelds && preSpecifiedMelds.length > 0) {
+            const meldTiles = toTiles(preSpecifiedMelds);
+            const meldTileToQuantity = new TileToQuantityMap(meldTiles);
+            for (const tile of meldTiles) {
+                if (meldTileToQuantity.getQuantity(tile) > tileToQuantity.getQuantity(tile)) {
+                    throw new TypeError(`A Hand's pre-specified melds must be a subset of the provided tiles. ` + 
+                        `For ${tile.value} ${tile.group}, there are ${meldTileToQuantity.getQuantity(tile)} of them in melds, but ` + 
+                        `${tileToQuantity.getQuantity(tile)} in tiles.`);
+                }
+            }
+        }
+
+        this._preSpecifiedMelds = preSpecifiedMelds ?? [];
         this._tileToQuantity = tileToQuantity;
         this._winningHands = [];
     }
@@ -94,6 +114,10 @@ export class Hand {
 
     get flowerTiles() {
         return this._flowerTiles;
+    }
+
+    get preSpecifiedMelds() {
+        return this._preSpecifiedMelds;
     }
 
     // returning "this" allows for chaining multiple analyzers.

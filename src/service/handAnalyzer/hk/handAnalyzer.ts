@@ -54,8 +54,9 @@ export function analyzeHandForWinningHands(hand : Hand): WinningHand[] {
     } else { // the honor melds themselves may be the only winning hand.
         possibleMeldCombinations.push(honorMelds);
     }
+    
     return possibleMeldCombinations
-    //.filter(melds => ) melds must have 1 pair, must have numKongs, must be length 5, tile sum must equal hand length
+    //.filter(melds => ) melds must have 1 pair, must have numKongs, must be length 5, tile sum must equal hand length, must contain pre-specified melds
     .map(melds => new StandardWinningHand(melds,hand.flowerTiles))
 }
 

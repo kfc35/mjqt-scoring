@@ -9,7 +9,9 @@ export default abstract class Meld {
 
     constructor(tiles: SuitedOrHonorTile[], type: MeldType, exposed?: boolean) {
         assertTilesSuitedOrHonor(tiles);
-        this._tiles = tiles;
+        this._tiles = [...tiles].sort(function(tile1: SuitedOrHonorTile, tile2: SuitedOrHonorTile){
+            return tile1.compareTo(tile2);
+        });
         this._type = type;
         this._exposed = (exposed ? exposed : false);
     }
@@ -24,5 +26,19 @@ export default abstract class Meld {
 
     get exposed(): boolean {
         return this._exposed;
+    }
+
+    equals(meld: Meld | undefined): boolean {
+        if (!meld) {
+            return false;
+        }
+        if (this._tiles.length !== meld.tiles.length) {
+            return false;
+        }
+        // tiles is sorted in both meld objects.
+        if (!this._tiles.every((tile, index) => tile.equals(meld.tiles[index]))) {
+            return false;
+        }
+        return this._type === meld.type && this._exposed === meld.exposed;
     }
 }

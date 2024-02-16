@@ -1,5 +1,6 @@
 import Meld from "model/meld/meld";
 import { MeldType } from "model/meld/meldType";
+import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 
 export function meldsNotNullAndCorrectLength(melds: Meld[], length: number): boolean {
     return (melds && melds.every(meld => !!meld) && melds.length === length);
@@ -17,4 +18,22 @@ export function meldsNumKongs(melds: Meld[]): number {
 
 export function meldsNumTiles(melds: Meld[]) : number {
     return melds.map(meld => meld.tiles.length).reduce<number>((sum, len) => sum + len, 0);
+}
+
+export function toTiles(melds: Meld[]) : SuitedOrHonorTile[] {
+    return melds.map(meld => meld.tiles)
+        .reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []);
+}
+
+export function meldsAreSubset(melds: Meld[], potentialSubset: Meld[]) {
+    return potentialSubset.every(meld => meldExistsInMelds(melds, meld));
+}
+
+export function meldExistsInMelds(melds: Meld[], meldToCheck: Meld) {
+    for (const meld of melds) {
+        if (meld.equals(meldToCheck)) {
+            return true;
+        }
+    }
+    return false;
 }

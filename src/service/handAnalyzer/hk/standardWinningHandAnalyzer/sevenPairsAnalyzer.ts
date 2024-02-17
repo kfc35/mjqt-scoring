@@ -6,9 +6,9 @@ import { isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { StandardWinningHand } from "model/hand/hk/standardWinningHand";
 import { meldsNotNullAndCorrectLength } from "common/meldUtils";
 
-export const sevenPairsAnalyzer = constructSevenPairsAnalyzer();
+default export const analyzeForSevenPairs = constructSevenPairsAnalyzer();
 
-function constructSevenPairsAnalyzer() : HandAnalyzer {
+function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
     return (hand: Hand) => {
         if (hand.getQuantityPerUniqueTile().every(quantity => quantity % 2 === 0)) {
             const melds : Meld[] = [];
@@ -30,10 +30,10 @@ function constructSevenPairsAnalyzer() : HandAnalyzer {
                 }
             }
             if (meldsNotNullAndCorrectLength(melds, 7)) {
-                return undefined;
+                return [];
             }
-            return new StandardWinningHand(melds, hand.flowerTiles);
+            return [new StandardWinningHand(melds, hand.flowerTiles)];
         }
-        return undefined;
+        return [];
     }
 }

@@ -16,7 +16,7 @@ export default abstract class Meld {
         this._exposed = (exposed ? exposed : false);
     }
 
-    get tiles(): typeof this._tiles {
+    get tiles(): SuitedOrHonorTile[] {
         return this._tiles;
     }
 
@@ -35,7 +35,7 @@ export default abstract class Meld {
         if (this._tiles.length !== meld.tiles.length) {
             return false;
         }
-        // tiles is sorted in both meld objects.
+        // TODO this assumption is not necessarily true... tiles is sorted in both meld objects.
         if (!this._tiles.every((tile, index) => tile.equals(meld.tiles[index]))) {
             return false;
         }

@@ -4,37 +4,46 @@ import Pair from "model/meld/pair";
 import { WinningHand } from "model/hand/hk/winningHand";
 import { handMinLength } from "model/hand/hk/handConstants";
 import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertTilesFlower, tilesUnique } from "common/tileUtils";
+import { meldPairLength } from "model/meld/meldConstants";
 
 /** A SpecialWinningHand is a combination of tiles that does not fit the "meld" structure,
  * but still constitutes a win. E.g. Thirteen Orphans (13 arbitrary tiles plus a duplicate tile.)
  * One can specify 14 specific tiles, in which case the pair will be undefined.
  */
 export class SpecialWinningHand implements WinningHand {
-    tiles: SuitedOrHonorTile[];
-    flowerTiles: FlowerTile[];
-    pair?: Pair | undefined;
+    private tiles: SuitedOrHonorTile[];
+    protected _flowerTiles: FlowerTile[];
+    private pair?: Pair | undefined;
 
     // dups are allowed in tiles
-    constructor(thirteenOrFourteenTiles: SuitedOrHonorTile[], flowerTiles: FlowerTile[], pair?: Pair) {
+    constructor(twelveOrFourteenTiles: SuitedOrHonorTile[], flowerTiles: FlowerTile[], pair?: Pair) {
         if (pair) {
-            assertTilesNotNullAndCorrectLength(thirteenOrFourteenTiles, handMinLength - 1, handMinLength - 1)
+            assertTilesNotNullAndCorrectLength(twelveOrFourteenTiles, handMinLength - meldPairLength, handMinLength - meldPairLength);
         } else {
-            assertTilesNotNullAndCorrectLength(thirteenOrFourteenTiles, handMinLength, handMinLength)
+            assertTilesNotNullAndCorrectLength(twelveOrFourteenTiles, handMinLength, handMinLength);
         }
-        assertTilesSuitedOrHonor(thirteenOrFourteenTiles);
+        assertTilesSuitedOrHonor(twelveOrFourteenTiles);
         // TODO assert max 4 of each suited or honor tile.
-        this.tiles = thirteenOrFourteenTiles;
+        this.tiles = twelveOrFourteenTiles;
 
         assertTilesFlower(flowerTiles);
         if (!tilesUnique(flowerTiles)) {
             throw new Error("flowerTiles must be unique");
         }
-        this.flowerTiles = flowerTiles;
+        this._flowerTiles = flowerTiles;
         this.pair = pair;
     }
 
     analyzeWinningHandForFaan(analyzer: (winningHand: WinningHand) => void) : this {
         analyzer(this);
         return this;
+    }
+
+    get flowerTiles() : FlowerTile[] {
+        return this._flowerTiles;
+    }
+
+    getContents(): SuitedOrHonorTile[] {
+        return ( this.pair ? [...this.tiles, ...this.pair.tiles] : [...this.tiles]); 
     }
 }

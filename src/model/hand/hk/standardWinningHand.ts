@@ -8,8 +8,8 @@ import { assertTilesFlower, tilesUnique } from "common/tileUtils";
  * Seven pairs counts as a standard winning hand.
 */
 export class StandardWinningHand implements WinningHand {
-    melds: Meld[];
-    flowerTiles: FlowerTile[];
+    private melds: Meld[];
+    protected _flowerTiles: FlowerTile[];
     // map from faan to "explanation", could be a single meld, multiple melds, individual tiles, whole hand, actions unrelated to your hand
 
     constructor(melds: Meld[], flowerTiles: FlowerTile[]) {
@@ -26,12 +26,20 @@ export class StandardWinningHand implements WinningHand {
         if (!tilesUnique(flowerTiles)) {
             throw new Error("flowerTiles must be unique");
         }
-        this.flowerTiles = flowerTiles;
+        this._flowerTiles = flowerTiles;
     }
 
     analyzeWinningHandForFaan(analyzer: (winningHand: WinningHand) => void) : this {
         analyzer(this);
         return this;
+    }
+
+    get flowerTiles() : FlowerTile[] {
+        return this._flowerTiles;
+    }
+
+    getContents(): Meld[] {
+        return this.melds;
     }
 
     // several candidate hand objects? you try to see if hand can be converted into a candidate hand object.

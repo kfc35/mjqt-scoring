@@ -7,7 +7,7 @@ import { SpecialWinningHand } from "model/hand/hk/specialWinningHand";
 import { assertTilesSuitedOrHonor, tilesUnique } from "common/tileUtils";
 import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
 
-export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: SuitedOrHonorTile[]): HandAnalyzer {
+export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: SuitedOrHonorTile[]): HandAnalyzer<SpecialWinningHand> {
     assertTilesSuitedOrHonor(thirteenUniqueTiles);
     assertTilesNotNullAndCorrectLength(thirteenUniqueTiles, handMinLength - 1, handMinLength - 1);
     if (!tilesUnique(thirteenUniqueTiles)) {
@@ -17,15 +17,15 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
         let pair: Pair | undefined = undefined;
         const tiles: SuitedOrHonorTile[] = [];
         if (hand.getTotalQuantity() !== handMinLength) {
-            return undefined;
+            return [];
         }
         for (const tile of thirteenUniqueTiles) {
             const quantity = hand.getQuantity(tile);
             if (quantity < 1 || quantity > 2) {
-                return undefined;
+                return [];
             }
             if (quantity === 2 && !!pair) { // has more than one pair
-                return undefined;
+                return [];
             }
             if (quantity === 2) {
                 pair = new Pair(tile);
@@ -35,8 +35,8 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
             }
         }
         if (pair === undefined || tiles.length !== handMinLength - 1) {
-            return undefined;
+            return [];
         }
-        return new SpecialWinningHand(tiles, hand.flowerTiles, pair);
+        return [new SpecialWinningHand(tiles, hand.flowerTiles, pair)];
     };
 }

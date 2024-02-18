@@ -81,7 +81,7 @@ export function isSuitedTileValue(tileValue: TileValue): tileValue is SuitedTile
     return acceptableTileValues.indexOf(tileValue) !== -1;
 }
 
-export function getNextTileValue(suitedTileValue : SuitedTileValue) : SuitedTileValue | undefined {
+export function getNextSuitedTileValue(suitedTileValue : SuitedTileValue) : SuitedTileValue | undefined {
     if (suitedTileValue < SuitedTileValue.NINE && suitedTileValue >= SuitedTileValue.ONE) {
         return suitedTileValue + 1;
     }

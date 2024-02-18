@@ -6,7 +6,7 @@ import { isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { StandardWinningHand } from "model/hand/hk/standardWinningHand";
 import { meldsNotNullAndCorrectLength } from "common/meldUtils";
 
-default export const analyzeForSevenPairs = constructSevenPairsAnalyzer();
+export const analyzeForSevenPairs = constructSevenPairsAnalyzer();
 
 function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
     return (hand: Hand) => {

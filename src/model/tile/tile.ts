@@ -39,5 +39,6 @@ export abstract class Tile {
         return this._group < otherTile.group ? -1 : +1
     }
     
+    // TODO rename to clone
     abstract copy(): Tile;
 }

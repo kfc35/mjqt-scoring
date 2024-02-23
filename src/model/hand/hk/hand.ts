@@ -19,7 +19,7 @@ export class Hand {
     private _tileToQuantity: TileToQuantityMap;
     /* preSpecifiedMelds are melds that must be present in every derived winning hand.
        preSpecifiedMelds = [] means that there are no restrictions on any derived winning hands.
-       e.g. if preSpeciedMelds has a concealed pong, every winning hand must have that pong. 
+       e.g. if preSpeciedMelds has a concealed pong, every winning hand must have that concealed pong. 
        Ideally, the tiles in the meld are also duplicated in _tileToQuantity */ 
     private _preSpecifiedMelds: Meld[];
     private _winningHands: WinningHand[];

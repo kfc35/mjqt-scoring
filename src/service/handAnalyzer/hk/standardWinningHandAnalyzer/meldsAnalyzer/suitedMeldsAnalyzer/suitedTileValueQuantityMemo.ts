@@ -11,7 +11,7 @@ export default class SuitedTileValueQuantityMemo {
         if (handOrToBeCopied instanceof Hand && tileGroup) {
             this._memo = [];
             const tileValueQuantityMap = handOrToBeCopied.getQuantitiesForTileGroup(tileGroup)
-            for (const suitedTileValue of suitedTileValues) {
+            for (const suitedTileValue of [...suitedTileValues].sort((stv1, stv2) => stv1.valueOf() - stv2.valueOf())) {
                 // SuitedTileValue.ONE is at index 0, TWO is at index 1, etc.
                 this._memo.push(tileValueQuantityMap.get(suitedTileValue) ?? 0);
             }
@@ -30,6 +30,9 @@ export default class SuitedTileValueQuantityMemo {
     }
 
     decreaseQuantity(stv: SuitedTileValue, amtToDecrease: number): number {
+        if (amtToDecrease < 0) {
+            throw new Error(`Cannot decrease a negative amount: ${amtToDecrease}`);
+        }
         const quantity = this.getQuantity(stv);
         if (quantity < amtToDecrease) {
             throw new Error(`Cannot decrease quantity for ${stv}; its quantity (${quantity}) is less than ${amtToDecrease}.`);
@@ -39,6 +42,9 @@ export default class SuitedTileValueQuantityMemo {
     }
 
     decreaseQuantityForChow(startingSTV : SuitedTileValue, numChows: number) : [[SuitedTileValue, number], [SuitedTileValue, number], [SuitedTileValue, number]] {
+        if (numChows < 0) {
+            throw new Error(`Cannot create a negative amount of chows: ${numChows}`);
+        }
         const nextSTV = getNextSuitedTileValue(startingSTV);
         if (nextSTV === undefined) {
             throw new Error(`startingSTV must have two suited tile values after it.`);

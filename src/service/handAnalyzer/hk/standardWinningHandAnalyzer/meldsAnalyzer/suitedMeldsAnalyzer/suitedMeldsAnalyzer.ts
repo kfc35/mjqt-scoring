@@ -6,99 +6,201 @@ import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Chow from "model/meld/chow";
 import Pong from "model/meld/pong";
-import { meldPairLength, meldChowLength, meldPongLength } from "model/meld/meldConstants";
+import Kong from "model/meld/kong";
+import { meldPairLength, meldPongLength, meldKongLength } from "model/meld/meldConstants";
 import { TileGroup } from "model/tile/tileGroup";
 import { SuitedTileValue, getNextSuitedTileValue } from "model/tile/tileValue";
 import SuitedTileValueQuantityMemo from "service/handAnalyzer/hk/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/suitedTileValueQuantityMemo";
+import SuitedTile from "model/tile/group/suitedTile";
 
 export const analyzeForSuitedMelds : MeldsAnalyzer = (hand: Hand) => {
     const bambooMelds = getSuitedMelds(hand, TileGroup.BAMBOO);
-    //const characterMelds = getSuitedMelds(hand, TileGroup.CHARACTER);
-    //const circleMelds = getSuitedMelds(hand, TileGroup.CIRCLE);
+    const characterMelds = getSuitedMelds(hand, TileGroup.CHARACTER);
+    const circleMelds = getSuitedMelds(hand, TileGroup.CIRCLE);
 
-    const suitedMelds = [];
-    // TODO cartesian product across all types of melds
-    if (bambooMelds) {
-        suitedMelds.push(...bambooMelds);
-    }
-    return suitedMelds;
+    return combineSuitedMelds(bambooMelds, characterMelds, circleMelds);
 }
 
-function getSuitedMelds(hand: Hand, tileGroup: SuitedTileGroup) : Meld[][] | undefined {
+function getSuitedMelds(hand: Hand, tileGroup: SuitedTileGroup) : Meld[][] {
     const memo = new SuitedTileValueQuantityMemo(hand, tileGroup); 
-    return getSuitedMeldsSubFun(tileGroup, SuitedTileValue.ONE, memo);
+    return getMeldsFromStartingSTV(tileGroup, SuitedTileValue.ONE, memo);
 }
 
-function getSuitedMeldsSubFun(tileGroup: SuitedTileGroup, suitedTileValue: SuitedTileValue | undefined, quantityMemo: SuitedTileValueQuantityMemo) : Meld[][] {
-    if (suitedTileValue === undefined) {
+function getMeldsFromStartingSTV(tileGroup: SuitedTileGroup, startingSTV: SuitedTileValue | undefined, quantityMemo: SuitedTileValueQuantityMemo) : Meld[][] {
+    if (startingSTV === undefined) {
         return []; // finished processing for this tileGroup
     }
-    const quantity = quantityMemo.getQuantity(suitedTileValue);
+    const quantity = quantityMemo.getQuantity(startingSTV);
     if (quantity === 0) {
-        return getSuitedMeldsSubFun(tileGroup, getNextSuitedTileValue(suitedTileValue), quantityMemo)
+        return getMeldsFromStartingSTV(tileGroup, getNextSuitedTileValue(startingSTV), quantityMemo)
     }
     if (quantity === 1) {
-        if (quantityMemo.hasEnoughQuantityForChows(suitedTileValue, 1)) {
-            const chow = createChow(tileGroup, suitedTileValue, quantityMemo);
-            const nextMelds = getSuitedMeldsSubFun(tileGroup, getNextSuitedTileValue(suitedTileValue), quantityMemo);
-            if (nextMelds.length === 0) {
-                return [[chow]];
-            }
-            return nextMelds.map(melds => [chow, ...melds]);
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 1)) {
+            const chowCreator = chowsCreator(1);
+            return createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, chowCreator);
         }
         return []; // one lone tile that cannot be used in a meld, so short circuit out for filtering out.
     }
     if (quantity === 2) {
         // can be a pair
-        const pairRemovedMemo = new SuitedTileValueQuantityMemo(quantityMemo);
-        const pair = createPair(tileGroup, suitedTileValue, pairRemovedMemo);
-        const nextMeldsWithoutPair = getSuitedMeldsSubFun(tileGroup, getNextSuitedTileValue(suitedTileValue), pairRemovedMemo);
-        const nextMelds = (nextMeldsWithoutPair.length === 0 ? [[pair]] : nextMeldsWithoutPair.map(melds => [pair, ...melds]));
+        const melds = [];
+        const pairCreator = toMeldsCreator(createPair);
+        const pairAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, pairCreator);
+        melds.push(...pairAndSubsequentMelds);
 
         // can also be two chows if there is sufficient quantity
-        if (quantityMemo.hasEnoughQuantityForChows(suitedTileValue, 2)) {
-            const chowsRemovedMemo = new SuitedTileValueQuantityMemo(quantityMemo);
-            const chows = [createChow(tileGroup, suitedTileValue, chowsRemovedMemo),
-                createChow(tileGroup, suitedTileValue, chowsRemovedMemo)];
-            const nextMeldsWithoutChows = getSuitedMeldsSubFun(tileGroup, getNextSuitedTileValue(suitedTileValue), chowsRemovedMemo);
-            const nextMeldsWithChows = (nextMeldsWithoutChows.length === 0 ? [chows]: nextMeldsWithoutChows.map(melds => [...chows, ...melds]));
-            return [...nextMelds, ...nextMeldsWithChows];
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 2)) {
+            const twoChowsCreator = chowsCreator(2);
+            const twoChowsAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, twoChowsCreator);
+            melds.push(...twoChowsAndSubsequentMelds);
         }
-        return nextMelds;
+        return melds;
     }
     if (quantity === 3) {
         // can be a pong.
-        const pongRemovedMemo = new SuitedTileValueQuantityMemo(quantityMemo);
-        const pong = new Pong(constructSuitedTile(tileGroup, suitedTileValue));
-        pongRemovedMemo.decreaseQuantity(suitedTileValue, meldPongLength);
-        const nextMeldsWithoutPong = getSuitedMeldsSubFun(tileGroup, getNextSuitedTileValue(suitedTileValue), pongRemovedMemo);
-        const nextMelds = (nextMeldsWithoutPong.length === 0 ? [[pong]] : nextMeldsWithoutPong.map(melds => [pong, ...melds]));
+        const melds = [];
+        const pongCreator = toMeldsCreator(createPong);
+        const pongAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, pongCreator);
+        melds.push(...pongAndSubsequentMelds);
 
-        // can be one chow and a pair
-        if (quantityMemo.hasEnoughQuantityForChows(suitedTileValue, 1)) {
-            return [];
+        // can be one pair and one chow
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 1)) {
+            const onePairAndOneChowCreator = concatMeldCreators([createPair, createChow]);
+            const onePairOneChowAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, onePairAndOneChowCreator);
+            melds.push(...onePairOneChowAndSubsequentMelds)
         }
 
         // can be three chows
-        if (quantityMemo.hasEnoughQuantityForChows(suitedTileValue, 3)) {
-            return [];
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 3)) {
+            const threeChowsCreator = chowsCreator(3);
+            const threeChowsAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, threeChowsCreator);
+            melds.push(...threeChowsAndSubsequentMelds);
         }
 
-        return nextMelds;
+        return melds;
     }
     if (quantity === 4) {
-        // can be a kong, one pong and one chow, four chows
-        // cannot be two pairs.
+        // can be a kong
+        const melds = [];
+        const kongCreator = toMeldsCreator(createKong);
+        const kongAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, kongCreator);
+        melds.push(...kongAndSubsequentMelds);
+        
+        // can be one pong and one chow
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 1)) {
+            const onePongAndOneChowCreator = concatMeldCreators([createPong, createChow]);
+            const onePongOneChowAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, onePongAndOneChowCreator);
+            melds.push(...onePongOneChowAndSubsequentMelds)
+        }
+
+        // can be one pair and two chows
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 2)) {
+            const onePairAndTwoChowsCreator = concatMeldsCreators([toMeldsCreator(createPair), chowsCreator(2)])
+            const onePongOneChowAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, onePairAndTwoChowsCreator);
+            melds.push(...onePongOneChowAndSubsequentMelds)
+        }
+        
+        // can be four chows
+        if (quantityMemo.hasEnoughQuantityForChows(startingSTV, 4)) {
+            const fourChowsCreator = chowsCreator(4);
+            const fourChowsAndSubsequentMelds = createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, fourChowsCreator);
+            melds.push(...fourChowsAndSubsequentMelds);
+        }
+
+        // cannot be two pairs -- checking for 7 pairs is a separate analyzer
+        return melds;
     }
     return []; // invalid quantity, short circuit out.
 }
 
-function createPair(suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) : Pair {
+type SuitedMeldCreator = (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => Meld
+
+const createPair : SuitedMeldCreator = (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
     quantityMemo.decreaseQuantity(suitedTileValue, meldPairLength);
     return new Pair(constructSuitedTile(suitedTileGroup, suitedTileValue));
 }
 
-function createChow(suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) : Chow {
-    const [[stv1, ],[stv2, ], [stv3, ]] = quantityMemo.decreaseQuantityForChow(suitedTileValue, meldChowLength);
+const createChow : SuitedMeldCreator = (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+    const [[stv1, ],[stv2, ], [stv3, ]] = quantityMemo.decreaseQuantityForChow(suitedTileValue, 1);
     return new Chow([constructSuitedTile(suitedTileGroup, stv1),constructSuitedTile(suitedTileGroup, stv2), constructSuitedTile(suitedTileGroup, stv3)]);
+}
+
+const createPong : SuitedMeldCreator = (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+    quantityMemo.decreaseQuantity(suitedTileValue, meldPongLength);
+    return new Pong(constructSuitedTile(suitedTileGroup, suitedTileValue));
+}
+
+const createKong : SuitedMeldCreator = (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+    quantityMemo.decreaseQuantity(suitedTileValue, meldKongLength);
+    return new Kong(constructSuitedTile(suitedTileGroup, suitedTileValue));
+}
+
+type SuitedMeldsCreator = (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => Meld[]
+
+function chowsCreator(numChows : number): SuitedMeldsCreator { 
+    if (numChows < 0) {
+        throw new Error("numChows cannot be negative.");
+    }
+    return (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+        const [[stv1, ],[stv2, ], [stv3, ]] = quantityMemo.decreaseQuantityForChow(suitedTileValue, numChows);
+        const tiles : [SuitedTile, SuitedTile, SuitedTile] = [constructSuitedTile(suitedTileGroup, stv1),constructSuitedTile(suitedTileGroup, stv2), constructSuitedTile(suitedTileGroup, stv3)];
+        const chows = [];
+        for (let i = 1; i <= (numChows); i++) {
+            chows.push(new Chow(tiles));
+        }
+        return chows;
+    }
+}
+
+function toMeldsCreator(suitedMeldCreator: SuitedMeldCreator) : SuitedMeldsCreator {
+    return (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+        return [suitedMeldCreator(suitedTileGroup, suitedTileValue, quantityMemo)];
+    };
+}
+
+function concatMeldCreators(suitedMeldCreators: SuitedMeldCreator[]) : SuitedMeldsCreator {
+    return (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+        return suitedMeldCreators.map(suitedMeldCreator => suitedMeldCreator(suitedTileGroup, suitedTileValue, quantityMemo));
+    };
+}
+
+function concatMeldsCreators(suitedMeldsCreators: SuitedMeldsCreator[]) : SuitedMeldsCreator {
+    return (suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo) => {
+        const melds = [];
+        for (const suitedMeldsCreator of suitedMeldsCreators) {
+            melds.push(...suitedMeldsCreator(suitedTileGroup, suitedTileValue, quantityMemo));
+        }
+        return melds;
+    }
+}
+
+function createMeldsAndGetSubsequentMelds(suitedTileGroup: SuitedTileGroup, suitedTileValue : SuitedTileValue, quantityMemo: SuitedTileValueQuantityMemo, meldsCreator: SuitedMeldsCreator) : Meld[][] {
+    // the memo is copied in case the parent memo is re-used to process different meld possibilities
+    const copiedMemo = new SuitedTileValueQuantityMemo(quantityMemo);
+    const currentSTVMelds = meldsCreator(suitedTileGroup, suitedTileValue, copiedMemo);
+    const nextMelds = getMeldsFromStartingSTV(suitedTileGroup, getNextSuitedTileValue(suitedTileValue), copiedMemo);
+    if (nextMelds.length === 0) {
+        return [currentSTVMelds];
+    }
+    return nextMelds.map(melds => [...currentSTVMelds, ...melds]);
+}
+
+function combineSuitedMelds(bambooMelds: Meld[][], characterMelds: Meld[][], circleMelds: Meld[][]) : Meld[][] {
+    return cartesianProduct(cartesianProduct(bambooMelds, characterMelds), circleMelds);
+}
+
+function cartesianProduct(meldsOne: Meld[][], meldsTwo: Meld[][]) : Meld[][] {
+    if (meldsOne.length === 0) {
+        return meldsTwo; // might also have length = 0, that is fine.
+    }
+    if (meldsTwo.length === 0) {
+        return meldsOne;
+    }
+    const product : Meld[][] = [];
+    for (const meldOne of meldsOne) {
+        for (const meldTwo of meldsTwo) {
+            product.push([...meldOne, ...meldTwo]);
+        }
+    }
+    return product;
 }

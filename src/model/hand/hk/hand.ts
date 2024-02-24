@@ -3,7 +3,6 @@ import { Tile } from "model/tile/tile";
 import { type HongKongTile } from "model/tile/hk/hongKongTile";
 import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
 import { type SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { WinningHand } from "model/hand/hk/winningHand";
 import { TileToQuantityMap } from "model/hand/hk/tileQuantityMap";
 import { handMinLength, handMaxLength, handMaxNumUniqueFlowers } from "model/hand/hk/handConstants";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
@@ -12,9 +11,9 @@ import { type TileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
 import { toTiles } from "common/meldUtils";
 
-/** A Hand is an unsorted collection of Mahjong Tiles during play.
- * It represents an instance when it is the player's turn (i.e. there are a minimum of 14 tiles instead of 13.)
- * It may or may not represent a winning hand. */
+/** A Hand is an unsorted collection of Mahjong Tiles.
+ * It represents an instance when it is the player's turn.
+ * It may or may not represent a winning hand based on what the tiles are. */
 export class Hand {
     private _tileToQuantity: TileToQuantityMap;
     /* preSpecifiedMelds are melds that must be present in every derived winning hand.
@@ -22,10 +21,12 @@ export class Hand {
        e.g. if preSpeciedMelds has a concealed pong, every winning hand must have that concealed pong. 
        Ideally, the tiles in the meld are also duplicated in _tileToQuantity */ 
     private _preSpecifiedMelds: Meld[];
-    private _winningHands: WinningHand[];
     private _flowerTiles: FlowerTile[];
+    private _mostRecentTile: SuitedOrHonorTile;
+    private _mostRecentTileIsSelfDrawn: boolean;
 
-    constructor(tiles: HongKongTile[], preSpecifiedMelds?: Meld[]) {
+    constructor(tiles: HongKongTile[], mostRecentTile: SuitedOrHonorTile, 
+        mostRecentTileIsSelfDrawn: boolean, preSpecifiedMelds?: Meld[]) {
         assertTilesNotNullAndCorrectLength(tiles, handMinLength, handMaxLength);
         assertTilesHongKongTile(tiles)
 
@@ -70,10 +71,14 @@ export class Hand {
                 }
             }
         }
+        if (tileToQuantity.getQuantity(mostRecentTile) === 0) {
+            throw new TypeError("mostRecentTile must also be included in the tiles array.");
+        }
 
         this._preSpecifiedMelds = preSpecifiedMelds ?? [];
         this._tileToQuantity = tileToQuantity;
-        this._winningHands = [];
+        this._mostRecentTile = mostRecentTile;
+        this._mostRecentTileIsSelfDrawn = mostRecentTileIsSelfDrawn;
     }
 
     get tileToQuantity() {
@@ -108,10 +113,6 @@ export class Hand {
         return this._tileToQuantity.getQuantityToTileMap(includeFlowerTiles);
     }
 
-    get winningHands() {
-        return this._winningHands;
-    }
-
     get flowerTiles() {
         return this._flowerTiles;
     }
@@ -120,12 +121,11 @@ export class Hand {
         return this._preSpecifiedMelds;
     }
 
-    // returning "this" allows for chaining multiple analyzers.
-    analyzeHandForWinCondition(analyzer: (hand: Hand) => WinningHand | undefined) : this {
-        const winningHand = analyzer(this);
-        if (winningHand) {
-            this._winningHands.push(winningHand);
-        }
-        return this;
+    get mostRecentTile() {
+        return this._mostRecentTile;
+    }
+
+    get mostRecentTileIsSelfDrawn() {
+        return this._mostRecentTileIsSelfDrawn;
     }
 }

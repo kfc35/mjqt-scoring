@@ -7,4 +7,6 @@ export interface WinningHand {
     //get winConditions() : WinCondition[];
     get flowerTiles() : FlowerTile[];
     getContents() : SuitedOrHonorTile[] | Meld[];
+    get meldWithWinningTile() : Meld | undefined;
+    get winningTile() : SuitedOrHonorTile;
 }

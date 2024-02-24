@@ -1,4 +1,4 @@
-import { MeldsAnalyzer } from "service/handAnalyzer/hk/standardWinningHandAnalyzer/meldsAnalyzer/meldsAnalyzer";
+import { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/meldsAnalyzer";
 import { Hand } from "model/hand/hk/hand";
 import { type HonorTileGroup, HonorTileValue } from "model/tile/group/honorTile";
 import { TileGroup } from "model/tile/tileGroup";
@@ -37,7 +37,7 @@ function getHonorMelds(hand: Hand, tileGroup: HonorTileGroup, tileValues: HonorT
 }
 
 function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
-    if (quantity < 2) {
+    if (quantity < 2 && quantity >= 0) {
         // quantity === 0 is a no-op. 
         // quantity === 1 means the hand does not have a winning hand probably. Not an error.
         return undefined; 
@@ -48,6 +48,6 @@ function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, til
     } else if (quantity === 4) {
         return new Kong(constructHonorTile(tileGroup, tileValue));
     } else {
-        throw new Error("Hand is malformed. Found quantity greater than 4: " + quantity);
+        throw new Error(`Hand is malformed. Found quantity not between 0 and 4 for ${tileGroup} ${tileValue}: ${quantity}`);
     }
 }

@@ -1,4 +1,5 @@
 import Meld from "model/meld/meld";
+import { Tile } from "model/tile/tile";
 import { MeldType } from "model/meld/meldType";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 
@@ -25,15 +26,51 @@ export function toTiles(melds: Meld[]) : SuitedOrHonorTile[] {
         .reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []);
 }
 
-export function meldsAreSubset(melds: Meld[], potentialSubset: Meld[]) {
-    return potentialSubset.every(meld => meldExistsInMelds(melds, meld));
-}
-
-export function meldExistsInMelds(melds: Meld[], meldToCheck: Meld) {
-    for (const meld of melds) {
-        if (meld.equals(meldToCheck)) {
+export function meldHasTile(meld: Meld, tile: Tile) : boolean {
+    for (const meldTile of meld.tiles) {
+        if (meldTile.equals(tile)) {
             return true;
         }
     }
     return false;
+}
+
+export function meldsAreSubset(melds: Meld[], potentialSubset: Meld[], ignoreExposed? : boolean) {
+    return potentialSubset.every(meld => meldExistsInMelds(melds, meld, ignoreExposed));
+}
+
+export function meldExistsInMelds(melds: Meld[], meldToCheck: Meld, ignoreExposed?: boolean) {
+    for (const meld of melds) {
+        if (meld.equals(meldToCheck, ignoreExposed)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function overwriteExposedFlag(meldsToOverwrite: Meld[], meldsWithDesiredExposedFlag: Meld[]) {
+    return meldsToOverwrite.map(meldToOverwrite => {
+        for (const meld of meldsWithDesiredExposedFlag) {
+            if (meldToOverwrite.equals(meld, false)) {
+                return meld.clone();
+            }
+        }
+        return meldToOverwrite.clone();
+    });
+}
+
+export function cartesianProduct(meldsOne: Meld[][], meldsTwo: Meld[][]) : Meld[][] {
+    if (meldsOne.length === 0) {
+        return meldsTwo; // might also have length = 0, that is fine.
+    }
+    if (meldsTwo.length === 0) {
+        return meldsOne;
+    }
+    const product : Meld[][] = [];
+    for (const meldOne of meldsOne) {
+        for (const meldTwo of meldsTwo) {
+            product.push([...meldOne, ...meldTwo]);
+        }
+    }
+    return product;
 }

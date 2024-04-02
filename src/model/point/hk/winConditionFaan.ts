@@ -1,4 +1,4 @@
-import { PointCriterion } from "model/point/pointCriterion";
+import { PointCriterion } from "model/point/predicate/pointPredicateID";
 
 const winConditionFaan = [
     PointCriterion.SELF_DRAW,

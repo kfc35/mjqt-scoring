@@ -47,5 +47,9 @@ export default abstract class Meld {
         return this._type === meld.type && ((ignoreExposed ?? true) || this._exposed === meld.exposed);
     }
 
+    // TODO meld ordering for lists to increase readability
+    // default sort by suit, then number ascending.
+    // can customize sort by exposed.
+
     abstract clone(exposedOverride? : boolean): Meld;
 }

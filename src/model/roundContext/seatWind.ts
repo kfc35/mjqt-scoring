@@ -1,3 +1,4 @@
+import WindTile from "model/tile/group/windTile";
 import { WindTileValue } from "model/tile/tileValue";
 
 export enum SeatWind {
@@ -7,15 +8,15 @@ export enum SeatWind {
     NORTH = 'NORTH' // four
 }
 
-export function seatWindToWindTileValue(seatWind: SeatWind) : WindTileValue {
+export function seatWindToWindTile(seatWind: SeatWind) : WindTile {
     switch (seatWind) {
         case SeatWind.EAST:
-            return WindTileValue.EAST;
+            return new WindTile(WindTileValue.EAST);
         case SeatWind.SOUTH:
-            return WindTileValue.SOUTH;
+            return new WindTile(WindTileValue.SOUTH);
         case SeatWind.WEST:
-            return WindTileValue.WEST;
+            return new WindTile(WindTileValue.WEST);
         case SeatWind.NORTH:
-            return WindTileValue.NORTH;
+            return new WindTile(WindTileValue.NORTH);
     }
 }

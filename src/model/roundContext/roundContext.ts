@@ -1,6 +1,6 @@
-import { PrevailingWind, prevailingWindToWindTileValue } from "model/roundContext/prevailingWind";
-import { SeatWind, seatWindToWindTileValue } from "model/roundContext/seatWind";
-import { WindTileValue } from "model/tile/tileValue";
+import { PrevailingWind, prevailingWindToWindTile } from "model/roundContext/prevailingWind";
+import { SeatWind, seatWindToWindTile } from "model/roundContext/seatWind";
+import WindTile from "model/tile/group/windTile";
 
 export class RoundContext {
     private _prevailingWind : PrevailingWind;
@@ -15,15 +15,15 @@ export class RoundContext {
         return this._prevailingWind;
     }
 
-    getPrevailingWindAsWindTileValue(): WindTileValue {
-        return prevailingWindToWindTileValue(this._prevailingWind);
+    getPrevailingWindAsWindTile(): WindTile {
+        return prevailingWindToWindTile(this._prevailingWind);
     }
 
     get seatWind(): SeatWind {
         return this._seatWind;
     }
 
-    getSeatWindAsWindTileValue(): WindTileValue {
-        return seatWindToWindTileValue(this._seatWind);
+    getSeatWindAsWindTile(): WindTile {
+        return seatWindToWindTile(this._seatWind);
     }
 }

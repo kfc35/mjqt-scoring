@@ -1,21 +1,30 @@
-export enum PointCriterion {
-    // Hand Points
-    CHICKEN = 'CHICKEN',
+/** 
+ * PointPredicates apply to WinningHands and WinConditions. 
+ * They are simple statements that evaluate to true or false.
+ * One or more PointPredicates can be combined to compose a PointCriterion
+ * All PointPredicates must be true in order for a PointCriterion to be true
+ * For more bespoke faan, they may have only one unique corresponding point predicate.
+*/
+
+export enum PointPredicateID {
     ALL_CHOWS = 'ALL_CHOWS', // aka Common Hand
-    VALUELESS_PAIR = 'VALUELESS_PAIR',
     ALL_IN_TRIPLETS = 'ALL_IN_TRIPLETS', // aka all pongs/kongs
     SEVEN_PAIRS = 'SEVEN_PAIRS',
     MIXED_ONE_SUIT = 'MIXED_ONE_SUIT', // honors + one suit
     ALL_ONE_SUIT = 'ALL_ONE_SUIT', // only one suit
     ALL_HONORS = 'ALL_HONORS', // only honors, ALL_IN_TRIPLETS not awarded
-    ALL_TERMINALS = 'ALL_TERMINALS', // AKA Orphans, ALL_IN_TRIPLES not awarded
-    ALL_TERMINALS_AND_HONORS = 'ALL_TERMINALS_AND_HONORS', // AKA Mixed Orphans.
-    SMALL_DRAGONS = 'SMALL_DRAGONS', // 2 pong dragons, pair of third
-    GREAT_DRAGONS = 'GREAT_DRAGONS', // 3 pong dragons
-    SMALL_WINDS = 'SMALL_WINDS', // 3 pong winds, pair of fourth. sometimes has restrictions on fourth pair
-    GREAT_WINDS = 'GREAT_WINDS', // 4 pong winds
+    ALL_TERMINALS = 'ALL_TERMINALS', // AKA Orphans, only 1's and 9's, ALL_IN_TRIPLES not awarded
+    ALL_TERMINALS_AND_HONORS = 'ALL_TERMINALS_AND_HONORS', // AKA Mixed Orphans, only 1's and 9's and honors
+    // can be implied by individual dragon pongs
+    //SMALL_DRAGONS = 'SMALL_DRAGONS', // 2 pong dragons, pair of third
+    //GREAT_DRAGONS = 'GREAT_DRAGONS', // 3 pong dragons
+    THREE_WINDS_PONG = 'THREE_WINDS_PONG',
+    FOUR_WINDS_PONG = 'FOUR_WINDS_PONG',
+    //SMALL_WINDS = 'SMALL_WINDS', // 3 pong winds, pair of fourth. sometimes has restrictions on fourth pair
+    //GREAT_WINDS = 'GREAT_WINDS', // 4 pong winds
     THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // special win condition.
     ALL_KONGS = 'ALL_KONGS', // ALL_IN_TRIPLETS not awarded
+    // TODO might be something else
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.
     // can win from self-pick for pair only? no bonus for winning from wall
     NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting.    
@@ -30,13 +39,21 @@ export enum PointCriterion {
     MOON_FROM_THE_BOTTOM_OF_THE_SEA = 'MOON_FROM_THE_BOTTOM_OF_THE_SEA',
     PLUM_BLOSSOM_ON_THE_ROOF = 'PLUM_BLOSSOM_ON_THE_ROOF',
 
-    // Individual Meld Points
+    // Individual Melds
     SEAT_WIND_PONG = 'SEAT_WIND_PONG',
     PREVAILING_WIND_PONG = 'PREVAILING_WIND_PONG',
-    DOUBLE_WIND_PONG = 'DOUBLE_WIND_PONG', // Seat & Prevailing
     RED_DRAGON_PONG = 'RED_DRAGON_PONG',
     GREEN_DRAGON_PONG = 'GREEN_DRAGON_PONG',
     WHITE_DRAGON_PONG = 'WHITE_DRAGON_PONG',
+
+    DRAGON_PAIR = 'DRAGON_PAIR',
+    VALUED_WIND_PAIR = 'VALUED_WIND_PAIR', // either seat or prevailing
+    VALUELESS_WIND_PAIR = 'VALUELESS_WIND_PAIR', // neither seat nor prevailing
+    VALUELESS_SUITED_PAIR = 'VALUELESS_SUITED_PAIR', 
+
+    PAIR_WAIT = 'PAIR_WAIT', // last tile completed the pair
+    EDGE_WAIT = 'EDGE_WAIT',
+    CLOSED_WAIT = 'CLOSED_WAIT',
 
     // Win condition Points - Points awarded by how the winning tile was received
     SELF_DRAW = 'SELF_DRAW', // winning tile is NOT a discard

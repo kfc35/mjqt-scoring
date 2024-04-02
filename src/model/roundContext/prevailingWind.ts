@@ -1,3 +1,4 @@
+import WindTile from "model/tile/group/windTile";
 import { WindTileValue } from "model/tile/tileValue";
 
 export enum PrevailingWind {
@@ -7,15 +8,15 @@ export enum PrevailingWind {
     NORTH = 'NORTH'
 }
 
-export function prevailingWindToWindTileValue(prevailingWind: PrevailingWind) : WindTileValue {
+export function prevailingWindToWindTile(prevailingWind: PrevailingWind) : WindTile {
     switch (prevailingWind) {
         case PrevailingWind.EAST:
-            return WindTileValue.EAST;
+            return new WindTile(WindTileValue.EAST);
         case PrevailingWind.SOUTH:
-            return WindTileValue.SOUTH;
+            return new WindTile(WindTileValue.SOUTH);
         case PrevailingWind.WEST:
-            return WindTileValue.WEST;
+            return new WindTile(WindTileValue.WEST);
         case PrevailingWind.NORTH:
-            return WindTileValue.NORTH;
+            return new WindTile(WindTileValue.NORTH);
     }
 }

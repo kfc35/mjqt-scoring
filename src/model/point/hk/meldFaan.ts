@@ -1,4 +1,4 @@
-import { PointCriterion } from "model/point/pointCriterion";
+import { PointCriterion } from "model/point/predicate/pointPredicateID";
 
 const meldFaan = [
     PointCriterion.SEAT_WIND_PONG,

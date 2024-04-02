@@ -1,7 +1,7 @@
-import { PointCriterion } from "model/point/pointCriterion";
+import { PointCriterion } from "model/point/predicate/pointPredicateID";
 
 const winningHandFaan = [
-    PointCriterion.CHICKEN,
+    "CHICKEN",
     PointCriterion.ALL_CHOWS, 
     PointCriterion.VALUELESS_PAIR, 
     PointCriterion.ALL_IN_TRIPLETS, 
@@ -11,7 +11,7 @@ const winningHandFaan = [
     PointCriterion.ALL_HONORS,
     PointCriterion.ALL_TERMINALS,
     // ALL_TERMINALS_AND_HONORS is not counted in HKOS official, but can be enabled if desired.
-    PointCriterion.ALL_TERMINALS_AND_HONORS
+    PointCriterion.ALL_TERMINALS_AND_HONORS,
     PointCriterion.SMALL_DRAGONS,
     PointCriterion.GREAT_DRAGONS,
     PointCriterion.SMALL_WINDS,
@@ -22,7 +22,6 @@ const winningHandFaan = [
     PointCriterion.NINE_GATES,
     PointCriterion.CONCEALED_HAND,
     PointCriterion.MELDED_HAND,
-    PointCriterion.FULLY_CONCEALED_HAND,
 ] as const;
 
 export type WinningHandFaan = typeof winningHandFaan[number];

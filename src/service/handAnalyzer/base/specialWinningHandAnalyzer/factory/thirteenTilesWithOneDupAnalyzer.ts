@@ -3,7 +3,7 @@ import { handMinLength } from "model/hand/hk/handConstants";
 import { type HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Pair from "model/meld/pair";
-import { SpecialWinningHand } from "model/hand/hk/specialWinningHand";
+import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { assertTilesSuitedOrHonor, tilesUnique } from "common/tileUtils";
 import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
 import { meldExistsInMelds } from "common/meldUtils";
@@ -42,6 +42,6 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
         if (!hand.preSpecifiedMelds || !(hand.preSpecifiedMelds.length === 1 && meldExistsInMelds(hand.preSpecifiedMelds, pair, false))) {
             return [];
         }
-        return [new SpecialWinningHand([...tiles, ...pair.tiles], hand.mostRecentTile, hand.flowerTiles)];
+        return [new SpecialWinningHand([[...tiles], [...pair.tiles]], hand.mostRecentTile, hand.flowerTiles)];
     };
 }

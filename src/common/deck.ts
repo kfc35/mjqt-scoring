@@ -11,8 +11,8 @@ export const maxQuantityPerNonFlowerTile = 4;
 export const 
     PLUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.PLUM),
     ORCHID_GENTLEMAN = new GentlemanTile(GentlemanTileValue.ORCHID),
-    BAMBOO_GENTLEMAN = new GentlemanTile(GentlemanTileValue.BAMBOO),
     CHRYSANTHEMUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.CHRYSANTHEMUM),
+    BAMBOO_GENTLEMAN = new GentlemanTile(GentlemanTileValue.BAMBOO),
     
     SPRING_SEASON = new SeasonTile(SeasonTileValue.SPRING),
     SUMMER_SEASON = new SeasonTile(SeasonTileValue.SUMMER),

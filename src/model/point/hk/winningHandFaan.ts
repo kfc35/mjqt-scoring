@@ -1,31 +1,21 @@
-import { PointCriterion } from "model/point/predicate/pointPredicateID";
-
-const winningHandFaan = [
-    "CHICKEN",
-    PointCriterion.ALL_CHOWS, 
-    PointCriterion.VALUELESS_PAIR, 
-    PointCriterion.ALL_IN_TRIPLETS, 
-    PointCriterion.SEVEN_PAIRS,
-    PointCriterion.MIXED_ONE_SUIT,
-    PointCriterion.ALL_ONE_SUIT,
-    PointCriterion.ALL_HONORS,
-    PointCriterion.ALL_TERMINALS,
-    // ALL_TERMINALS_AND_HONORS is not counted in HKOS official, but can be enabled if desired.
-    PointCriterion.ALL_TERMINALS_AND_HONORS,
-    PointCriterion.SMALL_DRAGONS,
-    PointCriterion.GREAT_DRAGONS,
-    PointCriterion.SMALL_WINDS,
-    PointCriterion.GREAT_WINDS,
-    PointCriterion.THIRTEEN_ORPHANS,
-    PointCriterion.ALL_KONGS,
-    PointCriterion.SELF_TRIPLETS,
-    PointCriterion.NINE_GATES,
-    PointCriterion.CONCEALED_HAND,
-    PointCriterion.MELDED_HAND,
-] as const;
-
-export type WinningHandFaan = typeof winningHandFaan[number];
-export function isWinningHandFaan(pointCriterion : PointCriterion) : pointCriterion is WinningHandFaan {
-    const faanList : readonly PointCriterion[] = winningHandFaan;
-    return faanList.indexOf(pointCriterion) !== -1;
+export enum WinningHandFaan {
+    CHICKEN = 'CHICKEN',
+    ALL_CHOWS = 'ALL_CHOWS',
+    PIN_WOO = 'PIN_WOO', // ALL_CHOWS, NO_GENTLEMEN_OR_SEASONS, AND VALUELESS_PAIR
+    ALL_IN_TRIPLETS = 'ALL_IN_TRIPLETS', 
+    SEVEN_PAIRS = 'SEVEN_PAIRS',
+    MIXED_ONE_SUIT = 'MIXED_ONE_SUIT',
+    ALL_ONE_SUIT = 'ALL_ONE_SUIT',
+    ALL_HONORS = 'ALL_HONORS',
+    ALL_TERMINALS = 'ALL_TERMINALS',
+    SMALL_DRAGONS = 'SMALL_DRAGONS', // 2 dragon pongs, pair of third
+    GREAT_DRAGONS = 'GREAT_DRAGONS', // 3 dragon pongs
+    SMALL_WINDS = 'SMALL_WINDS', // 3 wind pongs, pair of fourth. sometimes has restrictions on fourth pair
+    GREAT_WINDS = 'GREAT_WINDS', // 4 winds pongs
+    THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS',
+    ALL_KONGS = 'ALL_KONGS',
+    SELF_TRIPLETS = 'SELF_TRIPLETS',
+    NINE_GATES = 'NINE_GATES',
+    CONCEALED_HAND = 'CONCEALED_HAND',
+    MELDED_HAND = 'MELDED_HAND',
 }

@@ -4,7 +4,7 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Meld from "model/meld/meld";
 
 export interface WinningHand {
-    getContents() : SuitedOrHonorTile[] | Meld[];
+    getContents() : Meld[] | SuitedOrHonorTile[][];
     get meldWithWinningTile() : Meld | undefined; // undefined for special only
     get winningTile() : SuitedOrHonorTile;
     get flowerTiles() : FlowerTile[];

@@ -1,5 +1,5 @@
 import { Hand } from "model/hand/hk/hand";
-import { WinningHand } from "model/hand/hk/winningHand";
+import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { analyzeForSpecialWinningHands } from "service/handAnalyzer/base/specialWinningHandAnalyzer/specialWinningHandAnalyzer";
 import { analyzeForStandardWinningHands } from "service/handAnalyzer/hk/standardWinningHandAnalyzer/standardWinningHandAnalyzer";
 

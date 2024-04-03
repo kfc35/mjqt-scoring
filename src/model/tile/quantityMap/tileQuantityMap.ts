@@ -5,7 +5,7 @@ import { Tile } from "model/tile/tile";
 import { constructTile } from "model/tile/group/tileFactory";
 import { tilesDoesNotContainTile } from "common/tileUtils";
 
-// Wrapper class for mapping a tile to its quantity in a hand.
+// Wrapper class for mapping a tile to its quantity. Not directly related to gameplay, but useful for many ops.
 export class TileToQuantityMap {
     private _tileToQuantityMap: ReadonlyMap<TileGroup, ReadonlyMap<TileValue, number>>;
 

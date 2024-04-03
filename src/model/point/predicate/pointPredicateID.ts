@@ -1,5 +1,5 @@
 /** 
- * PointPredicates apply to WinningHands and WinConditions. 
+ * PointPredicates apply to WinningHands and WinContext. 
  * They are simple statements that evaluate to true or false.
  * One or more PointPredicates can be combined to compose a PointCriterion
  * All PointPredicates must be true in order for a PointCriterion to be true
@@ -7,23 +7,17 @@
 */
 
 export enum PointPredicateID {
-    ALL_CHOWS = 'ALL_CHOWS', // aka Common Hand
+    ALL_CHOWS = 'ALL_CHOWS',
     ALL_IN_TRIPLETS = 'ALL_IN_TRIPLETS', // aka all pongs/kongs
     SEVEN_PAIRS = 'SEVEN_PAIRS',
     MIXED_ONE_SUIT = 'MIXED_ONE_SUIT', // honors + one suit
     ALL_ONE_SUIT = 'ALL_ONE_SUIT', // only one suit
     ALL_HONORS = 'ALL_HONORS', // only honors, ALL_IN_TRIPLETS not awarded
     ALL_TERMINALS = 'ALL_TERMINALS', // AKA Orphans, only 1's and 9's, ALL_IN_TRIPLES not awarded
-    ALL_TERMINALS_AND_HONORS = 'ALL_TERMINALS_AND_HONORS', // AKA Mixed Orphans, only 1's and 9's and honors
-    // can be implied by individual dragon pongs
-    //SMALL_DRAGONS = 'SMALL_DRAGONS', // 2 pong dragons, pair of third
-    //GREAT_DRAGONS = 'GREAT_DRAGONS', // 3 pong dragons
-    THREE_WINDS_PONG = 'THREE_WINDS_PONG',
+    THREE_WINDS_PONG = 'THREE_WINDS_PONG', // hand has three pongs of different winds
     FOUR_WINDS_PONG = 'FOUR_WINDS_PONG',
-    //SMALL_WINDS = 'SMALL_WINDS', // 3 pong winds, pair of fourth. sometimes has restrictions on fourth pair
-    //GREAT_WINDS = 'GREAT_WINDS', // 4 pong winds
-    THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // special win condition.
-    ALL_KONGS = 'ALL_KONGS', // ALL_IN_TRIPLETS not awarded
+    THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // 
+    ALL_KONGS = 'ALL_KONGS',
     // TODO might be something else
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.
     // can win from self-pick for pair only? no bonus for winning from wall
@@ -47,17 +41,16 @@ export enum PointPredicateID {
     WHITE_DRAGON_PONG = 'WHITE_DRAGON_PONG',
 
     DRAGON_PAIR = 'DRAGON_PAIR',
-    VALUED_WIND_PAIR = 'VALUED_WIND_PAIR', // either seat or prevailing
+    VALUED_WIND_PAIR = 'VALUED_WIND_PAIR', // either seat and/or prevailing
     VALUELESS_WIND_PAIR = 'VALUELESS_WIND_PAIR', // neither seat nor prevailing
     VALUELESS_SUITED_PAIR = 'VALUELESS_SUITED_PAIR', 
 
-    PAIR_WAIT = 'PAIR_WAIT', // last tile completed the pair
-    EDGE_WAIT = 'EDGE_WAIT',
-    CLOSED_WAIT = 'CLOSED_WAIT',
+    PAIR_WAIT = 'PAIR_WAIT', // last tile can only complete the pair
+    EDGE_WAIT = 'EDGE_WAIT', // last tile can only be a 3 in a 1,2,3 chow or 7,8,9 chow, not at the same time.
+    CLOSED_WAIT = 'CLOSED_WAIT', // last tile can only complete the chow in the middle
 
-    // Win condition Points - Points awarded by how the winning tile was received
     SELF_DRAW = 'SELF_DRAW', // winning tile is NOT a discard
-    // TODO do we need to be more specific about which meld the last tile completes in a hand?
+    LAST_OF_IS_KIND = 'LAST_OF_ITS_KIND', // the winning tile is the last of its kind based on what's been melded/discarded by other players.
     ROBBING_KONG = 'ROBBING_KONG',  // win by having priority over someone else's call to add that tile to a melded kong
     WIN_BY_LAST_TILE = 'WIN_BY_LAST_TILE', // win by last tile on wall
     WIN_BY_LAST_DISCARD = 'WIN_BY_LAST_DISCARD', // win by last discard of game
@@ -65,15 +58,15 @@ export enum PointPredicateID {
     WIN_BY_FLOWER = 'WIN_BY_FLOWER', // win via replacement tile from flower
     WIN_BY_DOUBLE_KONG = 'WIN_BY_DOUBLE_KONG', // win via replacement tile of kong after replacement tile from kong
     WIN_BY_DOUBLE_FLOWER = 'WIN_BY_DOUBLE_FLOWER', // win via replacement tile after drawing two flowers in a row
-    HEAVENLY_HAND = 'HEAVENLY_HAND', // east's initial hand is a winning hand (winning tile received on first draw)
-    EARTHLY_HAND = 'EARTHLY_HAND', // non east player wins on east's first discard (winning tile was first discard)
+    WIN_WITH_INITIAL_HAND = 'WIN_WITH_INITIAL_HAND',
 
-    // Bonus tile Points
+    // Bonus tile points
     SEAT_GENTLEMAN = 'SEAT_GENTLEMAN',
     SEAT_SEASON = 'SEAT_SEASON',
     PREVAILING_GENTLEMAN = 'PREVAILING_GENTLEMAN',
     PREVAILING_SEASON = 'PREVAILING_SEASON',
-    ANY_GENTLEMAN_OR_SEASON = 'ANY_GENTLEMAN_SEASON',
+    // TODO in chinese competition rules, you have to count the number of flower tiles...
+    ANY_GENTLEMAN_OR_SEASON = 'ANY_GENTLEMAN_OR_SEASON',
     ALL_GENTLEMEN = 'ALL_GENTLEMEN',
     ALL_SEASONS = 'ALL_SEASONS',
     ALL_GENTLEMAN_AND_SEASONS = 'ALL_GENTLEMEN_AND_SEASONS',

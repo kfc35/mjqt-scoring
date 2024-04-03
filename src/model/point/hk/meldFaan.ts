@@ -1,15 +1,7 @@
-import { PointCriterion } from "model/point/predicate/pointPredicateID";
-
-const meldFaan = [
-    PointCriterion.SEAT_WIND_PONG,
-    PointCriterion.PREVAILING_WIND_PONG,
-    PointCriterion.RED_DRAGON_PONG,
-    PointCriterion.GREEN_DRAGON_PONG,
-    PointCriterion.WHITE_DRAGON_PONG,
-] as const;
-
-export type MeldFaan = typeof meldFaan[number];
-export function isMeldFaan(pointCriterion : PointCriterion) : pointCriterion is MeldFaan {
-    const faanList : readonly PointCriterion[] = meldFaan;
-    return faanList.indexOf(pointCriterion) !== -1;
+export enum MeldFaan {
+    SEAT_WIND_PONG = 'SEAT_WIND_PONG',
+    PREVAILING_WIND_PONG = 'PREVAILING_WIND_PONG',
+    RED_DRAGON_PONG = 'RED_DRAGON_PONG',
+    GREEN_DRAGON_PONG = 'GREEN_DRAGON_PONG',
+    WHITE_DRAGON_PONG = 'WHITE_DRAGON_PONG'
 }

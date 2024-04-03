@@ -1,4 +1,4 @@
-import { WinningHand } from "model/hand/hk/winningHand";
+import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import Meld from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLessThanMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
@@ -19,7 +19,6 @@ export class StandardWinningHand implements WinningHand {
 
     constructor(melds: Meld[], meldWithWinningTile: Meld, winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
         this._melds = melds;
-        // TODO any verification of melds? size 5 or 7? one pair if there is 5?
         const tiles: SuitedOrHonorTile[] = toTiles(this._melds);
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);

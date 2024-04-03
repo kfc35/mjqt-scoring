@@ -3,7 +3,7 @@ import { Hand } from "model/hand/hk/hand";
 import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import { isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { StandardWinningHand } from "model/hand/hk/standardWinningHand";
+import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
 import { meldsAreSubset, meldsNotNullAndCorrectLength } from "common/meldUtils";
 
 export const analyzeForSevenPairs = constructSevenPairsAnalyzer();

@@ -1,19 +1,8 @@
-import { PointCriterion } from "model/point/predicate/pointPredicateID";
-
-const bonusFaan = [
-    PointCriterion.SEAT_GENTLEMAN,
-    PointCriterion.SEAT_SEASON,
-    PointCriterion.ANY_GENTLEMAN_OR_SEASON,
-    PointCriterion.PREVAILING_GENTLEMAN,
-    PointCriterion.PREVAILING_SEASON,
-    PointCriterion.ALL_GENTLEMEN,
-    PointCriterion.ALL_SEASONS,
-    PointCriterion.ALL_GENTLEMAN_AND_SEASONS,
-    PointCriterion.NO_GENTLEMEN_OR_SEASONS,
-] as const;
-
-export type BonusFaan = typeof bonusFaan[number];
-export function isBonusFaan(pointCriterion : PointCriterion) : pointCriterion is BonusFaan {
-    const faanList : readonly PointCriterion[] = bonusFaan;
-    return faanList.indexOf(pointCriterion) !== -1;
+export enum BonusFaan {
+    SEAT_GENTLEMAN = 'SEAT_GENTLEMAN',
+    SEAT_SEASON = 'SEAT_SEASON',
+    ALL_GENTLEMEN = 'ALL_GENTLEMEN',
+    ALL_SEASONS = 'ALL_SEASONS',
+    ALL_GENTLEMEN_AND_SEASONS = 'ALL_GENTLEMEN_AND_SEASONS',
+    NO_GENTLEMEN_OR_SEASONS = 'NO_GENTLEMEN_OR_SEASONS'
 }

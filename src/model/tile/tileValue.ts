@@ -3,8 +3,8 @@ import { getEnumKeys } from "common/enumUtils"
 export enum GentlemanTileValue {
     PLUM = 'PLUM',
     ORCHID = 'ORCHID',
-    BAMBOO = 'BAMBOO',
-    CHRYSANTHEMUM = 'CHRYSANTHEMUM'
+    CHRYSANTHEMUM = 'CHRYSANTHEMUM',
+    BAMBOO = 'BAMBOO'
 }
 
 // Should automatically be sorted by declaration order.

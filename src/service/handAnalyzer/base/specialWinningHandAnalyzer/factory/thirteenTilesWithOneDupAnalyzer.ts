@@ -1,5 +1,5 @@
 import { Hand } from "model/hand/hk/hand";
-import { handMinLength } from "model/hand/hk/handConstants";
+import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { type HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Pair from "model/meld/pair";
@@ -10,14 +10,14 @@ import { meldExistsInMelds } from "common/meldUtils";
 
 export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: SuitedOrHonorTile[]): HandAnalyzer<SpecialWinningHand> {
     assertTilesSuitedOrHonor(thirteenUniqueTiles);
-    assertTilesNotNullAndCorrectLength(thirteenUniqueTiles, handMinLength - 1, handMinLength - 1);
+    assertTilesNotNullAndCorrectLength(thirteenUniqueTiles, handMinLengthWithoutFlowers - 1, handMinLengthWithoutFlowers - 1);
     if (!tilesUnique(thirteenUniqueTiles)) {
         throw new Error("There can only be one of each tile in thirteenUniqueTiles");
     }
     return (hand: Hand) => {
         let pair: Pair | undefined = undefined;
         const tiles: SuitedOrHonorTile[] = [];
-        if (hand.getTotalQuantity() !== handMinLength) {
+        if (hand.getTotalQuantity() !== handMinLengthWithoutFlowers) {
             return [];
         }
         for (const tile of thirteenUniqueTiles) {
@@ -35,13 +35,13 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
                 tiles.push(tile);
             }
         }
-        if (pair === undefined || tiles.length !== handMinLength - 1) {
+        if (pair === undefined || tiles.length !== handMinLengthWithoutFlowers - 1) {
             return [];
         }
         // if pre-specified melds exist, it can only be the pair we found.
-        if (!hand.preSpecifiedMelds || !(hand.preSpecifiedMelds.length === 1 && meldExistsInMelds(hand.preSpecifiedMelds, pair, false))) {
+        if (!hand.userSpecifiedMelds || !(hand.userSpecifiedMelds.length === 1 && meldExistsInMelds(hand.userSpecifiedMelds, pair, false))) {
             return [];
         }
-        return [new SpecialWinningHand([[...tiles], [...pair.tiles]], hand.mostRecentTile, hand.flowerTiles)];
+        return [new SpecialWinningHand([[...tiles], [...pair.tiles]], hand.mostRecentTile(), hand.mostRecentTileIsSelfDrawn(), hand.flowerTiles)];
     };
 }

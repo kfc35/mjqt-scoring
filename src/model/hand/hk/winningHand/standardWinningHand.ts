@@ -67,5 +67,9 @@ export class StandardWinningHand implements WinningHand {
     get flowerTiles() : FlowerTile[] {
         return this._flowerTiles;
     }
+
+    isSelfDrawn() : boolean {
+        return !this._meldWithWinningTile.exposed;
+    }
 }
 

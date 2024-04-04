@@ -8,25 +8,32 @@ import { handMinLengthWithoutFlowers, handMaxLength, handMaxNumUniqueFlowers, ha
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
-import { toTiles } from "common/meldUtils";
+import { meldExistsInMelds, toTiles } from "common/meldUtils";
+import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 
 /** A Hand is an unsorted collection of Mahjong Tiles.
  * It represents an instance when it is the player's turn.
  * It may or may not represent a winning hand based on what the tiles are. */
 export class Hand {
     private _tileToQuantity: TileToQuantityMap;
-    /* preSpecifiedMelds are melds that must be present in every derived winning hand.
-       preSpecifiedMelds = [] means that there are no restrictions on any derived winning hands.
-       e.g. if preSpeciedMelds has a concealed pong, every winning hand must have that concealed pong. 
-       The tiles in each meld must also be present in _tileToQuantity */ 
-    private _preSpecifiedMelds: Meld[];
-    private _mostRecentTile: SuitedOrHonorTile;
-    // if false, then it means the player took a discard
-    private _mostRecentTileIsSelfDrawn: boolean;
+    private _mostRecentTileContext : MostRecentTileContext;
+    /* userSpecifiedMelds are melds that must be present in every derived winning hand.
+       Exposed melds must exist exactly as they are specified.
+       Unexposed melds could become exposed as a result of the MostRecentTileContext. You can specify this behavior via lockConcealedSpecifiedMelds
+       userSpecifiedMelds = [] means that there are no restrictions on any derived winning hands.
+       If a userSpecifiedMeld is defined in mostRecentTileContext, it must also be present in userSpecifiedMelds.
+       The tiles in each meld must also be present in _tileToQuantity.    
+    */ 
+    private _userSpecifiedMelds: Meld[];
+    // Whether concealed specified melds can change depending on 
+    // where the most recent tile is placed (_mostRecentTileContext.userSpecifiedMeld must be undefined)
+    // The default is false in order to maximize point counting. 
+    // The melds might become exposed or the most recent tile may be inserted into them.
+    private _lockConcealedSpecifiedMelds: boolean;
     private _flowerTiles: FlowerTile[];
 
-    constructor(tiles: HongKongTile[], mostRecentTile: SuitedOrHonorTile, 
-        mostRecentTileIsSelfDrawn: boolean, preSpecifiedMelds?: Meld[]) {
+    constructor(tiles: HongKongTile[], mostRecentTileContext: MostRecentTileContext, 
+        userSpecifiedMelds?: Meld[], lockConcealedSpecifiedMelds: boolean = false) {
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLength);
         assertTilesHongKongTile(tiles)
 
@@ -59,8 +66,8 @@ export class Hand {
 
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
 
-        if (preSpecifiedMelds && preSpecifiedMelds.length > 0) {
-            const meldTiles = toTiles(preSpecifiedMelds);
+        if (userSpecifiedMelds && userSpecifiedMelds.length > 0) {
+            const meldTiles = toTiles(userSpecifiedMelds);
             const meldTileToQuantity = new TileToQuantityMap(meldTiles);
             for (const tile of meldTiles) {
                 if (meldTileToQuantity.getQuantity(tile) > tileToQuantity.getQuantity(tile)) {
@@ -70,14 +77,18 @@ export class Hand {
                 }
             }
         }
-        if (tileToQuantity.getQuantity(mostRecentTile) === 0) {
+        if (mostRecentTileContext.userSpecifiedMeld && (!userSpecifiedMelds || !meldExistsInMelds(userSpecifiedMelds, mostRecentTileContext.userSpecifiedMeld, false))) {
+            throw new Error(`userSpecifiedMelds must contain the most recent tile context's userSpecifiedMeld if defined.`);
+        }
+
+        if (tileToQuantity.getQuantity(mostRecentTileContext.tile) === 0) {
             throw new TypeError("mostRecentTile must be present in the tiles array.");
         }
 
         this._tileToQuantity = tileToQuantity;
-        this._mostRecentTile = mostRecentTile;
-        this._mostRecentTileIsSelfDrawn = mostRecentTileIsSelfDrawn;
-        this._preSpecifiedMelds = preSpecifiedMelds ?? [];
+        this._mostRecentTileContext = mostRecentTileContext;
+        this._userSpecifiedMelds = userSpecifiedMelds ?? [];
+        this._lockConcealedSpecifiedMelds = lockConcealedSpecifiedMelds;
     }
 
     get tileToQuantity() {
@@ -116,15 +127,23 @@ export class Hand {
         return this._flowerTiles;
     }
 
-    get mostRecentTile() {
-        return this._mostRecentTile;
+    mostRecentTile() : SuitedOrHonorTile {
+        return this._mostRecentTileContext.tile;
     }
 
-    get mostRecentTileIsSelfDrawn() {
-        return this._mostRecentTileIsSelfDrawn;
+    mostRecentTileIsSelfDrawn() : boolean{
+        return this._mostRecentTileContext.isSelfDrawn;
     }
 
-    get preSpecifiedMelds() {
-        return this._preSpecifiedMelds;
+    mostRecentTileUserSpecifiedMeld() : Meld | undefined {
+        return this._mostRecentTileContext.userSpecifiedMeld;
+    }
+
+    get userSpecifiedMelds() {
+        return this._userSpecifiedMelds;
+    }
+
+    get lockConcealedSpecifiedMelds() {
+        return this._lockConcealedSpecifiedMelds
     }
 }

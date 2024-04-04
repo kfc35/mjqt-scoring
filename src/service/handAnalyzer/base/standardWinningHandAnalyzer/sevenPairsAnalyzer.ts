@@ -10,7 +10,7 @@ export const analyzeForSevenPairs = constructSevenPairsAnalyzer();
 
 function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
     return (hand: Hand) => {
-        if (!!hand.preSpecifiedMelds && !hand.preSpecifiedMelds.every(meld => meld instanceof Pair)) {
+        if (!!hand.userSpecifiedMelds && !hand.userSpecifiedMelds.every(meld => meld instanceof Pair)) {
             return [];
         }
         if (hand.getQuantityPerUniqueTile().every(quantity => quantity % 2 === 0)) {
@@ -20,7 +20,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
                 if (quantity === 2) {
                     for (const tile of tileArray) {
                         if (isSuitedOrHonorTile(tile)) {
-                            if (hand.mostRecentTile.equals(tile)) {
+                            if (hand.mostRecentTile().equals(tile)) {
                                 winningPair = new Pair(tile, !hand.mostRecentTileIsSelfDrawn);
                                 melds.push(winningPair);
                             } else {
@@ -33,7 +33,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
                 if (quantity === 4) {
                     for (const tile of tileArray) {
                         if (isSuitedOrHonorTile(tile)) {
-                            if (hand.mostRecentTile.equals(tile)) {
+                            if (hand.mostRecentTile().equals(tile)) {
                                 winningPair = new Pair(tile, !hand.mostRecentTileIsSelfDrawn);
                                 melds.push(winningPair);
                             } else {
@@ -48,10 +48,11 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
             if (!meldsNotNullAndCorrectLength(melds, 7) || !winningPair) {
                 return [];
             }
-            if (!meldsAreSubset(melds, hand.preSpecifiedMelds, false)) {
+            if (!meldsAreSubset(melds, hand.userSpecifiedMelds, false)) {
                 return [];
             }
-            return [new StandardWinningHand(melds, winningPair, hand.mostRecentTile, hand.flowerTiles)];
+            return [new StandardWinningHand(melds, winningPair.clone(hand.mostRecentTileIsSelfDrawn()), 
+                hand.mostRecentTile(), hand.flowerTiles)];
         }
         return [];
     }

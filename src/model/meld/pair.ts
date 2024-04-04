@@ -3,6 +3,9 @@ import Meld  from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
 import { assertTileSuitedOrHonor } from "common/tileUtils";
 
+/**
+ * Pairs can only become exposed if they are completed via discard as your last set.
+ */
 export default class Pair extends Meld {
     private _tile: SuitedOrHonorTile;
 

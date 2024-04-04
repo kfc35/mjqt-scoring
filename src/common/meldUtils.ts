@@ -1,19 +1,20 @@
 import Meld from "model/meld/meld";
 import { Tile } from "model/tile/tile";
-import { MeldType } from "model/meld/meldType";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { meldIsPair } from "model/meld/pair";
+import { meldIsKong } from "model/meld/kong";
 
 export function meldsNotNullAndCorrectLength(melds: Meld[], length: number): boolean {
     return (melds && melds.every(meld => !!meld) && melds.length === length);
 }
 
 export function meldsHasOnePair(melds: Meld[]): boolean {
-    const pairs = melds.filter(meld => meld.type === MeldType.PAIR);
+    const pairs = melds.filter(meld => meldIsPair(meld));
     return pairs.length === 1;
 }
 
 export function meldsNumKongs(melds: Meld[]): number {
-    const kongs = melds.filter(meld => meld.type === MeldType.KONG);
+    const kongs = melds.filter(meld => meldIsKong(meld));
     return kongs.length;
 }
 
@@ -51,6 +52,21 @@ export function meldsAreSubset(melds: Meld[], potentialSubset: Meld[], ignoreExp
         }
     }
     return true;
+}
+
+export function meldsIntersection(meldsOne: Meld[], meldsTwo: Meld[], ignoreExposed? : boolean) : Meld[] {
+    const intersection = [];
+    const meldsTwoCopy = [...meldsTwo];
+    for (const meldOne of meldsOne) {
+        for (let i = 0; i < meldsTwoCopy.length; i++) {
+            if (meldOne.equals(meldsTwoCopy[i], ignoreExposed)) {
+                intersection.push(meldOne.clone());
+                meldsTwoCopy.splice(i, 1)
+                break;
+            }
+        }
+    }
+    return intersection;
 }
 
 export function meldExistsInMelds(melds: Meld[], meldToCheck: Meld, ignoreExposed?: boolean) : boolean {

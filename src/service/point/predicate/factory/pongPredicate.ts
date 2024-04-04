@@ -1,28 +1,31 @@
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
-import Pong from "model/meld/pong";
-import { PointPredicateID } from "model/point/predicate/pointPredicateID";
+import Meld from "model/meld/meld";
+import Pong, { meldIsPong } from "model/meld/pong";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { RoundContext } from "model/roundContext/roundContext";
-import WindTile from "model/tile/group/windTile";
+import { meldsIntersection } from "common/meldUtils";
 
-export default function createPongPredicate(pointPredicateID : PointPredicateID, tile: SuitedOrHonorTile) : PointPredicate<StandardWinningHand> {
+// TODO generify for pairs, kongs.
+export function createPongEqualityPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[]) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
-        const pong = new Pong(tile);
-        for (const meld of winningHand.getContents()) {
-            if (meld.equals(pong, true)) {
-                return new PointPredicateResult(pointPredicateID, true, [meld]);
-            }
+        const pongs : Pong[] = [];
+        for (const tile of tiles) {
+            pongs.push(new Pong(tile));
         }
-        return new PointPredicateResult(pointPredicateID, false, []);
+        const intersection : Meld[] = meldsIntersection(winningHand.getContents(), pongs, true);
+        return new PointPredicateResult(pointPredicateID, intersection.length == pongs.length, intersection);
     }
 }
 
-export function createWindPongPredicates(roundContext: RoundContext) : [PointPredicate<StandardWinningHand>, PointPredicate<StandardWinningHand>] {
-    const prevailingWindTile : WindTile = roundContext.getPrevailingWindAsWindTile();
-    const seatWindTile : WindTile = roundContext.getSeatWindAsWindTile();
-
-    return [createPongPredicate(PointPredicateID.PREVAILING_WIND_PONG, prevailingWindTile), 
-        createPongPredicate(PointPredicateID.SEAT_WIND_PONG, seatWindTile)];
+export function createPongQuantityPredicate(pointPredicateID : string, numPongs: number) : PointPredicate<StandardWinningHand> {
+    return (winningHand : StandardWinningHand) => {
+        const pongs : Pong[] = [];
+        for (const meld of winningHand.getContents()) {
+            if (meldIsPong(meld)) {
+                pongs.push(meld);
+            }
+        }
+        return new PointPredicateResult(pointPredicateID, pongs.length === numPongs, pongs);
+    }
 }

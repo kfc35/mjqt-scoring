@@ -7,5 +7,6 @@ export interface WinningHand {
     getContents() : Meld[] | SuitedOrHonorTile[][];
     get meldWithWinningTile() : Meld | undefined; // undefined for special only
     get winningTile() : SuitedOrHonorTile;
+    isSelfDrawn() : boolean;
     get flowerTiles() : FlowerTile[];
 }

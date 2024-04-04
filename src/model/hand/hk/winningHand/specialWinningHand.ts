@@ -9,17 +9,17 @@ import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEac
  * but still constitutes a win. E.g. Thirteen Orphans (13 arbitrary tiles plus a duplicate tile.)
  */
 export class SpecialWinningHand implements WinningHand {
-    private _tiles: SuitedOrHonorTile[][]; // contains tiles from the pair.
+    private _tiles: SuitedOrHonorTile[][]; // [][] in case there is a user friendly way of grouping the tiles.
     private _winningTile: SuitedOrHonorTile;
+    private _isSelfDrawn: boolean;
     protected _flowerTiles: FlowerTile[];
 
     // dups are allowed in tiles
-    constructor(tiles: SuitedOrHonorTile[][], winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
+    constructor(tiles: SuitedOrHonorTile[][], winningTile: SuitedOrHonorTile, isSelfDrawn: boolean, flowerTiles: FlowerTile[]) {
         const unwrappedTiles = tiles.reduce<SuitedOrHonorTile[]>((accum, tileArray) => accum.concat(tileArray), [])
         assertTilesNotNullAndCorrectLength(unwrappedTiles, handMinLengthWithoutFlowers, handMinLengthWithoutFlowers);
         assertTilesSuitedOrHonor(unwrappedTiles);
         assertEachTileHasQuantityLessThanMaxPerTile(unwrappedTiles);
-        // TODO assert max 4 of each suited or honor tile?
         
         this._tiles = tiles;
         this._winningTile = winningTile;
@@ -27,6 +27,7 @@ export class SpecialWinningHand implements WinningHand {
         if (!tilesUnique(flowerTiles)) {
             throw new Error("flowerTiles must be unique");
         }
+        this._isSelfDrawn = isSelfDrawn;
         this._flowerTiles = flowerTiles;
     }
 
@@ -44,6 +45,10 @@ export class SpecialWinningHand implements WinningHand {
 
     get flowerTiles() : FlowerTile[] {
         return this._flowerTiles;
+    }
+
+    isSelfDrawn() : boolean {
+        return this._isSelfDrawn;
     }
 
 }

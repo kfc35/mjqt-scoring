@@ -5,11 +5,14 @@ export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
     private _matchedTiles: Meld[] | Tile[];
+    private _subPredicateResults: PointPredicateResult[];
 
-    constructor(_pointPredicateId: string, success: boolean, _matchedTiles: Meld[] | Tile[]) {
-        this._pointPredicateId = _pointPredicateId;
+    constructor(pointPredicateId: string, success: boolean, 
+        matchedTiles: Meld[] | Tile[], subPredicateResults?: PointPredicateResult[]) {
+        this._pointPredicateId = pointPredicateId;
         this._success = success;
-        this._matchedTiles = _matchedTiles;
+        this._matchedTiles = matchedTiles;
+        this._subPredicateResults = subPredicateResults ?? [];
     }
 
     get pointPredicateId(): string {
@@ -22,5 +25,9 @@ export default class PointPredicateResult {
 
     get matchedTiles(): Meld[] | Tile[] {
         return this._matchedTiles;
+    }
+
+    get subPredicateResults(): PointPredicateResult[] {
+        return this._subPredicateResults;
     }
 }

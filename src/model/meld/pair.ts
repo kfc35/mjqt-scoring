@@ -4,19 +4,16 @@ import { MeldType } from "model/meld/meldType";
 import { assertTileSuitedOrHonor } from "common/tileUtils";
 
 /**
- * Pairs can only become exposed if they are completed via discard as your last set.
+ * Pairs can only be marked as "exposed" if they are completed via discard as your last set.
  */
 export default class Pair extends Meld {
-    private _tile: SuitedOrHonorTile;
-
-    constructor(tile: SuitedOrHonorTile, exposed? : boolean) {
+    constructor(tile: SuitedOrHonorTile, exposed : boolean = false) {
         assertTileSuitedOrHonor(tile);
         super([tile.copy(), tile.copy()], MeldType.PAIR, exposed);
-        this._tile = tile;
     }
 
     clone(exposedOverride? : boolean) {
-        return new Pair(this._tile, exposedOverride ?? this.exposed);
+        return new Pair(this._tiles[0], exposedOverride ?? this.exposed);
     }
 }
 

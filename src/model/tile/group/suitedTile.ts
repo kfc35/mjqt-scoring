@@ -4,8 +4,9 @@ import { SuitedTileValue, isSuitedTileValue } from "model/tile/tileValue";
 
 export default abstract class SuitedTile extends Tile {
     declare protected _value: SuitedTileValue;
+    declare protected _group: SuitedTileGroup;
 
-    constructor(group: TileGroup, value: SuitedTileValue) {
+    constructor(group: SuitedTileGroup, value: SuitedTileValue) {
         super(group, value);
     }
 
@@ -15,6 +16,14 @@ export default abstract class SuitedTile extends Tile {
     }
 
     abstract override copy() : SuitedTile;
+
+    override get group(): SuitedTileGroup {
+        return this._group;
+    }
+
+    override get value(): SuitedTileValue {
+        return this._value;
+    }
 }
 
 export type SuitedTileGroup = TileGroup.BAMBOO | TileGroup.CHARACTER | TileGroup.CIRCLE;

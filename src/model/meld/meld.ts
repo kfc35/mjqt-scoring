@@ -3,7 +3,7 @@ import { MeldType } from "model/meld/meldType";
 import { assertTilesSuitedOrHonor } from "common/tileUtils";
 
 export default abstract class Meld {
-    protected _tiles: SuitedOrHonorTile[];
+    protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]];
     protected _type: MeldType;
     /*  _exposed = false if the meld was completed without the need of a discard.
         _exposed = true if a discard was used to complete it during regular play.
@@ -11,16 +11,17 @@ export default abstract class Meld {
         _exposed is set to true. */
     protected _exposed: boolean;
 
-    constructor(tiles: SuitedOrHonorTile[], type: MeldType, exposed?: boolean) {
+    constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]], type: MeldType, exposed: boolean = false) {
         assertTilesSuitedOrHonor(tiles);
-        this._tiles = [...tiles].sort(function(tile1: SuitedOrHonorTile, tile2: SuitedOrHonorTile){
+        const tilesCopy : [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]] = [...tiles];
+        this._tiles = tilesCopy.sort(function(tile1: SuitedOrHonorTile, tile2: SuitedOrHonorTile){
             return tile1.compareTo(tile2);
         });
         this._type = type;
-        this._exposed = (exposed ? exposed : false);
+        this._exposed = exposed;
     }
 
-    get tiles(): SuitedOrHonorTile[] {
+    get tiles(): [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]] {
         return this._tiles;
     }
 
@@ -52,4 +53,9 @@ export default abstract class Meld {
     // can customize sort by exposed.
 
     abstract clone(exposedOverride? : boolean): Meld;
+
+    // for sorting
+    compareTo(otherMeld : Meld) : number {
+        return this._tiles[0].compareTo(otherMeld._tiles[0]);
+    }
 }

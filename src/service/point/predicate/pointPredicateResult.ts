@@ -30,4 +30,32 @@ export default class PointPredicateResult {
     get subPredicateResults(): PointPredicateResult[] {
         return this._subPredicateResults;
     }
+
+    and(otherResult: PointPredicateResult, newPointPredicateId?: string) {
+        const andPointPredicateId: string = newPointPredicateId ?? 
+            `(${this._pointPredicateId}_&&_${otherResult.pointPredicateId})`;
+        if (this._success && otherResult._success) {
+            // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
+            return new PointPredicateResult(andPointPredicateId, true, [], [this, otherResult]);
+        }
+        else if (!this._success) {
+            return new PointPredicateResult(andPointPredicateId, false, this._matchedTiles, [this]);
+        } else { // the otherResult is false
+            return new PointPredicateResult(andPointPredicateId, false, otherResult.matchedTiles, [otherResult]);
+        }
+    }
+
+    or(otherResult: PointPredicateResult, newPointPredicateId?: string) {
+        const orPointPredicateId: string = newPointPredicateId ?? 
+            `(${this._pointPredicateId}_||_${otherResult.pointPredicateId})`;
+        if (!this._success && !otherResult._success) {
+            // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
+            return new PointPredicateResult(orPointPredicateId, false, [], [this, otherResult]);
+        }
+        else if (this._success) {
+            return new PointPredicateResult(orPointPredicateId, true, this._matchedTiles, [this]);
+        } else { // the otherResult is true
+            return new PointPredicateResult(orPointPredicateId, true, otherResult.matchedTiles, [otherResult]);
+        }
+    }
 }

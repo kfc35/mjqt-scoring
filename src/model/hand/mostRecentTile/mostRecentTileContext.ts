@@ -6,7 +6,7 @@ export class MostRecentTileContext {
     private _isSelfDrawn: boolean;
     // _userSpecifiedMeld can be undefined for special hands, even if self drawn is false
     // one MAY define a most recent tile where _isSelfDrawn = false and the userSpecifiedMeld = undefined
-    // in this case, the discarded tile will be used to complete an exposed meld.
+    // in this case, the discard tile will be used to convert an unexposed meld to an exposed one.
     private _userSpecifiedMeld: Meld | undefined;
 
     constructor(tile: SuitedOrHonorTile, 

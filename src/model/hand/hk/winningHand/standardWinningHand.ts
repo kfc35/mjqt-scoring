@@ -72,4 +72,3 @@ export class StandardWinningHand implements WinningHand {
         return !this._meldWithWinningTile.exposed;
     }
 }
-

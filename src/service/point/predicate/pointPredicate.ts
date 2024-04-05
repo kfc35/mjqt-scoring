@@ -2,31 +2,39 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand"
 import { WinContext } from "model/winContext/winContext"
 import PointPredicateResult from "service/point/predicate/pointPredicateResult"
 
+/** 
+ * PointPredicates apply to WinningHands and WinContext. 
+ * They are simply statements that evaluate to true or false.
+ * One or more "smaller" PointPredicates can be combined to compose a "Faan" or "PointCrierion"
+*/
 export type PointPredicate<T extends WinningHand> = 
     ((winningHand : T, winContext? : WinContext) => PointPredicateResult)
 
-export function predicateAnd<T extends WinningHand>(pointPredicateId?: string, ...pointPredicates :PointPredicate<T>[]) : PointPredicate<T> {
+// You can combine PointPredicates themselves, or you can combine the results (look at pointPredicateResult class)
+export function predicateAnd<T extends WinningHand>(newPointPredicateId?: string, ...pointPredicates :PointPredicate<T>[]) : PointPredicate<T> {
     return (winningHand: T, winContext? : WinContext)  => {
         const results: PointPredicateResult[] = pointPredicates.map(pointPredicate => pointPredicate(winningHand, winContext));
-        const newPointPredicateId: string = pointPredicateId ?? `${results.reduce<string>((accum, result) => accum.concat("_&&_" + result.pointPredicateId), "")}`;
+        const andPointPredicateId: string = newPointPredicateId ?? `${results.reduce<string>((accum, result) => accum.concat("_&&_" + result.pointPredicateId), "")}`;
         for (const result of results) {
             if (!result.success) {
-                return new PointPredicateResult(newPointPredicateId, false, result.matchedTiles, [result]);
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.matchedTiles, [result]);
             }
         }
-        return new PointPredicateResult(newPointPredicateId, true, [], results);
+        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
+        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], results);
     }
 }
 
-export function predicateOr<T extends WinningHand>(pointPredicateId?: string, ...pointPredicates :PointPredicate<T>[]) : PointPredicate<T> {
+export function predicateOr<T extends WinningHand>(newPointPredicateId?: string, ...pointPredicates :PointPredicate<T>[]) : PointPredicate<T> {
     return (winningHand: T, winContext? : WinContext)  => {
         const results: PointPredicateResult[] = pointPredicates.map(pointPredicate => pointPredicate(winningHand, winContext));
-        const newPointPredicateId: string = pointPredicateId ?? `${results.reduce<string>((accum, result) => accum.concat("_||_" + result.pointPredicateId), "")}`;
+        const orPointPredicateId: string = newPointPredicateId ?? `${results.reduce<string>((accum, result) => accum.concat("_||_" + result.pointPredicateId), "")}`;
         for (const result of results) {
             if (result.success) {
-                return new PointPredicateResult(newPointPredicateId, true, result.matchedTiles, [result]);
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.matchedTiles, [result]);
             }
         }
-        return new PointPredicateResult(newPointPredicateId, false, [], results);
+        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
+        return new PointPredicateResult(`(${orPointPredicateId})`, false, [], results);
     }
 }

@@ -17,7 +17,7 @@ export abstract class Tile {
         return this._group;
     }
 
-    get value(): typeof this._value {
+    get value(): TileValue {
         return this._value;
     }
 
@@ -37,6 +37,13 @@ export abstract class Tile {
             return this._value < otherTile.value ? -1 : +1
         }
         return this._group < otherTile.group ? -1 : +1
+    }
+
+    compareToValueOnly(otherTile : Tile) : number {
+        if (this._value === otherTile.value) {
+            return 0;
+        }
+        return this._value < otherTile.value ? -1 : +1
     }
     
     // TODO rename to clone

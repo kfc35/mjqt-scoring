@@ -1,10 +1,4 @@
-/** 
- * PointPredicates apply to WinningHands and WinContext. 
- * They are simple statements that evaluate to true or false.
- * One or more PointPredicates can be combined to compose a PointCriterion
- * All PointPredicates must be true in order for a PointCriterion to be true
- * For more bespoke faan, they may have only one unique corresponding point predicate.
-*/
+
 
 export enum PointPredicateID {
     ALL_CHOWS = 'ALL_CHOWS',

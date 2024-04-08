@@ -6,8 +6,8 @@ import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { meldsIntersection } from "common/meldUtils";
 
-// Checks that a pong exists in a winning hand for each single tile in tiles
-export function createPongEqualityPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[]) : PointPredicate<StandardWinningHand> {
+// Checks that a pongs exist in a winning hand for each single tile in tiles
+export function createPongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[]) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const pongs : Pong[] = [];
         for (const tile of tiles) {

@@ -9,7 +9,7 @@ import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 
 // Checks that the given tile sequences exist as chows in a winning hand.
-export function createChowEqualityPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][]) : PointPredicate<StandardWinningHand> {
+export function createChowsExistPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][]) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const chows : Chow[] = [];
         for (const sequence of tileSequences) {
@@ -27,7 +27,7 @@ export function createChowEqualityPredicateFromSequences(pointPredicateID : stri
 }
 
 // Creates tile sequences using the provided tiles as the lowest in the sequence, then checks for those sequences in the winning hand.
-export function createChowEqualityPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[]) : PointPredicate<StandardWinningHand> {
+export function createChowsExistPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[]) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const chows : Chow[] = [];
         for (const tile of tiles) {

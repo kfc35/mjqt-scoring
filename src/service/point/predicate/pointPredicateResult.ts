@@ -4,11 +4,11 @@ import { Tile } from "model/tile/tile";
 export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
-    private _matchedTiles: Meld[] | Tile[];
+    private _matchedTiles: Meld[] | Tile[][];
     private _subPredicateResults: PointPredicateResult[];
 
     constructor(pointPredicateId: string, success: boolean, 
-        matchedTiles: Meld[] | Tile[], subPredicateResults?: PointPredicateResult[]) {
+        matchedTiles: Meld[] | Tile[][], subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
         this._matchedTiles = matchedTiles;
@@ -23,7 +23,7 @@ export default class PointPredicateResult {
         return this._success;
     }
 
-    get matchedTiles(): Meld[] | Tile[] {
+    get matchedTiles(): Meld[] | Tile[][] {
         return this._matchedTiles;
     }
 

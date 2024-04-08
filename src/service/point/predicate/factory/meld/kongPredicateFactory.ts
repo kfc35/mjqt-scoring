@@ -8,7 +8,7 @@ import { meldIsKong } from "model/meld/kong";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 
 // Checks that a pong exists in a winning hand for each single tile in tiles
-export function createKongEqualityPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[]) : PointPredicate<StandardWinningHand> {
+export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[]) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const kongs : Kong[] = [];
         for (const tile of tiles) {

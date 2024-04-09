@@ -4,18 +4,24 @@ import Meld from "model/meld/meld";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEachTileHasQuantityLessThanMaxPerTile, assertTilesFlower, tilesUnique } from "common/tileUtils";
+import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 
-/** A SpecialWinningHand is a combination of tiles that does not fit the "meld" structure,
- * but still constitutes a win. E.g. Thirteen Orphans (13 arbitrary tiles plus a duplicate tile.)
+/** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
+ * but still constitutes a win. 
  */
 export class SpecialWinningHand implements WinningHand {
     private _tiles: SuitedOrHonorTile[][]; // [][] in case there is a user friendly way of grouping the tiles.
     private _winningTile: SuitedOrHonorTile;
     private _isSelfDrawn: boolean;
     protected _flowerTiles: FlowerTile[];
+    protected _specialWinningHandType: SpecialWinningHandType;
 
     // dups are allowed in tiles
-    constructor(tiles: SuitedOrHonorTile[][], winningTile: SuitedOrHonorTile, isSelfDrawn: boolean, flowerTiles: FlowerTile[]) {
+    constructor(tiles: SuitedOrHonorTile[][], 
+        winningTile: SuitedOrHonorTile, 
+        isSelfDrawn: boolean, 
+        flowerTiles: FlowerTile[],
+        specialWinningHandType: SpecialWinningHandType) {
         const unwrappedTiles = tiles.reduce<SuitedOrHonorTile[]>((accum, tileArray) => accum.concat(tileArray), [])
         assertTilesNotNullAndCorrectLength(unwrappedTiles, handMinLengthWithoutFlowers, handMinLengthWithoutFlowers);
         assertTilesSuitedOrHonor(unwrappedTiles);
@@ -29,9 +35,14 @@ export class SpecialWinningHand implements WinningHand {
         }
         this._isSelfDrawn = isSelfDrawn;
         this._flowerTiles = flowerTiles;
+        this._specialWinningHandType = specialWinningHandType;
     }
 
-    getContents(): SuitedOrHonorTile[][] {
+    getMelds(): ReadonlyArray<Meld> {
+        return [];
+    }
+
+    getTiles(): SuitedOrHonorTile[][] {
         return this._tiles;
     }
 
@@ -49,6 +60,10 @@ export class SpecialWinningHand implements WinningHand {
 
     isSelfDrawn() : boolean {
         return this._isSelfDrawn;
+    }
+
+    get specialWinningHandType(): SpecialWinningHandType { 
+        return this._specialWinningHandType;
     }
 
 }

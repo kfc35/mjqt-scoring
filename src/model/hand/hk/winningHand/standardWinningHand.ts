@@ -7,22 +7,22 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { meldIsPair } from "model/meld/pair";
 
-/** A StandardWinningHand is a Hand that has been successfully analyzed to be a complete winning hand. i.e. processed into melds. 
- * A hand can have multipe standard winning hands depending on the arrangement of the melds.
+/** A StandardWinningHand is a Hand that has been processed completely into finished melds.
+ * A hand can have multiple standard winning hands depending on the arrangement of the melds.
  * Seven pairs counts as a standard winning hand.
 */
 export class StandardWinningHand implements WinningHand {
-    private _melds: Meld[];
+    private _melds: ReadonlyArray<Meld>;
     private _meldWithWinningTile: Meld;
     private _winningTile: SuitedOrHonorTile;
     protected _flowerTiles: FlowerTile[];
 
     constructor(melds: Meld[], meldWithWinningTile: Meld, winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
-        this._melds = melds;
-        const tiles: SuitedOrHonorTile[] = toTiles(this._melds);
+        const tiles: SuitedOrHonorTile[] = toTiles(melds);
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);
         assertEachTileHasQuantityLessThanMaxPerTile(tiles);
+        this._melds = melds;
         if (this._melds.length !== 5 && this._melds.length !== 7) {
             throw new Error("melds must be of length 5 or 7");
         }
@@ -52,8 +52,12 @@ export class StandardWinningHand implements WinningHand {
         this._flowerTiles = flowerTiles;
     }
 
-    getContents(): Meld[] {
+    getMelds(): ReadonlyArray<Meld> {
         return this._melds;
+    }
+
+    getTiles(): SuitedOrHonorTile[][] {
+        return this._melds.map(meld => meld.tiles);
     }
 
     get meldWithWinningTile() {

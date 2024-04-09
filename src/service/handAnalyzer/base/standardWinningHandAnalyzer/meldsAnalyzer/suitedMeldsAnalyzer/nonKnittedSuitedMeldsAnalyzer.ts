@@ -42,7 +42,7 @@ function getMeldsFromStartingSTV(tileGroup: SuitedTileGroup, startingSTV: Suited
             const chowCreator = chowsCreator(1);
             return createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, chowCreator);
         }
-        return []; // one lone tile that cannot be used in a meld, so short circuit out. It'll be filtered elsewhere.
+        return []; // one lone tile that cannot be used in a meld. However, it might be part of a knitted set.
     }
     if (quantity === 2) {
         // can be a pair

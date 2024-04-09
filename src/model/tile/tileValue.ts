@@ -72,6 +72,11 @@ export enum SuitedTileValue {
     NINE
 }
 
+/* Useful for knitted chows */
+export const oneFourSeven = [SuitedTileValue.ONE, SuitedTileValue.FOUR, SuitedTileValue.SEVEN] as const;
+export const twoFiveEight = [SuitedTileValue.TWO, SuitedTileValue.FIVE, SuitedTileValue.EIGHT] as const;
+export const threeSixNine = [SuitedTileValue.THREE, SuitedTileValue.SIX, SuitedTileValue.NINE] as const;
+
 export const suitedTileValues : SuitedTileValue[] = 
     getEnumKeys(SuitedTileValue).map(key => SuitedTileValue[key])
     .sort((v1, v2) => v1.valueOf() - v2.valueOf()); // just in case, sort explicitly by value.

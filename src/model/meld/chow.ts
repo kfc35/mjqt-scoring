@@ -13,7 +13,7 @@ export default class Chow extends Meld {
         } else if (tiles[0].group === tiles[1].group || 
                 tiles[1].group === tiles[2].group || 
                 tiles[0].group === tiles[2].group) {
-            throw new Error('A knitted chow must have tiles be from all different suits.');
+            throw new Error('A Knitted chow must have tiles from all different suits.');
         }
         
         const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].copy(), tiles[1].copy(), tiles[2].copy()];

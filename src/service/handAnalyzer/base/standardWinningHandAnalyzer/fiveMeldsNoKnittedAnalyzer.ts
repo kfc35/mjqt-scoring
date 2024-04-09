@@ -84,8 +84,8 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
     .reduce<StandardWinningHand[]>((accum, winningHands) => accum.concat(...winningHands), [])
 }
 
-// if a meld in meldsWithDesiredExposedFlag has an equivalent meld in meldsToOverwrite (minus the exposed flag), 
-// the equivalent meld is replaced. 
+// if a meld in meldsWithDesiredExposedFlag has an equivalent meld in meldsToOverwrite (ignoring the exposed flag), 
+// the equivalent meld is replaced.
 function overwriteCommonMelds(meldsSuperset: Meld[], meldsWithDesiredExposedFlag: Meld[]) {
     const copy = [...meldsSuperset];
     for (const replacer of meldsWithDesiredExposedFlag) {

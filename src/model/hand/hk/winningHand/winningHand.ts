@@ -4,7 +4,8 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Meld from "model/meld/meld";
 
 export interface WinningHand {
-    getContents() : Meld[] | SuitedOrHonorTile[][];
+    getMelds() : ReadonlyArray<Meld>;
+    getTiles() : SuitedOrHonorTile[][]
     get meldWithWinningTile() : Meld | undefined; // undefined for special only
     get winningTile() : SuitedOrHonorTile;
     isSelfDrawn() : boolean;

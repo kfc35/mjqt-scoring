@@ -4,7 +4,8 @@ import { Tile } from "model/tile/tile";
 export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
-    private _matchedTiles: Meld[] | Tile[][];
+    private _matchedTiles: Meld[][] | Tile[][][];
+    private _matchedMeldIndices: Set<number>;
     private _subPredicateResults: PointPredicateResult[];
 
     constructor(pointPredicateId: string, success: boolean, 

@@ -27,8 +27,10 @@ export default abstract class SuitedTile extends Tile {
 }
 
 export type SuitedTileGroup = TileGroup.BAMBOO | TileGroup.CHARACTER | TileGroup.CIRCLE;
-export const suitedTileGroups: ReadonlySet<TileGroup> = new Set([TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE]);
+export const suitedTileGroups = [TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE] as const;
+export function isSuitedTileGroup(tileGroup: TileGroup) : tileGroup is SuitedTileGroup {
+    return tileGroup === TileGroup.BAMBOO || tileGroup === TileGroup.CHARACTER || tileGroup === TileGroup.CIRCLE;
+}
 export function isSuitedTile(tile: Tile): tile is SuitedTile {
-    return suitedTileGroups.has(tile.group) && "isOneBefore" in tile
-        && isSuitedTileValue(tile.value);
+    return isSuitedTileGroup(tile.group) && "isOneBefore" in tile && isSuitedTileValue(tile.value);
 }

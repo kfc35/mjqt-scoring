@@ -7,6 +7,7 @@ import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand
 import { assertTilesSuitedOrHonor, tilesUnique } from "common/tileUtils";
 import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
 import { meldExistsInMelds } from "common/meldUtils";
+import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 
 export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: SuitedOrHonorTile[]): HandAnalyzer<SpecialWinningHand> {
     assertTilesSuitedOrHonor(thirteenUniqueTiles);
@@ -42,6 +43,8 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
         if (!hand.userSpecifiedMelds || !(hand.userSpecifiedMelds.length === 1 && meldExistsInMelds(hand.userSpecifiedMelds, pair, false))) {
             return [];
         }
-        return [new SpecialWinningHand([[...tiles], [...pair.tiles]], hand.mostRecentTile(), hand.mostRecentTileIsSelfDrawn(), hand.flowerTiles)];
+        return [new SpecialWinningHand([[...tiles], [...pair.tiles]], 
+            hand.mostRecentTile(), hand.mostRecentTileIsSelfDrawn(), 
+            hand.flowerTiles, SpecialWinningHandType.THIRTEEN_ORPHANS)];
     };
 }

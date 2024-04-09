@@ -28,7 +28,8 @@ function getSuitedMelds(hand: Hand, tileGroup: SuitedTileGroup) : Meld[][] {
 }
 
 // Returns a list of possible meld combinations (hence Meld[][]).
-// All melds have exposed = false by default.
+// All melds created in this algorithm have exposed = false by default.
+// Exposed may be set to true outside of this analyzer.
 function getMeldsFromStartingSTV(tileGroup: SuitedTileGroup, startingSTV: SuitedTileValue | undefined, quantityMemo: SuitedTileValueQuantityMemo) : Meld[][] {
     if (startingSTV === undefined) {
         return []; // finished processing for this tileGroup

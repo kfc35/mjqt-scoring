@@ -1,18 +1,23 @@
-import Meld from "model/meld/meld";
 import { Tile } from "model/tile/tile";
 
 export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
-    private _matchedTiles: Meld[][] | Tile[][][];
-    private _matchedMeldIndices: Set<number>;
+    // the point predicate could apply to multiple meld sets / sets of tile groupings
+    // (Tile[] is like Meld)
+    private _matchedTiles: Tile[][][];
+    private _matchedMeldIndices: ReadonlySet<ReadonlySet<number>>;
     private _subPredicateResults: PointPredicateResult[];
 
-    constructor(pointPredicateId: string, success: boolean, 
-        matchedTiles: Meld[] | Tile[][], subPredicateResults?: PointPredicateResult[]) {
+    constructor(pointPredicateId: string, 
+        success: boolean, 
+        matchedTiles: Tile[][][], 
+        matchedMeldIndices: ReadonlySet<ReadonlySet<number>>,
+        subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
         this._matchedTiles = matchedTiles;
+        this._matchedMeldIndices = matchedMeldIndices;
         this._subPredicateResults = subPredicateResults ?? [];
     }
 
@@ -24,39 +29,47 @@ export default class PointPredicateResult {
         return this._success;
     }
 
-    get matchedTiles(): Meld[] | Tile[][] {
+    get matchedTiles(): Tile[][][] {
         return this._matchedTiles;
+    }
+
+    get matchedMeldIndices(): ReadonlySet<ReadonlySet<number>> {
+        return this._matchedMeldIndices;
     }
 
     get subPredicateResults(): PointPredicateResult[] {
         return this._subPredicateResults;
     }
 
-    and(otherResult: PointPredicateResult, newPointPredicateId?: string) {
-        const andPointPredicateId: string = newPointPredicateId ?? 
-            `(${this._pointPredicateId}_&&_${otherResult.pointPredicateId})`;
-        if (this._success && otherResult._success) {
-            // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
-            return new PointPredicateResult(andPointPredicateId, true, [], [this, otherResult]);
+    static and(newPointPredicateId?: string, ...results: PointPredicateResult[]) {
+        const andPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_&&_" + pointPredicateId))})`;
+        for (const result of results) {
+            if (!result.success) {
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.matchedTiles, result.matchedMeldIndices, [result]);
+            }
         }
-        else if (!this._success) {
-            return new PointPredicateResult(andPointPredicateId, false, this._matchedTiles, [this]);
-        } else { // the otherResult is false
-            return new PointPredicateResult(andPointPredicateId, false, otherResult.matchedTiles, [otherResult]);
-        }
+        // all success 
+        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
+        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], new Set(), [...results]);
     }
 
-    or(otherResult: PointPredicateResult, newPointPredicateId?: string) {
-        const orPointPredicateId: string = newPointPredicateId ?? 
-            `(${this._pointPredicateId}_||_${otherResult.pointPredicateId})`;
-        if (!this._success && !otherResult._success) {
-            // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
-            return new PointPredicateResult(orPointPredicateId, false, [], [this, otherResult]);
+    and(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
+        return PointPredicateResult.and(newPointPredicateId, this, ...otherResults);
+    }
+
+    static or(newPointPredicateId?: string, ...results: PointPredicateResult[]) {
+        const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
+        for (const result of results) {
+            if (result.success) {
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.matchedTiles, result.matchedMeldIndices, [result]);
+            }
         }
-        else if (this._success) {
-            return new PointPredicateResult(orPointPredicateId, true, this._matchedTiles, [this]);
-        } else { // the otherResult is true
-            return new PointPredicateResult(orPointPredicateId, true, otherResult.matchedTiles, [otherResult]);
-        }
+        // all unsuccessful
+        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
+        return new PointPredicateResult(orPointPredicateId, false, [], new Set(), [...results]);
+    }
+
+    or(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
+        return PointPredicateResult.or(newPointPredicateId, this, ...otherResults);
     }
 }

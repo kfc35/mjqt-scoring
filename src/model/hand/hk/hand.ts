@@ -1,4 +1,4 @@
-import { assertTilesHongKongTile, assertTilesNotNullAndCorrectLength, tilesUnique, assertEachTileHasQuantityLessThanMaxPerTile } from "common/tileUtils";
+import { assertTilesHongKongTile, assertTilesNotNullAndCorrectLength, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile } from "common/tileUtils";
 import { Tile } from "model/tile/tile";
 import { type HongKongTile } from "model/tile/hk/hongKongTile";
 import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
@@ -62,7 +62,7 @@ export class Hand {
         if (suitedOrHonorTiles.length > handMaxLengthWithoutFlowers) {
             throw new TypeError("A HK Hand must have less than " + handMaxLengthWithoutFlowers + " suited or honor tiles. Found " + suitedOrHonorTiles.length);
         }
-        assertEachTileHasQuantityLessThanMaxPerTile(suitedOrHonorTiles);
+        assertEachTileHasQuantityLTEMaxPerTile(suitedOrHonorTiles);
 
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
 

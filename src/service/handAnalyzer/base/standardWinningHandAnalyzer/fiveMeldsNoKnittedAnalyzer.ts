@@ -11,7 +11,6 @@ import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = (hand: Hand) => {
     // all other standard winning hands (4 non-pair melds and 1 pair meld).
     // Overall, navigate greedily, filter bad combos at the end.
-    
     const honorMelds = analyzeForHonorMelds(hand);
     const suitedMelds = analyzeForNonKnittedSuitedMelds(hand);
     const possibleMeldCombinations = cartesianProduct(honorMelds, suitedMelds);

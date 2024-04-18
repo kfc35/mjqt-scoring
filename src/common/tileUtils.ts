@@ -80,10 +80,10 @@ export function tilesUnique(tiles: Tile[]): boolean {
         index + 1 < sortedTiles.length ? !tile.equals(sortedTiles[index + 1]) : true);
 }
 
-export function assertEachTileHasQuantityLessThanMaxPerTile(tiles: SuitedOrHonorTile[]) {
+export function assertEachTileHasQuantityLTEMaxPerTile(tiles: SuitedOrHonorTile[]) {
     const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
     const quantityPerUniqueTile : number[] = tileToQuantity.getQuantityPerUniqueTile();
-    if (!quantityPerUniqueTile.every(quantity => quantity < maxQuantityPerNonFlowerTile)) {
-        throw new Error(`Each suited or honor tile must have quantity < ${maxQuantityPerNonFlowerTile}.`);
+    if (!quantityPerUniqueTile.every(quantity => quantity <= maxQuantityPerNonFlowerTile)) {
+        throw new Error(`Each suited or honor tile must have quantity <= ${maxQuantityPerNonFlowerTile}.`);
     }
 }

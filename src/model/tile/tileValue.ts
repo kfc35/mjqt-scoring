@@ -96,4 +96,8 @@ export function getNextSuitedTileValue(suitedTileValue : SuitedTileValue) : Suit
     throw new Error("Unhandled SuitedTileValue.");
 }
 
+export function isTerminalSuitedTileValue(suitedTileValue: SuitedTileValue) {
+    return suitedTileValue === SuitedTileValue.ONE || suitedTileValue === SuitedTileValue.NINE;
+}
+
 export type TileValue = GentlemanTileValue | SeasonTileValue | DragonTileValue | WindTileValue | SuitedTileValue;

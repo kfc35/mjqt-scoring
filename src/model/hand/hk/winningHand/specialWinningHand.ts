@@ -3,7 +3,7 @@ import { type FlowerTile } from "model/tile/group/flowerTile";
 import Meld from "model/meld/meld";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
-import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEachTileHasQuantityLessThanMaxPerTile, assertTilesFlower, tilesUnique } from "common/tileUtils";
+import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEachTileHasQuantityLTEMaxPerTile, assertTilesFlower, tilesUnique } from "common/tileUtils";
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 
 /** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
@@ -25,7 +25,7 @@ export class SpecialWinningHand implements WinningHand {
         const unwrappedTiles = tiles.reduce<SuitedOrHonorTile[]>((accum, tileArray) => accum.concat(tileArray), [])
         assertTilesNotNullAndCorrectLength(unwrappedTiles, handMinLengthWithoutFlowers, handMinLengthWithoutFlowers);
         assertTilesSuitedOrHonor(unwrappedTiles);
-        assertEachTileHasQuantityLessThanMaxPerTile(unwrappedTiles);
+        assertEachTileHasQuantityLTEMaxPerTile(unwrappedTiles);
         
         this._tiles = tiles;
         this._winningTile = winningTile;

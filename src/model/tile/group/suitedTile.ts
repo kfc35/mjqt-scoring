@@ -1,6 +1,6 @@
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
-import { SuitedTileValue, isSuitedTileValue } from "model/tile/tileValue";
+import { SuitedTileValue, isSuitedTileValue, isTerminalSuitedTileValue } from "model/tile/tileValue";
 
 export default abstract class SuitedTile extends Tile {
     declare protected _value: SuitedTileValue;
@@ -33,4 +33,7 @@ export function isSuitedTileGroup(tileGroup: TileGroup) : tileGroup is SuitedTil
 }
 export function isSuitedTile(tile: Tile): tile is SuitedTile {
     return isSuitedTileGroup(tile.group) && "isOneBefore" in tile && isSuitedTileValue(tile.value);
+}
+export function isTerminalSuitedTile(suitedTile : SuitedTile): boolean {
+    return isTerminalSuitedTileValue(suitedTile.value);
 }

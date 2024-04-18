@@ -54,7 +54,7 @@ export function meldsAreSubset(melds: Meld[], potentialSubset: Meld[], ignoreExp
     return true;
 }
 
-export function meldsIntersection(meldsOne: Meld[], meldsTwo: Meld[], ignoreExposed? : boolean) : Meld[] {
+export function meldsIntersection(meldsOne: readonly Meld[], meldsTwo: readonly Meld[], ignoreExposed? : boolean) : Meld[] {
     const intersection = [];
     const meldsTwoCopy = [...meldsTwo];
     for (const meldOne of meldsOne) {

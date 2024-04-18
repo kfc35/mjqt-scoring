@@ -1,7 +1,7 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import Meld from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
-import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLessThanMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
+import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
 import { meldExistsInMelds, meldHasTile, toTiles } from "common/meldUtils";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
@@ -12,7 +12,7 @@ import { meldIsPair } from "model/meld/pair";
  * Seven pairs counts as a standard winning hand.
 */
 export class StandardWinningHand implements WinningHand {
-    private _melds: ReadonlyArray<Meld>;
+    private _melds: ReadonlyArray<Meld>; // meld indices are important for point reporting, hence reao
     private _meldWithWinningTile: Meld;
     private _winningTile: SuitedOrHonorTile;
     protected _flowerTiles: FlowerTile[];
@@ -21,7 +21,7 @@ export class StandardWinningHand implements WinningHand {
         const tiles: SuitedOrHonorTile[] = toTiles(melds);
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);
-        assertEachTileHasQuantityLessThanMaxPerTile(tiles);
+        assertEachTileHasQuantityLTEMaxPerTile(tiles);
         this._melds = melds;
         if (this._melds.length !== 5 && this._melds.length !== 7) {
             throw new Error("melds must be of length 5 or 7");

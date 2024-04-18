@@ -7,8 +7,9 @@ import { meldsIntersection } from "common/meldUtils";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
+import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
 
-// Checks that the given tile sequences exist as chows in a winning hand.
+// Checks that all the given tile sequences exist as chows in a winning hand.
 export function createChowsExistPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][]) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const chows : Chow[] = [];
@@ -18,11 +19,12 @@ export function createChowsExistPredicateFromSequences(pointPredicateID : string
                 && sequence[0].group !== sequence[2].group) {
                 chows.push(new Chow(sequence, false, true));
             } else {
+                assertTilesHaveSameSuitedGroup(sequence);
                 chows.push(new Chow(sequence));
             }
         }
-        const intersection : Meld[] = meldsIntersection(winningHand.getContents(), chows, true);
-        return new PointPredicateResult(pointPredicateID, intersection.length == chows.length, intersection);
+        const intersection : Meld[] = meldsIntersection(winningHand.getMelds(), chows, true);
+        return new PointPredicateResult(pointPredicateID, intersection.length == chows.length, [intersection]);
     }
 }
 
@@ -45,19 +47,19 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
                 [tile, nextTile, twoAfterTile]
             chows.push(new Chow(sequence));
         }
-        const intersection : Meld[] = meldsIntersection(winningHand.getContents(), chows, true);
-        return new PointPredicateResult(pointPredicateID, intersection.length == chows.length, intersection);
+        const intersection : Meld[] = meldsIntersection(winningHand.getMelds(), chows, true);
+        return new PointPredicateResult(pointPredicateID, intersection.length == chows.length, [intersection]);
     }
 }
 
-export function createChowQuantityPredicate(pointPredicateID : string, numChows: number) : PointPredicate<StandardWinningHand> {
+export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const chows : Chow[] = [];
-        for (const meld of winningHand.getContents()) {
+        for (const meld of winningHand.getMelds()) {
             if (meldIsChow(meld)) {
                 chows.push(meld);
             }
         }
-        return new PointPredicateResult(pointPredicateID, chows.length === numChows, chows);
+        return new PointPredicateResult(pointPredicateID, chows.length >= minNumChows, [chows]);
     }
 }

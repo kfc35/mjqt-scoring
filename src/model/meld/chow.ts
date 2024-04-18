@@ -18,7 +18,7 @@ export default class Chow extends Meld {
         
         const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].copy(), tiles[1].copy(), tiles[2].copy()];
         tilesCopy.sort(function(tile1: SuitedTile, tile2: SuitedTile){
-            return knitted ? tile1.compareToValueOnly(tile2) : tile1.compareTo(tile2);
+            return tile1.compareToValueOnly(tile2);
         });
         if (!tilesCopy[0].isOneBefore(tilesCopy[1])
             || !tilesCopy[1].isOneBefore(tilesCopy[2])) {

@@ -33,6 +33,10 @@ export default abstract class Meld {
         return this._exposed;
     }
 
+    equalsIgnoreExposed(meld: Meld | undefined) {
+        return this.equals(meld, true);
+    }
+
     // ignoreExposed default is true
     equals(meld: Meld | undefined, ignoreExposed? : boolean): boolean {
         if (!meld) {

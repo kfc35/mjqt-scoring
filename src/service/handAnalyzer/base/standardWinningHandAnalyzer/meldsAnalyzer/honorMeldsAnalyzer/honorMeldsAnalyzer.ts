@@ -39,7 +39,7 @@ function getHonorMelds(hand: Hand, tileGroup: HonorTileGroup, tileValues: HonorT
 function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
     if (quantity < 2 && quantity >= 0) {
         // quantity === 0 is a no-op. 
-        // quantity === 1 means the hand does not have a winning hand probably. Not an error.
+        // quantity === 1 means the hand does not have a winning hand probably. Not a fatal error.
         return undefined; 
     } else if (quantity === 2) {
         return new Pair(constructHonorTile(tileGroup, tileValue));

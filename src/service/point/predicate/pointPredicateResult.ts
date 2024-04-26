@@ -3,21 +3,33 @@ import { Tile } from "model/tile/tile";
 export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
-    // the point predicate could apply to multiple meld sets / sets of tile groupings
-    // (Tile[] is like Meld)
-    private _matchedTiles: Tile[][][];
-    private _matchedMeldIndices: ReadonlySet<ReadonlySet<number>>;
+    /** 
+     * The tiles that should be shown to the user that add more detail to this result.
+     * For example: if success = true, tiles may show all the tiles in the hand that satisfied the predicate.
+     * if success = false, tales may contain tiles in the hand that violated the predicate 
+     *   OR the tiles present in the hand that violated the predicate.
+     * Tile[] is like Meld but undecorated. Since multiple sets of melds Tile[][] could satisfy the predicate,
+     * it is wrapped by another array.
+     */
+    private _tiles: Tile[][][];
+    /** 
+     * If applicable, the subsets of meld indices in the hand that most satisfy this point predicate.
+     * If success = false, the subsets of meld indices may only partially satisfy the predicate.
+     *   e.g. if the predicate is about all non-pair melds being chows, but one of the melds is not a chow,
+     *   matchedMeldIndicesSubsets only contain the set of indices of the chows.
+    */
+    private _matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>;
     private _subPredicateResults: PointPredicateResult[];
 
     constructor(pointPredicateId: string, 
         success: boolean, 
-        matchedTiles: Tile[][][], 
-        matchedMeldIndices: ReadonlySet<ReadonlySet<number>>,
+        tiles: Tile[][][], 
+        matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>,
         subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
-        this._matchedTiles = matchedTiles;
-        this._matchedMeldIndices = matchedMeldIndices;
+        this._tiles = tiles;
+        this._matchedMeldIndicesSubsets = matchedMeldIndicesSubsets;
         this._subPredicateResults = subPredicateResults ?? [];
     }
 
@@ -29,12 +41,12 @@ export default class PointPredicateResult {
         return this._success;
     }
 
-    get matchedTiles(): Tile[][][] {
-        return this._matchedTiles;
+    get tiles(): Tile[][][] {
+        return this._tiles;
     }
 
-    get matchedMeldIndices(): ReadonlySet<ReadonlySet<number>> {
-        return this._matchedMeldIndices;
+    get matchedMeldIndicesSubsets(): ReadonlySet<ReadonlySet<number>> {
+        return this._matchedMeldIndicesSubsets;
     }
 
     get subPredicateResults(): PointPredicateResult[] {
@@ -45,7 +57,7 @@ export default class PointPredicateResult {
         const andPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_&&_" + pointPredicateId))})`;
         for (const result of results) {
             if (!result.success) {
-                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.matchedTiles, result.matchedMeldIndices, [result]);
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.tiles, result._matchedMeldIndicesSubsets, [result]);
             }
         }
         // all success 
@@ -61,7 +73,7 @@ export default class PointPredicateResult {
         const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
         for (const result of results) {
             if (result.success) {
-                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.matchedTiles, result.matchedMeldIndices, [result]);
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.tiles, result._matchedMeldIndicesSubsets, [result]);
             }
         }
         // all unsuccessful

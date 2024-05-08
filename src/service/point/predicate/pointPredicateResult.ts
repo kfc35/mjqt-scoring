@@ -4,31 +4,41 @@ export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
     /** 
-     * The tiles that should be shown to the user that add more detail to this result.
-     * For example: if success = true, tiles may show all the tiles in the hand that satisfied the predicate.
-     * if success = false, tales may contain tiles in the hand that violated the predicate 
-     *   OR the tiles present in the hand that violated the predicate.
-     * Tile[] is like Meld but undecorated. Since multiple sets of melds Tile[][] could satisfy the predicate,
-     * it is wrapped by another array.
+     * if success = true, successTiles contains all the tiles in the hand that satisfied the predicate.
+     * if success = false, successTiles contains tiles in the hand that partially satisfied the predicate.
+     * Since multiple groupings of melds in the hand (Tile[][]) could satisfy the predicate, it is wrapped by another array. 
+     * This field works for both Standard and Special winning hands.
      */
-    private _tiles: Tile[][][];
+    private _successTiles: Tile[][][];
+    /**
+     * If _failureTiles is non-empty, _failureTiles contains the tiles that violate the predicate, 
+     * whether because they exist in the hand or because the hand lacks them, depending on the predicate definition.
+     * _failureTiles may be empty even if _success = false (e.g. hands that require a min. number of chows)
+     * It is not wrapped in another [] because a violation of a predicate applies across the whole hand, no matter how it is arranged.
+     */
+    private _failureTiles: Tile[][];
     /** 
-     * If applicable, the subsets of meld indices in the hand that most satisfy this point predicate.
-     * If success = false, the subsets of meld indices may only partially satisfy the predicate.
+     * If success = true, the subsets of meld indices in the hand that satisfy this point predicate.
+     * If success = false, the subsets of meld indices that only partially satisfy the predicate.
      *   e.g. if the predicate is about all non-pair melds being chows, but one of the melds is not a chow,
      *   matchedMeldIndicesSubsets only contain the set of indices of the chows.
+     * This only matters for StandardWinningHands, and is used for correct calculation in International rules.
+     * Special winning hands will return an empty set.
+     * _successTiles is derived from these subsets for StandardWinningHands.
     */
     private _matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>;
     private _subPredicateResults: PointPredicateResult[];
 
     constructor(pointPredicateId: string, 
         success: boolean, 
-        tiles: Tile[][][], 
+        successTiles: Tile[][][], 
+        failureTiles: Tile[][], 
         matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>,
         subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
-        this._tiles = tiles;
+        this._successTiles = successTiles;
+        this._failureTiles = failureTiles;
         this._matchedMeldIndicesSubsets = matchedMeldIndicesSubsets;
         this._subPredicateResults = subPredicateResults ?? [];
     }
@@ -41,8 +51,12 @@ export default class PointPredicateResult {
         return this._success;
     }
 
-    get tiles(): Tile[][][] {
-        return this._tiles;
+    get successTiles(): Tile[][][] {
+        return this._successTiles;
+    }
+
+    get failureTiles(): Tile[][] {
+        return this._failureTiles;
     }
 
     get matchedMeldIndicesSubsets(): ReadonlySet<ReadonlySet<number>> {
@@ -57,12 +71,11 @@ export default class PointPredicateResult {
         const andPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_&&_" + pointPredicateId))})`;
         for (const result of results) {
             if (!result.success) {
-                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.tiles, result._matchedMeldIndicesSubsets, [result]);
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.successTiles, result._failureTiles, result._matchedMeldIndicesSubsets, [result]);
             }
         }
-        // all success 
-        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
-        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], new Set(), [...results]);
+        // all success, results have better detail on success/failure tiles
+        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], [], new Set(), [...results]);
     }
 
     and(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
@@ -73,12 +86,11 @@ export default class PointPredicateResult {
         const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
         for (const result of results) {
             if (result.success) {
-                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.tiles, result._matchedMeldIndicesSubsets, [result]);
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.successTiles, result.failureTiles, result._matchedMeldIndicesSubsets, [result]);
             }
         }
-        // all unsuccessful
-        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
-        return new PointPredicateResult(orPointPredicateId, false, [], new Set(), [...results]);
+        // all unsuccessful, results have better detail on success/failure tiles
+        return new PointPredicateResult(orPointPredicateId, false, [], [], new Set(), [...results]);
     }
 
     or(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {

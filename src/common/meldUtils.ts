@@ -95,14 +95,14 @@ export function cartesianProduct(meldsOne: Meld[][], meldsTwo: Meld[][]) : Meld[
 }
 
 
-export function getMatchingIndicesSubsetsIgnoreExposed(melds: Meld[], meldsToMatch: Meld[]) : [Set<Set<number>>, boolean[]] {
+export function getMatchingIndicesSubsetsIgnoreExposed(melds: readonly Meld[], meldsToMatch: Meld[]) : [Set<Set<number>>, boolean[]] {
     return getMatchingIndicesSubsets(melds, meldsToMatch, true);
 }
 
 /** 
- * Returns:
- *   the subsets indices from "melds" that have a 1:1 match in "meldsToMatch".
- *   a matchSuccessful array where, for each index in meldsToMatch, matchSuccessful[index] = true if there is a match for it.
+ * Returns a tuple of:
+ *   0) the subsets indices from "melds" that have a 1:1 match in "meldsToMatch".
+ *   1) a matchSuccessful array where, for each index in meldsToMatch, matchSuccessful[index] = true if there was a match for it.
  * Each "meldToMatch" will only match once with a meld in "melds" per subset, and vice versa per subset.
  * If you want to match the same meld multiple times, you must include a copy of that meld in "meldsToMatch".
  *   i.e. if meldsToMatch is [A], and melds contains [A, A, B, C, D], this function will return [[0], [1]] as the subsets 
@@ -123,7 +123,7 @@ export function getMatchingIndicesSubsetsIgnoreExposed(melds: Meld[], meldsToMat
  * If you want to ensure one pair of A, one pair of B, and one pair of C exist with the same hand (meldsToMatch = [A, B, C]), you get: 
  * [[0,2,4], [0,2,5], [0,3,4], [0,3,5], [1,2,4], [1,2,5], [1,3,4], [1,3,5]].
 */
-export function getMatchingIndicesSubsets(melds: Meld[], meldsToMatch: Meld[], ignoreExposed?: boolean): [Set<Set<number>>, boolean[]]  {
+export function getMatchingIndicesSubsets(melds: readonly Meld[], meldsToMatch: Meld[], ignoreExposed?: boolean): [Set<Set<number>>, boolean[]]  {
     let matchingIndicesSubsets: Set<Set<number>> = new Set();
     const meldsToMatchSuccess: boolean[] = meldsToMatch.map(() => false);
     for (const [toMatchIndex, toMatchMeld] of meldsToMatch.entries()) {

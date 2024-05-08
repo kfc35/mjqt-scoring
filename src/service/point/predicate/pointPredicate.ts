@@ -17,11 +17,11 @@ export function predicateAnd<T extends WinningHand>(newPointPredicateId?: string
         const andPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_&&_" + pointPredicateId))})`;
         for (const result of results) {
             if (!result.success) {
-                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.matchedTiles, result.matchedMeldIndices, [result]);
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.successTiles, result.failureTiles, result.matchedMeldIndicesSubsets, [result]);
             }
         }
-        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
-        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], new Set(), results);
+        // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
+        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], [], new Set(), results);
     }
 }
 
@@ -31,10 +31,10 @@ export function predicateOr<T extends WinningHand>(newPointPredicateId?: string,
         const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
         for (const result of results) {
             if (result.success) {
-                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.matchedTiles, result.matchedMeldIndices, [result]);
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.successTiles, result.failureTiles, result.matchedMeldIndicesSubsets, [result]);
             }
         }
-        // the "matching tiles" for the result is more accurately described in the list of results, so we set tiles to []
-        return new PointPredicateResult(`(${orPointPredicateId})`, false, [], new Set(), results);
+        // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
+        return new PointPredicateResult(`(${orPointPredicateId})`, false, [], [], new Set(), results);
     }
 }

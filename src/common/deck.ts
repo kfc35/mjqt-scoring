@@ -8,6 +8,7 @@ import CircleTile from "model/tile/group/circleTile";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue } from "model/tile/tileValue";
 
 export const maxQuantityPerNonFlowerTile = 4;
+export const maxQuantityPerFlowerTile = 1;
 export const 
     PLUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.PLUM),
     ORCHID_GENTLEMAN = new GentlemanTile(GentlemanTileValue.ORCHID),

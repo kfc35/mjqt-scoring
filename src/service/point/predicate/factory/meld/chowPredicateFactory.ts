@@ -8,6 +8,7 @@ import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
+import { createMeldCheckerSuccessesQuantityGTEPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
 
 // Checks that all the given tile sequences exist as chows in a winning hand.
 export function createChowsExistPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][]) : PointPredicate<StandardWinningHand> {
@@ -53,13 +54,5 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
 }
 
 export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<StandardWinningHand> {
-    return (winningHand : StandardWinningHand) => {
-        const chows : Chow[] = [];
-        for (const meld of winningHand.getMelds()) {
-            if (meldIsChow(meld)) {
-                chows.push(meld);
-            }
-        }
-        return new PointPredicateResult(pointPredicateID, chows.length >= minNumChows, [chows]);
-    }
+    return createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID, meldIsChow, minNumChows);
 }

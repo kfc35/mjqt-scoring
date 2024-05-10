@@ -1,32 +1,27 @@
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
+import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
+import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
 import Kong from "model/meld/kong";
-import Meld from "model/meld/meld";
-import { meldsIntersection } from "common/meldUtils";
 import { meldIsKong } from "model/meld/kong";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
+import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityGTEPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
 
-// Checks that a kong exists in a winning hand for each single tile in tiles
-export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[]) : PointPredicate<StandardWinningHand> {
-    return (winningHand : StandardWinningHand) => {
-        const kongs : Kong[] = [];
-        for (const tile of tiles) {
-            kongs.push(new Kong(tile));
+// Checks that kongs exist in the winning hand for each single tile in tiles
+export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numKongsToMatch: number) : PointPredicate<StandardWinningHand> {
+    const tileQuantityMap = new TileToQuantityMap(tiles);
+    for (const tile of tiles) {
+        if (tileQuantityMap.getQuantity(tile) * 4 > maxQuantityPerNonFlowerTile) {
+            throw new Error(`Cannot create a predicate of more than 1 pong for the same tile: ${tile.group} ${tile.value}.`)
         }
-        const intersection : Meld[] = meldsIntersection(winningHand.getMelds(), [kongs], true);
-        return new PointPredicateResult(pointPredicateID, intersection.length == kongs.length, [intersection]);
     }
+    const kongsToMatch : Kong[] = [];
+        for (const tile of tiles) {
+            kongsToMatch.push(new Kong(tile));
+        }
+    return createMeldsExistPredicate(pointPredicateID, kongsToMatch, numKongsToMatch);
 }
 
-export function createKongMinQuantityPredicate(pointPredicateID : string, minNumKongs: number) : PointPredicate<StandardWinningHand> {
-    return (winningHand : StandardWinningHand) => {
-        const kongs : Kong[] = [];
-        for (const meld of winningHand.getMelds()) {
-            if (meldIsKong(meld)) {
-                kongs.push(meld);
-            }
-        }
-        return new PointPredicateResult(pointPredicateID, kongs.length >= minNumKongs, [kongs]);
-    }
+export function createKongQuantityGTWPredicate(pointPredicateID : string, minNumKongs: number) : PointPredicate<StandardWinningHand> {
+    return createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID, meldIsKong, minNumKongs);
 }

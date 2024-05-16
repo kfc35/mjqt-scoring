@@ -15,7 +15,7 @@ export function createChowsExistPredicateFromSequences(pointPredicateID : string
         if (sequence[0].group !== sequence[1].group 
             && sequence[1].group !== sequence[2].group
             && sequence[0].group !== sequence[2].group) {
-            chows.push(new Chow(sequence, false, true));
+            chows.push(new Chow(sequence, false));
         } else {
             assertTilesHaveSameSuitedGroup(sequence);   
             chows.push(new Chow(sequence));

@@ -7,13 +7,10 @@ export default class Chow extends Meld {
     // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"
     declare protected _tiles: [SuitedTile, SuitedTile, SuitedTile];
 
-    constructor(tiles: [SuitedTile, SuitedTile, SuitedTile], exposed: boolean = false, knitted: boolean = false) {
-        if (!knitted) { 
-            assertTilesHaveSameSuitedGroup(tiles);
-        } else if (tiles[0].group === tiles[1].group || 
-                tiles[1].group === tiles[2].group || 
-                tiles[0].group === tiles[2].group) {
-            throw new Error('A Knitted chow must have tiles from all different suits.');
+    constructor(tiles: [SuitedTile, SuitedTile, SuitedTile], exposed: boolean = false) {
+        if (!(tiles[0].group === tiles[1].group && tiles[1].group === tiles[2].group && tiles[0].group === tiles[2].group) || 
+        !(tiles[0].group !== tiles[1].group && tiles[1].group !== tiles[2].group && tiles[0].group !== tiles[2].group))  {
+            throw new Error('A chow must be either all the same suit or knitted (all different suites)');
         }
         
         const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].copy(), tiles[1].copy(), tiles[2].copy()];
@@ -30,6 +27,19 @@ export default class Chow extends Meld {
 
     clone(exposedOverride? : boolean) {
         return new Chow(this._tiles, exposedOverride ?? this.exposed);
+    }
+
+    isKnitted() : boolean {
+        return this._tiles[0].group !== this._tiles[1].group && this._tiles[1].group !== this._tiles[2].group 
+        && this._tiles[0].group !== this._tiles[2].group;
+    }
+
+    isSameSuit() : boolean {
+        return !this.isKnitted(); // can only be knitted or all the same suit by assertion in the constructor.
+    }
+
+    override get tiles(): [SuitedTile, SuitedTile, SuitedTile] {
+        return this._tiles;
     }
 }
 

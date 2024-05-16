@@ -8,7 +8,7 @@ import { meldIsKong } from "model/meld/kong";
 import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityGTEPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
 
 // Checks that kongs exist in the winning hand for each single tile in tiles
-export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numKongsToMatch: number) : PointPredicate<StandardWinningHand> {
+export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numKongsToMatch?: number) : PointPredicate<StandardWinningHand> {
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 4 > maxQuantityPerNonFlowerTile) {
@@ -16,10 +16,14 @@ export function createKongsExistPredicate(pointPredicateID : string, tiles: Suit
         }
     }
     const kongsToMatch : Kong[] = [];
-        for (const tile of tiles) {
-            kongsToMatch.push(new Kong(tile));
-        }
-    return createMeldsExistPredicate(pointPredicateID, kongsToMatch, numKongsToMatch);
+    for (const tile of tiles) {
+        kongsToMatch.push(new Kong(tile));
+    }
+
+    if (numKongsToMatch && (numKongsToMatch > tiles.length || numKongsToMatch < 0)) {
+        throw new Error(`numKongsToMatch must be between 0 and tiles.length (${tiles.length})`);
+    }
+    return createMeldsExistPredicate(pointPredicateID, kongsToMatch, numKongsToMatch ?? kongsToMatch.length);
 }
 
 export function createKongQuantityGTWPredicate(pointPredicateID : string, minNumKongs: number) : PointPredicate<StandardWinningHand> {

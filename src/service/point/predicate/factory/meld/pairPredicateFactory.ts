@@ -8,7 +8,7 @@ import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityGTEPredica
 
 // Checks that the pairs exist in a winning hand for each single tile in tiles.
 // You can have dups in tiles, but only max 2 since you can only have max 2 pairs of a tile.
-export function createPairsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPairsToMatch: number) : PointPredicate<StandardWinningHand> {
+export function createPairsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPairsToMatch?: number) : PointPredicate<StandardWinningHand> {
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 2 > maxQuantityPerNonFlowerTile) {
@@ -21,7 +21,11 @@ export function createPairsExistPredicate(pointPredicateID : string, tiles: Suit
         pairsToMatch.push(new Pair(tile));
     }
 
-    return createMeldsExistPredicate(pointPredicateID, pairsToMatch, numPairsToMatch);
+    if (numPairsToMatch && (numPairsToMatch > tiles.length || numPairsToMatch < 0)) {
+        throw new Error(`numPairsToMatch must be between 0 and tiles.length (${tiles.length})`);
+    }
+
+    return createMeldsExistPredicate(pointPredicateID, pairsToMatch, numPairsToMatch ?? tiles.length);
 }
 
 export function createPairQuantityGTEPredicate(pointPredicateID : string, numMinPairs: number) : PointPredicate<StandardWinningHand> {

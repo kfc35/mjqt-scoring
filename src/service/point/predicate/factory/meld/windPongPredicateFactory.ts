@@ -9,6 +9,6 @@ export default function createWindPongsExistPredicates(roundContext: RoundContex
     const prevailingWindTile : WindTile = roundContext.getPrevailingWindAsWindTile();
     const seatWindTile : WindTile = roundContext.getSeatWindAsWindTile();
 
-    return [createPongsExistPredicate(PointPredicateID.PREVAILING_WIND_PONG.valueOf(), [prevailingWindTile], 1), 
-        createPongsExistPredicate(PointPredicateID.SEAT_WIND_PONG.valueOf(), [seatWindTile], 1)];
+    return [createPongsExistPredicate(PointPredicateID.PREVAILING_WIND_PONG.valueOf(), [prevailingWindTile]), 
+        createPongsExistPredicate(PointPredicateID.SEAT_WIND_PONG.valueOf(), [seatWindTile])];
 }

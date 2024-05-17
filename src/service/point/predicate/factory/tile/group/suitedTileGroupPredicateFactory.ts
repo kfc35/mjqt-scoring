@@ -70,7 +70,6 @@ export function createNumSuitedTileGroupsPredicate(pointPredicateID: string, des
             return new PointPredicateResult(pointPredicateID, false, [], tiles, new Set(), []);
         }
 
-        
         const tiles: Tile[][] = [];
         for (const melds of suitedTileGroupToNonKnittedMelds.values()) {
             tiles.push(toTiles(melds));

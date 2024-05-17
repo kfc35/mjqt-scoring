@@ -7,6 +7,7 @@ export default class PointPredicateResult {
      * if success = true, successTiles contains all the tiles in the hand that satisfied the predicate.
      * if success = false, successTiles contains tiles in the hand that partially satisfied the predicate.
      * Since multiple groupings of melds in the hand (Tile[][]) could satisfy the predicate, it is wrapped by another array. 
+     * i.e. a hand with two distinct short straights could have [[[1B,2B,3B],[4B,5B,6B]],[[2C,3C,4C],[5C,6C,7C]]]
      * This field works for both Standard and Special winning hands.
      */
     private _successTiles: Tile[][][];

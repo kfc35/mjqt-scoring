@@ -1,6 +1,7 @@
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { MeldType } from "model/meld/meldType";
 import { assertTilesSuitedOrHonor } from "common/tileUtils";
+import { TileGroup } from "model/tile/tileGroup";
 
 export default abstract class Meld {
     protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]];
@@ -23,6 +24,11 @@ export default abstract class Meld {
 
     get tiles(): [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]] {
         return this._tiles;
+    }
+
+    // for non knitted chows, this will always be the tile group of the *whole* meld
+    getTileGroupOfFirstTile(): TileGroup {
+        return this._tiles[0].group;
     }
 
     get type(): MeldType {

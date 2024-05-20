@@ -5,9 +5,10 @@ import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand
 import SuitedTile, { isSuitedTile, isSuitedTileGroup, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { Tile } from "model/tile/tile";
-import { meldIsChow } from "model/meld/chow";
+import Chow, { meldIsChow } from "model/meld/chow";
 import Meld from "model/meld/meld";
 import { toTiles } from "common/meldUtils";
+import { groupMeldsByTileGroupSatisfyingCondition } from "service/point/predicate/factory/tile/tilePredicateFactoryBase";
 
 // voided suit (two suits)
 // only one suit - specify the suit.
@@ -20,41 +21,17 @@ export function createNumSuitedTileGroupsPredicate(pointPredicateID: string, des
     }
     return (winningHand: StandardWinningHand) => {
         const melds = winningHand.getMelds();
-        const suitedMeldsIndices: number[] = melds.map((meld, index) => isSuitedTileGroup(meld.getTileGroupOfFirstTile()) ? index : -1)
+        const suitedMeldIndices: number[] = melds.map((meld, index) => isSuitedTileGroup(meld.getTileGroupOfFirstTile()) ? index : -1)
             .filter(index => index !== -1);
         const indicesSetWrapper : Set<Set<number>> = new Set();
-        indicesSetWrapper.add(new Set(suitedMeldsIndices));
+        indicesSetWrapper.add(new Set(suitedMeldIndices));
 
-        const knittedChows : Meld[] = melds.filter(meld => meldIsChow(meld) && meld.isKnitted());
-        const suitedTileGroupToNonKnittedMelds: Map<SuitedTileGroup, Meld[]> = new Map();
-        melds.filter(meld => !(meldIsChow(meld) && meld.isKnitted()))
-            .map(meld => [meld.getTileGroupOfFirstTile(), meld] as [TileGroup, Meld])
-            .forEach(([tileGroup, meld]) => {
-                if (!isSuitedTileGroup(tileGroup)) {
-                    return;
-                }
-                const suitedTileGroupMelds = suitedTileGroupToNonKnittedMelds.get(tileGroup);
-                if (suitedTileGroupMelds) {
-                    suitedTileGroupMelds.push(meld)
-                } else {
-                    suitedTileGroupToNonKnittedMelds.set(tileGroup, [meld])
-                }
-            });
+        const suitedTileGroupToNonKnittedMelds: ReadonlyMap<TileGroup, Meld[]> = groupMeldsByTileGroupSatisfyingCondition(melds, 
+            meld => isSuitedTileGroup(meld.getTileGroupOfFirstTile()) && !(meldIsChow(meld) && meld.isKnitted()));
+
+        const knittedChows : Chow[] = melds.filter(meld => meldIsChow(meld) && meld.isKnitted()).map(meld => meld as Chow);
         if (knittedChows.length > 0) { // knittedChows have all 3 suits.
-            const suitedTileGroupToKnittedTile: Map<SuitedTileGroup, Tile[]> = new Map();
-            knittedChows.forEach(knittedChow => {
-                knittedChow.tiles.forEach(tile => {
-                    if (!isSuitedTile(tile)) {
-                        return;
-                    }
-                    const suitedTiles = suitedTileGroupToKnittedTile.get(tile.group);
-                    if (suitedTiles) {
-                        suitedTiles.push(tile);
-                    } else {
-                        suitedTileGroupToKnittedTile.set(tile.group, [tile]);
-                    }
-                })
-            });
+            const suitedTileGroupToKnittedTile: ReadonlyMap<TileGroup, Tile[]> = separateKnittedChowsByTileGroup(knittedChows);
             const tiles: Tile[][] = [];
             for (const [stg, melds] of suitedTileGroupToNonKnittedMelds.entries()) {
                 const knittedTilesWithSameSuit: Tile[] | undefined = suitedTileGroupToKnittedTile.get(stg);
@@ -86,7 +63,7 @@ export function createNumSuitedTileGroupsPredicateSpecial(pointPredicateID: stri
         throw new Error("desiredNumSuitedTileGroups must be between 0 and 3.");
     }
     return (winningHand: SpecialWinningHand) => {
-        const suitedTileGroupsToTiles = createSuitedTileGroupsToTilesMapSpecial(winningHand);
+        const suitedTileGroupsToTiles = createSuitedTileGroupsToTilesMap(winningHand);
         const tiles : Tile[][] = [];
         for (const suitedTiles of suitedTileGroupsToTiles.values()) {
             tiles.push(suitedTiles);
@@ -98,7 +75,25 @@ export function createNumSuitedTileGroupsPredicateSpecial(pointPredicateID: stri
     }
 }
 
-function createSuitedTileGroupsToTilesMapSpecial(winningHand : SpecialWinningHand) : ReadonlyMap<SuitedTileGroup, SuitedTile[]> {
+function separateKnittedChowsByTileGroup(knittedChows: Chow[]) : ReadonlyMap<TileGroup, Tile[]> {
+    const tileGroupToTile: Map<TileGroup, Tile[]> = new Map();
+    knittedChows.forEach(chow => {
+        chow.tiles.forEach(tile => {
+            if (!isSuitedTile(tile)) {
+                return;
+            }
+            const tiles = tileGroupToTile.get(tile.group);
+            if (tiles) {
+                tiles.push(tile);
+            } else {
+                tileGroupToTile.set(tile.group, [tile]);
+            }
+        })
+    });
+    return tileGroupToTile;
+}
+
+function createSuitedTileGroupsToTilesMap(winningHand : SpecialWinningHand) : ReadonlyMap<SuitedTileGroup, SuitedTile[]> {
     const map = new Map<SuitedTileGroup, SuitedTile[]>();
     winningHand.getTiles().forEach(tiles => {
         tiles.forEach(tile => {

@@ -4,7 +4,7 @@ import PointPredicateResult from "service/point/predicate/pointPredicateResult"
 
 /** 
  * PointPredicates apply to WinningHands and WinContext. 
- * They are simply statements that evaluate to true or false.
+ * They are simple statements that evaluate to true or false.
  * One or more "smaller" PointPredicates can be combined to compose a "Faan" or "PointCrierion"
 */
 export type PointPredicate<T extends WinningHand> = 

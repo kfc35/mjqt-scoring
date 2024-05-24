@@ -22,7 +22,11 @@ export function meldsNumTiles(melds: Meld[]) : number {
     return melds.map(meld => meld.tiles.length).reduce<number>((sum, len) => sum + len, 0);
 }
 
-export function toTiles(melds: Meld[]) : SuitedOrHonorTile[] {
+export function toTiles(melds: Meld[]) : SuitedOrHonorTile[][] {
+    return melds.map(meld => meld.tiles);
+}
+
+export function toFlatTiles(melds: Meld[]) : SuitedOrHonorTile[] {
     return melds.map(meld => meld.tiles)
         .reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []);
 }
@@ -92,4 +96,8 @@ export function cartesianProduct(meldsOne: Meld[][], meldsTwo: Meld[][]) : Meld[
         }
     }
     return product;
+}
+
+export function getMeldsSubsetFromIndicesSet(melds: readonly Meld[], indices: ReadonlySet<number>): Meld[] {
+    return melds.filter((meld, index) => indices.has(index));
 }

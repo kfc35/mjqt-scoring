@@ -77,6 +77,10 @@ export const oneFourSeven = [SuitedTileValue.ONE, SuitedTileValue.FOUR, SuitedTi
 export const twoFiveEight = [SuitedTileValue.TWO, SuitedTileValue.FIVE, SuitedTileValue.EIGHT] as const;
 export const threeSixNine = [SuitedTileValue.THREE, SuitedTileValue.SIX, SuitedTileValue.NINE] as const;
 
+export const simpleSuitedTileValues : ReadonlySet<SuitedTileValue> = new Set([SuitedTileValue.TWO, SuitedTileValue.THREE, SuitedTileValue.FOUR, 
+    SuitedTileValue.FIVE, SuitedTileValue.SIX, SuitedTileValue.SEVEN, SuitedTileValue.EIGHT]);
+export const terminalSuitedTileValues: ReadonlySet<SuitedTileValue> = new Set([SuitedTileValue.ONE, SuitedTileValue.NINE]);
+
 export const suitedTileValues : SuitedTileValue[] = 
     getEnumKeys(SuitedTileValue).map(key => SuitedTileValue[key])
     .sort((v1, v2) => v1.valueOf() - v2.valueOf()); // just in case, sort explicitly by value.

@@ -2,10 +2,11 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import Meld from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
-import { meldExistsInMelds, meldHasTile, toTiles } from "common/meldUtils";
+import { meldExistsInMelds, meldHasTile, toFlatTiles } from "common/meldUtils";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { meldIsPair } from "model/meld/pair";
+import { StandardWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
 
 /** A StandardWinningHand is a Hand that has been processed completely into finished melds.
  * A hand can have multiple standard winning hands depending on the arrangement of the melds.
@@ -15,10 +16,11 @@ export class StandardWinningHand implements WinningHand {
     private _melds: ReadonlyArray<Meld>; // meld indices are important for point reporting, hence reao
     private _meldWithWinningTile: Meld;
     private _winningTile: SuitedOrHonorTile;
+    private _tileGroupValueMaps: StandardWinningHandTileGroupValueMaps;
     protected _flowerTiles: FlowerTile[];
 
     constructor(melds: Meld[], meldWithWinningTile: Meld, winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
-        const tiles: SuitedOrHonorTile[] = toTiles(melds);
+        const tiles: SuitedOrHonorTile[] = toFlatTiles(melds);
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);
         assertEachTileHasQuantityLTEMaxPerTile(tiles);
@@ -50,6 +52,8 @@ export class StandardWinningHand implements WinningHand {
             throw new Error("flowerTiles must be unique");
         }
         this._flowerTiles = flowerTiles;
+
+        this._tileGroupValueMaps = new StandardWinningHandTileGroupValueMaps(this._melds);
     }
 
     getMelds(): ReadonlyArray<Meld> {
@@ -58,6 +62,10 @@ export class StandardWinningHand implements WinningHand {
 
     getTiles(): SuitedOrHonorTile[][] {
         return this._melds.map(meld => meld.tiles);
+    }
+
+    get tileGroupValueMaps(): StandardWinningHandTileGroupValueMaps {
+        return this._tileGroupValueMaps;
     }
 
     get meldWithWinningTile() {

@@ -9,6 +9,8 @@ export enum PointPredicateID {
     ALL_HONORS = 'ALL_HONORS', // only honors
     ALL_TERMINALS = 'ALL_TERMINALS', // AKA Orphans, only 1's and 9's, ALL_IN_TRIPLES not awarded
     ALL_HONORS_AND_TERMINALS = 'ALL_HONORS_AND_TERMINALS',
+    ALL_SIMPLES = 'ALL_SIMPLES', // No honors or terminals, only suited values 2-9 in hand.
+    VOIDED_SUIT = 'VOIDED_SUIT', // only two of three suits, honors optional
     THREE_WINDS_PONG = 'THREE_WINDS_PONG', // hand has three pongs (kongs allowed) of different winds
     FOUR_WINDS_PONG = 'FOUR_WINDS_PONG', // hand has four pongs (kongs allowed) of diff winds
     THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // Special hand

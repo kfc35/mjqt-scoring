@@ -8,7 +8,7 @@ export interface WinningHand {
     getMelds() : ReadonlyArray<Meld>;
     getTiles() : SuitedOrHonorTile[][];
     get tileGroupValueMaps() : TileGroupValueMaps;
-    get meldWithWinningTile() : Meld | undefined; // undefined for special only
+    get meldWithWinningTileIndex() : number | undefined; // undefined for special only
     get winningTile() : SuitedOrHonorTile;
     isSelfDrawn() : boolean;
     get flowerTiles() : FlowerTile[];

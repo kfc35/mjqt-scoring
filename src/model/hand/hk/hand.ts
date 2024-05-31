@@ -8,7 +8,7 @@ import { handMinLengthWithoutFlowers, handMaxLength, handMaxNumUniqueFlowers, ha
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
-import { meldExistsInMelds, toTiles } from "common/meldUtils";
+import { meldExistsInMelds, toFlatTiles } from "common/meldUtils";
 import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 
 /** A Hand is an unsorted collection of Mahjong Tiles.
@@ -67,7 +67,7 @@ export class Hand {
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
 
         if (userSpecifiedMelds && userSpecifiedMelds.length > 0) {
-            const meldTiles = toTiles(userSpecifiedMelds);
+            const meldTiles = toFlatTiles(userSpecifiedMelds);
             const meldTileToQuantity = new TileToQuantityMap(meldTiles);
             for (const tile of meldTiles) {
                 if (meldTileToQuantity.getQuantity(tile) > tileToQuantity.getQuantity(tile)) {
@@ -77,8 +77,8 @@ export class Hand {
                 }
             }
         }
-        if (mostRecentTileContext.userSpecifiedMeld && (!userSpecifiedMelds || !meldExistsInMelds(userSpecifiedMelds, mostRecentTileContext.userSpecifiedMeld, false))) {
-            throw new Error(`userSpecifiedMelds must contain the most recent tile context's userSpecifiedMeld if defined.`);
+        if (mostRecentTileContext.userSpecifiedMeld && (!userSpecifiedMelds || !meldExistsInMelds(userSpecifiedMelds, mostRecentTileContext.userSpecifiedMeld))) {
+            throw new Error(`userSpecifiedMelds must contain the most recent tile context's userSpecifiedMeld if one is defined.`);
         }
 
         if (tileToQuantity.getQuantity(mostRecentTileContext.tile) === 0) {

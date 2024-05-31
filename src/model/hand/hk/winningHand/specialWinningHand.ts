@@ -53,7 +53,7 @@ export class SpecialWinningHand implements WinningHand {
         return this._tileGroupValueMaps;
     }
 
-    get meldWithWinningTile() : Meld | undefined {
+    get meldWithWinningTileIndex() {
         return undefined;
     }
 

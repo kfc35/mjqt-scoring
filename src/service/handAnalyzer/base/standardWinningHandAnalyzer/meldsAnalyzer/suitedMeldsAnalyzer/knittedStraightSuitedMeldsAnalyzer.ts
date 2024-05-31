@@ -17,15 +17,15 @@ export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
                         return [[new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[0]),
                             constructSuitedTile(secondSuitedTileGroup, twoFiveEight[0]),
                             constructSuitedTile(thirdSuitedTileGroup, threeSixNine[0])],
-                            false, true),
+                            false),
                             new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[1]),
                             constructSuitedTile(secondSuitedTileGroup, twoFiveEight[1]),
                             constructSuitedTile(thirdSuitedTileGroup, threeSixNine[1])],
-                            false, true),
+                            false),
                             new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[2]),
                             constructSuitedTile(secondSuitedTileGroup, twoFiveEight[2]),
                             constructSuitedTile(thirdSuitedTileGroup, threeSixNine[2])],
-                            false, true)], []]; // we can create a knitted straight, or we could choose not to (empty Meld[])
+                            false)], []]; // we can create a knitted straight, or we could choose not to (empty Meld[])
                     }   
                 }
              }

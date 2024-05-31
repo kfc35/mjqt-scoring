@@ -4,7 +4,7 @@ import Meld from "model/meld/meld";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand"
 import { analyzeForHonorMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorMeldsAnalyzer";
 import { analyzeForNonKnittedSuitedMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/nonKnittedSuitedMeldsAnalyzer";
-import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, toTiles, meldHasTile, meldExistsInMelds } from "common/meldUtils";
+import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, toFlatTiles, meldHasTile, meldExistsInMelds, getIndexOfMeld } from "common/meldUtils";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 
@@ -24,7 +24,7 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
     // all tiles in the hand should be represented within the melds
     .filter(melds => meldsNumTiles(melds) === hand.getTotalQuantity())
     .filter(melds => {
-        const meldTiles = toTiles(melds);
+        const meldTiles = toFlatTiles(melds);
         const meldTileQuantityMap = new TileToQuantityMap(meldTiles);
         return meldTiles.every(tile => meldTileQuantityMap.getQuantity(tile) === hand.getQuantity(tile))
     })
@@ -39,8 +39,12 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
     .map(melds => {
         const mostRecentTileUserSpecifiedMeld: Meld | undefined = hand.mostRecentTileUserSpecifiedMeld();
         if (mostRecentTileUserSpecifiedMeld) { // If this meld exists, the last tile should always be placed in this meld.
+            const indexOfMeld = getIndexOfMeld(melds, mostRecentTileUserSpecifiedMeld);
+            if (indexOfMeld === -1) {
+                throw new Error('The mostRecentTileUserSpecifiedMeld is not in melds, which should not happen.');
+            }
             // mostRecentTileUserSpecifiedMeld is guaranteed to be in `melds` since it was copied over as part of userSpecifiedMelds
-            return [new StandardWinningHand(melds, mostRecentTileUserSpecifiedMeld, hand.mostRecentTile(), hand.flowerTiles)]
+            return [new StandardWinningHand(melds, indexOfMeld, hand.mostRecentTile(), hand.flowerTiles)]
         }
         // multiple winning hands are possible depending on which meld we choose to have the most recent tile.
         return melds.map((meld, index) => {
@@ -58,7 +62,7 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
                 if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false) && hand.lockConcealedSpecifiedMelds) {
                     return undefined;
                 } else {
-                    return new StandardWinningHand(melds, meld, hand.mostRecentTile(), hand.flowerTiles);
+                    return new StandardWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
                 }
             }
 
@@ -71,15 +75,14 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
                     const exposedMeld : Meld = meld.clone(true);
                     // replace the previously concealed meld with the exposed meld
                     const meldsCopy = [...melds];
-                    meldsCopy.splice(index, 1);
-                    meldsCopy.push(exposedMeld);
-                    return new StandardWinningHand(meldsCopy, exposedMeld, hand.mostRecentTile(), hand.flowerTiles);
+                    meldsCopy.splice(index, 1, exposedMeld);
+                    return new StandardWinningHand(meldsCopy, index, hand.mostRecentTile(), hand.flowerTiles);
                 }
             }
 
             /* any other cases should not happen.
-               the meld analyzation algorithm does not create exposed melds (unless specified by the user)
-               i.e. if meld.exposed === true && (hand.userSpecifiedMelds, meld, false) === false, something is wrong!
+               the meld analyzation algorithm does not create exposed melds by itself.
+               i.e. if meld.exposed === true && (hand.userSpecifiedMelds, meld, false) === false, something went wrong!
             */
             throw new Error(`This should not happen. An exposed meld was created in the algorithm and it wasn't defined by the user!`);
         }).filter(winningHands => !!winningHands)

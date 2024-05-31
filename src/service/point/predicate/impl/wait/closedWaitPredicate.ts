@@ -15,7 +15,7 @@ export const CLOSED_WAIT_PREDICATE : PointPredicate<StandardWinningHand> = (winn
     }
 
     if (winningHand.winningTile.value !== chow.tiles[1].value) {
-        // we put the winning tile as the failed tile as the meld itself is fine, it's just that the winning tile is the wrong one.
+        // we put the winning tile as the failed tile. the meld itself is fine, it's just that the winning tile is the wrong one.
         return new PointPredicateResult(PointPredicateID.EDGE_WAIT, false, [], [[winningHand.winningTile]], new Set(), []);
     }
 

@@ -3,6 +3,7 @@ import Meld from "model/meld/meld";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { wrapSet } from "common/generic/setUtils";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are at least numMinMatches matches. */
 export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<StandardWinningHand> {
@@ -34,7 +35,7 @@ export function createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID 
                 failedTiles.push([...meld.tiles]);
             }
         }
-        return new PointPredicateResult(pointPredicateID, successTiles.length >= numMinMeldsPass, [successTiles], failedTiles, new Set<Set<number>>().add(passingIndices), []);
+        return new PointPredicateResult(pointPredicateID, successTiles.length >= numMinMeldsPass, [successTiles], failedTiles, wrapSet(passingIndices), []);
     }
 }
 

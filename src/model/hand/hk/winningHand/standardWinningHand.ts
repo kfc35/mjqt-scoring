@@ -2,7 +2,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import Meld from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
-import { meldExistsInMelds, meldHasTile, toFlatTiles } from "common/meldUtils";
+import { meldHasTile, toFlatTiles } from "common/meldUtils";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { meldIsPair } from "model/meld/pair";
@@ -14,12 +14,13 @@ import { StandardWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand
 */
 export class StandardWinningHand implements WinningHand {
     private _melds: ReadonlyArray<Meld>; // meld indices are important for point reporting, hence reao
+    private _meldWithWinningTileIndex: number;
     private _meldWithWinningTile: Meld;
     private _winningTile: SuitedOrHonorTile;
     private _tileGroupValueMaps: StandardWinningHandTileGroupValueMaps;
     protected _flowerTiles: FlowerTile[];
 
-    constructor(melds: Meld[], meldWithWinningTile: Meld, winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
+    constructor(melds: Meld[], meldWithWinningTileIndex: number, winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
         const tiles: SuitedOrHonorTile[] = toFlatTiles(melds);
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);
@@ -37,14 +38,16 @@ export class StandardWinningHand implements WinningHand {
             throw new Error("melds of length 5 must have exactly one pair.");
         }
 
-        if (!meldExistsInMelds(melds, meldWithWinningTile, false)) {
-            throw new Error("meldWithWinningTile must be one of melds");
+        const meldWithWinningTile = melds[meldWithWinningTileIndex];
+        if (meldWithWinningTileIndex < 0 || meldWithWinningTileIndex >= melds.length || !meldWithWinningTile) {
+            throw new Error("meldWithWinningTileIndex must be a valid index of melds.");
         }
-        this._meldWithWinningTile = meldWithWinningTile;
+        this._meldWithWinningTileIndex = meldWithWinningTileIndex;
 
         if (!meldHasTile(meldWithWinningTile, winningTile)) {
             throw new Error("winningTile must be in meldWithWinningTile");
         }
+        this._meldWithWinningTile = meldWithWinningTile;
         this._winningTile = winningTile;
 
         assertTilesFlower(flowerTiles);
@@ -66,6 +69,10 @@ export class StandardWinningHand implements WinningHand {
 
     get tileGroupValueMaps(): StandardWinningHandTileGroupValueMaps {
         return this._tileGroupValueMaps;
+    }
+
+    get meldWithWinningTileIndex() {
+        return this._meldWithWinningTileIndex;
     }
 
     get meldWithWinningTile() {

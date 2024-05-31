@@ -3,7 +3,7 @@ import SuitedTile, { type SuitedTileGroup, isSuitedTile, isSuitedTileGroup } fro
 import { SuitedOrHonorTileValue, type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { isSuitedTileValue, SuitedTileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
-import { addToMapValueSet, pushToMapValueArray } from "common/mapUtils";
+import { addToMapValueSet, pushToMapValueArray } from "common/generic/mapUtils";
 import { meldIsChow } from "model/meld/chow";
 import { toFlatTiles, getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 

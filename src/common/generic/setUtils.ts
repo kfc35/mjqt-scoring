@@ -16,7 +16,7 @@ export function getOnlyTruthyElement<T>(singletonSet: ReadonlySet<T>): T {
     return setArray[0];
 }
 
-export function consolidateSets<T>(...setArray: Set<T>[]): Set<T> {
+export function consolidateSets<T>(setArray: Set<T>[]): Set<T> {
     return setArray.reduce((accum, set) => {[...set.values()].forEach(item => accum.add(item)); return accum;}, new Set<T>());
 }
 

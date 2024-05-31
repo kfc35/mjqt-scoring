@@ -3,7 +3,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { consolidateSets, wrapSet } from "common/setUtils";
+import { consolidateSets, wrapSet } from "common/generic/setUtils";
 
 export const ALL_ONE_SUIT_PREDICATE : PointPredicate<StandardWinningHand> =
     (standardWinningHand : StandardWinningHand) => {
@@ -14,7 +14,7 @@ export const ALL_ONE_SUIT_PREDICATE : PointPredicate<StandardWinningHand> =
         const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
         
         if (suitedTileGroups.size === 1 && honorTileGroups.size === 0) {
-            const suitedTileIndices = consolidateSets(...[...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
+            const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
             return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT, true, [tilesSepBySuit], [], wrapSet(suitedTileIndices), []);
         }
 
@@ -25,7 +25,7 @@ export const ALL_ONE_SUIT_PREDICATE : PointPredicate<StandardWinningHand> =
         }
     };
 
-    export const ALL_ONE_SUIT_AND_HONORS_PREDICATE : PointPredicate<StandardWinningHand> = 
+export const ALL_ONE_SUIT_AND_HONORS_PREDICATE : PointPredicate<StandardWinningHand> = 
     (standardWinningHand : StandardWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
@@ -33,10 +33,10 @@ export const ALL_ONE_SUIT_PREDICATE : PointPredicate<StandardWinningHand> =
         const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
         
         if (suitedTileGroups.size === 1 && honorTileGroups.size > 0) {
-            const suitedTileIndices = consolidateSets(...[...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
-            const honorTileIndices = consolidateSets(...[...honorTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
+            const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
+            const honorTileIndices = consolidateSets([...honorTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
             
-            return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, true, [tilesSepBySuit], [], wrapSet(consolidateSets(suitedTileIndices, honorTileIndices)), []);
+            return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, true, [tilesSepBySuit], [], wrapSet(consolidateSets([suitedTileIndices, honorTileIndices])), []);
         }
 
         if (suitedTileGroups.size !== 1) {
@@ -46,7 +46,7 @@ export const ALL_ONE_SUIT_PREDICATE : PointPredicate<StandardWinningHand> =
         }
     };
 
-    export const ALL_HONORS_PREDICATE : PointPredicate<StandardWinningHand> = 
+export const ALL_HONORS_PREDICATE : PointPredicate<StandardWinningHand> = 
     (standardWinningHand : StandardWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
@@ -54,7 +54,7 @@ export const ALL_ONE_SUIT_PREDICATE : PointPredicate<StandardWinningHand> =
         const honorTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
 
         if (suitedTileGroups.size === 0 && honorTileGroups.size > 0) {
-            const honorTileIndices = consolidateSets(...[...honorTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
+            const honorTileIndices = consolidateSets([...honorTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
             return new PointPredicateResult(PointPredicateID.ALL_HONORS, true, [honorTiles], [], wrapSet(honorTileIndices), []);
         }
 

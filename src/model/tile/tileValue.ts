@@ -1,4 +1,4 @@
-import { getEnumKeys } from "common/enumUtils"
+import { getEnumKeys } from "common/generic/enumUtils"
 
 export enum GentlemanTileValue {
     PLUM = 'PLUM',

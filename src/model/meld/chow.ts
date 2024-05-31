@@ -1,7 +1,6 @@
 import SuitedTile from "model/tile/group/suitedTile";
 import Meld  from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
-import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
 
 export default class Chow extends Meld {
     // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"

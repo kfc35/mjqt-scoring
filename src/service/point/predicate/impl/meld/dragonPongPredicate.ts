@@ -1,5 +1,5 @@
 import { GREEN_DRAGON, RED_DRAGON, WHITE_DRAGON } from "common/deck";
-import { createPongsExistPredicate } from "service/point/predicate/factory/meld/pongPredicateFactory"
+import { createPongsExistPredicate } from "service/point/predicate/factory/pongPredicateFactory"
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 
 export const RED_DRAGON_PONG_PREDICATE = createPongsExistPredicate(PointPredicateID.RED_DRAGON_PONG.valueOf(), [RED_DRAGON]);

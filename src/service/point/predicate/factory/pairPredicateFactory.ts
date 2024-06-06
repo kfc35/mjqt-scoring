@@ -4,7 +4,7 @@ import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHa
 import Pair, { meldIsPair } from "model/meld/pair";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityGTEPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldPredicateFactoryBase";
 
 // Checks that the pairs exist in a winning hand for each single tile in tiles.
 // You can have dups in tiles, but only max 2 since you can only have max 2 pairs of a tile.
@@ -28,6 +28,6 @@ export function createPairsExistPredicate(pointPredicateID : string, tiles: Suit
     return createMeldsExistPredicate(pointPredicateID, pairsToMatch, numPairsToMatch ?? tiles.length);
 }
 
-export function createPairQuantityGTEPredicate(pointPredicateID : string, numMinPairs: number) : PointPredicate<StandardWinningHand> {
-    return createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID, meldIsPair, numMinPairs);
+export function createPairQuantityPredicate(pointPredicateID : string, numMinPairs: number, numMaxPairs: number | undefined = numMinPairs) : PointPredicate<StandardWinningHand> {
+    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsPair, numMinPairs, numMaxPairs);
 }

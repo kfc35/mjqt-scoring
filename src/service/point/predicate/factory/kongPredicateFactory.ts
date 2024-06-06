@@ -5,7 +5,7 @@ import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
 import Kong from "model/meld/kong";
 import { meldIsKong } from "model/meld/kong";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityGTEPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldPredicateFactoryBase";
 
 // Checks that kongs exist in the winning hand for each single tile in tiles
 export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numKongsToMatch?: number) : PointPredicate<StandardWinningHand> {
@@ -26,6 +26,6 @@ export function createKongsExistPredicate(pointPredicateID : string, tiles: Suit
     return createMeldsExistPredicate(pointPredicateID, kongsToMatch, numKongsToMatch ?? kongsToMatch.length);
 }
 
-export function createKongQuantityGTWPredicate(pointPredicateID : string, minNumKongs: number) : PointPredicate<StandardWinningHand> {
-    return createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID, meldIsKong, minNumKongs);
+export function createKongMinQuantityPredicate(pointPredicateID : string, minNumKongs: number) : PointPredicate<StandardWinningHand> {
+    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsKong, minNumKongs);
 }

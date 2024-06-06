@@ -22,7 +22,7 @@ export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatc
 }
 
 /* Evaluates meldChecker across all melds in the hand. The PointPredicate succeeds if at least numMinMeldsPass melds pass the meldChecker */
-export function createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID : string, meldChecker: (meld: Meld) => boolean, numMinMeldsPass: number) : PointPredicate<StandardWinningHand> {
+export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : string, meldChecker: (meld: Meld) => boolean, numMinMeldsPass: number, numMaxMeldsPass? : number) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const successTiles : Tile[][] = [];
         const failedTiles : Tile[][] = [];
@@ -35,7 +35,7 @@ export function createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID 
                 failedTiles.push([...meld.tiles]);
             }
         }
-        return new PointPredicateResult(pointPredicateID, successTiles.length >= numMinMeldsPass, [successTiles], failedTiles, wrapSet(passingIndices), []);
+        return new PointPredicateResult(pointPredicateID, successTiles.length >= numMinMeldsPass && (!!numMaxMeldsPass && successTiles.length <= numMaxMeldsPass), [successTiles], failedTiles, wrapSet(passingIndices), []);
     }
 }
 

@@ -5,7 +5,7 @@ import SuitedTile from "model/tile/group/suitedTile";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityGTEPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldPredicateFactoryBase";
 
 // Checks that all the given tile sequences exist as chows in a winning hand.
 // You can use this function for knitted tiles
@@ -52,5 +52,5 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
 }
 
 export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<StandardWinningHand> {
-    return createMeldCheckerSuccessesQuantityGTEPredicate(pointPredicateID, meldIsChow, minNumChows);
+    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsChow, minNumChows);
 }

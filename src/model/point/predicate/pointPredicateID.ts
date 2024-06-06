@@ -1,9 +1,11 @@
 
 
 export enum PointPredicateID {
+    AT_LEAST_FOUR_CHOWS = 'AT_LEAST_FOUR_CHOWS',
     ALL_CHOWS = 'ALL_CHOWS',
-    ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka all pongs/kongs
+    ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka "ALL_IN_TRIPLETS"
     SEVEN_PAIRS = 'SEVEN_PAIRS',
+    ONE_PAIR = 'ONE_PAIR',
     ALL_ONE_SUIT_AND_HONORS = 'ALL_ONE_SUIT_AND_HONORS', 
     ALL_ONE_SUIT = 'ALL_ONE_SUIT', // only one suit
     ALL_HONORS = 'ALL_HONORS', // only honors
@@ -14,6 +16,7 @@ export enum PointPredicateID {
     THREE_WINDS_PONG = 'THREE_WINDS_PONG', // hand has three pongs (kongs allowed) of different winds
     FOUR_WINDS_PONG = 'FOUR_WINDS_PONG', // hand has four pongs (kongs allowed) of diff winds
     THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // Special hand
+    AT_LEAST_FOUR_KONGS = 'AT_LEAST_FOUR_KONGS',
     ALL_KONGS = 'ALL_KONGS',
     // TODO might be something else
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.

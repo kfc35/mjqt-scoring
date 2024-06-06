@@ -4,6 +4,8 @@ import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredi
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { createChowMinQuantityPredicate } from "service/point/predicate/factory/chowPredicateFactory";
 import { createKongMinQuantityPredicate } from "service/point/predicate/factory/kongPredicateFactory";
+import { createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldPredicateFactoryBase";
+import Meld from "model/meld/meld";
 
 const onePairPredicate : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.ONE_PAIR, 1, 1);
 const atLeastFourChowsPredicate : PointPredicate<StandardWinningHand> = createChowMinQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CHOWS, 4);
@@ -18,3 +20,6 @@ export const ALL_KONGS_PREDICATE : PointPredicate<StandardWinningHand> =
     predicateAnd(PointPredicateID.ALL_KONGS, onePairPredicate, atLeastFourKongsPredicate);
 
 // TODO CONCEALED_HAND, MELDED_HAND, ALL_PONGS_AND_KONGS, SELF_TRIPLETS
+export const CONCEALED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
+    createMeldCheckerSuccessesQuantityPredicate(PointPredicateID.CONCEALED_HAND, (meld: Meld) => !meld.exposed, 5);
+

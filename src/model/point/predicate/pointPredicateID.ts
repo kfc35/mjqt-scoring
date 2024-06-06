@@ -24,7 +24,7 @@ export enum PointPredicateID {
     NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting.    
     CONCEALED_HAND = 'CONCEALED_HAND', // the four non pair melds are concealed (except maybe the last one if won by discard), may or may not include SELF_DRAW last tile. can be customized.
     // the concealed hand may still count if the last self-drawn tile completes one of the four non pair melds depending on desired behavior (aka winning by discard on non pair meld is accepted)
-    // default behavior: concealed hand counts if all four non pair melds are concealed and the last tile completes only the last non-pair meld, no restritions on self-draw.
+    // default behavior: concealed hand counts if all four non pair melds are concealed and the last tile completes only the last non-pair meld, no restrictions on self-draw.
     MELDED_HAND = 'MELDED_HAND', // the four non pair melds are revealed, may or may not include SELF_DRAW last tile for the pair. can be customized.
     // the melded hand may still count if the last tile completes the last non-pair meld via discard.
     // default behavior: melded hand counts if all four non pair melds are revealed and the last tile completes the pair via discard.

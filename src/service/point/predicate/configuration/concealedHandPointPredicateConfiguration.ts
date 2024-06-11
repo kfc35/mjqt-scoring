@@ -7,5 +7,3 @@ export class ConcealedHandPointPredicateConfiguration extends BasePointPredicate
         super(optionToValue);
     }
 }
-
-export const defaultConcealedHandPointPredicateConfiguration = new ConcealedHandPointPredicateConfiguration(false);

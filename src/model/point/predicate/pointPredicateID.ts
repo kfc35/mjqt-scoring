@@ -3,6 +3,7 @@
 export enum PointPredicateID {
     AT_LEAST_FOUR_CHOWS = 'AT_LEAST_FOUR_CHOWS',
     ALL_CHOWS = 'ALL_CHOWS',
+    AT_LEAST_FOUR_PONGS_AND_KONGS = 'AT_LEAST_FOUR_PONGS_AND_KONGS',
     ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka "ALL_IN_TRIPLETS"
     SEVEN_PAIRS = 'SEVEN_PAIRS',
     ONE_PAIR = 'ONE_PAIR',
@@ -18,13 +19,15 @@ export enum PointPredicateID {
     THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // Special hand
     AT_LEAST_FOUR_KONGS = 'AT_LEAST_FOUR_KONGS',
     ALL_KONGS = 'ALL_KONGS',
-    // TODO might be something else
+    AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS = 'AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS',
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.
     // can win from self-pick for pair only? no bonus for winning from wall
-    NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting.    
+    NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting.
+    AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS',    
     CONCEALED_HAND = 'CONCEALED_HAND', // the four non pair melds are concealed (except maybe the last one if won by discard), may or may not include SELF_DRAW last tile. can be customized.
     // the concealed hand may still count if the last self-drawn tile completes one of the four non pair melds depending on desired behavior (aka winning by discard on non pair meld is accepted)
     // default behavior: concealed hand counts if all four non pair melds are concealed and the last tile completes only the last non-pair meld, no restrictions on self-draw.
+    AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS',   
     MELDED_HAND = 'MELDED_HAND', // the four non pair melds are revealed, may or may not include SELF_DRAW last tile for the pair. can be customized.
     // the melded hand may still count if the last tile completes the last non-pair meld via discard.
     // default behavior: melded hand counts if all four non pair melds are revealed and the last tile completes the pair via discard.

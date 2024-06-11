@@ -4,6 +4,7 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
 import { wrapSet } from "common/generic/setUtils";
+import { toTiles } from "common/meldUtils";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are at least numMinMatches matches. */
 export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<StandardWinningHand> {
@@ -21,21 +22,57 @@ export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatc
     }
 }
 
-/* Evaluates meldChecker across all melds in the hand. The PointPredicate succeeds if at least numMinMeldsPass melds pass the meldChecker */
-export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : string, meldChecker: (meld: Meld) => boolean, numMinMeldsPass: number, numMaxMeldsPass? : number) : PointPredicate<StandardWinningHand> {
+/* Evaluates meldChecker across all melds in the hand. 
+ * The PointPredicate succeeds if at least numMinMeldsPass and at most numMaxMeldsPass melds pass the meldChecker. 
+ * If numMinMeldsPass and numMaxMeldsPass are both undefined, every meld must pass the checker. */
+export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
+        filteredMeldsChecker: (meld: Meld) => boolean,
+        numMinMeldsPass?: number | undefined, numMaxMeldsPass? : number | undefined) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
         const successTiles : Tile[][] = [];
         const failedTiles : Tile[][] = [];
         const passingIndices: Set<number> = new Set();
         for (const [index, meld] of winningHand.getMelds().entries()) {
-            if (meldChecker(meld)) {
+            if (filteredMeldsChecker(meld)) {
                 successTiles.push([...meld.tiles]);
                 passingIndices.add(index);
             } else {
                 failedTiles.push([...meld.tiles]);
             }
         }
-        return new PointPredicateResult(pointPredicateID, successTiles.length >= numMinMeldsPass && (!!numMaxMeldsPass && successTiles.length <= numMaxMeldsPass), [successTiles], failedTiles, wrapSet(passingIndices), []);
+        if (!numMinMeldsPass && !numMaxMeldsPass && failedTiles.length > 0) {
+            return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
+        } else if (!numMinMeldsPass && !numMaxMeldsPass) {
+            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], wrapSet(passingIndices), []);
+        }
+
+        if ((!!numMinMeldsPass && successTiles.length >= numMinMeldsPass) && (!!numMaxMeldsPass && successTiles.length <= numMaxMeldsPass)) {
+            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], wrapSet(passingIndices), []);
+        }
+        return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
+    }
+}
+
+/* Evaluates meldsChecker across all the filtered melds in the hand. 
+ * The PointPredicate succeeds if meldsChecker returns true. */
+export function createMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
+    meldFilter: (meld: Meld) => boolean,
+    meldsChecker: (melds: Meld[]) => boolean) : PointPredicate<StandardWinningHand> {
+    return (winningHand : StandardWinningHand) => {
+        const indices: Set<number> = new Set();
+        const filteredMelds: Meld[] = [];
+        for (const [index, meld] of winningHand.getMelds().entries()) {
+            if (meldFilter(meld)) {
+                indices.add(index);
+                filteredMelds.push(meld);
+            }
+        }
+
+        const tiles = toTiles(filteredMelds);
+        if (meldsChecker(filteredMelds)) {
+            return new PointPredicateResult(pointPredicateID, true, [tiles], [], wrapSet(indices), []);
+        }
+        return new PointPredicateResult(pointPredicateID, false, [], tiles, new Set(), []);
     }
 }
 

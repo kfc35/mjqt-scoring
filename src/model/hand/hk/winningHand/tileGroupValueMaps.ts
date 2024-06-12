@@ -12,6 +12,8 @@ export interface TileGroupValueMaps {
     getSuitedTileValues(): Set<SuitedTileValue>;
     getHonorTileGroups(): Set<HonorTileGroup>;
     getHonorTileValues(): Set<HonorTileValue>;
+    getTilesForTileGroups(tileGroups: ReadonlySet<SuitedTileGroup | HonorTileGroup>): SuitedOrHonorTile[][];
+    getTilesForTileValues(tileValues: ReadonlySet<SuitedOrHonorTileValue>): SuitedOrHonorTile[][]
 }
 
 export class StandardWinningHandTileGroupValueMaps implements TileGroupValueMaps {
@@ -108,8 +110,7 @@ export class StandardWinningHandTileGroupValueMaps implements TileGroupValueMaps
         return this._honorTileValueToMeldIndices.get(honorTileValue) ?? new Set();
     }
 
-    // The tiles are returned separated by group
-    getTilesForTileGroups(tileGroups: Set<SuitedTileGroup | HonorTileGroup>): SuitedOrHonorTile[][] {
+    getTilesForTileGroups(tileGroups: ReadonlySet<SuitedTileGroup | HonorTileGroup>): SuitedOrHonorTile[][] {
         return [...tileGroups.values()].map(tileGroup => {
             if (isSuitedTileGroup(tileGroup)) {
                 const tiles = this.getTilesFromKnittedChows(tileGroup);
@@ -120,8 +121,7 @@ export class StandardWinningHandTileGroupValueMaps implements TileGroupValueMaps
         });
     }
 
-    // The tiles are returned separated by tile value
-    getTilesForTileValues(tileValues: Set<SuitedOrHonorTileValue>): SuitedOrHonorTile[][] {
+    getTilesForTileValues(tileValues: ReadonlySet<SuitedOrHonorTileValue>): SuitedOrHonorTile[][] {
         return [...tileValues.values()].map(tileValue => {
             if (isSuitedTileValue(tileValue)) {
                 return this.getTilesForSuitedTileValue(tileValue);
@@ -189,5 +189,23 @@ export class SpecialWinningHandTileGroupValueMaps implements TileGroupValueMaps 
 
     getTilesForHonorTileValue(honorTileValue: HonorTileValue): HonorTile[] {
         return this._honorTileValueToTiles.get(honorTileValue) ?? [];
+    }
+    
+    getTilesForTileGroups(tileGroups: Set<SuitedTileGroup | HonorTileGroup>): SuitedOrHonorTile[][] {
+        return [...tileGroups.values()].map(tileGroup => {
+            if (isSuitedTileGroup(tileGroup)) {
+                return this.getTilesForSuitedTileGroup(tileGroup);
+            } 
+            return this.getTilesForHonorTileGroup(tileGroup);
+        });
+    }
+
+    getTilesForTileValues(tileValues: Set<SuitedOrHonorTileValue>): SuitedOrHonorTile[][] {
+        return [...tileValues.values()].map(tileValue => {
+            if (isSuitedTileValue(tileValue)) {
+                return this.getTilesForSuitedTileValue(tileValue);
+            } 
+            return this.getTilesForHonorTileValue(tileValue);
+        });
     }
 }

@@ -26,20 +26,10 @@ export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatc
  * The PointPredicate succeeds if at least numMinMeldsPass and at most numMaxMeldsPass melds pass the meldChecker. 
  * If numMinMeldsPass and numMaxMeldsPass are both undefined, every meld must pass the checker. */
 export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
-        filteredMeldsChecker: (meld: Meld) => boolean,
+        meldChecker: (meld: Meld) => boolean,
         numMinMeldsPass?: number | undefined, numMaxMeldsPass? : number | undefined) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
-        const successTiles : Tile[][] = [];
-        const failedTiles : Tile[][] = [];
-        const passingIndices: Set<number> = new Set();
-        for (const [index, meld] of winningHand.getMelds().entries()) {
-            if (filteredMeldsChecker(meld)) {
-                successTiles.push([...meld.tiles]);
-                passingIndices.add(index);
-            } else {
-                failedTiles.push([...meld.tiles]);
-            }
-        }
+        const [successTiles, failedTiles, passingIndices] = checkMelds(winningHand.getMelds().map((meld, index) => [meld, index]), meldChecker);
         if (!numMinMeldsPass && !numMaxMeldsPass && failedTiles.length > 0) {
             return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
         } else if (!numMinMeldsPass && !numMaxMeldsPass) {
@@ -54,26 +44,46 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
 }
 
 /* Evaluates meldsChecker across all the filtered melds in the hand. 
- * The PointPredicate succeeds if meldsChecker returns true. */
-export function createMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
-    meldFilter: (meld: Meld) => boolean,
-    meldsChecker: (melds: Meld[]) => boolean) : PointPredicate<StandardWinningHand> {
+ * The PointPredicate succeeds if meldsChecker returns true, and filteredMeldChecker returns true for every meld that passes the filter. */
+export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
+    meldFilter: (meld: Meld) => boolean = () => true,
+    meldsChecker: (melds: Meld[]) => boolean,
+    filteredMeldChecker: (meld: Meld) => boolean) : PointPredicate<StandardWinningHand> {
     return (winningHand : StandardWinningHand) => {
-        const indices: Set<number> = new Set();
-        const filteredMelds: Meld[] = [];
+        const filteredMelds: [Meld, number][] = [];
         for (const [index, meld] of winningHand.getMelds().entries()) {
             if (meldFilter(meld)) {
-                indices.add(index);
-                filteredMelds.push(meld);
+                filteredMelds.push([meld, index]);
             }
         }
 
-        const tiles = toTiles(filteredMelds);
-        if (meldsChecker(filteredMelds)) {
-            return new PointPredicateResult(pointPredicateID, true, [tiles], [], wrapSet(indices), []);
+        if (meldsChecker(filteredMelds.map(([meld,]) => meld))) {
+            const [successTiles, failedTiles, passingIndices] = checkMelds(filteredMelds, filteredMeldChecker);
+            if (failedTiles.length === 0) {
+                return new PointPredicateResult(pointPredicateID, true, [successTiles], [], wrapSet(passingIndices), []);
+            } else {
+                return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
+            }
+        } else { // the entire melds array failed the check, so consider all the melds to be failed tiles.
+            const tiles = toTiles(filteredMelds.map(([meld,]) => meld));
+            return new PointPredicateResult(pointPredicateID, false, [], tiles, new Set(), []);
         }
-        return new PointPredicateResult(pointPredicateID, false, [], tiles, new Set(), []);
     }
+}
+
+function checkMelds(meldIndexTuples: readonly [Meld, number][], meldChecker:(meld: Meld) => boolean): [Tile[][], Tile[][], Set<number>] {
+    const successTiles : Tile[][] = [];
+    const failedTiles : Tile[][] = [];
+    const passingIndices: Set<number> = new Set();
+    for (const [meld, index] of meldIndexTuples) {
+        if (meldChecker(meld)) {
+            successTiles.push([...meld.tiles]);
+            passingIndices.add(index);
+        } else {
+            failedTiles.push([...meld.tiles]);
+        }
+    }
+    return [successTiles, failedTiles, passingIndices];
 }
 
 /** 

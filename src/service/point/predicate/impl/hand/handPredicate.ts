@@ -2,25 +2,25 @@ import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHa
 import { createPairQuantityPredicate } from "service/point/predicate/factory/pairPredicateFactory";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { createMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldPredicateFactoryBase";
+import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
 import { meldIsChow } from "model/meld/chow";
 import { meldIsKong } from "model/meld/kong";
 import { meldIsPong } from "model/meld/pong";
 
 const onePairPredicate : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.ONE_PAIR, 1, 1);
-const atLeastFourChowsPredicate : PointPredicate<StandardWinningHand> = createMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CHOWS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4 && melds.every(meld => meldIsChow(meld)));
-const atLeastFourKongsPredicate : PointPredicate<StandardWinningHand> = createMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_KONGS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4 && melds.every(meld => meldIsKong(meld)));
-const atLeastFourPongsKongsPredicate : PointPredicate<StandardWinningHand> = createMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_PONGS_AND_KONGS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4 && melds.every(meld => meldIsKong(meld) || meldIsPong(meld)));
-const atLeastFourConcealedPongsKongsPredicate : PointPredicate<StandardWinningHand> = createMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4 && melds.every(meld => !meld.exposed && (meldIsKong(meld) || meldIsPong(meld))));
-const atLeastFourConcealedNonPairMeldsPredicate : PointPredicate<StandardWinningHand> = createMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4 && melds.every(meld => !meld.exposed));
-const atLeastFourExposedNonPairMeldsPredicate : PointPredicate<StandardWinningHand> = createMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4 && melds.every(meld => !meld.exposed));
+const atLeastFourChowsPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CHOWS, 
+    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meldIsChow(meld));
+const atLeastFourKongsPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_KONGS, 
+    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meldIsKong(meld));
+const atLeastFourPongsKongsPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_PONGS_AND_KONGS, 
+    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meldIsKong(meld) || meldIsPong(meld));
+const atLeastFourConcealedPongsKongsPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS, 
+    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed && (meldIsKong(meld) || meldIsPong(meld)));
+const atLeastFourConcealedNonPairMeldsPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS, 
+    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed);
+const atLeastFourExposedNonPairMeldsPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
+    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meld.exposed);
 
 export const SEVEN_PAIRS_PREDICATE : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);
 

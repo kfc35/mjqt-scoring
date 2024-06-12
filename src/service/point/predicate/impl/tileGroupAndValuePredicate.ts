@@ -32,6 +32,7 @@ function allOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesS
         return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT, true, [tilesSepBySuit], [], wrappedSuitedTileIndicesSet, []);
     }
 
+    // TODO what if SuitedTileGroups = 0? desired?
     return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT, false, [], [...tilesSepBySuit, ...honorTiles], new Set(), []);
 }
 
@@ -61,6 +62,7 @@ function allOneSuitAndHonorsPredicate(winningHand: WinningHand, wrappedSuitedAnd
     }
 
     if (suitedTileGroups.size !== 1) {
+        // TODO if suitedTileGroups is 0, failedTiles is empty. desired?
         return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, false, [], tilesSepBySuit, new Set(), []);
     } else { // does not have honors
         return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, false, [], [], new Set(), []);
@@ -178,7 +180,7 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, wrappedHonorsA
 
     const nonTerminalTileValues : Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !terminalSuitedTileValues.has(stv)));
     const nonTerminalTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonTerminalTileValues).filter(tiles => tiles.length > 0);
-    // if it's only terminals and no honors, the failureTiles will be empty.
+    // if it's only terminals and no honors, the failureTiles will be empty. TODO do we want to add the honor tiles to the failure tiles as "missing tiles"?
     return new PointPredicateResult(PointPredicateID.ALL_HONORS_AND_TERMINALS, false, [], [...nonTerminalTiles], new Set(), []);
 }
 

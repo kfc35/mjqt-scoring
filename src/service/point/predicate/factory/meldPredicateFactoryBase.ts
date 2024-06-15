@@ -44,7 +44,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
 }
 
 /* Evaluates meldsChecker across all the filtered melds in the hand. 
- * The PointPredicate succeeds if meldsChecker returns true, and filteredMeldChecker returns true for every meld that passes the filter. */
+ * The PointPredicate succeeds if meldsChecker returns true, and filteredMeldChecker returns true for every meld that has passed the filter. */
 export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
     meldFilter: (meld: Meld) => boolean = () => true,
     meldsChecker: (melds: Meld[]) => boolean,

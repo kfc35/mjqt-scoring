@@ -18,5 +18,5 @@ export default class Pair extends Meld {
 }
 
 export function meldIsPair(meld: Meld): meld is Pair {
-    return meld.type == MeldType.PAIR;
+    return meld.type === MeldType.PAIR;
 }

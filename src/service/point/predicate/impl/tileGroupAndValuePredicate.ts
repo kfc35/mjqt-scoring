@@ -8,6 +8,8 @@ import { consolidateSets, wrapSet } from "common/generic/setUtils";
 import { terminalSuitedTileValues, simpleSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 
+// TODO break these up into sub predicates so that it may be easier to see where things failed?
+
 export const ALL_ONE_SUIT_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> =
     (standardWinningHand : StandardWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;

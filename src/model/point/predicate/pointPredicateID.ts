@@ -24,13 +24,19 @@ export enum PointPredicateID {
     // can win from self-pick for pair only? no bonus for winning from wall
     NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting.
     AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS',    
+    AT_LEAST_FOUR_CONCEALED_MELDS = 'AT_LEAST_FOUR_CONCEALED_MELDS',    
+    IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR = 'IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR',
+    IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR = 'IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR',
+    LAST_TILE_COMPLETED_PAIR = 'LAST_TILE_COMPLETED_PAIR',
     CONCEALED_HAND = 'CONCEALED_HAND', // the four non pair melds are concealed (except maybe the last one if won by discard), may or may not include SELF_DRAW last tile. can be customized.
     // the concealed hand may still count if the last self-drawn tile completes one of the four non pair melds depending on desired behavior (aka winning by discard on non pair meld is accepted)
     // default behavior: concealed hand counts if all four non pair melds are concealed and the last tile completes only the last non-pair meld, no restrictions on self-draw.
+    FULLY_CONCEALED_HAND = 'FULLY_CONCEALED_HAND',
     AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS',   
-    MELDED_HAND = 'MELDED_HAND', // the four non pair melds are revealed, may or may not include SELF_DRAW last tile for the pair. can be customized.
+    MELDED_HAND = 'MELDED_HAND', // the four non pair melds are exposed, may or may not include SELF_DRAW last tile for the pair. can be customized.
     // the melded hand may still count if the last tile completes the last non-pair meld via discard.
     // default behavior: melded hand counts if all four non pair melds are revealed and the last tile completes the pair via discard.
+    FULLY_MELDED_HAND = 'FULLY_MELDED_HAND', // four non pair melds are exposed, pair meld won via discard
     // a FULLY_CONCEALED_HAND = CONCEALED_HAND + SELF_DRAWN. the self drawn tile applies to any of the melds
     // a FULLY_MELDED_HAND = MELDED_HAND and no SELF_DRAWN present. the last tile must complete the pair.
     MOON_FROM_THE_BOTTOM_OF_THE_SEA = 'MOON_FROM_THE_BOTTOM_OF_THE_SEA',
@@ -52,6 +58,7 @@ export enum PointPredicateID {
     EDGE_WAIT = 'EDGE_WAIT', // last tile can only be a 3 in a 1,2,3 chow or 7,8,9 chow, not at the same time.
     CLOSED_WAIT = 'CLOSED_WAIT', // last tile can only complete the chow in the middle
 
+    NOT_SELF_DRAW = 'NOT_SELF_DRAW', // winning tile is a discard
     SELF_DRAW = 'SELF_DRAW', // winning tile is NOT a discard
     LAST_OF_IS_KIND = 'LAST_OF_ITS_KIND', // the winning tile is the last of its kind based on what's been melded/discarded by other players.
     ROBBING_KONG = 'ROBBING_KONG',  // win by having priority over someone else's call to add that tile to a melded kong

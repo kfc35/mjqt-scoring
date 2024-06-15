@@ -1,18 +1,27 @@
-
-
 export enum PointPredicateID {
-    AT_LEAST_FOUR_CHOWS = 'AT_LEAST_FOUR_CHOWS',
-    ALL_CHOWS = 'ALL_CHOWS',
-    AT_LEAST_FOUR_PONGS_AND_KONGS = 'AT_LEAST_FOUR_PONGS_AND_KONGS',
-    ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka "ALL_IN_TRIPLETS"
-    SEVEN_PAIRS = 'SEVEN_PAIRS',
+    /* Subpredicates - Composed with each other to make more complex predicates */
     ONE_PAIR = 'ONE_PAIR',
-    ALL_ONE_SUIT_AND_HONORS = 'ALL_ONE_SUIT_AND_HONORS', 
-    ALL_ONE_SUIT = 'ALL_ONE_SUIT', // only one suit
+    AT_LEAST_FOUR_CHOWS = 'AT_LEAST_FOUR_CHOWS', 
+    AT_LEAST_FOUR_KONGS = 'AT_LEAST_FOUR_KONGS',
+    AT_LEAST_FOUR_PONGS_AND_KONGS = 'AT_LEAST_FOUR_PONGS_AND_KONGS',
+    AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS = 'AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS',
+    AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS',    
+    AT_LEAST_FOUR_CONCEALED_MELDS = 'AT_LEAST_FOUR_CONCEALED_MELDS',    
+    AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS',  
+    IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR = 'IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR',
+    IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR = 'IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR',
     SUBPREDICATE_HAND_CONTAINS_ONE_SUIT = 'SUBPREDICATE_HAND_CONTAINS_ONE_SUIT',
     SUBPREDICATE_HAND_CONTAINS_TWO_SUITS = 'SUBPREDICATE_HAND_CONTAINS_TWO_SUITS',
     SUBPREDICATE_HAND_CONTAINS_HONORS = 'SUBPREDICATE_HAND_CONTAINS_HONORS',
     SUBPREDICATE_HAND_CONTAINS_NO_HONORS = 'SUBPREDICATE_HAND_CONTAINS_NO_HONORS',
+    LAST_TILE_COMPLETED_PAIR = 'LAST_TILE_COMPLETED_PAIR',
+
+    ALL_CHOWS = 'ALL_CHOWS',
+    COMMON_HAND = 'COMMON_HAND', // could be considered more complex than all chows..
+    ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka "ALL_IN_TRIPLETS"
+    SEVEN_PAIRS = 'SEVEN_PAIRS',
+    ALL_ONE_SUIT_AND_HONORS = 'ALL_ONE_SUIT_AND_HONORS', 
+    ALL_ONE_SUIT = 'ALL_ONE_SUIT', // only one suit
     ALL_HONORS = 'ALL_HONORS', // only honors
     ALL_TERMINALS = 'ALL_TERMINALS', // AKA Orphans, only 1's and 9's, ALL_IN_TRIPLES not awarded
     ALL_HONORS_AND_TERMINALS = 'ALL_HONORS_AND_TERMINALS',
@@ -21,22 +30,14 @@ export enum PointPredicateID {
     THREE_WINDS_PONG = 'THREE_WINDS_PONG', // hand has three pongs (kongs allowed) of different winds
     FOUR_WINDS_PONG = 'FOUR_WINDS_PONG', // hand has four pongs (kongs allowed) of diff winds
     THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // Special hand
-    AT_LEAST_FOUR_KONGS = 'AT_LEAST_FOUR_KONGS',
     ALL_KONGS = 'ALL_KONGS',
-    AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS = 'AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS',
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.
     // can win from self-pick for pair only? no bonus for winning from wall
-    NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting.
-    AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS',    
-    AT_LEAST_FOUR_CONCEALED_MELDS = 'AT_LEAST_FOUR_CONCEALED_MELDS',    
-    IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR = 'IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR',
-    IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR = 'IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR',
-    LAST_TILE_COMPLETED_PAIR = 'LAST_TILE_COMPLETED_PAIR',
+    NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting. 
     CONCEALED_HAND = 'CONCEALED_HAND', // the four non pair melds are concealed (except maybe the last one if won by discard), may or may not include SELF_DRAW last tile. can be customized.
     // the concealed hand may still count if the last self-drawn tile completes one of the four non pair melds depending on desired behavior (aka winning by discard on non pair meld is accepted)
     // default behavior: concealed hand counts if all four non pair melds are concealed and the last tile completes only the last non-pair meld, no restrictions on self-draw.
     FULLY_CONCEALED_HAND = 'FULLY_CONCEALED_HAND',
-    AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS = 'AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS',   
     MELDED_HAND = 'MELDED_HAND', // the four non pair melds are exposed, may or may not include SELF_DRAW last tile for the pair. can be customized.
     // the melded hand may still count if the last tile completes the last non-pair meld via discard.
     // default behavior: melded hand counts if all four non pair melds are revealed and the last tile completes the pair via discard.

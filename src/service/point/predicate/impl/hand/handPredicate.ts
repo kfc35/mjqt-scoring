@@ -48,11 +48,11 @@ const ifLastTileWasSelfDrawnThenItCompletedPairPredicate : PointPredicate<Standa
 
 const lastTileCompletedPairPredicate : PointPredicate<StandardWinningHand> = 
     (standardWinningHand: StandardWinningHand) => {
-        if (meldIsPair(standardWinningHand.meldWithWinningTile)) {
-            return new PointPredicateResult(PointPredicateID.LAST_TILE_COMPLETED_PAIR, true, [[[...standardWinningHand.meldWithWinningTile.tiles]]], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
+        const winningMeld: Meld = standardWinningHand.meldWithWinningTile;
+        if (meldIsPair(winningMeld)) {
+            return new PointPredicateResult(PointPredicateID.LAST_TILE_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
         } else {
-            const meld: Meld = standardWinningHand.meldWithWinningTile;
-            return new PointPredicateResult(PointPredicateID.LAST_TILE_COMPLETED_PAIR, false, [], [[...meld.tiles]], new Set(), []);
+            return new PointPredicateResult(PointPredicateID.LAST_TILE_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], new Set(), []);
     }
 };
 

@@ -7,6 +7,8 @@ import { assertTileSuitedOrHonor } from "common/tileUtils";
  * Pairs can only be marked as "exposed" if they are completed via discard as your last set.
  */
 export default class Pair extends Meld {
+    declare protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile];
+
     constructor(tile: SuitedOrHonorTile, exposed : boolean = false) {
         assertTileSuitedOrHonor(tile);
         super([tile.copy(), tile.copy()], MeldType.PAIR, exposed);

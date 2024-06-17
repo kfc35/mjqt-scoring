@@ -3,6 +3,7 @@ import WindTile from "model/tile/group/windTile";
 import { SeasonTileValue } from "model/tile/tileValue";
 import SeasonTile from "model/tile/group/seasonTile";
 import GentlemanTile from "model/tile/group/gentlemanTile";
+import { getEnumKeys } from "common/generic/enumUtils";
 
 export enum WindDirection {
     EAST = 'EAST',
@@ -10,6 +11,9 @@ export enum WindDirection {
     WEST = 'WEST',
     NORTH = 'NORTH'
 }
+
+export const windDirections : WindDirection[] = 
+    getEnumKeys(WindDirection).map(key => WindDirection[key]);
 
 export function windDirectionToWindTile(windDirection: WindDirection) : WindTile {
     switch (windDirection) {

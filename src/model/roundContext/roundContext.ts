@@ -1,4 +1,4 @@
-import { WindDirection, windDirectionToWindTile, windDirectionToSeasonTile, windDirectionToGentlemanTile } from "model/roundContext/windDirection";
+import { WindDirection, windDirectionToWindTile, windDirectionToSeasonTile, windDirectionToGentlemanTile, windDirections } from "model/roundContext/windDirection";
 import GentlemanTile from "model/tile/group/gentlemanTile";
 import SeasonTile from "model/tile/group/seasonTile";
 import WindTile from "model/tile/group/windTile";
@@ -32,6 +32,11 @@ export class RoundContext {
         return this._seatWind;
     }
 
+    get otherWinds(): WindDirection[] {
+        return windDirections.filter(windDirection => windDirection !== this._prevailingWind 
+            && windDirection !== this._seatWind);
+    }
+
     getSeatWindAsWindTile(): WindTile {
         return windDirectionToWindTile(this._seatWind);
     }
@@ -43,4 +48,5 @@ export class RoundContext {
     getSeatWindAsGentlemanTile(): GentlemanTile {
         return windDirectionToGentlemanTile(this._seatWind);
     }
+    
 }

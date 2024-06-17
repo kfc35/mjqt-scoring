@@ -15,9 +15,15 @@ export enum PointPredicateID {
     SUBPREDICATE_HAND_CONTAINS_HONORS = 'SUBPREDICATE_HAND_CONTAINS_HONORS',
     SUBPREDICATE_HAND_CONTAINS_NO_HONORS = 'SUBPREDICATE_HAND_CONTAINS_NO_HONORS',
     LAST_TILE_COMPLETED_PAIR = 'LAST_TILE_COMPLETED_PAIR',
+    // Pair Value Subpredicates
+    SUBPREDICATE_DRAGON_PAIR = 'SUBPREDICATE_DRAGON_PAIR',
+    SUBPREDICATE_VALUED_WIND_PAIR = 'SUBPREDICATE_VALUED_WIND_PAIR', // either seat and/or prevailing
+    SUBPREDICATE_VALUELESS_WIND_PAIR = 'SUBPREDICATE_VALUELESS_WIND_PAIR', // neither seat nor prevailing
+    SUBPREDICATE_VALUELESS_SUITED_PAIR = 'SUBPREDICATE_VALUELESS_SUITED_PAIR',
+    SUBPREDICATE_VALUELESS_PAIR= 'SUBPREDICATE_VALUELESS_PAIR', // VALUELESS_WIND OR VALUELESS_SUITED
 
     ALL_CHOWS = 'ALL_CHOWS',
-    COMMON_HAND = 'COMMON_HAND', // could be considered more complex than all chows..
+    COMMON_HAND = 'COMMON_HAND', // could be considered more complex than all chows
     ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka "ALL_IN_TRIPLETS"
     SEVEN_PAIRS = 'SEVEN_PAIRS',
     ALL_ONE_SUIT_AND_HONORS = 'ALL_ONE_SUIT_AND_HONORS', 
@@ -54,18 +60,13 @@ export enum PointPredicateID {
     GREEN_DRAGON_PONG = 'GREEN_DRAGON_PONG',
     WHITE_DRAGON_PONG = 'WHITE_DRAGON_PONG',
 
-    DRAGON_PAIR = 'DRAGON_PAIR',
-    VALUED_WIND_PAIR = 'VALUED_WIND_PAIR', // either seat and/or prevailing
-    VALUELESS_WIND_PAIR = 'VALUELESS_WIND_PAIR', // neither seat nor prevailing
-    VALUELESS_SUITED_PAIR = 'VALUELESS_SUITED_PAIR', 
-
     PAIR_WAIT = 'PAIR_WAIT', // last tile can only complete the pair
     EDGE_WAIT = 'EDGE_WAIT', // last tile can only be a 3 in a 1,2,3 chow or 7,8,9 chow, not at the same time.
     CLOSED_WAIT = 'CLOSED_WAIT', // last tile can only complete the chow in the middle
 
     NOT_SELF_DRAW = 'NOT_SELF_DRAW', // winning tile is a discard
     SELF_DRAW = 'SELF_DRAW', // winning tile is NOT a discard
-    LAST_OF_IS_KIND = 'LAST_OF_ITS_KIND', // the winning tile is the last of its kind based on what's been melded/discarded by other players.
+    LAST_OF_ITS_KIND = 'LAST_OF_ITS_KIND', // the winning tile is the last of its kind based on what's been melded/discarded by other players.
     ROBBING_KONG = 'ROBBING_KONG',  // win by having priority over someone else's call to add that tile to a melded kong
     WIN_BY_LAST_TILE = 'WIN_BY_LAST_TILE', // win by last tile on wall
     WIN_BY_LAST_DISCARD = 'WIN_BY_LAST_DISCARD', // win by last discard of game

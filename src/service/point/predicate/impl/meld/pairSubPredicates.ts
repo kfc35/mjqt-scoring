@@ -1,6 +1,6 @@
 import { BAMBOO_TILES, CHARACTER_TILES, CIRCLE_TILES, DRAGON_TILES } from "common/deck";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
-import { createPairsExistPredicate } from "service/point/predicate/factory/pairPredicateFactory";
+import { createPairsExistPredicate } from "service/point/predicate/factory/meld/pairPredicateFactory";
 import { PointPredicate, predicateOr } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RoundContext } from "model/roundContext/roundContext";

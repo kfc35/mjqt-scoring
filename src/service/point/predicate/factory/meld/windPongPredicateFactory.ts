@@ -3,7 +3,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { RoundContext } from "model/roundContext/roundContext";
 import WindTile from "model/tile/group/windTile";
-import { createPongsExistPredicate } from "service/point/predicate/factory/pongPredicateFactory";
+import { createPongsExistPredicate } from "service/point/predicate/factory/meld/pongPredicateFactory";
 
 export default function createWindPongsExistPredicates(roundContext: RoundContext) : [PointPredicate<StandardWinningHand>, PointPredicate<StandardWinningHand>] {
     const prevailingWindTile : WindTile = roundContext.getPrevailingWindAsWindTile();

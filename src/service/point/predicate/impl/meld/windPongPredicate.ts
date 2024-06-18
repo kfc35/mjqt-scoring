@@ -3,7 +3,7 @@ import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHa
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
-import { createPongsExistPredicate } from "service/point/predicate/factory/pongPredicateFactory";
+import { createPongsExistPredicate } from "service/point/predicate/factory/meld/pongPredicateFactory";
 import { PointPredicateConfiguration } from "service/point/predicate/configuration/pointPredicateConfiguration";
 
 export const SEAT_WIND_PONG_PREDICATE : PointPredicate<StandardWinningHand> = 

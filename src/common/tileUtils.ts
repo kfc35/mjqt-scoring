@@ -87,3 +87,8 @@ export function assertEachTileHasQuantityLTEMaxPerTile(tiles: SuitedOrHonorTile[
         throw new Error(`Each suited or honor tile must have quantity <= ${maxQuantityPerNonFlowerTile}.`);
     }
 }
+
+export function tilesIsEmpty(tiles: Tile[][]) {
+    return tiles.length === 0 || // tiles = []
+        (tiles.length === 1 && (!tiles[0] || (tiles[0].length === 0))); // tiles = [[]] or tiles = [undefined]
+}

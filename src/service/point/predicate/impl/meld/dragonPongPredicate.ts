@@ -1,5 +1,5 @@
 import { GREEN_DRAGON, RED_DRAGON, WHITE_DRAGON } from "common/deck";
-import { createPongsExistPredicate } from "service/point/predicate/factory/pongPredicateFactory"
+import { createPongsExistPredicate } from "service/point/predicate/factory/meld/pongPredicateFactory"
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";

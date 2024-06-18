@@ -1,5 +1,5 @@
-import DragonTile from "model/tile/group/dragonTile";
-import WindTile from "model/tile/group/windTile";
+import DragonTile, { isDragonTile } from "model/tile/group/dragonTile";
+import WindTile, { isWindTile } from "model/tile/group/windTile";
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue, DragonTileValue, isDragonTileValue, WindTileValue, isWindTileValue } from "model/tile/tileValue";
@@ -15,6 +15,5 @@ export function isHonorTileValue(tileValue: TileValue) : tileValue is HonorTileV
     return isDragonTileValue(tileValue) || isWindTileValue(tileValue);
 }
 export function isHonorTile(tile: Tile): tile is HonorTile {
-    return (tile.group === TileGroup.DRAGON && isDragonTileValue(tile.value)) ||
-        (tile.group === TileGroup.WIND && isWindTileValue(tile.value));
+    return isDragonTile(tile) || isWindTile(tile);
 }

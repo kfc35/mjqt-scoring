@@ -1,4 +1,4 @@
-import { BAMBOO_TILES, CHARACTER_TILES, CIRCLE_TILES, DRAGON_TILES } from "common/deck";
+import { BAMBOO_TILES, CHARACTER_TILES, CIRCLE_TILES, DRAGON_TILES, WIND_TILES } from "common/deck";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
 import { createPairsExistPredicate } from "service/point/predicate/factory/meld/pairPredicateFactory";
 import { PointPredicate, predicateOr } from "service/point/predicate/pointPredicate";
@@ -20,6 +20,9 @@ export const VALUELESS_WIND_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHa
     const valuelessWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_WIND_PAIR, roundContext.otherWinds.map(windDirection => windDirectionToWindTile(windDirection)), 1);
     return valuelessWindPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration);
 }
+
+export const WIND_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = 
+    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_WIND_PAIR, WIND_TILES, 1);
 
 export const VALUELESS_SUITED_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = 
     createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_SUITED_PAIR, [...BAMBOO_TILES, ...CIRCLE_TILES, ...CHARACTER_TILES], 1);

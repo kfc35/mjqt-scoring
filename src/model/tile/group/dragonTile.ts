@@ -1,6 +1,6 @@
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
-import { DragonTileValue } from "model/tile/tileValue";
+import { DragonTileValue, isDragonTileValue } from "model/tile/tileValue";
 
 export default class DragonTile extends Tile {
     declare protected _value: DragonTileValue;
@@ -12,4 +12,8 @@ export default class DragonTile extends Tile {
     copy(): DragonTile {
         return new DragonTile(this._value);
     }
+}
+
+export function isDragonTile(tile: Tile): tile is DragonTile {
+    return (ile.group === TileGroup.DRAGON && isDragonTileValue(tile.value)
 }

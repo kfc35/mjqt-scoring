@@ -1,6 +1,6 @@
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
-import { WindTileValue } from "model/tile/tileValue";
+import { isWindTileValue, WindTileValue } from "model/tile/tileValue";
 
 export default class WindTile extends Tile {
     declare protected _value: WindTileValue;
@@ -12,4 +12,8 @@ export default class WindTile extends Tile {
     copy(): WindTile {
         return new WindTile(this._value);
     }
+}
+
+export function isWindTile(tile: Tile): tile is WindTile {
+    return tile.group === TileGroup.WIND && isWindTileValue(tile.value);
 }

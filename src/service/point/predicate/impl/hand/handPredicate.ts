@@ -15,6 +15,9 @@ import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { wrapSet } from "common/generic/setUtils";
 import { RoundContext } from "model/roundContext/roundContext";
 import { SELF_DRAW_PREDICATE, notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/winConditionPredicate";
+import { DRAGON_PAIR_SUBPREDICATE, WIND_PAIR_SUBPREDICATE } from "service/point/predicate/impl/meld/pairSubPredicates";
+import { twoDragonsPongKongSubPredicate } from "service/point/predicate/impl/meld/dragonPongPredicate";
+import { threeWindsPongKongSubPredicate } from "service/point/predicate/impl/meld/windPongPredicate";
 
 const onePairSubPredicate : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.SUBPREDICATE_ONE_PAIR, 1, 1);
 const atLeastFourChowsSubPredicate : PointPredicate<StandardWinningHand> = createChowMinQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CHOWS, 4);
@@ -132,3 +135,9 @@ export const MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> =
 export const FULLY_MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
     predicateAnd(PointPredicateID.FULLY_MELDED_HAND, atLeastFourExposedNonPairMeldsSubPredicate, 
         onePairSubPredicate, notSelfDrawSubPredicate, ifLastTileWasDiscardThenItCompletedPairSubPredicate);
+
+export const SMALL_THREE_DRAGONS : PointPredicate<StandardWinningHand> = 
+    predicateAnd(PointPredicateID.SMALL_THREE_DRAGONS, DRAGON_PAIR_SUBPREDICATE, twoDragonsPongKongSubPredicate);
+
+export const SMALL_FOUR_WINDS : PointPredicate<StandardWinningHand> = 
+    predicateAnd(PointPredicateID.SMALL_FOUR_WINDS, WIND_PAIR_SUBPREDICATE, threeWindsPongKongSubPredicate);

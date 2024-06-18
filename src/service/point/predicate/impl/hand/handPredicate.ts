@@ -14,6 +14,7 @@ import { WinContext } from "model/winContext/winContext";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { wrapSet } from "common/generic/setUtils";
 import { RoundContext } from "model/roundContext/roundContext";
+import { SELF_DRAW_PREDICATE, notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/winConditionPredicate";
 
 const onePairSubPredicate : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.SUBPREDICATE_ONE_PAIR, 1, 1);
 const atLeastFourChowsSubPredicate : PointPredicate<StandardWinningHand> = createChowMinQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CHOWS, 4);
@@ -61,22 +62,6 @@ const atLeastFourConcealedMeldsSubPredicate : PointPredicate<StandardWinningHand
     (meld) => !meld.exposed, (melds) => melds.length >= 4, () => true);
 const atLeastFourExposedNonPairMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meld.exposed);
-
-export const SELF_DRAW_PREDICATE : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand) => {
-        if (standardWinningHand.isSelfDrawn()) {
-            return new PointPredicateResult(PointPredicateID.SELF_DRAW, true, [[[standardWinningHand.winningTile]]], [], new Set(), []);
-        }
-        return new PointPredicateResult(PointPredicateID.SELF_DRAW, false, [], [[standardWinningHand.winningTile]], new Set(), []);
-    }
-
-export const NOT_SELF_DRAW_PREDICATE : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand) => {
-        if (!standardWinningHand.isSelfDrawn()) {
-            return new PointPredicateResult(PointPredicateID.NOT_SELF_DRAW, true, [[[standardWinningHand.winningTile]]], [], new Set(), []);
-        }
-        return new PointPredicateResult(PointPredicateID.NOT_SELF_DRAW, false, [], [[standardWinningHand.winningTile]], new Set(), []);
-    }
 
 export const SEVEN_PAIRS_PREDICATE : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);
 
@@ -133,17 +118,17 @@ export const MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> =
             return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
                 atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
                 onePairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                NOT_SELF_DRAW_PREDICATE(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
+                notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
                 ifLastTileWasDiscardThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
         } else { // no restrictions on hand if last tile was a discard
             return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
                 atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
                 onePairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                NOT_SELF_DRAW_PREDICATE(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
+                notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
         }
     };
 
 // four exposed non-pair melds, won by discard to finish the pair.
 export const FULLY_MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
     predicateAnd(PointPredicateID.FULLY_MELDED_HAND, atLeastFourExposedNonPairMeldsSubPredicate, 
-        onePairSubPredicate, NOT_SELF_DRAW_PREDICATE, ifLastTileWasDiscardThenItCompletedPairSubPredicate);
+        onePairSubPredicate, notSelfDrawSubPredicate, ifLastTileWasDiscardThenItCompletedPairSubPredicate);

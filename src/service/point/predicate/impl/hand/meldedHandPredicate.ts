@@ -5,7 +5,7 @@ import { PointPredicateConfiguration, PointPredicateOption } from "service/point
 import { WinContext } from "model/winContext/winContext";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { RoundContext } from "model/roundContext/roundContext";
-import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/winConditionPredicate";
+import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/winConditionSubPredicate";
 import { onePairSubPredicate, lastTileCompletedPairSubPredicate, 
     ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate, 
     ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/handSubPredicate";

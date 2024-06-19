@@ -5,6 +5,7 @@ export enum PointPredicateID {
     SUBPREDICATE_AT_LEAST_FOUR_CHOWS = 'SUBPREDICATE_AT_LEAST_FOUR_CHOWS', 
     SUBPREDICATE_AT_LEAST_FOUR_KONGS = 'SUBPREDICATE_AT_LEAST_FOUR_KONGS',
     SUBPREDICATE_AT_LEAST_FOUR_PONGS_AND_KONGS = 'SUBPREDICATE_AT_LEAST_FOUR_PONGS_AND_KONGS',
+    SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS = 'SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS',
     SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS = 'SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS',
     SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS = 'SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS',    
     SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_MELDS = 'SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_MELDS',    
@@ -42,10 +43,11 @@ export enum PointPredicateID {
     VOIDED_SUIT = 'VOIDED_SUIT', // only two of three suits, honors optional
     SMALL_FOUR_WINDS = 'SMALL_FOUR_WINDS',
     BIG_FOUR_WINDS = 'BIG_FOUR_WINDS',
-    SMALL_THREE_DRAGONS = 'SMALL_DRAGONS',
-    BIG_THREE_DRAGONS = 'GREAT_DRAGONS',
+    SMALL_THREE_DRAGONS = 'SMALL_THREE_DRAGONS',
+    BIG_THREE_DRAGONS = 'GREAT_THREE_DRAGONS',
     THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS', // Special hand
     ALL_KONGS = 'ALL_KONGS',
+    // TODO SELF_TRIPLETS must be pongs or option to make it pongs and kongs
     SELF_TRIPLETS = 'SELF_TRIPLETS', // four concealed pongs/kongs, not even the last one.
     // can win from self-pick for pair only? no bonus for winning from wall
     NINE_GATES = 'NINE_GATES', // must win totally concealed, can only eat when waiting. 
@@ -61,6 +63,9 @@ export enum PointPredicateID {
     // a FULLY_MELDED_HAND = MELDED_HAND and no SELF_DRAWN present. the last tile must complete the pair.
     MOON_FROM_THE_BOTTOM_OF_THE_SEA = 'MOON_FROM_THE_BOTTOM_OF_THE_SEA',
     PLUM_BLOSSOM_ON_THE_ROOF = 'PLUM_BLOSSOM_ON_THE_ROOF',
+    JADE_DRAGON = 'JADE_DRAGON',
+    RUBY_DRAGON = 'RUBY_DRAGON',
+    PEARL_DRAGON = 'PEARL_DRAGON',
 
     // Individual Melds
     SEAT_WIND_PONG_KONG = 'SEAT_WIND_PONG_KONG',
@@ -84,6 +89,7 @@ export enum PointPredicateID {
     WIN_BY_DOUBLE_KONG = 'WIN_BY_DOUBLE_KONG', // win via replacement tile of kong after replacement tile from kong
     WIN_BY_DOUBLE_FLOWER = 'WIN_BY_DOUBLE_FLOWER', // win via replacement tile after drawing two flowers in a row
     WIN_WITH_INITIAL_HAND = 'WIN_WITH_INITIAL_HAND',
+    // TODO EARTHLY AND HEAVENLY HAND?
 
     // Bonus tile points
     SEAT_GENTLEMAN = 'SEAT_GENTLEMAN',

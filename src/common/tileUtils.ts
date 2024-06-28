@@ -1,10 +1,11 @@
 import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
 import { type SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import SuitedTile, { isSuitedTile } from "model/tile/group/suitedTile";
+import SuitedTile, { isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { type HongKongTile, isHongKongTile } from "model/tile/hk/hongKongTile";
 import { Tile } from "model/tile/tile.js";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
+import { TileGroup } from "model/tile/tileGroup";
 
 export function assertTilesNotNullAndCorrectLength(tiles: Tile[], minLength: number, maxLength: number) {
     if (!tiles || !tiles.every(tile => !!tile)) {
@@ -88,7 +89,25 @@ export function assertEachTileHasQuantityLTEMaxPerTile(tiles: SuitedOrHonorTile[
     }
 }
 
-export function tilesIsEmpty(tiles: Tile[][]) {
+export function tilesIsEmpty(tiles: Tile[][]): boolean {
     return tiles.length === 0 || // tiles = []
         (tiles.length === 1 && (!tiles[0] || (tiles[0].length === 0))); // tiles = [[]] or tiles = [undefined]
+}
+
+export function suitedTilesAreAllSameSuit(tiles: SuitedTile[]): boolean {
+    const tileGroups : Set<SuitedTileGroup> = new Set(tiles.map(tile => tile.group));
+    return tileGroups.size === 1;
+}
+
+export function separateTilesByGroup(tiles: Tile[]): Tile[][] {
+    const tileGroupToTileMap : Map<TileGroup, Tile[]> = new Map();
+    tiles.forEach(tile => {
+        const tiles = tileGroupToTileMap.get(tile.group);
+        if (tiles) {
+            tiles.push(tile);
+        } else {
+            tileGroupToTileMap.set(tile.group, [tile]);
+        }
+    });
+    return [...tileGroupToTileMap.values()];
 }

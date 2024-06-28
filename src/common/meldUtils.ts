@@ -94,7 +94,7 @@ export function meldExistsInMeldsIgnoreExposed(melds: readonly Meld[], meldToChe
     return meldExistsInMelds(melds, meldToCheck, true);
 }
 
-export function cartesianProduct(meldsOne: readonly Meld[][], meldsTwo: readonly Meld[][]) : Meld[][] {
+export function cartesianProduct(meldsOne: readonly Meld[][], meldsTwo: readonly Meld[][]) : readonly Meld[][] {
     if (meldsOne.length === 0) {
         return meldsTwo; // might also have length = 0, that is fine.
     }
@@ -111,5 +111,9 @@ export function cartesianProduct(meldsOne: readonly Meld[][], meldsTwo: readonly
 }
 
 export function getMeldsSubsetFromIndicesSet(melds: readonly Meld[], indices: ReadonlySet<number>): Meld[] {
-    return melds.filter((meld, index) => indices.has(index));
+    return melds.filter((_meld, index) => indices.has(index));
+}
+
+export function getAllIndicesSet(melds: readonly Meld[]): Set<number> {
+    return new Set(melds.map((_meld, index) => index));
 }

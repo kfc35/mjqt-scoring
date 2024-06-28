@@ -18,7 +18,7 @@ const atLeastFourConcealedPongsKongsSubPredicate : PointPredicate<StandardWinnin
     //meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed && meldIsPong(meld));
 const atLeastFourConcealedNonPairMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed);
-const atLeastFourConcealedMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_MELDS, 
+export const atLeastFourConcealedMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_MELDS, 
     (meld) => !meld.exposed, (melds) => melds.length >= 4, () => true);
 
 export const SELF_TRIPLETS : PointPredicate<StandardWinningHand> = 

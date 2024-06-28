@@ -5,8 +5,10 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { consolidateSets, wrapSet } from "common/generic/setUtils";
-import { terminalSuitedTileValues, simpleSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
+import { terminalSuitedTileValues, simpleSuitedTileValues, SuitedTileValue, DragonTileValue } from "model/tile/tileValue";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
+import { type SuitedTileGroup } from "model/tile/group/suitedTile";
+import { getOnlyTruthyElement } from "common/generic/setUtils";
 
 // TODO break these up into sub predicates so that it may be easier to see where things failed?
 
@@ -227,4 +229,28 @@ function allSimplesPredicate(winningHand: WinningHand, wrappedSimplesIndicesSet:
     const nonSimpleTileValues : Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !simpleSuitedTileValues.has(stv)));
     const nonSimpleTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonSimpleTileValues).filter(tiles => tiles.length > 0);
     return new PointPredicateResult(PointPredicateID.ALL_SIMPLES, false, [], [...honorTiles, ...nonSimpleTiles], new Set(), []);
+}
+
+export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, standardWinningHand: StandardWinningHand, 
+    givenSuitedTileGroup: SuitedTileGroup, givenDragonTileValue: DragonTileValue) : PointPredicateResult {
+    const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
+    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
+    const honorTileValues = tileGroupValueMaps.getHonorTileValues();
+    const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
+    const tilesSepbyValue: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(honorTileValues);
+        
+    if (suitedTileGroups.size === 1 && givenSuitedTileGroup === getOnlyTruthyElement(suitedTileGroups) && 
+        honorTileValues.size === 1 && givenDragonTileValue  === getOnlyTruthyElement(honorTileValues)) {
+        const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
+        const honorTileIndices = consolidateSets([...honorTileValues.values()].map(tileValue => tileGroupValueMaps.getMeldIndicesForHonorTileValue(tileValue)));
+    
+        return new PointPredicateResult(pointPredicateId, true, [tilesSepBySuit, tilesSepbyValue], [], wrapSet(consolidateSets([suitedTileIndices, honorTileIndices])), []);
+    }
+
+    if (suitedTileGroups.size !== 1) {
+        // TODO if suitedTileGroups is 0, failedTiles is empty. desired?
+        return new PointPredicateResult(pointPredicateId, false, [], tilesSepBySuit, new Set(), []);
+    } else { // what if honorTileValue is 0?
+        return new PointPredicateResult(pointPredicateId, false, [], tilesSepbyValue, new Set(), []);
+    }
 }

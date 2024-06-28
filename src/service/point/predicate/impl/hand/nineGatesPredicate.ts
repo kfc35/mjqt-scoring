@@ -10,6 +10,8 @@ import { ALL_ONE_SUIT_PREDICATE_STANDARD } from "service/point/predicate/impl/ti
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { wrapSet } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
+import { atLeastFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
+import { onePairSubPredicate } from "service/point/predicate/impl/hand/handSubPredicate";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWinningHand> = 
     (standardWinningHand: StandardWinningHand) => {
@@ -68,4 +70,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWin
     }
 
 export const NINE_GATES_PREDICATE : PointPredicate<StandardWinningHand> = 
-    predicateAnd(PointPredicateID.NINE_GATES, ALL_ONE_SUIT_PREDICATE_STANDARD, sufficientTileQuantitiesNineGatesSubPredicate);
+    predicateAnd(PointPredicateID.NINE_GATES, ALL_ONE_SUIT_PREDICATE_STANDARD, 
+        sufficientTileQuantitiesNineGatesSubPredicate,
+        atLeastFourConcealedMeldsSubPredicate, // winning tile can be discard.
+        onePairSubPredicate);

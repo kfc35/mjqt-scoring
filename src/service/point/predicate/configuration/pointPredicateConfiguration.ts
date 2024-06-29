@@ -25,6 +25,9 @@ export enum PointPredicateOption {
     /** This option allows melded hands to have a self drawn pair alongside the four exposed non-pair melds.
      * Default = false. */
     MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR = "MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR",
+
+    // Only pongs are allowed for self triplets. Default = true
+    SELF_TRIPLETS_ONLY_PONGS = "SELF_TRIPLETS_ONLY_PONGS"
 }
 
 export const pointPredicateOptions: readonly PointPredicateOption[] = 

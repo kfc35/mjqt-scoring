@@ -20,7 +20,6 @@ export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles
         pongsToMatch.push(new Pong(tile));
         kongsToMatch.push(new Kong(tile));
     }
-    
 
     if (numPongsToMatch && (numPongsToMatch > tiles.length || numPongsToMatch < 0)) {
         throw new Error(`numPairsToMatch must be between 0 and tiles.length (${tiles.length})`);

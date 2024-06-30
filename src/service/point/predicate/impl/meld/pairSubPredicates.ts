@@ -5,18 +5,18 @@ import { PointPredicate, predicateOr } from "service/point/predicate/pointPredic
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WinContext } from "model/winContext/winContext";
-import { PointPredicateConfiguration } from "service/point/predicate/configuration/pointPredicateConfiguration";
+import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/pointPredicateConfiguration";
 import { windDirectionToWindTile } from "model/roundContext/windDirection";
 
 export const DRAGON_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = 
     createPairsExistPredicate(PointPredicateID.SUBPREDICATE_DRAGON_PAIR, DRAGON_TILES, 1);
 
-export const VALUED_WIND_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, pointPredicateConfiguration: PointPredicateConfiguration) => {
+export const VALUED_WIND_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, pointPredicateConfiguration: PointPredicateLogicConfiguration) => {
     const valuedWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUED_WIND_PAIR, [roundContext.getSeatWindAsWindTile(), roundContext.getPrevailingWindAsWindTile()], 1);
     return valuedWindPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration);
 }
 
-export const VALUELESS_WIND_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, pointPredicateConfiguration: PointPredicateConfiguration) => {
+export const VALUELESS_WIND_PAIR_SUBPREDICATE : PointPredicate<StandardWinningHand> = (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, pointPredicateConfiguration: PointPredicateLogicConfiguration) => {
     const valuelessWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_WIND_PAIR, roundContext.otherWinds.map(windDirection => windDirectionToWindTile(windDirection)), 1);
     return valuelessWindPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration);
 }

@@ -9,11 +9,11 @@ export function getOnlyElement<T>(singletonSet: ReadonlySet<T>): T | undefined {
 
 /** Use this only if you are sure it is a singleton set. */
 export function getOnlyTruthyElement<T>(singletonSet: ReadonlySet<T>): T {
-    const setArray = Array.from(singletonSet);
-    if (setArray.length !== 1 || !setArray[0]) {
-        throw new Error("Expected Set to have only one element, but it has multiple: " + singletonSet.size);
+    const element = getOnlyElement(singletonSet);
+    if (!element) {
+        throw new Error("Expected element to not be undefined, but it was.");
     }
-    return setArray[0];
+    return element;
 }
 
 export function consolidateSets<T>(setArray: Set<T>[]): Set<T> {

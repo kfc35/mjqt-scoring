@@ -1,3 +1,0 @@
-import { SelfTripletsPointPredicateConfiguration } from "service/point/predicate/configuration/selfTripletsPointPredicateConfiguration";
-
-export const defaultSelfTripletsPointPredicateConfiguration = new SelfTripletsPointPredicateConfiguration(true);

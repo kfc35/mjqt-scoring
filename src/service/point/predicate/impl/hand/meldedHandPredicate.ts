@@ -1,7 +1,6 @@
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateConfiguration, PointPredicateOption } from "service/point/predicate/configuration/pointPredicateConfiguration";
 import { WinContext } from "model/winContext/winContext";
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { RoundContext } from "model/roundContext/roundContext";
@@ -11,37 +10,40 @@ import { onePairSubPredicate, lastTileCompletedPairSubPredicate,
     ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/handSubPredicate";
 import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
+import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 
 const atLeastFourExposedNonPairMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meld.exposed);
 
 export const MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, pointPredicateConfiguration: PointPredicateConfiguration) => {        
-        if (pointPredicateConfiguration.getOptionValue(PointPredicateOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR)) {
-            if (pointPredicateConfiguration.getOptionValue(PointPredicateOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
+    (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {   
+        const logicConfig = config.getLogicConfiguration();
+        if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR)) {
+            if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
                 return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
-                    atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                    onePairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                    lastTileCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
+                    atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
+                    onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
+                    lastTileCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, config));
             } else { // no restrictions on hand if last tile was a discard. the pair can be self drawn.
                 // this is the most permissive option.
                 return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
-                    atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                    onePairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                    ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
+                    atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
+                    onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
+                    ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, config));
             }
-        } else if (pointPredicateConfiguration.getOptionValue(PointPredicateOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
+        } else if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             // this is the most restrictive option, and is the same as the fully melded hand predicate.
             return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
-                atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                onePairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                ifLastTileWasDiscardThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
+                atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
+                onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
+                notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, config),
+                ifLastTileWasDiscardThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, config));
         } else { // no restrictions on hand if last tile was a discard
             return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
-                atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                onePairSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration),
-                notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, pointPredicateConfiguration));
+                atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
+                onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
+                notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, config));
         }
     };
 

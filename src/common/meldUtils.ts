@@ -94,12 +94,12 @@ export function meldExistsInMeldsIgnoreExposed(melds: readonly Meld[], meldToChe
     return meldExistsInMelds(melds, meldToCheck, true);
 }
 
-export function cartesianProduct(meldsOne: readonly Meld[][], meldsTwo: readonly Meld[][]) : readonly Meld[][] {
+export function cartesianProduct(meldsOne: readonly Meld[][], meldsTwo: readonly Meld[][]) : Meld[][] {
     if (meldsOne.length === 0) {
-        return meldsTwo; // might also have length = 0, that is fine.
+        return [...meldsTwo]; // might also have length = 0, that is fine.
     }
     if (meldsTwo.length === 0) {
-        return meldsOne;
+        return [...meldsOne];
     }
     const product : Meld[][] = [];
     for (const meldOne of meldsOne) {

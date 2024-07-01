@@ -7,6 +7,7 @@ import { GREEN_DRAGON_PONG_KONG_PREDICATE, RED_DRAGON_PONG_KONG_PREDICATE, WHITE
 import { allGivenSuitAndGivenDragonPredicate } from "service/point/predicate/impl/tileGroupAndValuePredicate";
 import { TileGroup } from "model/tile/tileGroup";
 import { DragonTileValue } from "model/tile/tileValue";
+import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 
 const allBambooAndGreenDragonSubPredicate : PointPredicate<StandardWinningHand> = 
     (standardWinningHand : StandardWinningHand) => {
@@ -16,7 +17,8 @@ const allBambooAndGreenDragonSubPredicate : PointPredicate<StandardWinningHand> 
 
 export const JADE_DRAGON_PREDICATE : PointPredicate<StandardWinningHand> = 
     predicateAnd(PointPredicateID.JADE_DRAGON, 
-        allBambooAndGreenDragonSubPredicate, 
+        allBambooAndGreenDragonSubPredicate,
+        onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         GREEN_DRAGON_PONG_KONG_PREDICATE);
 
@@ -29,6 +31,7 @@ const allCharacterAndRedDragonSubPredicate : PointPredicate<StandardWinningHand>
 export const RUBY_DRAGON_PREDICATE : PointPredicate<StandardWinningHand> = 
     predicateAnd(PointPredicateID.JADE_DRAGON, 
         allCharacterAndRedDragonSubPredicate, 
+        onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         RED_DRAGON_PONG_KONG_PREDICATE);
 
@@ -41,5 +44,6 @@ const allCircleAndWhiteDragonSubPredicate : PointPredicate<StandardWinningHand> 
 export const PEARL_DRAGON_PREDICATE : PointPredicate<StandardWinningHand> = 
     predicateAnd(PointPredicateID.JADE_DRAGON, 
         allCircleAndWhiteDragonSubPredicate, 
+        onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         WHITE_DRAGON_PONG_KONG_PREDICATE);

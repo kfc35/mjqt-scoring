@@ -25,7 +25,7 @@ export const ALL_ONE_SUIT_PREDICATE_SPECIAL : PointPredicate<SpecialWinningHand>
         return allOneSuitPredicate(specialWinningHand);
     };
 
-function handContainsOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
+function handContainsOneSuitSubPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
@@ -37,7 +37,7 @@ function handContainsOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTil
     }
 }
 
-function handContainsNoHonorsPredicate(winningHand: WinningHand) : PointPredicateResult {
+function handContainsNoHonorsSubPredicate(winningHand: WinningHand) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
     const honorTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
@@ -50,8 +50,8 @@ function handContainsNoHonorsPredicate(winningHand: WinningHand) : PointPredicat
 
 function allOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
     return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT, 
-        handContainsOneSuitPredicate(winningHand, wrappedSuitedTileIndicesSet),
-        handContainsNoHonorsPredicate(winningHand)
+        handContainsOneSuitSubPredicate(winningHand, wrappedSuitedTileIndicesSet),
+        handContainsNoHonorsSubPredicate(winningHand)
     );
 }
 
@@ -62,7 +62,7 @@ export const ALL_ONE_SUIT_AND_HONORS_PREDICATE_STANDARD : PointPredicate<Standar
         const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
         const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
         const honorTileIndices = consolidateSets([...honorTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
-        return allOneSuitAndHonorsPredicate(standardWinningHand, wrapSet(consolidateSets([suitedTileIndices, honorTileIndices])));
+        return allOneSuitAndHonorsPredicate(standardWinningHand, wrapSet(suitedTileIndices), wrapSet(honorTileIndices));
     };
 
 export const ALL_ONE_SUIT_AND_HONORS_PREDICATE_SPECIAL : PointPredicate<SpecialWinningHand> = 
@@ -70,22 +70,23 @@ export const ALL_ONE_SUIT_AND_HONORS_PREDICATE_SPECIAL : PointPredicate<SpecialW
         return allOneSuitAndHonorsPredicate(specialWinningHand);
     };
 
-function allOneSuitAndHonorsPredicate(winningHand: WinningHand, wrappedSuitedAndHonorTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
+function handContainsHonorsSubPredicate(winningHand: WinningHand, wrappedHonorTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
-    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
-    const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
-        
-    if (suitedTileGroups.size === 1 && honorTileGroups.size > 0) {
-        return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, true, [tilesSepBySuit], [], wrappedSuitedAndHonorTileIndicesSet, []);
+    const honorTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
+    if (honorTileGroups.size > 0) {
+        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS, true, [honorTiles], [], wrappedHonorTileIndicesSet, []);
+    } else {
+        // TODO missing tiles?
+        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS, false, [], [], new Set(), []);
     }
+}
 
-    if (suitedTileGroups.size !== 1) {
-        // TODO if suitedTileGroups is 0, failedTiles is empty. desired?
-        return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, false, [], tilesSepBySuit, new Set(), []);
-    } else { // does not have honors
-        return new PointPredicateResult(PointPredicateID.ALL_ONE_SUIT_AND_HONORS, false, [], [], new Set(), []);
-    }
+function allOneSuitAndHonorsPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<Set<number>> = new Set(), wrappedHonorTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
+    return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT, 
+        handContainsOneSuitSubPredicate(winningHand, wrappedSuitedTileIndicesSet),
+        handContainsHonorsSubPredicate(winningHand, wrappedHonorTileIndicesSet)
+    ); // TODO matched indices?
 }
 
 export const ALL_HONORS_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
@@ -101,21 +102,23 @@ export const ALL_HONORS_PREDICATE_SPECIAL : PointPredicate<SpecialWinningHand> =
         return allHonorsPredicate(specialWinningHand)
     };
 
-function allHonorsPredicate(winningHand: WinningHand, wrappedHonorTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
+function handContainsNoSuitsSubPredicate(winningHand: WinningHand) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
-    const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
-    const honorTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
+    const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
+    if (suitedTileGroups.size === 0) {
+        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_NO_SUITS, true, [], [], new Set(), []);
+    } else {
 
-    if (suitedTileGroups.size === 0 && honorTileGroups.size > 0) {
-        return new PointPredicateResult(PointPredicateID.ALL_HONORS, true, [honorTiles], [], wrappedHonorTileIndicesSet, []);
+        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_NO_SUITS, false, [], tilesSepBySuit, new Set(), []);
     }
+}
 
-    if (suitedTileGroups.size > 0) {
-        const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
-        return new PointPredicateResult(PointPredicateID.ALL_HONORS, false, [], tilesSepBySuit, new Set(), []);
-    } // does not have honors too.
-    return new PointPredicateResult(PointPredicateID.ALL_HONORS, false, [], [], new Set(), []);
+function allHonorsPredicate(winningHand: WinningHand, wrappedHonorTileIndicesSet: Set<Set<number>> = new Set()) : PointPredicateResult {
+    return PointPredicateResult.and(PointPredicateID.ALL_HONORS, 
+        handContainsNoSuitsSubPredicate(winningHand),
+        handContainsHonorsSubPredicate(winningHand, wrappedHonorTileIndicesSet)
+    ); // TODO matched indices?
 }
 
 export const VOIDED_SUIT_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 

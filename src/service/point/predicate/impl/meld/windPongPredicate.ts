@@ -19,8 +19,5 @@ export const PREVAILING_WIND_PONG_KONG_PREDICATE : PointPredicate<StandardWinnin
         return prevailingWindPredicate(standardWinningHand, winContext, roundContext, config);
     }
 
-export const threeWindsPongKongSubPredicate: PointPredicate<StandardWinningHand> = 
-    createPongOrKongsExistPredicate(PointPredicateID.SUBPREDICATE_THREE_WINDS_PONG_KONG, WIND_TILES, 3);
-
 export const BIG_FOUR_WINDS_PREDICATE: PointPredicate<StandardWinningHand> = 
     createPongOrKongsExistPredicate(PointPredicateID.BIG_FOUR_WINDS, WIND_TILES);

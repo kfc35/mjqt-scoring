@@ -8,8 +8,5 @@ export const RED_DRAGON_PONG_KONG_PREDICATE: PointPredicate<StandardWinningHand>
 export const GREEN_DRAGON_PONG_KONG_PREDICATE: PointPredicate<StandardWinningHand> = createPongOrKongsExistPredicate(PointPredicateID.GREEN_DRAGON_PONG_KONG.valueOf(), [GREEN_DRAGON]);
 export const WHITE_DRAGON_PONG_KONG_PREDICATE: PointPredicate<StandardWinningHand> = createPongOrKongsExistPredicate(PointPredicateID.WHITE_DRAGON_PONG_KONG.valueOf(), [WHITE_DRAGON]);
 
-export const twoDragonsPongKongSubPredicate: PointPredicate<StandardWinningHand> = 
-    createPongOrKongsExistPredicate(PointPredicateID.SUBPREDICATE_TWO_DRAGONS_PONG_KONG, DRAGON_TILES, 2);
-
 export const BIG_THREE_DRAGONS_PREDICATE: PointPredicate<StandardWinningHand> = 
     createPongOrKongsExistPredicate(PointPredicateID.BIG_THREE_DRAGONS, DRAGON_TILES);

@@ -11,7 +11,7 @@ import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { wrapSet } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
 import { atLeastFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
-import { onePairSubPredicate } from "service/point/predicate/impl/hand/handSubPredicate";
+import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWinningHand> = 
     (standardWinningHand: StandardWinningHand) => {

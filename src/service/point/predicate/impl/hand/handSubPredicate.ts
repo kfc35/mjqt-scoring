@@ -1,5 +1,4 @@
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
-import { createPairQuantityPredicate } from "service/point/predicate/factory/meld/pairPredicateFactory";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
@@ -12,7 +11,6 @@ import { createKongMinQuantityPredicate } from "service/point/predicate/factory/
 import PointPredicateResult from "service/point/predicate/pointPredicateResult";
 import { wrapSet } from "common/generic/setUtils";
 
-export const onePairSubPredicate : PointPredicate<StandardWinningHand> = createPairQuantityPredicate(PointPredicateID.SUBPREDICATE_ONE_PAIR, 1, 1);
 export const atLeastFourChowsSubPredicate : PointPredicate<StandardWinningHand> = createChowMinQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CHOWS, 4);
 export const atLeastFourKongsSubPredicate : PointPredicate<StandardWinningHand> = createKongMinQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_KONGS, 4);
 export const atLeastFourPongsKongsSubPredicate : PointPredicate<StandardWinningHand> = createMeldCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_PONGS_AND_KONGS, meld => meldIsKong(meld) || meldIsPong(meld), 4);

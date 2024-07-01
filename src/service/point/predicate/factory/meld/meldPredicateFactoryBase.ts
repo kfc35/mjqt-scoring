@@ -12,12 +12,13 @@ export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatc
         const [indicesSubsets, meldFoundMatch] = getMatchingIndicesSubsetsIgnoreExposed(winningHand.getMelds(), meldsToMatch);
 
         if ([...indicesSubsets].every(pairIndices => pairIndices.size >= numMinMatches)) {
-            return new PointPredicateResult(pointPredicateID, true, [meldsToMatch.map(pair => pair.tiles)], [], indicesSubsets, []);
+            return new PointPredicateResult(pointPredicateID, true, [meldsToMatch.map(pair => pair.tiles)], [], [], indicesSubsets, []);
         }
         
         const successTiles : Tile[][][] = 
             [...indicesSubsets].map((indicesSubset) => getTilesFromMeldsAndIndices(winningHand.getMelds(), indicesSubset));
-        return new PointPredicateResult(pointPredicateID, false, successTiles, getTilesFromMeldsAndIncludeFlagArray(meldsToMatch, meldFoundMatch), 
+        // TODO missingTiles
+        return new PointPredicateResult(pointPredicateID, false, successTiles, getTilesFromMeldsAndIncludeFlagArray(meldsToMatch, meldFoundMatch), [], 
         indicesSubsets, []);
     }
 }
@@ -31,15 +32,15 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
     return (winningHand : StandardWinningHand) => {
         const [successTiles, failedTiles, passingIndices] = checkMelds(winningHand.getMelds().map((meld, index) => [meld, index]), meldChecker);
         if (!numMinMeldsPass && !numMaxMeldsPass && failedTiles.length > 0) {
-            return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
+            return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
         } else if (!numMinMeldsPass && !numMaxMeldsPass) {
-            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], wrapSet(passingIndices), []);
+            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], [], wrapSet(passingIndices), []);
         }
 
         if ((!!numMinMeldsPass && successTiles.length >= numMinMeldsPass) && (!!numMaxMeldsPass && successTiles.length <= numMaxMeldsPass)) {
-            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], wrapSet(passingIndices), []);
+            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], [], wrapSet(passingIndices), []);
         }
-        return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
+        return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
     }
 }
 
@@ -60,13 +61,13 @@ export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredic
         if (meldsChecker(filteredMelds.map(([meld,]) => meld))) {
             const [successTiles, failedTiles, passingIndices] = checkMelds(filteredMelds, filteredMeldChecker);
             if (failedTiles.length === 0) {
-                return new PointPredicateResult(pointPredicateID, true, [successTiles], [], wrapSet(passingIndices), []);
+                return new PointPredicateResult(pointPredicateID, true, [successTiles], [], [], wrapSet(passingIndices), []);
             } else {
-                return new PointPredicateResult(pointPredicateID, false, [], failedTiles, wrapSet(passingIndices), []);
+                return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
             }
         } else { // the entire melds array failed the check, so consider all the melds to be failed tiles.
             const tiles = toTiles(filteredMelds.map(([meld,]) => meld));
-            return new PointPredicateResult(pointPredicateID, false, [], tiles, new Set(), []);
+            return new PointPredicateResult(pointPredicateID, false, [], tiles, [], new Set(), []);
         }
     }
 }

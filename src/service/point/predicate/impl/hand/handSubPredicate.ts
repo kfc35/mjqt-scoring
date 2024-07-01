@@ -19,11 +19,11 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
     (standardWinningHand: StandardWinningHand) => {
         const winningMeld : Meld = standardWinningHand.meldWithWinningTile;
         if (!standardWinningHand.isSelfDrawn() && meldIsPair(winningMeld)) {
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
         } else if (standardWinningHand.isSelfDrawn()) { 
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR, true, [[[standardWinningHand.winningTile]]], [], new Set(), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR, true, [[[standardWinningHand.winningTile]]], [], [], new Set(), []);
         } else { // last tile was discard but winning meld is not a pair
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], new Set(), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], [], new Set(), []);
         }
     };
 
@@ -31,11 +31,11 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
     (standardWinningHand: StandardWinningHand) => {
         const winningMeld : Meld = standardWinningHand.meldWithWinningTile;
         if (standardWinningHand.isSelfDrawn() && meldIsPair(winningMeld) ) {
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
         } else if (!standardWinningHand.isSelfDrawn()) { // winning tile is not self drawn
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR, true, [[[standardWinningHand.winningTile]]], [], new Set(), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR, true, [[[standardWinningHand.winningTile]]], [], [], new Set(), []);
         } else { // last tile was self drawn but winning meld is not a pair
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], new Set(), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], [], new Set(), []);
         }
     };
 
@@ -43,8 +43,8 @@ export const lastTileCompletedPairSubPredicate : PointPredicate<StandardWinningH
     (standardWinningHand: StandardWinningHand) => {
         const winningMeld: Meld = standardWinningHand.meldWithWinningTile;
         if (meldIsPair(winningMeld)) {
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR, true, [[[...winningMeld.tiles]]], [], [], wrapSet(new Set([standardWinningHand.meldWithWinningTileIndex])), []);
         } else {
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], new Set(), []);
+            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR, false, [], [[...winningMeld.tiles]], [], new Set(), []);
     }
 };

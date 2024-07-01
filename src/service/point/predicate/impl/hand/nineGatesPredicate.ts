@@ -27,7 +27,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWin
             }
             if (!suitedTilesAreAllSameSuit(suitedTiles)) {
                 return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], separateTilesByGroup(suitedTiles), new Set(), []);
+                    false, [], separateTilesByGroup(suitedTiles), [], new Set(), []);
             }
 
             if (stv === SuitedTileValue.ONE || stv === SuitedTileValue.NINE) {
@@ -37,11 +37,11 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWin
                 const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
                 const missingTiles: SuitedTile[] = [...suitedTileGroups].map(stg => constructSuitedTile(stg, stv));
                 return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], [missingTiles], new Set(), []);
+                    false, [], [], [missingTiles], new Set(), []);
             }
             if (suitedTiles.length < minimumRequiredSuitedTileLength) {
                 return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], [suitedTiles], new Set(), []);
+                    false, [], [suitedTiles], [], new Set(), []);
             } else if (suitedTiles.length === minimumRequiredSuitedTileLength) {
                 tilesOrderedBySTV.push(suitedTiles);
             } else if (suitedTiles.length === (minimumRequiredSuitedTileLength + 1)) {
@@ -50,27 +50,27 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWin
                 tilesOrderedBySTV.push(suitedTiles);
             } else {
                 return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], [suitedTiles], new Set(), []);
+                    false, [], [suitedTiles], [], new Set(), []);
             }
         }
 
         if (extraTile.length > 1) {
             return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                false, [], [extraTile], new Set(), []);
+                false, [], [extraTile], [], new Set(), []);
         }
         if (extraTile.length < 1) {
             const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
             const missingTiles: SuitedTile[][] = [...suitedTileGroups].map(stg => (suitedTileValues.map(stv => constructSuitedTile(stg, stv))));
             return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                false, [], missingTiles, new Set(), []);
+                false, [], [], missingTiles, new Set(), []);
         }
 
         return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-            true, [[...tilesOrderedBySTV, extraTile]], [], wrapSet(getAllIndicesSet(standardWinningHand.getMelds())), []);
+            true, [[...tilesOrderedBySTV, extraTile]], [], [], wrapSet(getAllIndicesSet(standardWinningHand.getMelds())), []);
     }
 
 export const NINE_GATES_PREDICATE : PointPredicate<StandardWinningHand> = 
     predicateAnd(PointPredicateID.NINE_GATES, ALL_ONE_SUIT_PREDICATE_STANDARD, 
         sufficientTileQuantitiesNineGatesSubPredicate,
-        atLeastFourConcealedMeldsSubPredicate, // winning tile can be discard.
+        atLeastFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld
         onePairSubPredicate);

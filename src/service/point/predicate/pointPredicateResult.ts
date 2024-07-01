@@ -12,12 +12,13 @@ export default class PointPredicateResult {
      */
     private _successTiles: Tile[][][];
     /**
-     * If _failureTiles is non-empty, _failureTiles contains the tiles that violate the predicate, 
-     * whether because they exist in the hand or because the hand lacks them, depending on the predicate definition.
-     * _failureTiles may be empty even if _success = false (e.g. hands that require a min. number of chows)
+     * If _failureTiles is non-empty, _failureTiles contains the tiles that violate the predicate because they exist in the hand.
      * It is not wrapped in another [] because a violation of a predicate applies across the whole hand, no matter how it is arranged.
      */
     private _failureTiles: Tile[][];
+
+    // If _missingTiles is non-empty, _missingTiles contains tiles the hand lacks to pass the given predicate.
+    private _missingTiles: Tile[][];
     /** 
      * If success = true, the subsets of meld indices in the hand that satisfy this point predicate.
      * If success = false, the subsets of meld indices that only partially satisfy the predicate.
@@ -34,12 +35,14 @@ export default class PointPredicateResult {
         success: boolean, 
         successTiles: Tile[][][], 
         failureTiles: Tile[][], 
+        missingTiles: Tile[][],
         matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>,
         subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
         this._successTiles = successTiles;
         this._failureTiles = failureTiles;
+        this._missingTiles = missingTiles;
         this._matchedMeldIndicesSubsets = matchedMeldIndicesSubsets;
         this._subPredicateResults = subPredicateResults ?? [];
     }
@@ -60,6 +63,10 @@ export default class PointPredicateResult {
         return this._failureTiles;
     }
 
+    get missingTiles(): Tile[][] {
+        return this._missingTiles;
+    }
+
     get matchedMeldIndicesSubsets(): ReadonlySet<ReadonlySet<number>> {
         return this._matchedMeldIndicesSubsets;
     }
@@ -72,11 +79,11 @@ export default class PointPredicateResult {
         const andPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_&&_" + pointPredicateId))})`;
         for (const result of results) {
             if (!result.success) {
-                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.successTiles, result._failureTiles, result._matchedMeldIndicesSubsets, [result]);
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.successTiles, result._failureTiles, result._missingTiles, result._matchedMeldIndicesSubsets, [result]);
             }
         }
         // all success, results have better detail on success/failure tiles
-        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], [], new Set(), [...results]);
+        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], [], [], new Set(), [...results]);
     }
 
     and(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
@@ -87,11 +94,11 @@ export default class PointPredicateResult {
         const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
         for (const result of results) {
             if (result.success) {
-                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.successTiles, result.failureTiles, result._matchedMeldIndicesSubsets, [result]);
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.successTiles, result.failureTiles, result.missingTiles, result._matchedMeldIndicesSubsets, [result]);
             }
         }
         // all unsuccessful, results have better detail on success/failure tiles
-        return new PointPredicateResult(orPointPredicateId, false, [], [], new Set(), [...results]);
+        return new PointPredicateResult(orPointPredicateId, false, [], [], [], new Set(), [...results]);
     }
 
     or(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {

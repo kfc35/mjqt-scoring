@@ -8,29 +8,29 @@ import { FlowerTile } from "model/tile/group/flowerTile";
 import { GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
 
 export const SEAT_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 
-    (winningHand: WinningHand, _winContext: WinContext, roundContext: RoundContext) => {
-        const gentlemanTileToFind = roundContext.getSeatWindAsGentlemanTile();
+    (winningHand: WinningHand, _winCtx: WinContext, roundCtx: RoundContext) => {
+        const gentlemanTileToFind = roundCtx.getSeatWindAsGentlemanTile();
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SEAT_GENTLEMAN, 
             filterFlowerTiles(winningHand.flowerTiles, [gentlemanTileToFind]).length > 0, [[gentlemanTileToFind]]);
     }
 
 export const SEAT_SEASON_PREDICATE : PointPredicate<WinningHand> = 
-    (winningHand: WinningHand, _winContext: WinContext, roundContext: RoundContext) => {
-        const seasonTileToFind = roundContext.getSeatWindAsSeasonTile();
+    (winningHand: WinningHand, _winCtx: WinContext, roundCtx: RoundContext) => {
+        const seasonTileToFind = roundCtx.getSeatWindAsSeasonTile();
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SEAT_SEASON, 
             filterFlowerTiles(winningHand.flowerTiles, [seasonTileToFind]).length > 0, [[seasonTileToFind]]);
     }
 
 export const PREVAILING_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 
-    (winningHand: WinningHand, _winContext: WinContext, roundContext: RoundContext) => {
-        const gentlemanTileToFind = roundContext.getPrevailingWindAsGentlemanTile();
+    (winningHand: WinningHand, _winCtx: WinContext, roundCtx: RoundContext) => {
+        const gentlemanTileToFind = roundCtx.getPrevailingWindAsGentlemanTile();
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.PREVAILING_GENTLEMAN, 
             filterFlowerTiles(winningHand.flowerTiles, [gentlemanTileToFind]).length > 0, [[gentlemanTileToFind]]);
     }
 
 export const PREVAILING_SEASON_PREDICATE : PointPredicate<WinningHand> = 
-    (winningHand: WinningHand, _winContext: WinContext, roundContext: RoundContext) => {
-        const seasonTileToFind = roundContext.getPrevailingWindAsSeasonTile();
+    (winningHand: WinningHand, _winContext: WinContext, roundCtx: RoundContext) => {
+        const seasonTileToFind = roundCtx.getPrevailingWindAsSeasonTile();
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.PREVAILING_SEASON, 
             filterFlowerTiles(winningHand.flowerTiles, [seasonTileToFind]).length > 0, [[seasonTileToFind]]);
     }

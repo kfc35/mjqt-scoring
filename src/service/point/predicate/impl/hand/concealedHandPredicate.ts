@@ -24,30 +24,30 @@ export const atLeastFourConcealedMeldsSubPredicate : PointPredicate<StandardWinn
     (meld) => !meld.exposed, (melds) => melds.length >= 4, () => true);
 
 export const SELF_TRIPLETS : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {
+    (standardWinningHand: StandardWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.SELF_TRIPLETS_ONLY_PONGS_ALLOWED)) {
             return PointPredicateResult.and(PointPredicateID.SELF_TRIPLETS,
-                onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
-                atLeastFourConcealedPongsSubPredicate(standardWinningHand, winContext, roundContext, config));
+                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
+                atLeastFourConcealedPongsSubPredicate(standardWinningHand, winCtx, roundCtx, config));
         } else {
             return PointPredicateResult.and(PointPredicateID.SELF_TRIPLETS,
-                onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
-                atLeastFourConcealedPongsKongsSubPredicate(standardWinningHand, winContext, roundContext, config));
+                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
+                atLeastFourConcealedPongsKongsSubPredicate(standardWinningHand, winCtx, roundCtx, config));
         }
     };
 
 export const CONCEALED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {
+    (standardWinningHand: StandardWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.CONCEALED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             return PointPredicateResult.and(PointPredicateID.CONCEALED_HAND,
-                atLeastFourConcealedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
-                onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
-                ifLastTileWasDiscardThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, config));
+                atLeastFourConcealedNonPairMeldsSubPredicate(standardWinningHand, winCtx, roundCtx, config),
+                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
+                ifLastTileWasDiscardThenItCompletedPairSubPredicate(standardWinningHand, winCtx, roundCtx, config));
         } else { // last discarded tile can complete any meld
             return PointPredicateResult.and(PointPredicateID.CONCEALED_HAND,
                 // pair can count as one of the concealed melds
-                atLeastFourConcealedMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
-                onePairSubPredicate(standardWinningHand, winContext, roundContext, config));
+                atLeastFourConcealedMeldsSubPredicate(standardWinningHand, winCtx, roundCtx, config),
+                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config));
         }
     };
 

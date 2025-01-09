@@ -8,7 +8,8 @@ import { predicateAnd } from "service/point/predicate/pointPredicate";
 
 const winningTileIsOneCircleSubPredicate : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {
-        return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_ONE_CIRCLE, ONE_CIRCLE.equals(winningHand.winningTile), [[winningHand.winningTile]]);
+        return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_ONE_CIRCLE, 
+            ONE_CIRCLE.equals(winningHand.winningTile), [[winningHand.winningTile]]);
     }
 
 export const MOON_FROM_THE_BOTTOM_OF_THE_SEA_PREDICATE : PointPredicate<WinningHand> = 

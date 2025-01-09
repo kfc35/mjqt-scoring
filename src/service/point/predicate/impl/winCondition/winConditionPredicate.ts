@@ -10,11 +10,6 @@ export const SELF_DRAW_PREDICATE : PointPredicate<WinningHand> =
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SELF_DRAW, winningHand.isSelfDrawn(), [[winningHand.winningTile]]);
     }
 
-export const notSelfDrawSubPredicate : PointPredicate<WinningHand> = 
-    (winningHand: WinningHand) => {
-        return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW, !winningHand.isSelfDrawn(), [[winningHand.winningTile]]);
-    }
-
 export const LAST_OF_ITS_KIND_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand, winContext: WinContext) => {
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.LAST_OF_ITS_KIND, winContext.mostRecentTileIsLastOfItsKind, [[winningHand.winningTile]]);

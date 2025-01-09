@@ -1,8 +1,23 @@
 import { Tile } from "model/tile/tile";
 
+export enum PointPredicateResultCode {
+    SUCCESS = 'SUCCESS',
+    IGNORED_NON_REPEAT_PRINCIPLE = 'IGNORED_NON_REPEAT_PRINCIPLE', // included by another result
+    IGNORED_NON_IDENTICAL_PRINCIPLE = 'IGNORED_NON_IDENTICAL_PRINCIPLE',
+    IGNORED_EXCLUSIONARY_PRINCIPLE = 'IGNORED_EXCLUSIONARY_PRINCIPLE',
+    IGNORED_CONDITION_NOT_APPLICABLE = 'IGNORED_CONDITION_NOT_APPLICABLE', // the "if" part of "if...then predicate " is false.
+    FAILURE = 'FAILURE',
+    FAILURE_IGNORED = 'FAILURE_IGNORED',
+}
+
+// PointPredicateSuccessResult, PointPredicateSuccessIgnoredResult, PointPredicateFailureResult
+// DISABLED just doesnt show up as a result
+// predicates can return a list of results. that list can be empty if disabled. can have multiple success results if multiple subsets count.
+
 export default class PointPredicateResult {
     private _pointPredicateId: string;
     private _success: boolean;
+    private _ignored: boolean; // TODO the reason it was ignored?
     /** 
      * if success = true, successTiles contains all the tiles in the hand that satisfied the predicate.
      * if success = false, successTiles contains tiles in the hand that partially satisfied the predicate.
@@ -29,6 +44,7 @@ export default class PointPredicateResult {
      * _successTiles is derived from these subsets for StandardWinningHands.
     */
     private _matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>;
+    //private _failureMeldIndices: ReadonlySet<number>;
     private _subPredicateResults: PointPredicateResult[];
 
     constructor(pointPredicateId: string, 
@@ -37,13 +53,16 @@ export default class PointPredicateResult {
         failureTiles: Tile[][], 
         missingTiles: Tile[][],
         matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>,
+        //failureMeldIndices: ReadonlySet<number>,
         subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
+        this._ignored = false;
         this._successTiles = successTiles;
         this._failureTiles = failureTiles;
         this._missingTiles = missingTiles;
         this._matchedMeldIndicesSubsets = matchedMeldIndicesSubsets;
+        //this._failureMeldIndices = failureMeldIndices;
         this._subPredicateResults = subPredicateResults ?? [];
     }
 
@@ -53,6 +72,14 @@ export default class PointPredicateResult {
 
     get success(): boolean {
         return this._success;
+    }
+
+    get ignored(): boolean {
+        return this._ignored;
+    }
+
+    set ignored(ignored: boolean) {
+        this._ignored = ignored;
     }
 
     get successTiles(): Tile[][][] {
@@ -68,6 +95,10 @@ export default class PointPredicateResult {
     }
 
     get matchedMeldIndicesSubsets(): ReadonlySet<ReadonlySet<number>> {
+        return this._matchedMeldIndicesSubsets;
+    }
+
+    get failureMeldIndicesSubsets(): ReadonlySet<ReadonlySet<number>> {
         return this._matchedMeldIndicesSubsets;
     }
 
@@ -104,4 +135,16 @@ export default class PointPredicateResult {
     or(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
         return PointPredicateResult.or(newPointPredicateId, this, ...otherResults);
     }
+}
+
+export function createPointPredicateSuccessResult(pointPredicateId: string,
+    successTiles: Tile[][][], matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>,
+    subPredicateResults?: PointPredicateResult[]) {
+    return new PointPredicateResult(pointPredicateId, true, successTiles, [], [], matchedMeldIndicesSubsets, subPredicateResults);
+}
+
+export function createPointPredicateFailureResult(pointPredicateId: string,
+    failureTiles: Tile[][], missingTiles: Tile[][], 
+    subPredicateResults?: PointPredicateResult[]) {
+    return new PointPredicateResult(pointPredicateId, false, [], failureTiles, missingTiles, new Set(), subPredicateResults);
 }

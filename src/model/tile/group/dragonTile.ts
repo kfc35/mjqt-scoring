@@ -15,5 +15,5 @@ export default class DragonTile extends Tile {
 }
 
 export function isDragonTile(tile: Tile): tile is DragonTile {
-    return (ile.group === TileGroup.DRAGON && isDragonTileValue(tile.value)
+    return tile.group === TileGroup.DRAGON && isDragonTileValue(tile.value);
 }

@@ -12,6 +12,6 @@ export function addToMapValueSet<K, V>(map: Map<K, Set<V>>, key: K, ...values: V
     if (set) {
         values.forEach(value => set.add(value));
     } else {
-        map.set(key, new Set([...values]));
+        map.set(key, new Set(values));
     }
 }

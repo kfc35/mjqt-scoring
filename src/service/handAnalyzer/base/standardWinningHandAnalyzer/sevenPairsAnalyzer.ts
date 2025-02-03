@@ -16,6 +16,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
         if (hand.getQuantityPerUniqueTile().every(quantity => quantity % 2 === 0)) {
             const melds : Meld[] = [];
             let winningPair : Pair | undefined = undefined;
+            let winningMeldIndex : number = -1;
             for (const [quantity, tileArray] of hand.getQuantityToTileMap().entries()) {
                 if (quantity === 2) {
                     for (const tile of tileArray) {
@@ -23,6 +24,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
                             if (hand.mostRecentTile().equals(tile)) {
                                 winningPair = new Pair(tile, !hand.mostRecentTileIsSelfDrawn);
                                 melds.push(winningPair);
+                                winningMeldIndex = melds.length - 1;
                             } else {
                                 melds.push(new Pair(tile));
                             }
@@ -36,6 +38,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
                             if (hand.mostRecentTile().equals(tile)) {
                                 winningPair = new Pair(tile, !hand.mostRecentTileIsSelfDrawn);
                                 melds.push(winningPair);
+                                winningMeldIndex = melds.length - 1;
                             } else {
                                 melds.push(new Pair(tile));
                             }
@@ -51,7 +54,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
             if (!meldsAreSubset(melds, hand.userSpecifiedMelds, false)) {
                 return [];
             }
-            return [new StandardWinningHand(melds, winningPair.clone(hand.mostRecentTileIsSelfDrawn()), 
+            return [new StandardWinningHand(melds, winningMeldIndex, 
                 hand.mostRecentTile(), hand.flowerTiles)];
         }
         return [];

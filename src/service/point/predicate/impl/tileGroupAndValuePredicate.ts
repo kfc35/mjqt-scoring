@@ -32,7 +32,7 @@ function handContainsOneSuitSubPredicate(winningHand: WinningHand, wrappedSuited
     if (suitedTileGroups.size === 1) {
         return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT, true, [tilesSepBySuit], [], [], wrappedSuitedTileIndicesSet, []);
     } else {
-        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT, false, [], [], SUITED_TILES, new Set(), []);
+        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT, false, [], [], [SUITED_TILES], new Set(), []);
     }
 }
 
@@ -76,7 +76,7 @@ function handContainsHonorsSubPredicate(winningHand: WinningHand, wrappedHonorTi
     if (honorTileGroups.size > 0) {
         return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS, true, [honorTiles], [], [], wrappedHonorTileIndicesSet, []);
     } else {
-        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS, false, [], [], HONOR_TILES, new Set(), []);
+        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS, false, [], [], [HONOR_TILES], new Set(), []);
     }
 }
 

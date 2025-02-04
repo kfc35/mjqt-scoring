@@ -8,7 +8,7 @@ export default class Kong extends Meld {
 
     constructor(tile: SuitedOrHonorTile, exposed: boolean = false) {
         assertTileSuitedOrHonor(tile);
-        super([tile.copy(), tile.copy(), tile.copy(), tile.copy()], MeldType.KONG, exposed);
+        super([tile.clone(), tile.clone(), tile.clone(), tile.clone()], MeldType.KONG, exposed);
     }
 
     clone(exposedOverride? : boolean) {

@@ -9,7 +9,7 @@ export default class SeasonTile extends Tile {
         super(TileGroup.SEASON, value);
     }
 
-    copy(): SeasonTile {
+    clone(): SeasonTile {
         return new SeasonTile(this._value);
     }
 }

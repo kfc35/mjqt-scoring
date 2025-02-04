@@ -7,7 +7,7 @@ export default class CircleTile extends SuitedTile {
         super(TileGroup.CIRCLE, value);
     }
 
-    copy(): CircleTile {
+    clone(): CircleTile {
         return new CircleTile(this._value);
     }
 }

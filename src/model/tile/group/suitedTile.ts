@@ -15,7 +15,7 @@ export default abstract class SuitedTile extends Tile {
             this._value.valueOf() + 1 === otherTile.value.valueOf();
     }
 
-    abstract override copy() : SuitedTile;
+    abstract override clone() : SuitedTile;
 
     override get group(): SuitedTileGroup {
         return this._group;

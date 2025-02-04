@@ -12,7 +12,7 @@ export default class Chow extends Meld {
             throw new Error('A chow must be either all the same suit or knitted (all different suites)');
         }
         
-        const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].copy(), tiles[1].copy(), tiles[2].copy()];
+        const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].clone(), tiles[1].clone(), tiles[2].clone()];
         tilesCopy.sort(function(tile1: SuitedTile, tile2: SuitedTile){
             return tile1.compareToValueOnly(tile2);
         });

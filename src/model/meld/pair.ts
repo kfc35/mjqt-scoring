@@ -11,7 +11,7 @@ export default class Pair extends Meld {
 
     constructor(tile: SuitedOrHonorTile, exposed : boolean = false) {
         assertTileSuitedOrHonor(tile);
-        super([tile.copy(), tile.copy()], MeldType.PAIR, exposed);
+        super([tile.clone(), tile.clone()], MeldType.PAIR, exposed);
     }
 
     clone(exposedOverride? : boolean) {

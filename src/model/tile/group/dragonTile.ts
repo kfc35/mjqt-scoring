@@ -9,7 +9,7 @@ export default class DragonTile extends Tile {
         super(TileGroup.DRAGON, value);
     }
 
-    copy(): DragonTile {
+    clone(): DragonTile {
         return new DragonTile(this._value);
     }
 }

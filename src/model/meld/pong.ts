@@ -8,7 +8,7 @@ export default class Pong extends Meld {
 
     constructor(tile: SuitedOrHonorTile, exposed: boolean = false) {
         assertTileSuitedOrHonor(tile);
-        super([tile.copy(), tile.copy(), tile.copy()], MeldType.PONG, exposed);
+        super([tile.clone(), tile.clone(), tile.clone()], MeldType.PONG, exposed);
     }
 
     clone(exposedOverride? : boolean) {

@@ -7,7 +7,7 @@ export default class CharacterTile extends SuitedTile {
         super(TileGroup.CHARACTER, value);
     }
 
-    copy(): CharacterTile {
+    clone(): CharacterTile {
         return new CharacterTile(this._value);
     }
 }

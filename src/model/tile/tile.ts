@@ -46,6 +46,5 @@ export abstract class Tile {
         return this._value < otherTile.value ? -1 : +1
     }
     
-    // TODO rename to clone
-    abstract copy(): Tile;
+    abstract clone(): Tile;
 }

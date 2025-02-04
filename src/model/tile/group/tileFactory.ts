@@ -9,6 +9,7 @@ import WindTile from "model/tile/group/windTile";
 import GentlemanTile from "model/tile/group/gentlemanTile";
 import SeasonTile from "model/tile/group/seasonTile";
 
+// Use this constructor if you do not need the more specific subtype of Tile
 export function constructTile(group: TileGroup, value: TileValue) : Tile {
     switch (group) {
         case TileGroup.BAMBOO:

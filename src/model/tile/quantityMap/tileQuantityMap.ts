@@ -77,7 +77,7 @@ export class TileToQuantityMap {
         .reduce<number>((sum, quantity) => sum + quantity, 0);
     }
 
-    getQuantityToTileMap(includeFlowerTiles?: boolean) : ReadonlyMap<number, Tile[]> {
+    getNonZeroQuantityToTileMap(includeFlowerTiles?: boolean) : ReadonlyMap<number, Tile[]> {
         const invertedMap = new Map<number, Tile[]>();
         for (const [tileGroup, innerMap] of this._tileToQuantityMap.entries()) {
             if (!(includeFlowerTiles ?? false) && flowerTileGroups.has(tileGroup)) {
@@ -89,7 +89,7 @@ export class TileToQuantityMap {
                 if (tileArray) {
                     if (tilesDoesNotContainTile(tileArray, tile)) {
                         tileArray.push(tile);
-                    } // else no-op, array already containes tile.
+                    } // else no-op, array already containes tile. this should not happen.
                 } else {
                     invertedMap.set(quantity, [tile]);
                 }

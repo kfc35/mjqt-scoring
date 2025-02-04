@@ -9,6 +9,7 @@ import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, Su
 
 export const maxQuantityPerNonFlowerTile = 4;
 export const maxQuantityPerFlowerTile = 1;
+// This does not use the tile constructor so that they are at their narrowest type.
 export const 
     PLUM_GENTLEMAN = new GentlemanTile(GentlemanTileValue.PLUM),
     ORCHID_GENTLEMAN = new GentlemanTile(GentlemanTileValue.ORCHID),

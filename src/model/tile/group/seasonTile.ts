@@ -1,6 +1,6 @@
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
-import { SeasonTileValue } from "model/tile/tileValue";
+import { isSeasonTileValue, SeasonTileValue } from "model/tile/tileValue";
 
 export default class SeasonTile extends Tile {
     declare protected _value: SeasonTileValue;
@@ -12,4 +12,8 @@ export default class SeasonTile extends Tile {
     clone(): SeasonTile {
         return new SeasonTile(this._value);
     }
+}
+
+export function isSeasonTile(tile: Tile): tile is SeasonTile {
+    return tile.group === TileGroup.SEASON && isSeasonTileValue(tile.value);
 }

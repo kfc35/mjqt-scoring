@@ -27,7 +27,7 @@ export default abstract class SuitedTile extends Tile {
 }
 
 export type SuitedTileGroup = TileGroup.BAMBOO | TileGroup.CHARACTER | TileGroup.CIRCLE;
-export const suitedTileGroups = [TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE] as const;
+export const suitedTileGroups: ReadonlySet<SuitedTileGroup> = new Set([TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE]);
 export function isSuitedTileGroup(tileGroup: TileGroup) : tileGroup is SuitedTileGroup {
     return tileGroup === TileGroup.BAMBOO || tileGroup === TileGroup.CHARACTER || tileGroup === TileGroup.CIRCLE;
 }

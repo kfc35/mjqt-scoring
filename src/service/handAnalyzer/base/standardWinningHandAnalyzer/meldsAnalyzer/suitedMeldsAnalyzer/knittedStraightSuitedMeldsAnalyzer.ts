@@ -4,7 +4,7 @@ import { oneFourSeven, twoFiveEight, threeSixNine} from "model/tile/tileValue";
 import { type SuitedTileGroup, suitedTileGroups } from "model/tile/group/suitedTile";
 import Chow from "model/meld/chow";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
-import { TileGroup } from "model/tile/tileGroup";
+import { getOnlyTruthyElement } from "common/generic/setUtils";
 
 export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
     for (const firstSuitedTileGroup of suitedTileGroups) {
@@ -45,10 +45,11 @@ function getLastSuitedTileGroup(firstSuitedTileGroup: SuitedTileGroup, secondSui
     if (firstSuitedTileGroup === secondSuitedTileGroup) {
         throw new Error('Suited tile groups must be different from each other.');
     }
-    const suitedTileGroupsCopy: [TileGroup.BAMBOO, TileGroup.CHARACTER, TileGroup.CIRCLE] = [...suitedTileGroups];
-    suitedTileGroupsCopy.splice(suitedTileGroupsCopy.indexOf(firstSuitedTileGroup), 1);
-    suitedTileGroupsCopy.splice(suitedTileGroupsCopy.indexOf(secondSuitedTileGroup), 1);
-    return suitedTileGroupsCopy[0];
+    const suitedTileGroupsCopy = new Set(suitedTileGroups);
+    suitedTileGroupsCopy.delete(firstSuitedTileGroup);
+    suitedTileGroupsCopy.delete(secondSuitedTileGroup);
+    // there should only be one element left.
+    return getOnlyTruthyElement(suitedTileGroupsCopy);
 }
 
 function tileQuantitiesGreaterThanZero(hand: Hand, tileGroup: SuitedTileGroup, suitedTileValues: typeof oneFourSeven | typeof twoFiveEight | typeof threeSixNine): boolean {

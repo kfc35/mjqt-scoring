@@ -120,7 +120,7 @@ export class Hand {
     }
 
     getQuantityToTileMap(includeFlowerTiles?: boolean) : ReadonlyMap<number, Tile[]> {
-        return this._tileToQuantity.getQuantityToTileMap(includeFlowerTiles);
+        return this._tileToQuantity.getNonZeroQuantityToTileMap(includeFlowerTiles);
     }
 
     get flowerTiles() {

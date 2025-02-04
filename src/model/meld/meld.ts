@@ -6,17 +6,14 @@ export default abstract class Meld {
     protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]];
     protected _type: MeldType;
     /*  _exposed = false if the meld was completed without the need of a discard.
-        _exposed = true if a discard was used to complete it during regular play.
-        If the last tile that completes your hand AND this meld is from a discard, 
-        _exposed is set to true. */
+        _exposed = true if a discard was used to complete the meld. 
+          Pairs can have _exposed = true (the pair was completed via discard to complete the hand) */
     protected _exposed: boolean;
 
-    constructor(tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]], type: MeldType, exposed: boolean = false) {
-        assertTilesSuitedOrHonor(tiles);
-        const tilesCopy : [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]] = [...tiles];
-        this._tiles = tilesCopy.sort(function(tile1: SuitedOrHonorTile, tile2: SuitedOrHonorTile){
-            return tile1.compareTo(tile2);
-        });
+    /** implementing classes should ensure that tiles are ordered in their desired way for comparisons (applies to chows) */
+    constructor(sortedTiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]], type: MeldType, exposed: boolean = false) {
+        assertTilesSuitedOrHonor(sortedTiles);
+        this._tiles = sortedTiles;
         this._type = type;
         this._exposed = exposed;
     }
@@ -50,16 +47,14 @@ export default abstract class Meld {
         if (this._tiles.length !== meld.tiles.length) {
             return false;
         }
-        // TODO this assumption is not necessarily true... tiles is sorted in both meld objects.
+        if (this._type !== meld.type) {
+            return false;
+        }
         if (!this._tiles.every((tile, index) => tile.equals(meld.tiles[index]))) {
             return false;
         }
-        return this._type === meld.type && ((ignoreExposed ?? true) || this._exposed === meld.exposed);
+        return ((ignoreExposed ?? true) || this._exposed === meld.exposed);
     }
-
-    // TODO meld ordering for lists to increase readability
-    // default sort by suit, then number ascending.
-    // can customize sort by exposed.
 
     abstract clone(exposedOverride? : boolean): Meld;
 

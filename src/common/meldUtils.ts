@@ -43,17 +43,13 @@ export function meldHasTile(meld: Meld, tile: Tile) : boolean {
 export function meldsAreSubset(melds: readonly Meld[], potentialSubset: readonly Meld[], ignoreExposed? : boolean) : boolean {
     const haystack = [...melds];
     for (const needle of potentialSubset) {
-        let found = false;
         for (let i = 0; i < haystack.length; i++) {
             if (needle.equals(haystack[i], ignoreExposed)) {
                 haystack.splice(i, 1);
-                found = true;
                 break;
             }
         }
-        if (!found) {
-            return false;
-        }
+        return false;
     }
     return true;
 }
@@ -94,17 +90,17 @@ export function meldExistsInMeldsIgnoreExposed(melds: readonly Meld[], meldToChe
     return meldExistsInMelds(melds, meldToCheck, true);
 }
 
-export function cartesianProduct(meldsOne: readonly Meld[][], meldsTwo: readonly Meld[][]) : Meld[][] {
-    if (meldsOne.length === 0) {
-        return [...meldsTwo]; // might also have length = 0, that is fine.
+export function cartesianProduct(listOfMeldsOne: readonly Meld[][], listOfMeldsTwo: readonly Meld[][]) : Meld[][] {
+    if (listOfMeldsOne.length === 0) {
+        return [...listOfMeldsTwo]; // might also have length = 0, that is fine.
     }
-    if (meldsTwo.length === 0) {
-        return [...meldsOne];
+    if (listOfMeldsTwo.length === 0) {
+        return [...listOfMeldsOne];
     }
     const product : Meld[][] = [];
-    for (const meldOne of meldsOne) {
-        for (const meldTwo of meldsTwo) {
-            product.push([...meldOne, ...meldTwo]);
+    for (const meldsOne of listOfMeldsOne) {
+        for (const meldsTwo of listOfMeldsTwo) {
+            product.push([...meldsOne, ...meldsTwo]);
         }
     }
     return product;

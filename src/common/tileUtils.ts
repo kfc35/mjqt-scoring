@@ -29,7 +29,7 @@ export function assertTilesHaveSameSuitedGroup(tiles: Tile[]): tiles is SuitedTi
 
 export function assertTilesSuitedOrHonor(tiles: Tile[]): tiles is SuitedOrHonorTile[] {
     if (!tiles.every(tile => isSuitedOrHonorTile(tile))) {
-        throw new Error("Tiles must be of type SuitedOrHonorTile."); 
+        throw new Error("Tiles must only contain SuitedOrHonorTiles."); 
     }
     return true;
 }
@@ -43,7 +43,7 @@ export function assertTileSuitedOrHonor(tile: Tile): tile is SuitedOrHonorTile {
 
 export function assertTilesFlower(tiles: Tile[]): tiles is FlowerTile[] {
     if (!tiles.every(tile => isFlowerTile(tile))) {
-        throw new Error("Tiles must be of type FlowerTile."); 
+        throw new Error("Tiles must only contain FlowerTiles."); 
     }
     return true;
 }
@@ -57,7 +57,7 @@ export function assertTileFlower(tile: Tile): tile is FlowerTile {
 
 export function assertTilesHongKongTile(tiles: Tile[]): tiles is HongKongTile[] {
     if (!tiles.every(tile => isHongKongTile(tile))) {
-        throw new Error("Tiles must be of type HongKongTile."); 
+        throw new Error("Tiles must only contain HongKongTiles."); 
     }
     return true;
 }
@@ -89,7 +89,7 @@ export function assertEachTileHasQuantityLTEMaxPerTile(tiles: SuitedOrHonorTile[
     }
 }
 
-export function tilesIsEmpty(tiles: Tile[][]): boolean {
+export function tilesListIsEmpty(tiles: Tile[][]): boolean {
     return tiles.length === 0 || // tiles = []
         (tiles.length === 1 && (!tiles[0] || (tiles[0].length === 0))); // tiles = [[]] or tiles = [undefined]
 }
@@ -99,7 +99,7 @@ export function suitedTilesAreAllSameSuit(tiles: SuitedTile[]): boolean {
     return tileGroups.size === 1;
 }
 
-export function separateTilesByGroup(tiles: Tile[]): Tile[][] {
+export function partitionTilesByGroup(tiles: Tile[]): Tile[][] {
     const tileGroupToTileMap : Map<TileGroup, Tile[]> = new Map();
     tiles.forEach(tile => {
         const tiles = tileGroupToTileMap.get(tile.group);

@@ -5,7 +5,7 @@ import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHa
 import { SuitedTileValue, suitedTileValues } from "model/tile/tileValue";
 import SuitedTile from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
-import { suitedTilesAreAllSameSuit, separateTilesByGroup } from "common/tileUtils";
+import { suitedTilesAreAllSameSuit, partitionTilesByGroup } from "common/tileUtils";
 import { ALL_ONE_SUIT_PREDICATE_STANDARD } from "service/point/predicate/impl/tileGroupAndValuePredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { wrapSet } from "common/generic/setUtils";
@@ -27,7 +27,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWin
             }
             if (!suitedTilesAreAllSameSuit(suitedTiles)) {
                 return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], separateTilesByGroup(suitedTiles), [], new Set(), []);
+                    false, [], partitionTilesByGroup(suitedTiles), [], new Set(), []);
             }
 
             if (stv === SuitedTileValue.ONE || stv === SuitedTileValue.NINE) {

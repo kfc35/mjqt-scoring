@@ -4,7 +4,7 @@ import { MeldType } from "model/meld/meldType";
 import { assertTileSuitedOrHonor } from "common/tileUtils";
 
 /**
- * Pairs can only be marked as "exposed" if they are completed via discard as your last set.
+ * Pairs can only be marked as "exposed" if they are completed via discard as your last meld.
  */
 export default class Pair extends Meld {
     declare protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile];

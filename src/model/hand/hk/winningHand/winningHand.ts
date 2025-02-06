@@ -5,8 +5,9 @@ import Meld from "model/meld/meld";
 import { TileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
 
 export interface WinningHand {
+    // TODO should we remove the meld stuff?
     getMelds() : ReadonlyArray<Meld>;
-    getTiles() : SuitedOrHonorTile[][];
+    getTiles() : ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>>;
     get tileGroupValueMaps() : TileGroupValueMaps;
     get meldWithWinningTileIndex() : number | undefined; // undefined for special only
     get winningTile() : SuitedOrHonorTile;

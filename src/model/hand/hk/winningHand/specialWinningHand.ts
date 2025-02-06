@@ -45,7 +45,7 @@ export class SpecialWinningHand implements WinningHand {
         return [];
     }
 
-    getTiles(): SuitedOrHonorTile[][] {
+    getTiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>>  {
         return this._tiles;
     }
 

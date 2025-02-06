@@ -30,17 +30,20 @@ export class StandardWinningHand implements WinningHand {
             throw new Error("melds must be of length 5 or 7");
         }
         // assert melds of size 7 means all melds are pairs.
-        if (this._melds.length !== 7 && this._melds.filter(meld => meldIsPair(meld)).length !== 7) {
+        if (this._melds.length === 7 && this._melds.filter(meld => meldIsPair(meld)).length !== 7) {
             throw new Error("melds of length 7 must be all pairs.");
         }
-        // assert melds of size 5 have at only one pair
-        if (this._melds.length !== 7 && this._melds.filter(meld => meldIsPair(meld)).length !== 1) {
+        // assert melds of size 5 have only one pair
+        if (this._melds.length === 5 && this._melds.filter(meld => meldIsPair(meld)).length !== 1) {
             throw new Error("melds of length 5 must have exactly one pair.");
         }
 
-        const meldWithWinningTile = melds[meldWithWinningTileIndex];
-        if (meldWithWinningTileIndex < 0 || meldWithWinningTileIndex >= melds.length || !meldWithWinningTile) {
+        if (meldWithWinningTileIndex < 0 || meldWithWinningTileIndex >= melds.length) {
             throw new Error("meldWithWinningTileIndex must be a valid index of melds.");
+        }
+        const meldWithWinningTile = melds[meldWithWinningTileIndex];
+        if (!meldWithWinningTile) {
+            throw new Error("meldWithWinningTileIndex must refer to a defined meld in melds.");
         }
         this._meldWithWinningTileIndex = meldWithWinningTileIndex;
 
@@ -63,7 +66,7 @@ export class StandardWinningHand implements WinningHand {
         return this._melds;
     }
 
-    getTiles(): SuitedOrHonorTile[][] {
+    getTiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>> {
         return this._melds.map(meld => meld.tiles);
     }
 

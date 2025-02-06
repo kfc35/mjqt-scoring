@@ -58,8 +58,8 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
 
             // the self drawn most recent tile could be used to complete this concealed meld. the meld may or may not be user specified.
             if (!meld.exposed && hand.mostRecentTileIsSelfDrawn()) {
-                // if the meld is user specified and does not want its tiles to be changed, return undefined.
-                if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false) && hand.lockConcealedSpecifiedMelds) {
+                // if the meld is user specified, return undefined.
+                if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false)) {
                     return undefined;
                 } else {
                     return new StandardWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
@@ -68,8 +68,8 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
 
             // the winning meld can be created via discard to make an exposed meld. the meld may or may not be user specified.
             if (!meld.exposed && !hand.mostRecentTileIsSelfDrawn()) { 
-                // if the meld is user specified and does not want its exposed status modified, return undefined.
-                if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false) && hand.lockConcealedSpecifiedMelds) {
+                // if the meld is user specified, return undefined.
+                if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false)) {
                     return undefined;
                 } else {
                     const exposedMeld : Meld = meld.clone(true);

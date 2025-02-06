@@ -18,22 +18,16 @@ export class Hand {
     private _tileToQuantity: TileToQuantityMap;
     private _mostRecentTileContext : MostRecentTileContext;
     /* userSpecifiedMelds are melds that must be present in every derived winning hand.
-       Exposed melds must exist exactly as they are specified.
-       Unexposed melds could become exposed as a result of the MostRecentTileContext. You can specify this behavior via lockConcealedSpecifiedMelds
+       Exposed melds, for example, must exist exactly as they are specified.
+       Users can optionally specify concealed melds, although it is not necessary.
        userSpecifiedMelds = [] means that there are no restrictions on any derived winning hands.
        If a userSpecifiedMeld is defined in mostRecentTileContext, it must also be present in userSpecifiedMelds.
-       The tiles in each meld must also be present in _tileToQuantity.    
     */ 
     private _userSpecifiedMelds: Meld[];
-    // Whether concealed specified melds can change depending on 
-    // where the most recent tile is placed (_mostRecentTileContext.userSpecifiedMeld must be undefined)
-    // The default is false in order to maximize point counting. 
-    // The melds might become exposed or the most recent tile may be inserted into them.
-    private _lockConcealedSpecifiedMelds: boolean;
     private _flowerTiles: FlowerTile[];
 
     constructor(tiles: HongKongTile[], mostRecentTileContext: MostRecentTileContext, 
-        userSpecifiedMelds?: Meld[], lockConcealedSpecifiedMelds: boolean = false) {
+        userSpecifiedMelds?: Meld[]) {
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLength);
         assertTilesHongKongTile(tiles)
 
@@ -88,7 +82,6 @@ export class Hand {
         this._tileToQuantity = tileToQuantity;
         this._mostRecentTileContext = mostRecentTileContext;
         this._userSpecifiedMelds = userSpecifiedMelds ?? [];
-        this._lockConcealedSpecifiedMelds = lockConcealedSpecifiedMelds;
     }
 
     get tileToQuantity() {
@@ -141,9 +134,5 @@ export class Hand {
 
     get userSpecifiedMelds() {
         return this._userSpecifiedMelds;
-    }
-
-    get lockConcealedSpecifiedMelds() {
-        return this._lockConcealedSpecifiedMelds
     }
 }

@@ -29,7 +29,7 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
         const meldTileQuantityMap = new TileToQuantityMap(meldTiles);
         return meldTiles.every(tile => meldTileQuantityMap.getQuantity(tile) === hand.getQuantity(tile))
     })
-    // if the hand has user specified melds, they must be present in the possible meld combo.
+    // if the hand has user specified melds, they must be present in all possible winning hands.
     .filter(melds => meldsAreSubset(melds, hand.userSpecifiedMelds, true))
     .map(melds => {
         const mostRecentTileUserSpecifiedMeld: Meld | undefined = hand.mostRecentTileUserSpecifiedMeld();

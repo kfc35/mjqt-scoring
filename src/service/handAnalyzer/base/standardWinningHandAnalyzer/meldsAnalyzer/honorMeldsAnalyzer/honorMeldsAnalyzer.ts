@@ -8,10 +8,9 @@ import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
-import { meldsAreSubset } from "common/meldUtils";
 import HonorTileValueQuantityMemo from "./honorTileValueQuantityMemo";
 
-/* This logic assumes that the hand does not consist purely of pairs */
+/* This logic assumes that the hand does not consist of more than one pair */
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     const quantityMemo: HonorTileValueQuantityMemo = new HonorTileValueQuantityMemo(hand);
 
@@ -23,10 +22,6 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     honorMelds.push(...userSpecifiedHonorMelds);
     honorMelds.push(...dragonMelds);
     honorMelds.push(...windMelds);
-
-    if (!!hand.userSpecifiedMelds && !meldsAreSubset(hand.userSpecifiedMelds, honorMelds, true)) {
-        return [];
-    }
 
     return [honorMelds];
 }
@@ -63,7 +58,7 @@ function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, til
         // quantity === 0 is a no-op. 
         // quantity === 1 means the hand does not have a winning hand probably. Not a fatal error, just continue.
         return undefined; 
-    /** default to not exposed for every created meld. */
+    /** default to not exposed for every non user specified meld. */
     } else if (quantity === 2) {
         return new Pair(constructHonorTile(tileGroup, tileValue));
     } else if (quantity === 3) {

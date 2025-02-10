@@ -15,9 +15,9 @@ import HonorTileValueQuantityMemo from "./honorTileValueQuantityMemo";
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     const quantityMemo: HonorTileValueQuantityMemo = new HonorTileValueQuantityMemo(hand);
 
-    const userSpecifiedHonorMelds = getUserSpecifiedHonorMelds(quantityMemo, hand.userSpecifiedMelds);
-    const dragonMelds = getHonorMelds(quantityMemo, TileGroup.DRAGON, dragonTileValues);
-    const windMelds = getHonorMelds(quantityMemo, TileGroup.WIND, windTileValues);
+    const userSpecifiedHonorMelds = getUserSpecifiedHonorMelds(hand.userSpecifiedMelds, quantityMemo);
+    const dragonMelds = getHonorMelds(TileGroup.DRAGON, dragonTileValues, quantityMemo);
+    const windMelds = getHonorMelds(TileGroup.WIND, windTileValues, quantityMemo);
     
     const honorMelds: Meld[] = [];
     honorMelds.push(...userSpecifiedHonorMelds);
@@ -31,26 +31,21 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     return [honorMelds];
 }
 
-function getUserSpecifiedHonorMelds(quantityMap: HonorTileValueQuantityMemo, userSpecifiedMelds: Meld[]) {
-    const userSpecifiedHonorMelds = userSpecifiedMelds.filter(meld => {
-        const firstTile = meld.getFirstTile();
-        if (isHonorTile(firstTile)) {
-            return quantityMap.getQuantity(firstTile.value) >= meld.tiles.length;
-        }
-        return false;
-    });
+function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMap: HonorTileValueQuantityMemo) {
+    const userSpecifiedHonorMelds: Meld[] = [];
     
-    userSpecifiedMelds.forEach(meld => {
+    for (const meld of userSpecifiedMelds) {
         const firstTile = meld.getFirstTile();
-        if (isHonorTile(firstTile)) {
+        if (isHonorTile(firstTile) && quantityMap.getQuantity(firstTile.value) >= meld.tiles.length) {
             quantityMap.decreaseQuantity(firstTile.value, meld.tiles.length);
+            userSpecifiedMelds.push(meld);
         }
-    });
+    };
 
     return userSpecifiedHonorMelds.map(meld => meld.clone());
 }
 
-function getHonorMelds(quantityMap: HonorTileValueQuantityMemo, tileGroup: HonorTileGroup, tileValues: HonorTileValue[]) : Meld[] {
+function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMap: HonorTileValueQuantityMemo) : Meld[] {
     const melds : Meld[] = [];
     for (const tileValue of tileValues) {
         const quantity = quantityMap.getQuantity(tileValue);

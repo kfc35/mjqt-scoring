@@ -2,16 +2,12 @@ import type { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHan
 import { Hand } from "model/hand/hk/hand";
 import { oneFourSeven, twoFiveEight, threeSixNine} from "model/tile/tileValue";
 import { type SuitedTileGroup, suitedTileGroups } from "model/tile/group/suitedTile";
-import Chow, { meldIsChow } from "model/meld/chow";
+import Chow from "model/meld/chow";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { meldsAreSubset } from "common/meldUtils";
 
 export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
-    if (!!hand.userSpecifiedMelds && hand.userSpecifiedMelds.length > 2 
-        && hand.userSpecifiedMelds.filter(meld => !(meldIsChow(meld) && meld.isKnitted)).length > 2) {
-        return [];
-    }
     for (const firstSuitedTileGroup of suitedTileGroups) {
         if (tileQuantitiesGreaterThanZero(hand, firstSuitedTileGroup, oneFourSeven)) {
             const otherTwoTileGroups = getOtherTwoSuitedTileGroups(firstSuitedTileGroup);
@@ -32,7 +28,13 @@ export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
                         constructSuitedTile(thirdSuitedTileGroup, threeSixNine[2])],
                         false)];
 
-                        // knittedStraights MUST be unexposed.
+                        /**for (const knittedChow of knittedStraight) {
+                            if (meldExistsInMeldsIgnoreExposed(hand.userSpecifiedMelds, knittedChow) {
+
+                            }
+                        }**/
+
+                        // TODO knittedStraights MUST be unexposed? what if the last tile is given to them? are they considered exposed?
                         if (!!hand.userSpecifiedMelds && !meldsAreSubset(hand.userSpecifiedMelds, knittedStraight, false)) {
                             return [];
                         }

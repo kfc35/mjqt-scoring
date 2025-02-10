@@ -31,7 +31,6 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
     })
     // if the hand has user specified melds, they must be present in the possible meld combo.
     .filter(melds => meldsAreSubset(melds, hand.userSpecifiedMelds, true))
-    .map(melds => overwriteCommonMelds(melds, hand.userSpecifiedMelds))
     .map(melds => {
         const mostRecentTileUserSpecifiedMeld: Meld | undefined = hand.mostRecentTileUserSpecifiedMeld();
         if (mostRecentTileUserSpecifiedMeld) { // If this meld exists, the last tile should always be placed in this meld.
@@ -53,25 +52,4 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
         }).filter(winningHands => !!winningHands)
     })
     .reduce<StandardWinningHand[]>((accum, winningHands) => accum.concat(...winningHands), [])
-}
-
-// A meld in meldsWithDesiredExposedFlag is assumed to have an equivalent meld in meldsToOverwrite (ignoring the exposed flag). 
-// The equivalent meld is replaced with the meld that has the desired exposed flag.
-function overwriteCommonMelds(meldsSuperset: Meld[], meldsWithDesiredExposedFlag: Meld[]) {
-    const copy = [...meldsSuperset];
-    for (const replacer of meldsWithDesiredExposedFlag) {
-        let replacementSuccessful = false;
-        for (let j = 0; j < copy.length; j++) {
-            if (replacer.equals(copy[j], true)) {
-                copy.splice(j, 1);
-                replacementSuccessful = true;
-                break;
-            }
-        }
-        if (!replacementSuccessful) {
-            throw new Error(`meldsSuperset is not a superset of meldsWithDesiredExposedFlag`);
-        }
-    }
-    // TODO probably should clone the meld.
-    return [...copy, ...meldsWithDesiredExposedFlag];
 }

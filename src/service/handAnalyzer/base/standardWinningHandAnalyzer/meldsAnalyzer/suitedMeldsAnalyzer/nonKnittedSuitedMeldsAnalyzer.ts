@@ -1,10 +1,10 @@
 import { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/meldsAnalyzer"
 import { Hand } from "model/hand/hk/hand"
-import { type SuitedTileGroup } from "model/tile/group/suitedTile";
+import { isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
-import Chow from "model/meld/chow";
+import Chow, { meldIsChow } from "model/meld/chow";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
 import { meldPairLength, meldPongLength, meldKongLength } from "model/meld/meldConstants";
@@ -22,9 +22,30 @@ export const analyzeForNonKnittedSuitedMelds : MeldsAnalyzer = (hand: Hand) => {
     return combineSuitedMelds(bambooMelds, characterMelds, circleMelds);
 }
 
+function getUserSpecifiedSuitedMelds(userSpecifiedMelds: Meld[], tileGroup: SuitedTileGroup, quantityMap: SuitedTileValueQuantityMemo) {
+    const userSpecifiedSuitedMelds: Meld[] = [];
+    
+    for (const meld of userSpecifiedMelds) {
+        const firstTile = meld.getFirstTile();
+        if (meldIsChow(meld) && !meld.isKnitted && firstTile.group === tileGroup &&
+            quantityMap.hasEnoughQuantityForChows(firstTile.value, 1)) {
+                quantityMap.decreaseQuantityForChow(firstTile.value, 1);
+                userSpecifiedSuitedMelds.push(meld);
+        } else if (isSuitedTile(firstTile) && firstTile.group === tileGroup && 
+            quantityMap.getQuantity(firstTile.value) >= meld.tiles.length) {
+                quantityMap.decreaseQuantity(firstTile.value, meld.tiles.length);
+                userSpecifiedSuitedMelds.push(meld);
+        }
+    }
+    
+    return userSpecifiedSuitedMelds.map(meld => meld.clone());
+}
+
 function getSuitedMelds(hand: Hand, tileGroup: SuitedTileGroup) : Meld[][] {
-    const memo = new SuitedTileValueQuantityMemo(hand, tileGroup); 
-    return getMeldsFromStartingSTV(tileGroup, SuitedTileValue.ONE, memo);
+    const memo = new SuitedTileValueQuantityMemo(hand, tileGroup);
+    const userSpecifiedMelds = getUserSpecifiedSuitedMelds(hand.userSpecifiedMelds, tileGroup, memo);
+    const newMelds = getMeldsFromStartingSTV(tileGroup, SuitedTileValue.ONE, memo);
+    return cartesianProduct([userSpecifiedMelds], newMelds);
 }
 
 // Returns a list of possible meld combinations (hence Meld[][]).

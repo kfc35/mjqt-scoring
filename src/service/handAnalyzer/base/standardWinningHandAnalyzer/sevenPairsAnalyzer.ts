@@ -51,6 +51,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
             if (!meldsNotNullAndCorrectLength(melds, 7) || !winningPair) {
                 return [];
             }
+            // TODO what about exposed flag if the last pair was taken via discard?
             if (!meldsAreSubset(melds, hand.userSpecifiedMelds, false)) {
                 return [];
             }

@@ -8,6 +8,7 @@ import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
+import { meldsAreSubset } from "common/meldUtils";
 
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     const dragonMelds = getHonorMelds(hand, TileGroup.DRAGON, dragonTileValues);
@@ -18,9 +19,17 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     if (windMelds === undefined) {
         return [];
     }
+    
     const honorMelds: Meld[] = [];
     honorMelds.push(...dragonMelds);
     honorMelds.push(...windMelds);
+
+    // ignore exposed flag because we analyzed for honor melds without considering the exposed flag.
+    if (!!hand.userSpecifiedMelds && !meldsAreSubset(hand.userSpecifiedMelds, honorMelds, true)) {
+        return [];
+    }
+
+    // TODO fix exposed flag for honor melds based on userSpecifiedMelds
     return [honorMelds];
 }
 

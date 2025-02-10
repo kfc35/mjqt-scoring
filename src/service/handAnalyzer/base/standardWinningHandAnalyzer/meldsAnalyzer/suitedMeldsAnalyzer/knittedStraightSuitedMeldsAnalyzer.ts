@@ -2,11 +2,16 @@ import type { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHan
 import { Hand } from "model/hand/hk/hand";
 import { oneFourSeven, twoFiveEight, threeSixNine} from "model/tile/tileValue";
 import { type SuitedTileGroup, suitedTileGroups } from "model/tile/group/suitedTile";
-import Chow from "model/meld/chow";
+import Chow, { meldIsChow } from "model/meld/chow";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
+import { meldsAreSubset } from "common/meldUtils";
 
 export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
+    if (!!hand.userSpecifiedMelds && hand.userSpecifiedMelds.length > 2 
+        && hand.userSpecifiedMelds.filter(meld => !(meldIsChow(meld) && meld.isKnitted)).length > 2) {
+        return [];
+    }
     for (const firstSuitedTileGroup of suitedTileGroups) {
         if (tileQuantitiesGreaterThanZero(hand, firstSuitedTileGroup, oneFourSeven)) {
             const otherTwoTileGroups = getOtherTwoSuitedTileGroups(firstSuitedTileGroup);
@@ -14,24 +19,29 @@ export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
                 if (tileQuantitiesGreaterThanZero(hand, secondSuitedTileGroup, twoFiveEight)) {
                     const thirdSuitedTileGroup = getLastSuitedTileGroup(firstSuitedTileGroup, secondSuitedTileGroup);
                     if (tileQuantitiesGreaterThanZero(hand, thirdSuitedTileGroup, threeSixNine)) {
-                        return [[new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[0]),
-                            constructSuitedTile(secondSuitedTileGroup, twoFiveEight[0]),
-                            constructSuitedTile(thirdSuitedTileGroup, threeSixNine[0])],
-                            false),
-                            new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[1]),
-                            constructSuitedTile(secondSuitedTileGroup, twoFiveEight[1]),
-                            constructSuitedTile(thirdSuitedTileGroup, threeSixNine[1])],
-                            false),
-                            new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[2]),
-                            constructSuitedTile(secondSuitedTileGroup, twoFiveEight[2]),
-                            constructSuitedTile(thirdSuitedTileGroup, threeSixNine[2])],
-                            false)], []]; // we can create a knitted straight, or we could choose not to (empty Meld[])
+                        const knittedStraight = [new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[0]),
+                        constructSuitedTile(secondSuitedTileGroup, twoFiveEight[0]),
+                        constructSuitedTile(thirdSuitedTileGroup, threeSixNine[0])],
+                        false),
+                        new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[1]),
+                        constructSuitedTile(secondSuitedTileGroup, twoFiveEight[1]),
+                        constructSuitedTile(thirdSuitedTileGroup, threeSixNine[1])],
+                        false),
+                        new Chow([constructSuitedTile(firstSuitedTileGroup, oneFourSeven[2]),
+                        constructSuitedTile(secondSuitedTileGroup, twoFiveEight[2]),
+                        constructSuitedTile(thirdSuitedTileGroup, threeSixNine[2])],
+                        false)];
+
+                        // knittedStraights MUST be unexposed.
+                        if (!!hand.userSpecifiedMelds && !meldsAreSubset(hand.userSpecifiedMelds, knittedStraight, false)) {
+                            return [];
+                        }
+                        return [knittedStraight, []]; // we can create a knitted straight, or we could choose not to (empty Meld[])
                     }   
                 }
              }
         }
     }
-    // cannot create a knitted straight
     return [];
 }
 

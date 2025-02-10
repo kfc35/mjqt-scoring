@@ -29,13 +29,8 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
         return meldTiles.every(tile => meldTileQuantityMap.getQuantity(tile) === hand.getQuantity(tile))
     })
     // if the hand has user specified melds, they must be present in the possible meld combo.
-    // "melds" all have exposed = false by default, so we first test for equality ignoring the exposed flag.
     .filter(melds => meldsAreSubset(melds, hand.userSpecifiedMelds, true))
-    // ensure any melds have the same exposed flag as their corresponding user specified meld
     .map(melds => overwriteCommonMelds(melds, hand.userSpecifiedMelds))
-    /* Different winning hands can be created depending on 
-       which meld we choose to complete with the last tile (if we have that freedom).
-       This whole map block is dealing with all those possibilities. */
     .map(melds => {
         const mostRecentTileUserSpecifiedMeld: Meld | undefined = hand.mostRecentTileUserSpecifiedMeld();
         if (mostRecentTileUserSpecifiedMeld) { // If this meld exists, the last tile should always be placed in this meld.
@@ -43,55 +38,22 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
             if (indexOfMeld === -1) {
                 throw new Error('The mostRecentTileUserSpecifiedMeld is not in melds, which should not happen.');
             }
-            // mostRecentTileUserSpecifiedMeld is guaranteed to be in `melds` since it was copied over as part of userSpecifiedMelds
             return [new StandardWinningHand(melds, indexOfMeld, hand.mostRecentTile(), hand.flowerTiles)]
         }
-        // multiple winning hands are possible depending on which meld we choose to have the most recent tile.
+
+        // multiple winning hands could be possible depending on which meld we choose to have the most recent tile.
         return melds.map((meld, index) => {
-            if (!meldHasTile(meld, hand.mostRecentTile())) {
+            if (!meldHasTile(meld, hand.mostRecentTile()) || meld.exposed) {
                 return undefined;
             }
-            // this meld contains the most recent tile, but was exposed by the user beforehand.
-            if (meld.exposed && meldExistsInMelds(hand.userSpecifiedMelds, meld, false)) {
-                return undefined;
-            }
-
-            // the self drawn most recent tile could be used to complete this concealed meld. the meld may or may not be user specified.
-            if (!meld.exposed && hand.mostRecentTileIsSelfDrawn()) {
-                // if the meld is user specified, return undefined.
-                if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false)) {
-                    return undefined;
-                } else {
-                    return new StandardWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
-                }
-            }
-
-            // the winning meld can be created via discard to make an exposed meld. the meld may or may not be user specified.
-            if (!meld.exposed && !hand.mostRecentTileIsSelfDrawn()) { 
-                // if the meld is user specified, return undefined.
-                if (meldExistsInMelds(hand.userSpecifiedMelds, meld, false)) {
-                    return undefined;
-                } else {
-                    const exposedMeld : Meld = meld.clone(true);
-                    // replace the previously concealed meld with the exposed meld
-                    const meldsCopy = [...melds];
-                    meldsCopy.splice(index, 1, exposedMeld);
-                    return new StandardWinningHand(meldsCopy, index, hand.mostRecentTile(), hand.flowerTiles);
-                }
-            }
-
-            /* any other cases should not happen.
-               the meld analyzation algorithm does not create exposed melds by itself.
-               i.e. if meld.exposed === true && (hand.userSpecifiedMelds, meld, false) === false, something went wrong!
-            */
-            throw new Error(`This should not happen. An exposed meld was created in the algorithm and it wasn't defined by the user!`);
+            return new StandardWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
         }).filter(winningHands => !!winningHands)
     })
     .reduce<StandardWinningHand[]>((accum, winningHands) => accum.concat(...winningHands), [])
 }
 
-// if a meld in meldsWithDesiredExposedFlag has an equivalent meld in meldsToOverwrite (ignoring the exposed flag), 
-// the equivalent meld is replaced.
+// A meld in meldsWithDesiredExposedFlag is assumed to have an equivalent meld in meldsToOverwrite (ignoring the exposed flag). 
+// The equivalent meld is replaced with the meld that has the desired exposed flag.
 function overwriteCommonMelds(meldsSuperset: Meld[], meldsWithDesiredExposedFlag: Meld[]) {
     const copy = [...meldsSuperset];
     for (const replacer of meldsWithDesiredExposedFlag) {
@@ -107,5 +69,6 @@ function overwriteCommonMelds(meldsSuperset: Meld[], meldsWithDesiredExposedFlag
             throw new Error(`meldsSuperset is not a superset of meldsWithDesiredExposedFlag`);
         }
     }
+    // TODO probably should clone the meld.
     return [...copy, ...meldsWithDesiredExposedFlag];
 }

@@ -4,11 +4,12 @@ import Meld from "model/meld/meld";
 import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand"
 import { analyzeForHonorMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorMeldsAnalyzer";
 import { analyzeForNonKnittedSuitedMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/nonKnittedSuitedMeldsAnalyzer";
-import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, toFlatTiles, meldHasTile, meldExistsInMelds, getIndexOfMeld } from "common/meldUtils";
+import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, toFlatTiles, meldHasTile, getIndexOfMeld } from "common/meldUtils";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 
 export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = (hand: Hand) => {
+
     // all other standard winning hands (4 non-pair melds and 1 pair meld).
     // Overall, navigate greedily, filter bad combos at the end.
     const honorMelds = analyzeForHonorMelds(hand);
@@ -42,6 +43,8 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
         }
 
         // multiple winning hands could be possible depending on which meld we choose to have the most recent tile.
+        // TODO does it really matter to the user to distinguish this if the hands essentially have the same melds? 
+        // the melds are essentially the same... it could for some of the special hands. have to look.
         return melds.map((meld, index) => {
             if (!meldHasTile(meld, hand.mostRecentTile()) || meld.exposed) {
                 return undefined;

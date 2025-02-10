@@ -11,6 +11,10 @@ import Kong from "model/meld/kong";
 import { meldsAreSubset } from "common/meldUtils";
 
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
+    // TODO we either have to account for all userSpecifiedMelds up front OR
+    // we account for them after we get all the generated melds to ensure we have the correct
+    // number of melds with the correct exposed flag (if there are dups in userSpecifiedMelds)
+
     const dragonMelds = getHonorMelds(hand, TileGroup.DRAGON, dragonTileValues);
     if (dragonMelds === undefined) {
         return [];

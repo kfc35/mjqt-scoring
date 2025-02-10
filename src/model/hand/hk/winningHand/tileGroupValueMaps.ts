@@ -1,4 +1,4 @@
-import { type HonorTile, type HonorTileGroup, type HonorTileValue, isHonorTile } from "model/tile/group/honorTile";
+import HonorTile, { type HonorTileGroup, type HonorTileValue, isHonorTile } from "model/tile/group/honorTile";
 import SuitedTile, { type SuitedTileGroup, isSuitedTile, isSuitedTileGroup } from "model/tile/group/suitedTile";
 import { SuitedOrHonorTileValue, type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { isSuitedTileValue, SuitedTileValue } from "model/tile/tileValue";

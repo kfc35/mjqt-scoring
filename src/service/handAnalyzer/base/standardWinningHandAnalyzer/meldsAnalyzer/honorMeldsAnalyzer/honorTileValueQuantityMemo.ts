@@ -1,9 +1,9 @@
 import { Hand } from "model/hand/hk/hand";
-import { getHonorTileValues, HonorTileGroup, honorTileGroups, HonorTileValue } from "model/tile/group/honorTile";
+import { getHonorTileValues, honorTileGroups, HonorTileValue } from "model/tile/group/honorTile";
 export default class HonorTileValueQuantityMemo {
     private _memo: Map<HonorTileValue, number>;
 
-    constructor(hand: Hand, tileGroup: HonorTileGroup);
+    constructor(hand: Hand);
     constructor(toBeCopied: HonorTileValueQuantityMemo); 
     constructor(handOrToBeCopied: Hand | HonorTileValueQuantityMemo) {
         if (handOrToBeCopied instanceof Hand) {

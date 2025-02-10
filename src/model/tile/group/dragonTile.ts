@@ -1,8 +1,9 @@
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
 import { DragonTileValue, isDragonTileValue } from "model/tile/tileValue";
+import HonorTile from "./honorTile";
 
-export default class DragonTile extends Tile {
+export default class DragonTile extends HonorTile {
     declare protected _value: DragonTileValue;
 
     constructor(value: DragonTileValue) {

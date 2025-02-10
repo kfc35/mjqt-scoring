@@ -3,7 +3,7 @@ import Meld from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
 import { meldHasTile, toFlatTiles } from "common/meldUtils";
-import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { meldIsPair } from "model/meld/pair";
 import { StandardWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";

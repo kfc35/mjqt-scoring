@@ -1,6 +1,6 @@
 import { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/meldsAnalyzer";
 import { Hand } from "model/hand/hk/hand";
-import { type HonorTileGroup, HonorTileValue } from "model/tile/group/honorTile";
+import { type HonorTileGroup, HonorTileValue, isHonorTile } from "model/tile/group/honorTile";
 import { TileGroup } from "model/tile/tileGroup";
 import { dragonTileValues, windTileValues } from "model/tile/tileValue";
 import { constructHonorTile } from "model/tile/group/honorTileConstructor";
@@ -9,41 +9,55 @@ import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
 import { meldsAreSubset } from "common/meldUtils";
+import HonorTileValueQuantityMemo from "./honorTileValueQuantityMemo";
 
+/* This logic assumes that the hand does not consist purely of pairs */
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
-    // TODO we either have to account for all userSpecifiedMelds up front OR
-    // we account for them after we get all the generated melds to ensure we have the correct
-    // number of melds with the correct exposed flag (if there are dups in userSpecifiedMelds)
+    const quantityMemo: HonorTileValueQuantityMemo = new HonorTileValueQuantityMemo(hand);
 
-    const dragonMelds = getHonorMelds(hand, TileGroup.DRAGON, dragonTileValues);
-    if (dragonMelds === undefined) {
-        return [];
-    }
-    const windMelds = getHonorMelds(hand, TileGroup.WIND, windTileValues);
-    if (windMelds === undefined) {
-        return [];
-    }
+    const userSpecifiedHonorMelds = getUserSpecifiedHonorMelds(quantityMemo, hand.userSpecifiedMelds);
+    const dragonMelds = getHonorMelds(quantityMemo, TileGroup.DRAGON, dragonTileValues);
+    const windMelds = getHonorMelds(quantityMemo, TileGroup.WIND, windTileValues);
     
     const honorMelds: Meld[] = [];
+    honorMelds.push(...userSpecifiedHonorMelds);
     honorMelds.push(...dragonMelds);
     honorMelds.push(...windMelds);
 
-    // ignore exposed flag because we analyzed for honor melds without considering the exposed flag.
     if (!!hand.userSpecifiedMelds && !meldsAreSubset(hand.userSpecifiedMelds, honorMelds, true)) {
         return [];
     }
 
-    // TODO fix exposed flag for honor melds based on userSpecifiedMelds
     return [honorMelds];
 }
 
-function getHonorMelds(hand: Hand, tileGroup: HonorTileGroup, tileValues: HonorTileValue[]) : Meld[] {
+function getUserSpecifiedHonorMelds(quantityMap: HonorTileValueQuantityMemo, userSpecifiedMelds: Meld[]) {
+    const userSpecifiedHonorMelds = userSpecifiedMelds.filter(meld => {
+        const firstTile = meld.getFirstTile();
+        if (isHonorTile(firstTile)) {
+            return quantityMap.getQuantity(firstTile.value) >= meld.tiles.length;
+        }
+        return false;
+    });
+    
+    userSpecifiedMelds.forEach(meld => {
+        const firstTile = meld.getFirstTile();
+        if (isHonorTile(firstTile)) {
+            quantityMap.decreaseQuantity(firstTile.value, meld.tiles.length);
+        }
+    });
+
+    return userSpecifiedHonorMelds.map(meld => meld.clone());
+}
+
+function getHonorMelds(quantityMap: HonorTileValueQuantityMemo, tileGroup: HonorTileGroup, tileValues: HonorTileValue[]) : Meld[] {
     const melds : Meld[] = [];
     for (const tileValue of tileValues) {
-        const quantity = hand.getQuantity(tileGroup, tileValue);
+        const quantity = quantityMap.getQuantity(tileValue);
         const meld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);
         if (meld) {
             melds.push(meld);
+            quantityMap.decreaseQuantity(tileValue, meld.tiles.length);
         }
     }
     return melds;
@@ -52,8 +66,9 @@ function getHonorMelds(hand: Hand, tileGroup: HonorTileGroup, tileValues: HonorT
 function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
     if (quantity < 2 && quantity >= 0) {
         // quantity === 0 is a no-op. 
-        // quantity === 1 means the hand does not have a winning hand probably. Not a fatal error.
+        // quantity === 1 means the hand does not have a winning hand probably. Not a fatal error, just continue.
         return undefined; 
+    /** default to not exposed for every created meld. */
     } else if (quantity === 2) {
         return new Pair(constructHonorTile(tileGroup, tileValue));
     } else if (quantity === 3) {

@@ -1,4 +1,4 @@
-import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
+import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { MeldType } from "model/meld/meldType";
 import { assertTilesSuitedOrHonor } from "common/tileUtils";
 

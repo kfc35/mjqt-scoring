@@ -3,8 +3,7 @@ import Meld from "model/meld/meld";
 
 export class MostRecentTileContext {
     private _tile: SuitedOrHonorTile;
-    // _userSpecifiedMeld can be undefined for special hands, even if self drawn is false
-    // TODO maybe we need a separate flag for self drawn... for special hands. i.e. you get your last orphan via discard.
+    // _userSpecifiedMeld can be undefined for special hands. in that case, the isSelfDrawn flag is used.
     private _userSpecifiedMeld: Meld | undefined;
     private _isSelfDrawn: boolean;
     
@@ -17,6 +16,7 @@ export class MostRecentTileContext {
                 this._userSpecifiedMeld = isSelfDrawnOrUserSpecifiedMeld;
                 this._isSelfDrawn = (!!this._userSpecifiedMeld ? !this._userSpecifiedMeld.exposed : false);
             } else {
+                this._userSpecifiedMeld = undefined;
                 this._isSelfDrawn = isSelfDrawnOrUserSpecifiedMeld;
             }
     }

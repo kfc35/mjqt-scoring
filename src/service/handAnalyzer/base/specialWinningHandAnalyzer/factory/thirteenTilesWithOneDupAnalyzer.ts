@@ -39,8 +39,8 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
         if (pair === undefined || tiles.length !== handMinLengthWithoutFlowers - 1) {
             return [];
         }
-        // if pre-specified melds exist, it can only be the pair we found.
-        if (!hand.userSpecifiedMelds || !(hand.userSpecifiedMelds.length === 1 && meldExistsInMelds(hand.userSpecifiedMelds, pair, false))) {
+        // if pre-specified melds exist, it can only be the pair we found (ignoring exposed flag)
+        if (!!hand.userSpecifiedMelds && !(hand.userSpecifiedMelds.length === 1 && meldExistsInMelds(hand.userSpecifiedMelds, pair, false))) {
             return [];
         }
         return [new SpecialWinningHand([[...tiles], [...pair.tiles]], 

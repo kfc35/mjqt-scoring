@@ -5,7 +5,7 @@ import { analyzeForSevenPairs } from "service/handAnalyzer/base/standardWinningH
 import { analyzeForFiveMeldsNoKnitted } from "service/handAnalyzer/base/standardWinningHandAnalyzer/fiveMeldsNoKnittedAnalyzer";
 
 export const analyzeForStandardWinningHands : HandAnalyzer<StandardWinningHand> = (hand: Hand) => {
-    // a standard winning hand, but pre-checked for simplicity of logic.
+    // check for 7 pairs separately to simplify logic.
     const sevenPairsHand = analyzeForSevenPairs(hand);
     if (sevenPairsHand) {
         return sevenPairsHand;

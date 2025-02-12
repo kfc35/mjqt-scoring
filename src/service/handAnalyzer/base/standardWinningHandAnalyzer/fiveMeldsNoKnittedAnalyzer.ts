@@ -41,22 +41,25 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
             return [new StandardWinningHand(melds, indexOfMeld, hand.mostRecentTile(), hand.flowerTiles)]
         }
 
-
         // multiple winning hands could be possible depending on which meld we choose to have the most recent tile in.
         // TODO does it really matter to the user to distinguish this if the hands essentially have the same melds? 
         // the melds are essentially the same... it could matter in scoring for some of the special hands. have to look.
         return melds.map((meld, index) => {
+            // if meld does not have the most recent tile, or the meld was previously exposed, this meld cannot accept the most recent tile.
             if (!meldHasTile(meld, hand.mostRecentTile()) || meld.exposed) {
                 return undefined;
             }
             
-            // mostRecentTileUserSpecifiedMeld is undefined, so hand.mostRecentTileIsSelfDrawn could have been set manually.
+            // this meld has the most recent tile and is currently marked as unexposed
+            // mostRecentTileUserSpecifiedMeld is undefined, so hand.mostRecentTileIsSelfDrawn could have been set manually by the user.
             if (!hand.mostRecentTileIsSelfDrawn()) {
+                // if mostRecentTileUserSpecifiedMeld was not specified, but the recent tile is eaten via discard, 
+                // use it to complete this meld via discard (expose it)
                 const updatedMelds = [...melds];
                 const newlyExposedMeld = meld.clone(true);
                 updatedMelds.splice(index, 1, newlyExposedMeld);
                 return new StandardWinningHand(updatedMelds, index, hand.mostRecentTile(), hand.flowerTiles);
-            } else {
+            } else { // the self drawn tile was used to complete this concealed meld, so mark it as such.
                 return new StandardWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
             }
         }).filter(winningHands => !!winningHands)

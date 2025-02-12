@@ -22,7 +22,7 @@ export default abstract class Meld {
         return this._tiles;
     }
 
-    // for non knitted chows, the group of this tile is the TileGroup for the whole meld.
+    // except for non knitted chows, the group of this tile is the TileGroup for the whole meld.
     getFirstTile(): SuitedOrHonorTile {
         return this._tiles[0];
     }

@@ -15,13 +15,12 @@ export default class HonorTileValueQuantityMemo {
                     this._memo.set(honorTileValue, tileValueQuantityMap.get(honorTileValue) ?? 0);
                 }
             }
-        } else if (handOrToBeCopied instanceof HonorTileValueQuantityMemo) {
+        } else {
             this._memo = handOrToBeCopied._memo;
             for (const [key, value] of handOrToBeCopied.memo.entries()) {
                 this._memo.set(key, value);
             }
         }
-        throw new Error('Invalid constructor arguments for HonorTileValueQuantityMemo.');
     }
 
     getQuantity(htv: HonorTileValue): number {

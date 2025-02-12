@@ -22,6 +22,13 @@ export const analyzeForNonKnittedSuitedMelds : MeldsAnalyzer = (hand: Hand) => {
     return combineSuitedMelds(bambooMelds, characterMelds, circleMelds);
 }
 
+function getSuitedMelds(hand: Hand, tileGroup: SuitedTileGroup) : Meld[][] {
+    const memo = new SuitedTileValueQuantityMemo(hand, tileGroup);
+    const userSpecifiedMelds = getUserSpecifiedSuitedMelds(hand.userSpecifiedMelds, tileGroup, memo);
+    const newMelds = getMeldsFromStartingSTV(tileGroup, SuitedTileValue.ONE, memo);
+    return cartesianProduct([userSpecifiedMelds], newMelds);
+}
+
 function getUserSpecifiedSuitedMelds(userSpecifiedMelds: Meld[], tileGroup: SuitedTileGroup, quantityMap: SuitedTileValueQuantityMemo) {
     const userSpecifiedSuitedMelds: Meld[] = [];
     
@@ -39,13 +46,6 @@ function getUserSpecifiedSuitedMelds(userSpecifiedMelds: Meld[], tileGroup: Suit
     }
     
     return userSpecifiedSuitedMelds.map(meld => meld.clone());
-}
-
-function getSuitedMelds(hand: Hand, tileGroup: SuitedTileGroup) : Meld[][] {
-    const memo = new SuitedTileValueQuantityMemo(hand, tileGroup);
-    const userSpecifiedMelds = getUserSpecifiedSuitedMelds(hand.userSpecifiedMelds, tileGroup, memo);
-    const newMelds = getMeldsFromStartingSTV(tileGroup, SuitedTileValue.ONE, memo);
-    return cartesianProduct([userSpecifiedMelds], newMelds);
 }
 
 // Returns a list of possible meld combinations (hence Meld[][]).

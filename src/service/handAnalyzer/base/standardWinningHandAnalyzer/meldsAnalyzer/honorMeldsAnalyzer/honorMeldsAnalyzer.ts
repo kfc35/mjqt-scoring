@@ -26,13 +26,13 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     return [honorMelds];
 }
 
-function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMap: HonorTileValueQuantityMemo) {
+function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: HonorTileValueQuantityMemo) {
     const userSpecifiedHonorMelds: Meld[] = [];
     
     for (const meld of userSpecifiedMelds) {
         const firstTile = meld.getFirstTile();
-        if (isHonorTile(firstTile) && quantityMap.getQuantity(firstTile.value) >= meld.tiles.length) {
-            quantityMap.decreaseQuantity(firstTile.value, meld.tiles.length);
+        if (isHonorTile(firstTile) && quantityMemo.getQuantity(firstTile.value) >= meld.tiles.length) {
+            quantityMemo.decreaseQuantity(firstTile.value, meld.tiles.length);
             userSpecifiedMelds.push(meld);
         }
     };
@@ -40,14 +40,14 @@ function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMap: Hon
     return userSpecifiedHonorMelds.map(meld => meld.clone());
 }
 
-function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMap: HonorTileValueQuantityMemo) : Meld[] {
+function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[] {
     const melds : Meld[] = [];
     for (const tileValue of tileValues) {
-        const quantity = quantityMap.getQuantity(tileValue);
+        const quantity = quantityMemo.getQuantity(tileValue);
         const meld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);
         if (meld) {
             melds.push(meld);
-            quantityMap.decreaseQuantity(tileValue, meld.tiles.length);
+            quantityMemo.decreaseQuantity(tileValue, meld.tiles.length);
         }
     }
     return melds;

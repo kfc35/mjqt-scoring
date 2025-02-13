@@ -5,7 +5,7 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import Pair from "model/meld/pair";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { assertTilesSuitedOrHonor, tilesUnique } from "common/tileUtils";
-import { assertTilesNotNullAndCorrectLength } from "common/tileUtils";
+import { assertTilesNotNullAndCorrectLength, tilesDoesNotContainTile } from "common/tileUtils";
 import { meldExistsInMelds } from "common/meldUtils";
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 
@@ -17,7 +17,7 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
     }
     return (hand: Hand) => {
         let pair: Pair | undefined = undefined;
-        const tiles: SuitedOrHonorTile[] = [];
+        const twelveNonDups: SuitedOrHonorTile[] = [];
         if (hand.getTotalQuantity() !== handMinLengthWithoutFlowers) {
             return [];
         }
@@ -33,17 +33,19 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
                 pair = new Pair(tile);
             }
             else { // quantity === 1
-                tiles.push(tile);
+                twelveNonDups.push(tile);
             }
         }
-        if (pair === undefined || tiles.length !== handMinLengthWithoutFlowers - 1) {
+        if (pair === undefined || twelveNonDups.length !== handMinLengthWithoutFlowers - 1) {
             return [];
         }
         // if pre-specified melds exist, it can only be the pair we found (ignoring exposed flag)
         if (!!hand.userSpecifiedMelds && !(hand.userSpecifiedMelds.length === 1 && meldExistsInMelds(hand.userSpecifiedMelds, pair, false))) {
             return [];
         }
-        return [new SpecialWinningHand([[...tiles], [...pair.tiles]], 
+        const tiles = [[...twelveNonDups], [...pair.tiles]];
+        const indexOfWinningTile = tilesDoesNotContainTile(pair.tiles, hand.mostRecentTile()) ? 0 : 1;
+        return [new SpecialWinningHand(tiles, indexOfWinningTile,
             hand.mostRecentTile(), hand.mostRecentTileIsSelfDrawn(), 
             hand.flowerTiles, SpecialWinningHandType.THIRTEEN_ORPHANS)];
     };

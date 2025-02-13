@@ -9,7 +9,8 @@ import { SpecialWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/
 /** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
  * but still constitutes a win. */
 export class SpecialWinningHand implements WinningHand {
-    private _tiles: SuitedOrHonorTile[][]; // [][] in case there is a user friendly way of grouping the tiles.
+    private _tiles: SuitedOrHonorTile[][]; // [][] because the tiles are organized into subgroups.
+    private _tilesIndexWithWinningTile: number;
     private _winningTile: SuitedOrHonorTile;
     private _isSelfDrawn: boolean;
     private _tileGroupValueMaps: SpecialWinningHandTileGroupValueMaps;
@@ -18,6 +19,7 @@ export class SpecialWinningHand implements WinningHand {
 
     // dups are allowed in tiles
     constructor(tiles: SuitedOrHonorTile[][], 
+        tilesIndexWithWinningTile: number,
         winningTile: SuitedOrHonorTile, 
         isSelfDrawn: boolean, 
         flowerTiles: FlowerTile[],
@@ -28,6 +30,7 @@ export class SpecialWinningHand implements WinningHand {
         assertEachTileHasQuantityLTEMaxPerTile(unwrappedTiles);
         
         this._tiles = tiles;
+        this._tilesIndexWithWinningTile = tilesIndexWithWinningTile;
         this._tileGroupValueMaps = new SpecialWinningHandTileGroupValueMaps(this._tiles);
         this._winningTile = winningTile;
         assertTilesFlower(flowerTiles);
@@ -41,6 +44,10 @@ export class SpecialWinningHand implements WinningHand {
 
     get tiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>>  {
         return this._tiles;
+    }
+
+    get tilesIndexWithWinningTile(): number {
+        return this._tilesIndexWithWinningTile;
     }
 
     get tileGroupValueMaps(): SpecialWinningHandTileGroupValueMaps {

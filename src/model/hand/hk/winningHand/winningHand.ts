@@ -5,6 +5,7 @@ import { TileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps
 
 export interface WinningHand {
     get tiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>>;
+    get tilesIndexWithWinningTile(): number;
     get tileGroupValueMaps() : TileGroupValueMaps;
     get winningTile() : SuitedOrHonorTile;
     isSelfDrawn() : boolean;

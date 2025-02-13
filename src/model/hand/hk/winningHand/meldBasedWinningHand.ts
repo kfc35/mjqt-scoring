@@ -15,7 +15,7 @@ import { MeldBasedWinningHandTileGroupValueMaps } from "model/hand/hk/winningHan
 export class MeldBasedWinningHand implements WinningHand {
     private _melds: ReadonlyArray<Meld>; // meld indices are important for point reporting, hence reao
     private _meldWithWinningTileIndex: number;
-    private _meldWithWinningTile: Meld;
+    private _meldWithWinningTile: Meld; // for easy access
     private _winningTile: SuitedOrHonorTile;
     private _tileGroupValueMaps: MeldBasedWinningHandTileGroupValueMaps;
     protected _flowerTiles: FlowerTile[];
@@ -57,6 +57,10 @@ export class MeldBasedWinningHand implements WinningHand {
 
     get tiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>> {
         return this._melds.map(meld => meld.tiles);
+    }
+
+    get tilesIndexWithWinningTile(): number {
+        return this._meldWithWinningTileIndex; // tiles() is melds mapped to each meld's tiles with the same outer ordering.
     }
 
     get tileGroupValueMaps(): MeldBasedWinningHandTileGroupValueMaps {

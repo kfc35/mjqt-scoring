@@ -1,4 +1,4 @@
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import Pong, { meldIsPong } from "model/meld/pong";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
@@ -7,7 +7,7 @@ import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
 
 // Checks that pongs exist in the winning hand for each single tile in tiles
-export function createPongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPongsToMatch?: number) : PointPredicate<StandardWinningHand> {
+export function createPongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPongsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 3 > maxQuantityPerNonFlowerTile) {
@@ -26,6 +26,6 @@ export function createPongsExistPredicate(pointPredicateID : string, tiles: Suit
     return createMeldsExistPredicate(pointPredicateID, pongsToMatch, numPongsToMatch ?? tiles.length);
 }
 
-export function createPongQuantityPredicate(pointPredicateID : string, minNumPongs: number) : PointPredicate<StandardWinningHand> {
+export function createPongQuantityPredicate(pointPredicateID : string, minNumPongs: number) : PointPredicate<MeldBasedWinningHand> {
     return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsPong, minNumPongs);
 }

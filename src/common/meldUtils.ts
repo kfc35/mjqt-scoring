@@ -113,3 +113,14 @@ export function getMeldsSubsetFromIndicesSet(melds: readonly Meld[], indices: Re
 export function getAllIndicesSet(melds: readonly Meld[]): Set<number> {
     return new Set(melds.map((_meld, index) => index));
 }
+
+export function getMeldAtIndex(melds: readonly Meld[], index: number) : Meld {
+    if (index < 0 || index >= melds.length) {
+        throw new Error(`index ${index} is out of bounds for melds of length ${melds.length}`);
+    }
+    const meld = melds[index];
+    if (!meld) {
+        throw new Error(`meld was undefined in melds at index ${index}`);
+    }
+    return meld;
+}

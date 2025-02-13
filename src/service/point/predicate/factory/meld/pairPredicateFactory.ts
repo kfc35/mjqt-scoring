@@ -1,6 +1,6 @@
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import Pair, { meldIsPair } from "model/meld/pair";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
@@ -8,7 +8,7 @@ import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate 
 
 // Checks that the pairs exist in a winning hand for each single tile in tiles.
 // You can have dups in tiles, but only max 2 since you can only have max 2 pairs of a tile.
-export function createPairsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPairsToMatch?: number) : PointPredicate<StandardWinningHand> {
+export function createPairsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPairsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 2 > maxQuantityPerNonFlowerTile) {
@@ -28,6 +28,6 @@ export function createPairsExistPredicate(pointPredicateID : string, tiles: Suit
     return createMeldsExistPredicate(pointPredicateID, pairsToMatch, numPairsToMatch ?? tiles.length);
 }
 
-export function createPairQuantityPredicate(pointPredicateID : string, numMinPairs: number, numMaxPairs: number | undefined = numMinPairs) : PointPredicate<StandardWinningHand> {
+export function createPairQuantityPredicate(pointPredicateID : string, numMinPairs: number, numMaxPairs: number | undefined = numMinPairs) : PointPredicate<MeldBasedWinningHand> {
     return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsPair, numMinPairs, numMaxPairs);
 }

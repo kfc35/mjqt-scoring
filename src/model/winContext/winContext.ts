@@ -3,7 +3,7 @@
  * Information surrounding the last tile being "self drawn" are in the hand itself.
  * This class concerns itself with the more superfluous details.
  */
-export class WinContext {
+export default class WinContext {
     mostRecentTileIsLastOfItsKind: boolean; // cannot be inferred from tilehog alone.
     winByRobbingAKong: boolean;
     winByLastTileOnWall: boolean;

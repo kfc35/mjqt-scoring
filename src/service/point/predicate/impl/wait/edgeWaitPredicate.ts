@@ -1,12 +1,12 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedTileValue } from "model/tile/tileValue";
 import { meldIsChow } from "model/meld/chow";
 import Chow from "model/meld/chow";
 
-export const EDGE_WAIT_PREDICATE : PointPredicate<StandardWinningHand> = (winningHand : StandardWinningHand) => {
+export const EDGE_WAIT_PREDICATE : PointPredicate<MeldBasedWinningHand> = (winningHand : MeldBasedWinningHand) => {
     if (!meldIsChow(winningHand.meldWithWinningTile)) {
         return new PointPredicateResult(PointPredicateID.EDGE_WAIT, false, [], [winningHand.meldWithWinningTile.tiles], [], new Set(), []);
     }

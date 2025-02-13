@@ -1,5 +1,5 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import Chow, { meldIsChow } from "model/meld/chow";
 import SuitedTile from "model/tile/group/suitedTile";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
@@ -9,7 +9,7 @@ import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate 
 
 // Checks that all the given tile sequences exist as chows in a winning hand.
 // You can use this function for knitted tiles
-export function createChowsExistPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][], numSequencesToMatch?: number) : PointPredicate<StandardWinningHand> {
+export function createChowsExistPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][], numSequencesToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
     const chows : Chow[] = [];
     for (const sequence of tileSequences) {
         if (sequence[0].group !== sequence[1].group 
@@ -28,7 +28,7 @@ export function createChowsExistPredicateFromSequences(pointPredicateID : string
 }
 
 // Creates same suited tile sequences using the provided tiles as the lowest in the sequence, then checks for those sequences in the winning hand.
-export function createChowsExistPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[], numSequencesToMatch? : number) : PointPredicate<StandardWinningHand> {
+export function createChowsExistPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[], numSequencesToMatch? : number) : PointPredicate<MeldBasedWinningHand> {
     const chows : Chow[] = [];
     for (const tile of tiles) {
         const nextTileValue = getNextSuitedTileValue(tile.value);
@@ -51,6 +51,6 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
     return createMeldsExistPredicate(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
 }
 
-export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<StandardWinningHand> {
+export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<MeldBasedWinningHand> {
     return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsChow, minNumChows);
 }

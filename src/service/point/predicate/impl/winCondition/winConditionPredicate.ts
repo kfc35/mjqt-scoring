@@ -1,8 +1,7 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { WinContext } from "model/winContext/winContext";
-import { toTiles } from "common/meldUtils";
+import WinContext from "model/winContext/winContext";
 import { createPointPredicateResultBasedOnBooleanFlag } from "service/point/predicate/impl/util/pointPredicateUtil";
 
 export const SELF_DRAW_PREDICATE : PointPredicate<WinningHand> = 
@@ -52,5 +51,5 @@ export const WIN_BY_DOUBLE_FLOWER_PREDICATE : PointPredicate<WinningHand> =
 
 export const WIN_WITH_INITIAL_HAND_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand, winContext: WinContext) => {
-        return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.WIN_WITH_INITIAL_HAND, winContext.winWithInitialHand, toTiles(winningHand.getMelds()));
+        return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.WIN_WITH_INITIAL_HAND, winContext.winWithInitialHand, winningHand.tiles);
     }

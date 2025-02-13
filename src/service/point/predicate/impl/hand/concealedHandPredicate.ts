@@ -1,4 +1,4 @@
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
@@ -7,24 +7,24 @@ import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/po
 import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";
 import { meldIsPong } from "model/meld/pong";
-import { WinContext } from "model/winContext/winContext";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
+import WinContext from "model/winContext/winContext";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { RoundContext } from "model/roundContext/roundContext";
 import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/winConditionPredicate";
 import { ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/handSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 
-const atLeastFourConcealedPongsKongsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS, 
+const atLeastFourConcealedPongsKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS_AND_KONGS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed && (meldIsKong(meld) || meldIsPong(meld)));
-const atLeastFourConcealedPongsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS, 
+const atLeastFourConcealedPongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_PONGS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed && meldIsPong(meld));
-const atLeastFourConcealedNonPairMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS, 
+const atLeastFourConcealedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_NON_PAIR_MELDS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => !meld.exposed);
-export const atLeastFourConcealedMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_MELDS, 
+export const atLeastFourConcealedMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CONCEALED_MELDS, 
     (meld) => !meld.exposed, (melds) => melds.length >= 4, () => true);
 
-export const SELF_TRIPLETS : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
+export const SELF_TRIPLETS : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.SELF_TRIPLETS_ONLY_PONGS_ALLOWED)) {
             return PointPredicateResult.and(PointPredicateID.SELF_TRIPLETS,
                 onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
@@ -36,8 +36,8 @@ export const SELF_TRIPLETS : PointPredicate<StandardWinningHand> =
         }
     };
 
-export const CONCEALED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
+export const CONCEALED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.CONCEALED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             return PointPredicateResult.and(PointPredicateID.CONCEALED_HAND,
                 atLeastFourConcealedNonPairMeldsSubPredicate(standardWinningHand, winCtx, roundCtx, config),
@@ -52,6 +52,6 @@ export const CONCEALED_HAND_PREDICATE : PointPredicate<StandardWinningHand> =
     };
 
 // four concealed non-pair melds, MUST win via self-draw
-export const FULLY_CONCEALED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
+export const FULLY_CONCEALED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.FULLY_CONCEALED_HAND,
             atLeastFourConcealedNonPairMeldsSubPredicate, onePairSubPredicate, SELF_DRAW_PREDICATE);

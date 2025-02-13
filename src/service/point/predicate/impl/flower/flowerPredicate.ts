@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
-import { WinContext } from "model/winContext/winContext";
+import WinContext from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { createPointPredicateResultBasedOnBooleanFlag } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { FlowerTile } from "model/tile/group/flowerTile";

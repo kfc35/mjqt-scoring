@@ -1,5 +1,5 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { createPointPredicateResultBasedOnBooleanFlag } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE } from "common/deck";
@@ -7,13 +7,13 @@ import { WIN_BY_KONG_PREDICATE } from "service/point/predicate/impl/winCondition
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { meldIsChow } from "model/meld/chow";
 
-const winningTileIsFiveCircleSubPredicate : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand) => {
+const winningTileIsFiveCircleSubPredicate : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand) => {
         return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_ONE_CIRCLE, FIVE_CIRCLE.equals(standardWinningHand.winningTile), [[standardWinningHand.winningTile]]);
     }
 
-const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand) => {
+const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand) => {
         const winningTileMeld = standardWinningHand.meldWithWinningTile;
         const winningTileMeldIsFourFiveSixCircle = meldIsChow(winningTileMeld) 
         && winningTileMeld.tiles[0].equals(FOUR_CIRCLE) && winningTileMeld.tiles[1].equals(FIVE_CIRCLE) && 
@@ -23,7 +23,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<StandardWi
     }
 
 // TODO replacement tile from kong only... configurable?
-export const PLUM_BLOSSOM_ON_THE_ROOF : PointPredicate<StandardWinningHand> = 
+export const PLUM_BLOSSOM_ON_THE_ROOF : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, winningTileIsFiveCircleSubPredicate, 
         winningMeldIsFourFiveSixCircleChowSubPredicate, WIN_BY_KONG_PREDICATE
     );

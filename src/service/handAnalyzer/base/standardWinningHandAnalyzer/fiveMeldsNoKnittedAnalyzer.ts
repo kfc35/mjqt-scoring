@@ -1,14 +1,14 @@
 import { HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { Hand } from "model/hand/hk/hand"
 import Meld from "model/meld/meld";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand"
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand"
 import { analyzeForHonorMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorMeldsAnalyzer";
 import { analyzeForNonKnittedSuitedMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/nonKnittedSuitedMeldsAnalyzer";
 import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, toFlatTiles, meldHasTile, getIndexOfMeld } from "common/meldUtils";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 
-export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = (hand: Hand) => {
+export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<MeldBasedWinningHand> = (hand: Hand) => {
 
     // all other standard winning hands (4 non-pair melds and 1 pair meld).
     // Overall, navigate greedily, filter bad combos at the end.
@@ -38,7 +38,7 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
             if (indexOfMeld === -1) {
                 throw new Error('The mostRecentTileUserSpecifiedMeld is not in melds, which should not happen.');
             }
-            return [new StandardWinningHand(melds, indexOfMeld, hand.mostRecentTile(), hand.flowerTiles)]
+            return [new MeldBasedWinningHand(melds, indexOfMeld, hand.mostRecentTile(), hand.flowerTiles)]
         }
 
         // multiple winning hands could be possible depending on which meld we choose to have the most recent tile in.
@@ -58,11 +58,11 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<StandardWinningHand> = 
                 const updatedMelds = [...melds];
                 const newlyExposedMeld = meld.clone(true);
                 updatedMelds.splice(index, 1, newlyExposedMeld);
-                return new StandardWinningHand(updatedMelds, index, hand.mostRecentTile(), hand.flowerTiles);
+                return new MeldBasedWinningHand(updatedMelds, index, hand.mostRecentTile(), hand.flowerTiles);
             } else { // the self drawn tile was used to complete this concealed meld, so mark it as such.
-                return new StandardWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
+                return new MeldBasedWinningHand(melds, index, hand.mostRecentTile(), hand.flowerTiles);
             }
         }).filter(winningHands => !!winningHands)
     })
-    .reduce<StandardWinningHand[]>((accum, winningHands) => accum.concat(...winningHands), [])
+    .reduce<MeldBasedWinningHand[]>((accum, winningHands) => accum.concat(...winningHands), [])
 }

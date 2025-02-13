@@ -1,23 +1,15 @@
 import { Tile } from "model/tile/tile";
-
-export enum PointPredicateResultCode {
-    SUCCESS = 'SUCCESS',
-    IGNORED_NON_REPEAT_PRINCIPLE = 'IGNORED_NON_REPEAT_PRINCIPLE', // included by another result
-    IGNORED_NON_IDENTICAL_PRINCIPLE = 'IGNORED_NON_IDENTICAL_PRINCIPLE',
-    IGNORED_EXCLUSIONARY_PRINCIPLE = 'IGNORED_EXCLUSIONARY_PRINCIPLE',
-    IGNORED_CONDITION_NOT_APPLICABLE = 'IGNORED_CONDITION_NOT_APPLICABLE', // the "if" part of "if...then predicate " is false.
-    FAILURE = 'FAILURE',
-    FAILURE_IGNORED = 'FAILURE_IGNORED',
-}
+//import { PointPredicateResultCode } from "./pointPredicateResultCode";
 
 // PointPredicateSuccessResult, PointPredicateSuccessIgnoredResult, PointPredicateFailureResult
 // DISABLED just doesnt show up as a result
 // predicates can return a list of results. that list can be empty if disabled. can have multiple success results if multiple subsets count.
 
 export default class PointPredicateResult {
-    private _pointPredicateId: string;
-    private _success: boolean;
-    private _ignored: boolean; // TODO the reason it was ignored?
+    protected _pointPredicateId: string;
+    //protected _resultCode: PointPredicateResultCode;
+    protected _success: boolean;
+    protected _ignored: boolean;
     /** 
      * if success = true, successTiles contains all the tiles in the hand that satisfied the predicate.
      * if success = false, successTiles contains tiles in the hand that partially satisfied the predicate.
@@ -25,12 +17,12 @@ export default class PointPredicateResult {
      * i.e. a hand with two distinct short straights could have [[[1B,2B,3B],[4B,5B,6B]],[[2C,3C,4C],[5C,6C,7C]]]
      * This field works for both Standard and Special winning hands.
      */
-    private _successTiles: Tile[][][];
+    private _successTiles: ReadonlyArray<ReadonlyArray<Tile>>[];
     /**
      * If _failureTiles is non-empty, _failureTiles contains the tiles that violate the predicate because they exist in the hand.
      * It is not wrapped in another [] because a violation of a predicate applies across the whole hand, no matter how it is arranged.
      */
-    private _failureTiles: Tile[][];
+    private _failureTiles: ReadonlyArray<ReadonlyArray<Tile>>;
 
     // If _missingTiles is non-empty, _missingTiles contains tiles the hand lacks to pass the given predicate.
     private _missingTiles: Tile[][];
@@ -49,8 +41,8 @@ export default class PointPredicateResult {
 
     constructor(pointPredicateId: string, 
         success: boolean, 
-        successTiles: Tile[][][], 
-        failureTiles: Tile[][], 
+        successTiles: ReadonlyArray<ReadonlyArray<Tile>>[], 
+        failureTiles: ReadonlyArray<ReadonlyArray<Tile>>, 
         missingTiles: Tile[][],
         matchedMeldIndicesSubsets: ReadonlySet<ReadonlySet<number>>,
         //failureMeldIndices: ReadonlySet<number>,
@@ -82,11 +74,11 @@ export default class PointPredicateResult {
         this._ignored = ignored;
     }
 
-    get successTiles(): Tile[][][] {
+    get successTiles(): ReadonlyArray<ReadonlyArray<Tile>>[] {
         return this._successTiles;
     }
 
-    get failureTiles(): Tile[][] {
+    get failureTiles(): ReadonlyArray<ReadonlyArray<Tile>> {
         return this._failureTiles;
     }
 

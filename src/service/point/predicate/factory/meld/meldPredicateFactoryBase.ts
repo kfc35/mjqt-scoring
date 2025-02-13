@@ -1,22 +1,22 @@
 import { Tile } from "model/tile/tile";
 import Meld from "model/meld/meld";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { wrapSet } from "common/generic/setUtils";
 import { toTiles } from "common/meldUtils";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are at least numMinMatches matches. */
-export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<StandardWinningHand> {
-    return (winningHand : StandardWinningHand) => {
-        const [indicesSubsets, meldFoundMatch] = getMatchingIndicesSubsetsIgnoreExposed(winningHand.getMelds(), meldsToMatch);
+export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<MeldBasedWinningHand> {
+    return (winningHand : MeldBasedWinningHand) => {
+        const [indicesSubsets, meldFoundMatch] = getMatchingIndicesSubsetsIgnoreExposed(winningHand.melds, meldsToMatch);
 
         if ([...indicesSubsets].every(pairIndices => pairIndices.size >= numMinMatches)) {
             return new PointPredicateResult(pointPredicateID, true, [meldsToMatch.map(pair => pair.tiles)], [], [], indicesSubsets, []);
         }
         
         const successTiles : Tile[][][] = 
-            [...indicesSubsets].map((indicesSubset) => getTilesFromMeldsAndIndices(winningHand.getMelds(), indicesSubset));
+            [...indicesSubsets].map((indicesSubset) => getTilesFromMeldsAndIndices(winningHand.melds, indicesSubset));
         // TODO missingTiles
         return new PointPredicateResult(pointPredicateID, false, successTiles, getTilesFromMeldsAndIncludeFlagArray(meldsToMatch, meldFoundMatch), [], 
         indicesSubsets, []);
@@ -28,9 +28,9 @@ export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatc
  * If numMinMeldsPass and numMaxMeldsPass are both undefined, every meld must pass the checker. */
 export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
         meldChecker: (meld: Meld) => boolean,
-        numMinMeldsPass?: number | undefined, numMaxMeldsPass? : number | undefined) : PointPredicate<StandardWinningHand> {
-    return (winningHand : StandardWinningHand) => {
-        const [successTiles, failedTiles, passingIndices] = checkMelds(winningHand.getMelds().map((meld, index) => [meld, index]), meldChecker);
+        numMinMeldsPass?: number | undefined, numMaxMeldsPass? : number | undefined) : PointPredicate<MeldBasedWinningHand> {
+    return (winningHand : MeldBasedWinningHand) => {
+        const [successTiles, failedTiles, passingIndices] = checkMelds(winningHand.melds.map((meld, index) => [meld, index]), meldChecker);
         if (!numMinMeldsPass && !numMaxMeldsPass && failedTiles.length > 0) {
             return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
         } else if (!numMinMeldsPass && !numMaxMeldsPass) {
@@ -49,10 +49,10 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
 export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
     meldFilter: (meld: Meld) => boolean = () => true,
     meldsChecker: (melds: Meld[]) => boolean,
-    filteredMeldChecker: (meld: Meld) => boolean) : PointPredicate<StandardWinningHand> {
-    return (winningHand : StandardWinningHand) => {
+    filteredMeldChecker: (meld: Meld) => boolean) : PointPredicate<MeldBasedWinningHand> {
+    return (winningHand : MeldBasedWinningHand) => {
         const filteredMelds: [Meld, number][] = [];
-        for (const [index, meld] of winningHand.getMelds().entries()) {
+        for (const [index, meld] of winningHand.melds.entries()) {
             if (meldFilter(meld)) {
                 filteredMelds.push([meld, index]);
             }

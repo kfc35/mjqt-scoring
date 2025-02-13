@@ -89,7 +89,7 @@ export function assertEachTileHasQuantityLTEMaxPerTile(tiles: SuitedOrHonorTile[
     }
 }
 
-export function tilesListIsEmpty(tiles: Tile[][]): boolean {
+export function tilesListIsEmpty(tiles: ReadonlyArray<ReadonlyArray<Tile>>): boolean {
     return tiles.length === 0 || // tiles = []
         (tiles.length === 1 && (!tiles[0] || (tiles[0].length === 0))); // tiles = [[]] or tiles = [undefined]
 }

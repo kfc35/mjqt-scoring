@@ -1,7 +1,7 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SuitedTileValue, suitedTileValues } from "model/tile/tileValue";
 import SuitedTile from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
@@ -13,8 +13,8 @@ import { getAllIndicesSet } from "common/meldUtils";
 import { atLeastFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 
-const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand) => {
+const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const extraTile: SuitedTile[] = [];
         const tilesOrderedBySTV: SuitedTile[][] = [];
@@ -66,10 +66,10 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<StandardWin
         }
 
         return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-            true, [[...tilesOrderedBySTV, extraTile]], [], [], wrapSet(getAllIndicesSet(standardWinningHand.getMelds())), []);
+            true, [[...tilesOrderedBySTV, extraTile]], [], [], wrapSet(getAllIndicesSet(standardWinningHand.melds)), []);
     }
 
-export const NINE_GATES_PREDICATE : PointPredicate<StandardWinningHand> = 
+export const NINE_GATES_PREDICATE : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.NINE_GATES, ALL_ONE_SUIT_PREDICATE_STANDARD, 
         sufficientTileQuantitiesNineGatesSubPredicate,
         atLeastFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld

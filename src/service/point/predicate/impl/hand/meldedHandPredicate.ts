@@ -1,8 +1,8 @@
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { WinContext } from "model/winContext/winContext";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
+import WinContext from "model/winContext/winContext";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { RoundContext } from "model/roundContext/roundContext";
 import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/winConditionSubPredicate";
 import { lastTileCompletedPairSubPredicate, 
@@ -14,11 +14,11 @@ import { RootPointPredicateConfiguration } from "service/point/predicate/configu
 import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 
-const atLeastFourExposedNonPairMeldsSubPredicate : PointPredicate<StandardWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
+const atLeastFourExposedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
     meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meld.exposed);
 
-export const MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand: StandardWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {   
+export const MELDED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {   
         const logicConfig = config.getLogicConfiguration();
         if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR)) {
             if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
@@ -49,6 +49,6 @@ export const MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> =
     };
 
 // four exposed non-pair melds, won by discard to finish the pair.
-export const FULLY_MELDED_HAND_PREDICATE : PointPredicate<StandardWinningHand> = 
+export const FULLY_MELDED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.FULLY_MELDED_HAND, atLeastFourExposedNonPairMeldsSubPredicate, 
         onePairSubPredicate, notSelfDrawSubPredicate, ifLastTileWasDiscardThenItCompletedPairSubPredicate);

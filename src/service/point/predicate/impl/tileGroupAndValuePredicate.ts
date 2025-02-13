@@ -1,8 +1,8 @@
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import PointPredicateResult from "service/point/predicate/pointPredicateResult";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { consolidateSets, wrapSet } from "common/generic/setUtils";
 import { terminalSuitedTileValues, simpleSuitedTileValues, SuitedTileValue, DragonTileValue } from "model/tile/tileValue";
@@ -12,8 +12,8 @@ import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { HONOR_TILES, SUITED_TILES } from "common/deck";
 
 // TODO break these up into sub predicates so that it may be easier to see where things failed?
-export const ALL_ONE_SUIT_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> =
-    (standardWinningHand : StandardWinningHand) => {
+export const ALL_ONE_SUIT_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> =
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
         const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
@@ -54,8 +54,8 @@ function allOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesS
     );
 }
 
-export const ALL_ONE_SUIT_AND_HONORS_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand : StandardWinningHand) => {
+export const ALL_ONE_SUIT_AND_HONORS_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
         const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
@@ -87,8 +87,8 @@ function allOneSuitAndHonorsPredicate(winningHand: WinningHand, wrappedSuitedTil
     ); // TODO matched indices?
 }
 
-export const ALL_HONORS_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand : StandardWinningHand) => {
+export const ALL_HONORS_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
         const honorTileIndices = consolidateSets([...honorTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
@@ -119,8 +119,8 @@ function allHonorsPredicate(winningHand: WinningHand, wrappedHonorTileIndicesSet
     ); // TODO matched indices?
 }
 
-export const VOIDED_SUIT_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand : StandardWinningHand) => {
+export const VOIDED_SUIT_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
         const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
@@ -144,8 +144,8 @@ function voidedSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesS
     return new PointPredicateResult(PointPredicateID.VOIDED_SUIT, false, [], tilesSepBySuit, [], new Set(), []);
 }
 
-export const ALL_TERMINALS_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand : StandardWinningHand) => {
+export const ALL_TERMINALS_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const terminalIndices = consolidateSets([...terminalSuitedTileValues.keys()].map(stv => tileGroupValueMaps.getMeldIndicesForSuitedTileValue(stv)))
         return allTerminalsPredicate(standardWinningHand, wrapSet(terminalIndices));
@@ -171,8 +171,8 @@ function allTerminalsPredicate(winningHand: WinningHand, wrappedTerminalsIndices
     return new PointPredicateResult(PointPredicateID.ALL_TERMINALS, false, [], [...honorTiles, ...nonTerminalTiles], [], new Set(), []);
 }
 
-export const ALL_HONORS_AND_TERMINALS_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand : StandardWinningHand) => {
+export const ALL_HONORS_AND_TERMINALS_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const terminalIndices = consolidateSets([...terminalSuitedTileValues.keys()].map(stv => tileGroupValueMaps.getMeldIndicesForSuitedTileValue(stv)))
         const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
@@ -204,8 +204,8 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, wrappedHonorsA
     return new PointPredicateResult(PointPredicateID.ALL_HONORS_AND_TERMINALS, false, [], [...nonTerminalTiles], [], new Set(), []);
 }
 
-export const ALL_SIMPLES_PREDICATE_STANDARD : PointPredicate<StandardWinningHand> = 
-    (standardWinningHand : StandardWinningHand) => {
+export const ALL_SIMPLES_PREDICATE_STANDARD : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         const simplesIndices = consolidateSets([...simpleSuitedTileValues.keys()].map(stv => tileGroupValueMaps.getMeldIndicesForSuitedTileValue(stv)))
         return allSimplesPredicate(standardWinningHand, wrapSet(simplesIndices));
@@ -232,7 +232,7 @@ function allSimplesPredicate(winningHand: WinningHand, wrappedSimplesIndicesSet:
     return new PointPredicateResult(PointPredicateID.ALL_SIMPLES, false, [], [...honorTiles, ...nonSimpleTiles], [], new Set(), []);
 }
 
-export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, standardWinningHand: StandardWinningHand, 
+export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, standardWinningHand: MeldBasedWinningHand, 
     givenSuitedTileGroup: SuitedTileGroup, givenDragonTileValue: DragonTileValue) : PointPredicateResult {
     const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();

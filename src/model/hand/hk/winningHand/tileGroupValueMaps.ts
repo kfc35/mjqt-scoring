@@ -16,7 +16,7 @@ export interface TileGroupValueMaps {
     getTilesForTileValues(tileValues: ReadonlySet<SuitedOrHonorTileValue>): SuitedOrHonorTile[][]
 }
 
-export class StandardWinningHandTileGroupValueMaps implements TileGroupValueMaps {
+export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMaps {
     private _melds: readonly Meld[];
     private _knittedChowIndices: Set<number>;
     private _suitedTileGroupToKnittedChowTiles: Map<SuitedTileGroup, SuitedTile[]>;

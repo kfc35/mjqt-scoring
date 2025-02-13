@@ -3,12 +3,12 @@ import { Hand } from "model/hand/hk/hand";
 import Meld from "model/meld/meld";
 import Pair, { meldIsPair } from "model/meld/pair";
 import { isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { StandardWinningHand } from "model/hand/hk/winningHand/standardWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { meldsNotNullAndCorrectLength, meldsAreSubset } from "common/meldUtils";
 
 export const analyzeForSevenPairs = constructSevenPairsAnalyzer();
 
-function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
+function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
     return (hand: Hand) => {
         if (!!hand.userSpecifiedMelds && !hand.userSpecifiedMelds.every(meld => meldIsPair(meld))) {
             return [];
@@ -79,7 +79,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<StandardWinningHand> {
                 return []
             }
 
-            return [new StandardWinningHand(melds, winningMeldIndex, 
+            return [new MeldBasedWinningHand(melds, winningMeldIndex, 
                 hand.mostRecentTile(), hand.flowerTiles)];
         }
         return [];

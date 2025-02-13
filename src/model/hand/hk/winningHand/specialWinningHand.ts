@@ -1,6 +1,5 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { type FlowerTile } from "model/tile/group/flowerTile";
-import Meld from "model/meld/meld";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEachTileHasQuantityLTEMaxPerTile, assertTilesFlower, tilesUnique } from "common/tileUtils";
@@ -8,8 +7,7 @@ import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinning
 import { SpecialWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
 
 /** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
- * but still constitutes a win. 
- */
+ * but still constitutes a win. */
 export class SpecialWinningHand implements WinningHand {
     private _tiles: SuitedOrHonorTile[][]; // [][] in case there is a user friendly way of grouping the tiles.
     private _winningTile: SuitedOrHonorTile;
@@ -41,20 +39,12 @@ export class SpecialWinningHand implements WinningHand {
         this._specialWinningHandType = specialWinningHandType;
     }
 
-    getMelds(): ReadonlyArray<Meld> {
-        return [];
-    }
-
-    getTiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>>  {
+    get tiles(): ReadonlyArray<ReadonlyArray<SuitedOrHonorTile>>  {
         return this._tiles;
     }
 
     get tileGroupValueMaps(): SpecialWinningHandTileGroupValueMaps {
         return this._tileGroupValueMaps;
-    }
-
-    get meldWithWinningTileIndex() {
-        return undefined;
     }
 
     get winningTile() : SuitedOrHonorTile {

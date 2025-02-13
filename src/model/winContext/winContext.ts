@@ -12,6 +12,7 @@ export default class WinContext {
     winByFlowerReplacement: boolean;
     winByKongOnKongReplacement: boolean;
     winByFlowerOnFlowerReplacement: boolean;
+    winByMixedDoubleReplacement: boolean; // flower -> kong -> win or kong -> flower -> win
     winWithInitialHand: boolean;
 
     constructor(mostRecentTileIsLastOfItsKind: boolean,
@@ -22,6 +23,7 @@ export default class WinContext {
         winByFlowerReplacement: boolean,
         winByKongOnKongReplacement: boolean,
         winByFlowerOnFlowerReplacement: boolean,
+        winByMixedDoubleReplacement: boolean,
         winWithInitialHand: boolean) {
         this.mostRecentTileIsLastOfItsKind = mostRecentTileIsLastOfItsKind;
         this.winByRobbingAKong = winByRobbingAKong;
@@ -31,6 +33,7 @@ export default class WinContext {
         this.winByFlowerReplacement = winByFlowerReplacement;
         this.winByKongOnKongReplacement = winByKongOnKongReplacement;
         this.winByFlowerOnFlowerReplacement = winByFlowerOnFlowerReplacement;
+        this.winByMixedDoubleReplacement = winByMixedDoubleReplacement;
         this.winWithInitialHand = winWithInitialHand;
     }
 
@@ -43,6 +46,7 @@ export default class WinContext {
         _winByFlowerReplacement: boolean = false;
         _winByKongOnKongReplacement: boolean = false;
         _winByFlowerOnFlowerReplacement: boolean = false;
+        _winByMixedDoubleReplacement: boolean = false;
         _winWithInitialHand: boolean = false;
 
         winByRobbingAKong(winByRobbingAKong: boolean) {
@@ -77,6 +81,10 @@ export default class WinContext {
             this._winByFlowerOnFlowerReplacement = winByFlowerOnFlowerReplacement;
         }
 
+        winByMixedDoubleReplacement(winByMixedDoubleReplacement: boolean) {
+            this._winByMixedDoubleReplacement = winByMixedDoubleReplacement;
+        }
+
         winWithInitialHand(winWithInitialHand: boolean) {
             this._winWithInitialHand = winWithInitialHand;
         }
@@ -87,7 +95,7 @@ export default class WinContext {
                 this._winByLastTileOnWall, this._winByLastDiscardOfGame,
                 this._winByKongReplacement, this._winByFlowerReplacement,
                 this._winByKongOnKongReplacement, this._winByFlowerOnFlowerReplacement,
-                this._winWithInitialHand);
+                this._winByMixedDoubleReplacement, this._winWithInitialHand);
             return winContext;
         }
     }

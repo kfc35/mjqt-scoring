@@ -9,6 +9,9 @@ import { RootPointPredicateConfiguration } from "service/point/predicate/configu
  * They are simple statements that evaluate to true or false.
  * One or more "smaller" PointPredicates can be combined to compose a "Faan" or "PointCrierion"
 */
+
+// TODO two different kinds of PointPredicates
+// One that can create a list? and one that does not?
 export type PointPredicate<T extends WinningHand> = 
     ((winningHand : T, winCtx : WinContext, roundCtx : RoundContext, config : RootPointPredicateConfiguration) => PointPredicateResult);
 

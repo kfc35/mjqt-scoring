@@ -1,5 +1,5 @@
 // To check for other possible waits... (works with all other wait)
-// Take all the tiles for the same suit as the winning tile if it is a suited tile.
+// Take all the tiles for the same suit as the winning tile if it is a suited tile. they must be from concealed melds.
 // Try to find all possible meld combinations from these tiles, 
 // but get the list of tiles that would be used to complete the last set
 // If there is more than one unique tile that can complete all of the possible last sets, it is not a special wait.

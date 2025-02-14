@@ -3,9 +3,13 @@ import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinning
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { createPointPredicateResultBasedOnBooleanFlag } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE } from "common/deck";
-import { WIN_BY_KONG_PREDICATE } from "service/point/predicate/impl/winCondition/winConditionPredicate";
+import { winByAnyReplacementPredicate, WIN_BY_KONG_PREDICATE } from "service/point/predicate/impl/winCondition/winConditionPredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { meldIsChow } from "model/meld/chow";
+import { RootPointPredicateConfiguration } from "../../configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicConfiguration";
+import WinContext from "model/winContext/winContext";
+import { RoundContext } from "model/roundContext/roundContext";
 
 const winningTileIsFiveCircleSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
@@ -22,8 +26,15 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
             [standardWinningHand.meldWithWinningTile.tiles]);
     }
 
-// TODO replacement tile from kong only... configurable?
+const replacementPredicate : PointPredicate<MeldBasedWinningHand> = 
+    (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
+        if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED)) {
+            return winByAnyReplacementPredicate(standardWinningHand, winCtx, roundCtx, config);
+        }
+        return WIN_BY_KONG_PREDICATE(standardWinningHand, winCtx, roundCtx, config);
+    }
+
 export const PLUM_BLOSSOM_ON_THE_ROOF : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, winningTileIsFiveCircleSubPredicate, 
-        winningMeldIsFourFiveSixCircleChowSubPredicate, WIN_BY_KONG_PREDICATE
+        winningMeldIsFourFiveSixCircleChowSubPredicate, replacementPredicate
     );

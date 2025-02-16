@@ -6,6 +6,8 @@ import BambooTile from "model/tile/group/bambooTile";
 import CharacterTile from "model/tile/group/characterTile";
 import CircleTile from "model/tile/group/circleTile";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue } from "model/tile/tileValue";
+import { SuitedTileGroup } from "model/tile/group/suitedTile";
+import { TileGroup } from "model/tile/tileGroup";
 
 export const maxQuantityPerNonFlowerTile = 4;
 export const maxQuantityPerFlowerTile = 1;
@@ -79,6 +81,32 @@ export const CIRCLE_TILES = [ONE_CIRCLE, TWO_CIRCLE, THREE_CIRCLE,
     SEVEN_CIRCLE, EIGHT_CIRCLE, NINE_CIRCLE];
 
 export const SUITED_TILES = [...BAMBOO_TILES, ...CHARACTER_TILES, ...CIRCLE_TILES];
+
+export const TERMINAL_TILES = [ONE_BAMBOO, NINE_BAMBOO, ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE];
+
+export const SIMPLE_TILES = [TWO_BAMBOO, THREE_BAMBOO, 
+    FOUR_BAMBOO, FIVE_BAMBOO, SIX_BAMBOO, 
+    SEVEN_BAMBOO, EIGHT_BAMBOO,
+    TWO_CHARACTER, THREE_CHARACTER, 
+    FOUR_CHARACTER, FIVE_CHARACTER, SIX_CHARACTER, 
+    SEVEN_CHARACTER, EIGHT_CHARACTER,
+    TWO_CIRCLE, THREE_CIRCLE, 
+    FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE, 
+    SEVEN_CIRCLE, EIGHT_CIRCLE
+]
+
+export function getSuitedTilesForSuitedTileGroup(stg: SuitedTileGroup) {
+    if (stg === TileGroup.BAMBOO) {
+        return BAMBOO_TILES;
+    }
+    if (stg === TileGroup.CHARACTER) {
+        return CHARACTER_TILES;
+    }
+    if (stg === TileGroup.CIRCLE) {
+        return CIRCLE_TILES;
+    }
+    throw new Error(`Unsupported SuitedTileGroup ${stg}`);
+}
 
 export const GENTLEMEN_TILES = [PLUM_GENTLEMAN, ORCHID_GENTLEMAN, 
     CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN];

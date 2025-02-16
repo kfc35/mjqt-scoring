@@ -22,7 +22,10 @@ export enum PointPredicateLogicOption {
     MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR = "MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR",
 
     // Only pongs are allowed for self triplets (no kongs). Default = true
-    SELF_TRIPLETS_ONLY_PONGS_ALLOWED = "SELF_TRIPLETS_ONLY_PONGS_ALLOWED"
+    SELF_TRIPLETS_ONLY_PONGS_ALLOWED = "SELF_TRIPLETS_ONLY_PONGS_ALLOWED", 
+
+    // A replacement from flower also counts for getting the five circle. Default = false (only Kongs allowed)
+    PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED = "PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED"
 }
 
 export const pointPredicateLogicOptions: readonly PointPredicateLogicOption[] = 

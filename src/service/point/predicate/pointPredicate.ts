@@ -9,9 +9,6 @@ import { RootPointPredicateConfiguration } from "service/point/predicate/configu
  * They are simple statements that evaluate to true or false.
  * One or more "smaller" PointPredicates can be combined to compose a "Faan" or "PointCrierion"
 */
-
-// TODO two different kinds of PointPredicates
-// One that can create a list? and one that does not?
 export type PointPredicate<T extends WinningHand> = 
     ((winningHand : T, winCtx : WinContext, roundCtx : RoundContext, config : RootPointPredicateConfiguration) => PointPredicateResult);
 
@@ -20,13 +17,15 @@ export function predicateAnd<T extends WinningHand>(newPointPredicateId?: string
     return (winningHand: T, winContext : WinContext, roundContext : RoundContext, configuration : RootPointPredicateConfiguration)  => {
         const results: PointPredicateResult[] = pointPredicates.map(pointPredicate => pointPredicate(winningHand, winContext, roundContext, configuration));
         const andPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_&&_" + pointPredicateId))})`;
-        for (const result of results) {
+        for (const [index, result] of results.entries()) {
             if (!result.success) {
-                return new PointPredicateResult(`(${andPointPredicateId})`, false, result.successTiles, result.failureTiles, result.missingTiles, result.matchedMeldIndicesSubsets, [result]);
+                const otherResults = [...results];
+                otherResults.splice(index, 1);
+                return new PointPredicateResult(`(${andPointPredicateId})`, false, [result, ...otherResults]);
             }
         }
         // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
-        return new PointPredicateResult(`(${andPointPredicateId})`, true, [], [], [], new Set(), results);
+        return new PointPredicateResult(`(${andPointPredicateId})`, true, results);
     }
 }
 
@@ -34,12 +33,14 @@ export function predicateOr<T extends WinningHand>(newPointPredicateId?: string,
     return (winningHand: T, winContext : WinContext, roundContext : RoundContext, configuration : RootPointPredicateConfiguration)  => {
         const results: PointPredicateResult[] = pointPredicates.map(pointPredicate => pointPredicate(winningHand, winContext, roundContext, configuration));
         const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
-        for (const result of results) {
+        for (const [index, result] of results.entries()) {
             if (result.success) {
-                return new PointPredicateResult(`(${orPointPredicateId})`, true, result.successTiles, result.failureTiles, result.missingTiles, result.matchedMeldIndicesSubsets, [result]);
+                const otherResults = [...results];
+                otherResults.splice(index, 1);
+                return new PointPredicateResult(`(${orPointPredicateId})`, true, [result, ...otherResults]);
             }
         }
         // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
-        return new PointPredicateResult(`(${orPointPredicateId})`, false, [], [], [], new Set(), results);
+        return new PointPredicateResult(`(${orPointPredicateId})`, false, results);
     }
 }

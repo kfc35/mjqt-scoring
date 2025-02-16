@@ -67,7 +67,7 @@ export class MeldBasedWinningHand implements WinningHand {
         return this._tileGroupValueMaps;
     }
 
-    get winningTile() {
+    get winningTile(): SuitedOrHonorTile {
         return this._winningTile;
     }
 
@@ -85,11 +85,11 @@ export class MeldBasedWinningHand implements WinningHand {
         return this._melds;
     }
 
-    get meldWithWinningTileIndex() {
+    get meldWithWinningTileIndex(): number {
         return this._meldWithWinningTileIndex;
     }
 
-    get meldWithWinningTile() {
+    get meldWithWinningTile(): Meld {
         return this._meldWithWinningTile;
     }
 }

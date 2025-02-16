@@ -1,50 +1,120 @@
-import { Tile } from "model/tile/tile";
 import Meld from "model/meld/meld";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { wrapSet } from "common/generic/setUtils";
-import { toTiles } from "common/meldUtils";
+import { getOnlyTruthyElement } from "common/generic/setUtils";
+import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
+import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
+import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
+import PointPredicateFailureResultMeldDetail from "../../result/meldBased/pointPredicateFailureResultMeldDetail";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are at least numMinMatches matches. */
 export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<MeldBasedWinningHand> {
     return (winningHand : MeldBasedWinningHand) => {
-        const [indicesSubsets, meldFoundMatch] = getMatchingIndicesSubsetsIgnoreExposed(winningHand.melds, meldsToMatch);
-
-        if ([...indicesSubsets].every(pairIndices => pairIndices.size >= numMinMatches)) {
-            return new PointPredicateResult(pointPredicateID, true, [meldsToMatch.map(pair => pair.tiles)], [], [], indicesSubsets, []);
+        const [indicesSubsets, meldsToMatchGotMatchSuccessfully] = getMatchingIndicesSubsetsIgnoreExposed(winningHand.melds, meldsToMatch);
+        if (indicesSubsets.size > 1) {
+            throw new Error('indicesSubsets.size > 1 is currently not supported.');
         }
-        
-        const successTiles : Tile[][][] = 
-            [...indicesSubsets].map((indicesSubset) => getTilesFromMeldsAndIndices(winningHand.melds, indicesSubset));
-        // TODO missingTiles
-        return new PointPredicateResult(pointPredicateID, false, successTiles, getTilesFromMeldsAndIncludeFlagArray(meldsToMatch, meldFoundMatch), [], 
-        indicesSubsets, []);
+        const indicesSubset = getOnlyTruthyElement(indicesSubsets);
+        const meldsThatSatisfyPredicate = getMeldsSubsetFromIndicesSet(winningHand.melds, indicesSubset);
+
+        if (indicesSubset.size >= numMinMatches) {
+            return new PointPredicateSingleSuccessResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateSuccessResultMeldDetail.Builder()
+                        .meldsThatSatisfyPredicate(meldsThatSatisfyPredicate)
+                        .meldIndicesThatSatisfyPredicate(indicesSubset)
+                        .build()
+                )
+                .build();
+        } else {
+            const missingMelds: Meld[] = meldsToMatch.filter((_meld, index) => !meldsToMatchGotMatchSuccessfully[index]);
+            return new PointPredicateFailureResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateFailureResultMeldDetail.Builder()
+                        .meldsThatPartiallySatisfyPredicate(meldsThatSatisfyPredicate)
+                        .meldIndicesThatPartiallySatisfyPredicate(indicesSubset)
+                        .meldsThatAreMissingToSatisfyPredicate(missingMelds)
+                        .build()
+                )
+                .build();
+        }
     }
 }
 
 /* Evaluates meldChecker across all melds in the hand. 
  * The PointPredicate succeeds if at least numMinMeldsPass and at most numMaxMeldsPass melds pass the meldChecker. 
- * If numMinMeldsPass and numMaxMeldsPass are both undefined, every meld must pass the checker. */
+ * If numMinMeldsPass and numMaxMeldsPass are both undefined, every meld (incl. pair) must pass the checker. */
 export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
         meldChecker: (meld: Meld) => boolean,
         numMinMeldsPass?: number | undefined, numMaxMeldsPass? : number | undefined) : PointPredicate<MeldBasedWinningHand> {
     return (winningHand : MeldBasedWinningHand) => {
-        const [successTiles, failedTiles, passingIndices] = checkMelds(winningHand.melds.map((meld, index) => [meld, index]), meldChecker);
-        if (!numMinMeldsPass && !numMaxMeldsPass && failedTiles.length > 0) {
-            return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
+        const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(winningHand.melds.map((meld, index) => [meld, index]), meldChecker);
+        if (!numMinMeldsPass && !numMaxMeldsPass && failedMelds.length > 0) {
+            return new PointPredicateFailureResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateFailureResultMeldDetail.Builder()
+                        .meldsThatPartiallySatisfyPredicate(successMelds)
+                        .meldIndicesThatPartiallySatisfyPredicate(passingIndices)
+                        .meldsThatFailPredicate(failedMelds)
+                        .meldIndicesThatFailPredicate(failingIndices)
+                        .build()
+                )
+                .build();
         } else if (!numMinMeldsPass && !numMaxMeldsPass) {
-            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], [], wrapSet(passingIndices), []);
+            return new PointPredicateSingleSuccessResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateSuccessResultMeldDetail.Builder()
+                        .meldsThatSatisfyPredicate(successMelds)
+                        .meldIndicesThatSatisfyPredicate(passingIndices)
+                        .build()
+                )
+                .build();
         }
 
-        if ((!!numMinMeldsPass && successTiles.length >= numMinMeldsPass) && (!!numMaxMeldsPass && successTiles.length <= numMaxMeldsPass)) {
-            return new PointPredicateResult(pointPredicateID, true, [successTiles], [], [], wrapSet(passingIndices), []);
-        }
-        return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
+        if ((!!numMinMeldsPass && successMelds.length >= numMinMeldsPass) && (!!numMaxMeldsPass && successMelds.length <= numMaxMeldsPass)) {
+            return new PointPredicateSingleSuccessResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateSuccessResultMeldDetail.Builder()
+                        .meldsThatSatisfyPredicate(successMelds)
+                        .meldIndicesThatSatisfyPredicate(passingIndices)
+                        .build()
+                )
+                .build();
+        } else if ((!!numMinMeldsPass && successMelds.length < numMinMeldsPass)) {
+            return new PointPredicateFailureResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateFailureResultMeldDetail.Builder()
+                        .meldsThatPartiallySatisfyPredicate(successMelds)
+                        .meldIndicesThatPartiallySatisfyPredicate(passingIndices)
+                        .meldsThatFailPredicate(failedMelds)
+                        .meldIndicesThatFailPredicate(failingIndices)
+                        .build()
+                )
+                .build();
+        } 
+        return new PointPredicateFailureResult.Builder()
+            .pointPredicateId(pointPredicateID)
+            .meldDetail(
+                new PointPredicateFailureResultMeldDetail.Builder()
+                    // too many successful melds
+                    .meldsThatFailPredicate(successMelds) 
+                    .meldIndicesThatFailPredicate(passingIndices)
+                    .build()
+            )
+            .build();
     }
 }
 
-/* Evaluates meldsChecker across all the filtered melds in the hand. 
+/* Evaluates meldsChecker against the the whole list of melds in the hand included via meldFilter
+ * Also evaluates filteredMeldChecker against each individual meld in the filtered list
+ * By default, meldFilter includes all melds in the hand.
  * The PointPredicate succeeds if meldsChecker returns true, and filteredMeldChecker returns true for every meld that has passed the filter. */
 export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
     meldFilter: (meld: Meld) => boolean = () => true,
@@ -59,32 +129,59 @@ export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredic
         }
 
         if (meldsChecker(filteredMelds.map(([meld,]) => meld))) {
-            const [successTiles, failedTiles, passingIndices] = checkMelds(filteredMelds, filteredMeldChecker);
-            if (failedTiles.length === 0) {
-                return new PointPredicateResult(pointPredicateID, true, [successTiles], [], [], wrapSet(passingIndices), []);
+            const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(filteredMelds, filteredMeldChecker);
+            if (failedMelds.length === 0) {
+                return new PointPredicateSingleSuccessResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateSuccessResultMeldDetail.Builder()
+                        .meldsThatSatisfyPredicate(successMelds)
+                        .meldIndicesThatSatisfyPredicate(passingIndices)
+                        .build()
+                )
+                .build();
             } else {
-                return new PointPredicateResult(pointPredicateID, false, [], failedTiles, [], wrapSet(passingIndices), []);
+                return new PointPredicateFailureResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateFailureResultMeldDetail.Builder()
+                        .meldsThatPartiallySatisfyPredicate(successMelds)
+                        .meldIndicesThatPartiallySatisfyPredicate(passingIndices)
+                        .meldsThatFailPredicate(failedMelds)
+                        .meldIndicesThatFailPredicate(failingIndices)
+                        .build()
+                )
+                .build();
             }
-        } else { // the entire melds array failed the check, so consider all the melds to be failed tiles.
-            const tiles = toTiles(filteredMelds.map(([meld,]) => meld));
-            return new PointPredicateResult(pointPredicateID, false, [], tiles, [], new Set(), []);
+        } else { // the entire filtered melds array failed the check
+            return new PointPredicateFailureResult.Builder()
+                .pointPredicateId(pointPredicateID)
+                .meldDetail(
+                    new PointPredicateFailureResultMeldDetail.Builder()
+                        .meldsThatFailPredicate(filteredMelds.map(([meld, _]) => meld))
+                        .meldIndicesThatFailPredicate(new Set(filteredMelds.map(([_, index]) => index)))
+                        .build()
+                )
+                .build();
         }
     }
 }
 
-function checkMelds(meldIndexTuples: readonly [Meld, number][], meldChecker:(meld: Meld) => boolean): [Tile[][], Tile[][], Set<number>] {
-    const successTiles : Tile[][] = [];
-    const failedTiles : Tile[][] = [];
+function checkMelds(meldIndexTuples: readonly [Meld, number][], meldChecker:(meld: Meld) => boolean): [Meld[], Meld[], Set<number>, Set<number>] {
+    const successMelds : Meld[] = [];
+    const failedMelds : Meld[] = [];
     const passingIndices: Set<number> = new Set();
+    const failingIndices: Set<number> = new Set();
     for (const [meld, index] of meldIndexTuples) {
         if (meldChecker(meld)) {
-            successTiles.push([...meld.tiles]);
+            successMelds.push(meld);
             passingIndices.add(index);
         } else {
-            failedTiles.push([...meld.tiles]);
+            failedMelds.push(meld);
+            failingIndices.add(index);
         }
     }
-    return [successTiles, failedTiles, passingIndices];
+    return [successMelds, failedMelds, passingIndices, failingIndices];
 }
 
 /** 
@@ -152,32 +249,6 @@ function getMatchingIndicesSubsets(melds: readonly Meld[], meldsToMatch: Meld[],
 
 function getMatchingIndicesSubsetsIgnoreExposed(melds: readonly Meld[], meldsToMatch: Meld[]) : [Set<Set<number>>, boolean[]] {
     return getMatchingIndicesSubsets(melds, meldsToMatch, true);
-}
-
-function getTilesFromMeldsAndIndices(melds: readonly Meld[], meldIndices : Set<number>) : Tile[][] {
-    if (![...meldIndices].every(index => index < melds.length && index > -1)) {
-        throw new Error("Every meld index must be < melds.length and > -1.");
-    }
-    return [...meldIndices].map((meldIndex) => {
-        const meld = melds[meldIndex];
-        if (meld) {
-            return meld.tiles;
-        }
-        return []; // this should not happen.
-    }).filter(tiles => !!tiles && tiles.length !== 0);
-}
-
-function getTilesFromMeldsAndIncludeFlagArray(melds: readonly Meld[], includeFlagArray: boolean[]) : Tile[][] {
-    if (includeFlagArray.length !== melds.length) {
-        throw new Error("melds and includeFlagArray arrays must be of same length.");
-    }
-    return [...includeFlagArray].map((includeMeld, meldIndex) => {
-        const meld = melds[meldIndex];
-        if (includeMeld && !!meld) {
-            return meld.tiles;
-        }
-        return []; // this should not happen.
-    }).filter(tiles => !!tiles && tiles.length !== 0);
 }
 
 function dedup(setsOfIndices: Set<Set<number>>) : Set<Set<number>> {

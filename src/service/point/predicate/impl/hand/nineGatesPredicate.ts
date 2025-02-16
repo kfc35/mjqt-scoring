@@ -1,5 +1,4 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SuitedTileValue, suitedTileValues } from "model/tile/tileValue";
@@ -8,10 +7,15 @@ import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { suitedTilesAreAllSameSuit, partitionTilesByGroup } from "common/tileUtils";
 import { ALL_ONE_SUIT_PREDICATE_STANDARD } from "service/point/predicate/impl/tileGroupAndValuePredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
-import { wrapSet } from "common/generic/setUtils";
+import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
 import { atLeastFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
+import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
+import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
+import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
+import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
@@ -26,22 +30,29 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
                 throw new Error(`suitedTiles has an undefined element, which should not happen.`);
             }
             if (!suitedTilesAreAllSameSuit(suitedTiles)) {
-                return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], partitionTilesByGroup(suitedTiles), [], new Set(), []);
+                return new PointPredicateFailureResult.Builder()
+                    .pointPredicateId(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
+                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                        .tilesThatFailPredicate(partitionTilesByGroup(suitedTiles))
+                        .build()
+                    ).build();
             }
 
             if (stv === SuitedTileValue.ONE || stv === SuitedTileValue.NINE) {
                 minimumRequiredSuitedTileLength = 3
             }
-            if (suitedTiles.length <= 0) {
-                const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
-                const missingTiles: SuitedTile[] = [...suitedTileGroups].map(stg => constructSuitedTile(stg, stv));
-                return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], [], [missingTiles], new Set(), []);
-            }
             if (suitedTiles.length < minimumRequiredSuitedTileLength) {
-                return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], [suitedTiles], [], new Set(), []);
+                const suitedTileGroup = getOnlyTruthyElement(tileGroupValueMaps.getSuitedTileGroups());
+                const missingTiles: SuitedTile[] = [];
+                for (let i = 0; i < minimumRequiredSuitedTileLength - suitedTiles.length; i++) {
+                    missingTiles.push(constructSuitedTile(suitedTileGroup, stv));
+                }
+                return new PointPredicateFailureResult.Builder()
+                    .pointPredicateId(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
+                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                        .tilesThatAreMissingToSatisfyPredicate([missingTiles])
+                        .build()
+                    ).build();
             } else if (suitedTiles.length === minimumRequiredSuitedTileLength) {
                 tilesOrderedBySTV.push(suitedTiles);
             } else if (suitedTiles.length === (minimumRequiredSuitedTileLength + 1)) {
@@ -49,24 +60,46 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
                 extraTile.push(suitedTile);
                 tilesOrderedBySTV.push(suitedTiles);
             } else {
-                return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                    false, [], [suitedTiles], [], new Set(), []);
+                return new PointPredicateFailureResult.Builder()
+                    .pointPredicateId(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
+                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                        .tilesThatFailPredicate([suitedTiles])
+                        .build()
+                    ).build();
             }
         }
 
         if (extraTile.length > 1) {
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                false, [], [extraTile], [], new Set(), []);
+            return new PointPredicateFailureResult.Builder()
+                    .pointPredicateId(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
+                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                        .tilesThatFailPredicate([extraTile])
+                        .build()
+                    ).build();
         }
         if (extraTile.length < 1) {
             const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
             const missingTiles: SuitedTile[][] = [...suitedTileGroups].map(stg => (suitedTileValues.map(stv => constructSuitedTile(stg, stv))));
-            return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-                false, [], [], missingTiles, new Set(), []);
+            return new PointPredicateFailureResult.Builder()
+                    .pointPredicateId(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
+                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                        .tilesThatAreMissingToSatisfyPredicate(missingTiles)
+                        .build()
+                    ).build();
         }
 
-        return new PointPredicateResult(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES, 
-            true, [[...tilesOrderedBySTV, extraTile]], [], [], wrapSet(getAllIndicesSet(standardWinningHand.melds)), []);
+        return new PointPredicateSingleSuccessResult.Builder()
+            .pointPredicateId(PointPredicateID.SUBPREDICATE_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
+            .meldDetail(new PointPredicateSuccessResultMeldDetail.Builder()
+                .meldsThatSatisfyPredicate([...standardWinningHand.melds])
+                .meldIndicesThatSatisfyPredicate(getAllIndicesSet(standardWinningHand.melds))
+                .build()
+            )
+            .tileDetail(new PointPredicateSuccessResultTileDetail.Builder()
+                .tilesThatSatisfyPredicate([...tilesOrderedBySTV, extraTile])
+                .build()
+            )
+            .build();
     }
 
 export const NINE_GATES_PREDICATE : PointPredicate<MeldBasedWinningHand> = 

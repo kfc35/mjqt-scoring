@@ -30,7 +30,8 @@ export function createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId:
         return failureResultBuilder.build();
     }
 }
-export function createPointPredicateSwitcher(meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>,
+
+export function createGenericPointPredicateRouter(meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>,
     specialPointPredicate: PointPredicate<SpecialWinningHand>): PointPredicate<WinningHand> {
     return (winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (winningHand instanceof SpecialWinningHand) {
@@ -41,4 +42,24 @@ export function createPointPredicateSwitcher(meldBasedPointPredicate: PointPredi
         }
         throw new Error('winningHand not instanceOf either implementing class of WinningHand');
     };
+}
+
+function createAutoFailureSpecialPredicate(pointPredicateId: string): PointPredicate<SpecialWinningHand> {
+    return () => new PointPredicateFailureResult(pointPredicateId);
+}
+
+function createAutoSuccessSpecialPredicate(pointPredicateId: string): PointPredicate<SpecialWinningHand> {
+    return () => new PointPredicateSingleSuccessResult(pointPredicateId);
+}
+
+export function createPointPredicateRouterWithAutoFailSpecialPredicate(pointPredicateId: string, meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>): PointPredicate<WinningHand> {
+    return createGenericPointPredicateRouter(meldBasedPointPredicate, 
+        createAutoFailureSpecialPredicate(pointPredicateId)
+    );
+}
+
+export function createPointPredicateRouterWithAutoSucessSpecialPredicate(pointPredicateId: string, meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>): PointPredicate<WinningHand> {
+    return createGenericPointPredicateRouter(meldBasedPointPredicate, 
+        createAutoSuccessSpecialPredicate(pointPredicateId)
+    );
 }

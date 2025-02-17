@@ -12,6 +12,7 @@ export class SpecialWinningHand implements WinningHand {
     private _tiles: SuitedOrHonorTile[][]; // [][] because the tiles are organized into subgroups.
     private _tilesIndexWithWinningTile: number;
     private _winningTile: SuitedOrHonorTile;
+    private _winningTileIsPartOfPair: boolean;
     private _isSelfDrawn: boolean;
     private _tileGroupValueMaps: SpecialWinningHandTileGroupValueMaps;
     protected _flowerTiles: FlowerTile[];
@@ -21,6 +22,7 @@ export class SpecialWinningHand implements WinningHand {
     constructor(tiles: SuitedOrHonorTile[][], 
         tilesIndexWithWinningTile: number,
         winningTile: SuitedOrHonorTile, 
+        winningTileIsPartOfPair: boolean,
         isSelfDrawn: boolean, 
         flowerTiles: FlowerTile[],
         specialWinningHandType: SpecialWinningHandType) {
@@ -28,11 +30,15 @@ export class SpecialWinningHand implements WinningHand {
         assertTilesNotNullAndCorrectLength(unwrappedTiles, handMinLengthWithoutFlowers, handMinLengthWithoutFlowers);
         assertTilesSuitedOrHonor(unwrappedTiles);
         assertEachTileHasQuantityLTEMaxPerTile(unwrappedTiles);
+        if (!tiles[tilesIndexWithWinningTile]) {
+            throw new Error(`tiles at tilesIndexWithWinningTile (${tilesIndexWithWinningTile}) must be defined`);
+        }
         
         this._tiles = tiles;
         this._tilesIndexWithWinningTile = tilesIndexWithWinningTile;
         this._tileGroupValueMaps = new SpecialWinningHandTileGroupValueMaps(this._tiles);
         this._winningTile = winningTile;
+        this._winningTileIsPartOfPair = winningTileIsPartOfPair;
         assertTilesFlower(flowerTiles);
         if (!tilesUnique(flowerTiles)) {
             throw new Error("flowerTiles must be unique");
@@ -56,6 +62,10 @@ export class SpecialWinningHand implements WinningHand {
 
     get winningTile() : SuitedOrHonorTile {
         return this._winningTile;
+    }
+
+    get winningTileIsPartOfPair(): boolean {
+        return this._winningTileIsPartOfPair;
     }
 
     get flowerTiles() : FlowerTile[] {

@@ -1,11 +1,11 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate, createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE } from "common/deck";
 import { winByAnyReplacementPredicate, WIN_BY_KONG_PREDICATE } from "service/point/predicate/impl/winCondition/winConditionPredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
-import { meldIsChow } from "model/meld/chow";
+import Chow, { meldIsChow } from "model/meld/chow";
 import { RootPointPredicateConfiguration } from "../../configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicConfiguration";
 import WinContext from "model/winContext/winContext";
@@ -48,6 +48,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
                     new PointPredicateFailureResultMeldDetail.Builder()
                     .meldsThatFailPredicate([winningTileMeld])
                     .meldIndicesThatFailPredicate(new Set([standardWinningHand.meldWithWinningTileIndex]))
+                    .meldsThatAreMissingToSatisfyPredicate([new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])])
                     .build()
                 ).build();
         }
@@ -61,7 +62,8 @@ const replacementPredicate : PointPredicate<MeldBasedWinningHand> =
         return WIN_BY_KONG_PREDICATE(standardWinningHand, winCtx, roundCtx, config);
     }
 
-export const PLUM_BLOSSOM_ON_THE_ROOF : PointPredicate<MeldBasedWinningHand> = 
+const plumBlossomOnRoofMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, winningTileIsFiveCircleSubPredicate, 
         winningMeldIsFourFiveSixCircleChowSubPredicate, replacementPredicate
     );
+export const PLUM_BLOSSOM_ON_ROOF_PREDICATE = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, plumBlossomOnRoofMeldBasedPredicate);

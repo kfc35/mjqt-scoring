@@ -1,5 +1,5 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { createPointPredicateSwitcher } from "../util/pointPredicateUtil";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
@@ -10,8 +10,6 @@ import { allGivenSuitAndGivenDragonPredicate } from "service/point/predicate/imp
 import { TileGroup } from "model/tile/tileGroup";
 import { DragonTileValue } from "model/tile/tileValue";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
-import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
 
 const allBambooAndGreenDragonSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand : MeldBasedWinningHand) => {
@@ -25,9 +23,7 @@ const jadeDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
         onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         GREEN_DRAGON_PONG_KONG_PREDICATE);
-const jadeDragonSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.JADE_DRAGON).build();
-export const JADE_DRAGON_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(jadeDragonMeldBasedPredicate, jadeDragonSpecialPredicate);
+export const JADE_DRAGON_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.JADE_DRAGON, jadeDragonMeldBasedPredicate);
 
 const allCharacterAndRedDragonSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand : MeldBasedWinningHand) => {
@@ -41,9 +37,7 @@ const rubyDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
         onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         RED_DRAGON_PONG_KONG_PREDICATE);
-const rubyDragonSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.RUBY_DRAGON).build();
-export const RUBY_DRAGON_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(rubyDragonMeldBasedPredicate, rubyDragonSpecialPredicate);
+export const RUBY_DRAGON_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.RUBY_DRAGON, rubyDragonMeldBasedPredicate);
 
 const allCircleAndWhiteDragonSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand : MeldBasedWinningHand) => {
@@ -57,6 +51,4 @@ const pearlDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
         onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         WHITE_DRAGON_PONG_KONG_PREDICATE);
-const pearlDragonSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.PEARL_DRAGON).build();
-export const PEARL_DRAGON_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(pearlDragonMeldBasedPredicate, pearlDragonSpecialPredicate);
+export const PEARL_DRAGON_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.PEARL_DRAGON, pearlDragonMeldBasedPredicate);

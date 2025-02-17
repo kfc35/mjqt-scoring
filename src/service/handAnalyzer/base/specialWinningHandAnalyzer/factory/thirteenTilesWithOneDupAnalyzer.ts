@@ -43,10 +43,10 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
         if (!!hand.userSpecifiedMelds && !(hand.userSpecifiedMelds.length === 1 && meldExistsInMelds(hand.userSpecifiedMelds, pair, false))) {
             return [];
         }
-        const tiles = [[...twelveNonDups], [...pair.tiles]];
+        const tiles = [[...twelveNonDups].sort(), [...pair.tiles]];
         const indexOfWinningTile = tilesDoesNotContainTile(pair.tiles, hand.mostRecentTile()) ? 0 : 1;
         return [new SpecialWinningHand(tiles, indexOfWinningTile,
-            hand.mostRecentTile(), hand.mostRecentTileIsSelfDrawn(), 
+            hand.mostRecentTile(), indexOfWinningTile != 1, hand.mostRecentTileIsSelfDrawn(), 
             hand.flowerTiles, SpecialWinningHandType.THIRTEEN_ORPHANS)];
     };
 }

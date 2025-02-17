@@ -6,59 +6,28 @@ import { dragonPairSubPredicate, windPairSubPredicate } from "service/point/pred
 import { twoDragonsPongKongSubPredicate, threeWindsPongKongSubPredicate } from "service/point/predicate/impl/meld/honorsPongKongSubPredicates";
 import { atLeastFourChowsSubPredicate, atLeastFourKongsSubPredicate, atLeastFourPongsKongsSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
-import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { createPointPredicateSwitcher } from "../util/pointPredicateUtil";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
 
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);
-
-const sevenPairsSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SEVEN_PAIRS).build();
-
-export const SEVEN_PAIRS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(sevenPairsMeldBasedPredicate, sevenPairsSpecialPredicate);
-
+export const SEVEN_PAIRS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SEVEN_PAIRS, sevenPairsMeldBasedPredicate);
 
 const allChowsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.ALL_CHOWS, onePairSubPredicate, atLeastFourChowsSubPredicate);
-
-const allChowsSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.ALL_CHOWS).build();
-
-export const ALL_CHOWS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(allChowsMeldBasedPredicate, allChowsSpecialPredicate);
-
+export const ALL_CHOWS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.ALL_CHOWS, allChowsMeldBasedPredicate);
 
 const allPongsKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.ALL_PONGS_AND_KONGS, onePairSubPredicate, atLeastFourPongsKongsSubPredicate);
-
-const allPongsKongsSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.ALL_PONGS_AND_KONGS).build();
-
-export const ALL_PONGS_AND_KONGS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(allPongsKongsMeldBasedPredicate, allPongsKongsSpecialPredicate);
-
+export const ALL_PONGS_AND_KONGS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.ALL_PONGS_AND_KONGS, allPongsKongsMeldBasedPredicate);
 
 const allKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.ALL_KONGS, onePairSubPredicate, atLeastFourKongsSubPredicate);
-
-const allKongsSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.ALL_KONGS).build();
-
-export const ALL_KONGS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(allKongsMeldBasedPredicate, allKongsSpecialPredicate);
-
+export const ALL_KONGS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.ALL_KONGS, allKongsMeldBasedPredicate);
 
 const smallThreeDragonsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.SMALL_THREE_DRAGONS, dragonPairSubPredicate, twoDragonsPongKongSubPredicate);
-
-const smallThreeDragonsSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SMALL_THREE_DRAGONS).build();
-
-export const SMALL_THREE_DRAGONS : PointPredicate<WinningHand> = createPointPredicateSwitcher(smallThreeDragonsMeldBasedPredicate, smallThreeDragonsSpecialPredicate);
-
+export const SMALL_THREE_DRAGONS : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SMALL_THREE_DRAGONS, smallThreeDragonsMeldBasedPredicate);
 
 const smallFourWindsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
 predicateAnd(PointPredicateID.SMALL_FOUR_WINDS, windPairSubPredicate, threeWindsPongKongSubPredicate);
-
-const smallFourWindsSpecialPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SMALL_FOUR_WINDS).build();
-
-export const SMALL_FOUR_WINDS : PointPredicate<MeldBasedWinningHand> = createPointPredicateSwitcher(smallFourWindsMeldBasedPredicate, smallFourWindsSpecialPredicate);
+export const SMALL_FOUR_WINDS : PointPredicate<MeldBasedWinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SMALL_FOUR_WINDS, smallFourWindsMeldBasedPredicate);

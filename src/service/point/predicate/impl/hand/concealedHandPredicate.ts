@@ -1,7 +1,7 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
-import { createPointPredicateSwitcher } from "../util/pointPredicateUtil";
+import { createGenericPointPredicateRouter, createPointPredicateRouterWithAutoFailSpecialPredicate, createPointPredicateRouterWithAutoSucessSpecialPredicate as createPointPredicateRouterWithAutoSuccessSpecialPredicate } from "../util/pointPredicateUtil";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
@@ -16,9 +16,7 @@ import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/w
 import { ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
 import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "../util/pointPredicateUtil";
 
@@ -44,9 +42,7 @@ const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
                 atLeastFourConcealedPongsKongsSubPredicate(standardWinningHand, winCtx, roundCtx, config));
         }
     };
-const selfTriplesSpecialPredicate : PointPredicate<SpecialWinningHand> = () =>
-        new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SELF_TRIPLETS).build();
-export const SELF_TRIPLETS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(selfTripletsMeldBasedPredicate, selfTriplesSpecialPredicate);
+export const SELF_TRIPLETS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SELF_TRIPLETS, selfTripletsMeldBasedPredicate);
 
 const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
@@ -62,9 +58,7 @@ const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
                 onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config));
         }
     };
-const concealedSpecialHandPredicate : PointPredicate<SpecialWinningHand> = () => 
-    new PointPredicateSingleSuccessResult.Builder().pointPredicateId(PointPredicateID.CONCEALED_HAND).build();
-export const CONCEALED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(concealedHandMeldBasedPredicate, concealedSpecialHandPredicate);
+export const CONCEALED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoSuccessSpecialPredicate(PointPredicateID.CONCEALED_HAND, concealedHandMeldBasedPredicate);
 
 // four concealed non-pair melds, MUST win via self-draw
 const fullyConcealedMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
@@ -76,4 +70,4 @@ const fullyConcealedSpecialHandPredicate : PointPredicate<SpecialWinningHand> =
                     new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[specialWinningHand.winningTile]]).build(), 
                     new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[specialWinningHand.winningTile]]).build());
     }
-export const FULLY_CONCEALED_PREDICATE : PointPredicate<WinningHand> = createPointPredicateSwitcher(fullyConcealedMeldBasedPredicate, fullyConcealedSpecialHandPredicate);
+export const FULLY_CONCEALED_PREDICATE : PointPredicate<WinningHand> = createGenericPointPredicateRouter(fullyConcealedMeldBasedPredicate, fullyConcealedSpecialHandPredicate);

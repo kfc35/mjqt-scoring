@@ -8,6 +8,7 @@ export interface WinningHand {
     get tilesIndexWithWinningTile(): number;
     get tileGroupValueMaps() : TileGroupValueMaps;
     get winningTile() : SuitedOrHonorTile;
+    get winningTileIsPartOfPair() :  boolean;
     isSelfDrawn() : boolean;
     get flowerTiles() : FlowerTile[];
 }

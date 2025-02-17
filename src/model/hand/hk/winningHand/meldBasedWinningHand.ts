@@ -71,6 +71,10 @@ export class MeldBasedWinningHand implements WinningHand {
         return this._winningTile;
     }
 
+    get winningTileIsPartOfPair(): boolean {
+        return meldIsPair(this._meldWithWinningTile);
+    }
+
     get flowerTiles() : FlowerTile[] {
         return this._flowerTiles;
     }

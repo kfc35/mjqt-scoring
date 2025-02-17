@@ -10,6 +10,7 @@ import { atLeastFourChowsSubPredicate } from "../meld/cpkSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
+import { NO_GENTLEMEN_OR_SEASONS_PREDICATE } from "../flower/flowerPredicate";
 
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);
 export const SEVEN_PAIRS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SEVEN_PAIRS, sevenPairsMeldBasedPredicate);
@@ -32,4 +33,9 @@ export const SMALL_THREE_DRAGONS : PointPredicate<WinningHand> = createPointPred
 
 const smallFourWindsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
 predicateAnd(PointPredicateID.SMALL_FOUR_WINDS, windPairSubPredicate, threeWindsPongKongSubPredicate);
-export const SMALL_FOUR_WINDS : PointPredicate<MeldBasedWinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SMALL_FOUR_WINDS, smallFourWindsMeldBasedPredicate);
+export const SMALL_FOUR_WINDS : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SMALL_FOUR_WINDS, smallFourWindsMeldBasedPredicate);
+
+// TODO valueless pair logic config.
+const commonHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
+predicateAnd(PointPredicateID.COMMON_HAND, allChowsMeldBasedPredicate, NO_GENTLEMEN_OR_SEASONS_PREDICATE);
+export const COMMON_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.COMMON_HAND, commonHandMeldBasedPredicate);

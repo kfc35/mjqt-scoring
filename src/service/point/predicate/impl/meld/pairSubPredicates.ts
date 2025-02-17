@@ -1,7 +1,7 @@
 import { BAMBOO_TILES, CHARACTER_TILES, CIRCLE_TILES, DRAGON_TILES, WIND_TILES } from "common/deck";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { createPairQuantityPredicate } from "service/point/predicate/factory/meld/pairPredicateFactory";
-import { createPairsExistPredicate } from "service/point/predicate/factory/meld/pairPredicateFactory";
+import { createPairQuantityPredicate } from "service/point/predicate/factory/meldBased/pairPredicateFactory";
+import { createPairsExistPredicate } from "service/point/predicate/factory/meldBased/pairPredicateFactory";
 import { PointPredicate, predicateOr } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RoundContext } from "model/roundContext/roundContext";

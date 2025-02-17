@@ -5,9 +5,9 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
-export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPongsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
+export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPongsKongsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 4 > maxQuantityPerNonFlowerTile) {
@@ -21,11 +21,11 @@ export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles
         kongsToMatch.push(new Kong(tile));
     }
 
-    if (numPongsToMatch && (numPongsToMatch > tiles.length || numPongsToMatch < 0)) {
+    if (numPongsKongsToMatch && (numPongsKongsToMatch > tiles.length || numPongsKongsToMatch < 0)) {
         throw new Error(`numPairsToMatch must be between 0 and tiles.length (${tiles.length})`);
     }
     
-    return createMeldsExistPredicate(pointPredicateID, [...pongsToMatch, ...kongsToMatch], (numPongsToMatch ?? tiles.length) * 2);
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, [...pongsToMatch, ...kongsToMatch], (numPongsKongsToMatch ?? tiles.length) * 2);
 }
 
 export function createPongOrKongQuantityPredicate(pointPredicateID : string, minNumPongOrKongs: number) : PointPredicate<MeldBasedWinningHand> {

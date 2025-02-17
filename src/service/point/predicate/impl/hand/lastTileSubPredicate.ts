@@ -1,13 +1,13 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import Meld from "model/meld/meld";
 import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";
 import { meldIsPong } from "model/meld/pong";
-import { createChowMinQuantityPredicate } from "service/point/predicate/factory/meld/chowPredicateFactory";
-import { createKongMinQuantityPredicate } from "service/point/predicate/factory/meld/kongPredicateFactory";
+import { createChowMinQuantityPredicate } from "service/point/predicate/factory/meldBased/chowPredicateFactory";
+import { createKongMinQuantityPredicate } from "service/point/predicate/factory/meldBased/kongPredicateFactory";
 import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
 import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
 import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";

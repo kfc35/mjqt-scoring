@@ -4,7 +4,7 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
 // Checks that pongs exist in the winning hand for each single tile in tiles
 export function createPongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPongsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
@@ -23,7 +23,7 @@ export function createPongsExistPredicate(pointPredicateID : string, tiles: Suit
         throw new Error(`numPairsToMatch must be between 0 and tiles.length (${tiles.length})`);
     }
     
-    return createMeldsExistPredicate(pointPredicateID, pongsToMatch, numPongsToMatch ?? tiles.length);
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, pongsToMatch, numPongsToMatch ?? tiles.length);
 }
 
 export function createPongQuantityPredicate(pointPredicateID : string, minNumPongs: number) : PointPredicate<MeldBasedWinningHand> {

@@ -1,6 +1,6 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { createPongOrKongsExistPredicate } from "service/point/predicate/factory/meld/pongOrKongPredicateFactory";
+import { createPongOrKongsExistPredicate } from "service/point/predicate/factory/meldBased/pongOrKongPredicateFactory";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { DRAGON_TILES, WIND_TILES } from "common/deck";
 

@@ -3,6 +3,8 @@ import { RoundContext } from "model/roundContext/roundContext";
 import WinContext from "model/winContext/winContext"
 import PointPredicateResult from "service/point/predicate/result/pointPredicateResult"
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 
 /** 
  * PointPredicates apply to WinningHands and WinContext. 
@@ -11,6 +13,19 @@ import { RootPointPredicateConfiguration } from "service/point/predicate/configu
 */
 export type PointPredicate<T extends WinningHand> = 
     ((winningHand : T, winCtx : WinContext, roundCtx : RoundContext, config : RootPointPredicateConfiguration) => PointPredicateResult);
+
+export function createPointPredicateSwitcher(meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>, 
+    specialPointPredicate: PointPredicate<SpecialWinningHand>): PointPredicate<WinningHand> {
+    return (winningHand : WinningHand, winCtx : WinContext, roundCtx : RoundContext, config : RootPointPredicateConfiguration) => {
+        if (winningHand instanceof SpecialWinningHand) {
+            return specialPointPredicate(winningHand, winCtx, roundCtx, config);
+        }
+        else if (winningHand instanceof MeldBasedWinningHand) {
+            return meldBasedPointPredicate(winningHand, winCtx, roundCtx, config);
+        }
+        throw new Error('winningHand not instanceOf either implementing class of WinningHand');
+    }
+}
 
 // You can combine PointPredicates themselves, or you can combine the results (look at PointPredicateResult class)
 export function predicateAnd<T extends WinningHand>(newPointPredicateId?: string, ...pointPredicates :PointPredicate<T>[]) : PointPredicate<T> {

@@ -5,7 +5,7 @@ import SuitedTile from "model/tile/group/suitedTile";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
 // Checks that all the given tile sequences exist as chows in a winning hand.
 // You can use this function for knitted tiles
@@ -24,20 +24,20 @@ export function createChowsExistPredicateFromSequences(pointPredicateID : string
     if (numSequencesToMatch && (numSequencesToMatch > tileSequences.length || numSequencesToMatch < 0)) {
         throw new Error(`numSequencesToMatch must be between 0 and tileSequences.length (${tileSequences.length})`);
     }
-    return createMeldsExistPredicate(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
 }
 
-// Creates same suited tile sequences using the provided tiles as the lowest in the sequence, then checks for those sequences in the winning hand.
+// Creates same suited tile sequences using the provided tiles as the lowest in a consecutive, non-knitted sequence, then checks for those sequences in the winning hand.
 export function createChowsExistPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[], numSequencesToMatch? : number) : PointPredicate<MeldBasedWinningHand> {
     const chows : Chow[] = [];
     for (const tile of tiles) {
         const nextTileValue = getNextSuitedTileValue(tile.value);
         if (!nextTileValue) {
-            throw new Error("Invalid tile provided. Tile must be earliest tile in the sequence, ");
+            throw new Error("Invalid tile provided. Tile value must be earliest tile in the sequence (<=7)");
         }
         const twoAfterTileValue = getNextSuitedTileValue(nextTileValue);
         if (!twoAfterTileValue) {
-            throw new Error("Invalid tile provided. Tile must be earliest tile in the sequence, ");
+            throw new Error("Invalid tile provided. Tile value must be earliest tile in the sequence (<=7)");
         }
         const nextTile = constructSuitedTile(tile.group, nextTileValue);
         const twoAfterTile = constructSuitedTile(tile.group, twoAfterTileValue);
@@ -48,7 +48,7 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
     if (numSequencesToMatch && (numSequencesToMatch > tiles.length || numSequencesToMatch < 0)) {
         throw new Error(`numSequencesToMatch must be between 0 and tiles.length (${tiles.length})`);
     }
-    return createMeldsExistPredicate(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
 }
 
 export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<MeldBasedWinningHand> {

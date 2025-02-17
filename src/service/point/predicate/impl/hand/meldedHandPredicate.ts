@@ -7,8 +7,8 @@ import { RoundContext } from "model/roundContext/roundContext";
 import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/winConditionSubPredicate";
 import { lastTileCompletedPairSubPredicate, 
     ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate, 
-    ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/handSubPredicate";
-import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+    ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
+import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
@@ -25,6 +25,7 @@ export const MELDED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> =
                 return PointPredicateResult.and(PointPredicateID.MELDED_HAND,
                     atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
                     onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
+                    // the last tile must complete the pair, no matter if it is self draw or discard
                     lastTileCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, config));
             } else { // no restrictions on hand if last tile was a discard. the pair can be self drawn.
                 // this is the most permissive option.
@@ -32,6 +33,7 @@ export const MELDED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> =
                     atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
                     onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
                     ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate(standardWinningHand, winContext, roundContext, config));
+                    // if the last tile was discard, it can have been used to complete either the pair or an exposed meld
             }
         } else if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             // this is the most restrictive option, and is the same as the fully melded hand predicate.
@@ -45,6 +47,7 @@ export const MELDED_HAND_PREDICATE : PointPredicate<MeldBasedWinningHand> =
                 atLeastFourExposedNonPairMeldsSubPredicate(standardWinningHand, winContext, roundContext, config),
                 onePairSubPredicate(standardWinningHand, winContext, roundContext, config),
                 notSelfDrawSubPredicate(standardWinningHand, winContext, roundContext, config));
+                // the last tile (a discard) can be used to complete either the pair or the fourth exposed meld.
         }
     };
 

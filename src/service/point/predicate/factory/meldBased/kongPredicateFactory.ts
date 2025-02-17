@@ -5,14 +5,14 @@ import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import Kong from "model/meld/kong";
 import { meldIsKong } from "model/meld/kong";
-import { createMeldsExistPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meld/meldPredicateFactoryBase";
+import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
 // Checks that kongs exist in the winning hand for each single tile in tiles
 export function createKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numKongsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 4 > maxQuantityPerNonFlowerTile) {
-            throw new Error(`Cannot create a predicate of more than 1 pong for the same tile: ${tile.group} ${tile.value}.`)
+            throw new Error(`Cannot create a predicate of more than 1 kong for the same tile: ${tile.group} ${tile.value}.`)
         }
     }
     const kongsToMatch : Kong[] = [];
@@ -23,7 +23,7 @@ export function createKongsExistPredicate(pointPredicateID : string, tiles: Suit
     if (numKongsToMatch && (numKongsToMatch > tiles.length || numKongsToMatch < 0)) {
         throw new Error(`numKongsToMatch must be between 0 and tiles.length (${tiles.length})`);
     }
-    return createMeldsExistPredicate(pointPredicateID, kongsToMatch, numKongsToMatch ?? kongsToMatch.length);
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, kongsToMatch, numKongsToMatch ?? kongsToMatch.length);
 }
 
 export function createKongMinQuantityPredicate(pointPredicateID : string, minNumKongs: number) : PointPredicate<MeldBasedWinningHand> {

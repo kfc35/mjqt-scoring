@@ -9,7 +9,7 @@ import PointPredicateFailureResult from "../../result/pointPredicateFailureResul
 import PointPredicateFailureResultMeldDetail from "../../result/meldBased/pointPredicateFailureResultMeldDetail";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are at least numMinMatches matches. */
-export function createMeldsExistPredicate(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<MeldBasedWinningHand> {
+export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string, meldsToMatch: Meld[], numMinMatches: number) : PointPredicate<MeldBasedWinningHand> {
     return (winningHand : MeldBasedWinningHand) => {
         const [indicesSubsets, meldsToMatchGotMatchSuccessfully] = getMatchingIndicesSubsetsIgnoreExposed(winningHand.melds, meldsToMatch);
         if (indicesSubsets.size > 1) {

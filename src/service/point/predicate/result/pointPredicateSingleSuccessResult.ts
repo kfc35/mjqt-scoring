@@ -2,7 +2,7 @@ import PointPredicateSuccessResultMeldDetail from "./meldBased/pointPredicateSuc
 import PointPredicateResult from "./pointPredicateResult";
 import PointPredicateSuccessResultTileDetail from "./tile/pointPredicateSuccessResultTileDetail";
 
-export default class PointPredicateSingleSuccessResult extends PointPredicateResult{
+export default class PointPredicateSingleSuccessResult extends PointPredicateResult {
     private _meldDetail: PointPredicateSuccessResultMeldDetail | undefined;
     private _tileDetail: PointPredicateSuccessResultTileDetail | undefined;
 

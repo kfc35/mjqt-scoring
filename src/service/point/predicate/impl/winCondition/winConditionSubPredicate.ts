@@ -1,9 +1,13 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { createPointPredicateResultBasedOnBooleanFlag } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
+import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
 
 export const notSelfDrawSubPredicate : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {
-        return createPointPredicateResultBasedOnBooleanFlag(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW, !winningHand.isSelfDrawn(), [[winningHand.winningTile]]);
+        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW, !winningHand.isSelfDrawn(), 
+        new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[winningHand.winningTile]]).build(), 
+        new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[winningHand.winningTile]]).build());
     }

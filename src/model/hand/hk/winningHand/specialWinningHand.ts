@@ -7,7 +7,7 @@ import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinning
 import { SpecialWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
 
 /** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
- * but still constitutes a win. */
+ * but still constitutes a win. Every tile besides the last tile MUST have been received via self draw. */
 export class SpecialWinningHand implements WinningHand {
     private _tiles: SuitedOrHonorTile[][]; // [][] because the tiles are organized into subgroups.
     private _tilesIndexWithWinningTile: number;

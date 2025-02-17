@@ -3,7 +3,7 @@ import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinning
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import WinContext from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
-import { createPongOrKongsExistPredicate } from "service/point/predicate/factory/meld/pongOrKongPredicateFactory";
+import { createPongOrKongsExistPredicate } from "service/point/predicate/factory/meldBased/pongOrKongPredicateFactory";
 import { WIND_TILES } from "common/deck";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 

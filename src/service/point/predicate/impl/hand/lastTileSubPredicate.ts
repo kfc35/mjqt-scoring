@@ -1,22 +1,13 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import Meld from "model/meld/meld";
 import { meldIsPair } from "model/meld/pair";
-import { meldIsKong } from "model/meld/kong";
-import { meldIsPong } from "model/meld/pong";
-import { createChowMinQuantityPredicate } from "service/point/predicate/factory/meldBased/chowPredicateFactory";
-import { createKongMinQuantityPredicate } from "service/point/predicate/factory/meldBased/kongPredicateFactory";
 import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
 import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
 import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
 import PointPredicateFailureResultMeldDetail from "../../result/meldBased/pointPredicateFailureResultMeldDetail";
 import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
-
-export const atLeastFourChowsSubPredicate : PointPredicate<MeldBasedWinningHand> = createChowMinQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_CHOWS, 4);
-export const atLeastFourKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createKongMinQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_KONGS, 4);
-export const atLeastFourPongsKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createMeldCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_PONGS_AND_KONGS, meld => meldIsKong(meld) || meldIsPong(meld), 4);
 
 export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {

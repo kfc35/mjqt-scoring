@@ -4,7 +4,9 @@ import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredi
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { dragonPairSubPredicate, windPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { twoDragonsPongKongSubPredicate, threeWindsPongKongSubPredicate } from "service/point/predicate/impl/meld/honorsPongKongSubPredicates";
-import { atLeastFourChowsSubPredicate, atLeastFourKongsSubPredicate, atLeastFourPongsKongsSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
+import { atLeastFourPongsKongsSubPredicate } from "../meld/cpkSubPredicate";
+import { atLeastFourKongsSubPredicate } from "../meld/cpkSubPredicate";
+import { atLeastFourChowsSubPredicate } from "../meld/cpkSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";

@@ -9,7 +9,7 @@ import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPr
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { createPointPredicateSwitcher } from "service/point/predicate/pointPredicate";
+import { createPointPredicateSwitcher } from "../util/pointPredicateUtil";
 
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);
 

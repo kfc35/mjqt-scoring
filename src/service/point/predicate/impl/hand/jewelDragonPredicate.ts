@@ -1,4 +1,5 @@
-import { createPointPredicateSwitcher, PointPredicate } from "service/point/predicate/pointPredicate";
+import { PointPredicate } from "service/point/predicate/pointPredicate";
+import { createPointPredicateSwitcher } from "../util/pointPredicateUtil";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";

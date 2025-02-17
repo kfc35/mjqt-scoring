@@ -1,6 +1,7 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { createPointPredicateSwitcher, PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
+import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
+import { createPointPredicateSwitcher } from "../util/pointPredicateUtil";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";

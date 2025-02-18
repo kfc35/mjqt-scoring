@@ -1,10 +1,12 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { PointPredicate, predicateOr } from "service/point/predicate/pointPredicate";
+import { PointPredicate, predicateAnd, predicateOr } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import WinContext from "model/winContext/winContext";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
 import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
+import { RoundContext } from "model/roundContext/roundContext";
+import { WindDirection } from "model/roundContext/windDirection";
 
 export const SELF_DRAW_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {
@@ -82,8 +84,24 @@ export const winByAnyReplacementPredicate : PointPredicate<WinningHand> =
 export const winByAnyDoubleReplacementPredicate : PointPredicate<WinningHand> = 
     predicateOr(PointPredicateID.SUBPREDICATE_WIN_BY_ANY_DOUBLE_REPLACEMENT, WIN_BY_DOUBLE_KONG_PREDICATE, WIN_BY_DOUBLE_FLOWER_PREDICATE, WIN_BY_MIXED_DOUBLE_PREDICATE);
 
-export const WIN_WITH_INITIAL_HAND_PREDICATE : PointPredicate<WinningHand> = 
+const winWithInitialHandSubPredicate : PointPredicate<WinningHand> = 
     (winningHand: WinningHand, winContext: WinContext) => {
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.WIN_WITH_INITIAL_HAND, winContext.winWithInitialHand, 
             new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([...winningHand.tiles.map(tileSublist => [...tileSublist])]).build());
     }
+
+const seatWindIsEastSubPredicate : PointPredicate<WinningHand> = 
+    (_winningHand: WinningHand, _winContext: WinContext, roundContext: RoundContext) => {
+        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_SEAT_WIND_IS_EAST, roundContext.seatWind === WindDirection.EAST);
+}
+
+const seatWindIsNotEastSubPredicate : PointPredicate<WinningHand> = 
+    (_winningHand: WinningHand, _winContext: WinContext, roundContext: RoundContext) => {
+        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_NOT_SEAT_WIND_IS_EAST, roundContext.seatWind !== WindDirection.EAST);
+}
+
+export const EARTHLY_HAND_PREDICATE : PointPredicate<WinningHand> = 
+    predicateAnd(PointPredicateID.EARTHLY_HAND, winWithInitialHandSubPredicate, seatWindIsEastSubPredicate);
+
+export const HEAVENLY_HAND_PREDICATE : PointPredicate<WinningHand> = 
+predicateAnd(PointPredicateID.EARTHLY_HAND, winWithInitialHandSubPredicate, seatWindIsNotEastSubPredicate);

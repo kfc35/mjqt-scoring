@@ -5,7 +5,7 @@ import { SuitedTileValue, suitedTileValues } from "model/tile/tileValue";
 import SuitedTile from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { suitedTilesAreAllSameSuit, partitionTilesByGroup } from "common/tileUtils";
-import { ALL_ONE_SUIT_PREDICATE_STANDARD } from "service/point/predicate/impl/tileGroupAndValuePredicate";
+import { allOneSuitMeldBasedPredicate } from "service/point/predicate/impl/tileGroupAndValuePredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
@@ -16,6 +16,8 @@ import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredic
 import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
 import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
 import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
+import { WinningHand } from "model/hand/hk/winningHand/winningHand";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
@@ -102,8 +104,9 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
             .build();
     }
 
-export const NINE_GATES_PREDICATE : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.NINE_GATES, ALL_ONE_SUIT_PREDICATE_STANDARD, 
+const nineGatesMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
+    predicateAnd(PointPredicateID.NINE_GATES, allOneSuitMeldBasedPredicate, 
         sufficientTileQuantitiesNineGatesSubPredicate,
         atLeastFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld
         onePairSubPredicate);
+export const NINE_GATES_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.NINE_GATES, nineGatesMeldBasedPredicate);

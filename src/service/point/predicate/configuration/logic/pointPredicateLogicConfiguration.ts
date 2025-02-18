@@ -25,7 +25,10 @@ export enum PointPredicateLogicOption {
     SELF_TRIPLETS_ONLY_PONGS_ALLOWED = "SELF_TRIPLETS_ONLY_PONGS_ALLOWED", 
 
     // A replacement from flower also counts for getting the five circle. Default = false (only Kongs allowed)
-    PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED = "PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED"
+    PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED = "PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED",
+
+    // A common hand must have a valueless pair (non seat/prevailing wind pair or a suited pair only). Default = false
+    COMMON_HAND_MUST_HAVE_VALUELESS_PAIR = "COMMON_HAND_MUST_HAVE_VALUELESS_PAIR",
 }
 
 export const pointPredicateLogicOptions: readonly PointPredicateLogicOption[] = 

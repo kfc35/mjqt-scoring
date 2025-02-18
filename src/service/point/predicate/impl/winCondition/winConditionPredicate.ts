@@ -104,4 +104,4 @@ export const EARTHLY_HAND_PREDICATE : PointPredicate<WinningHand> =
     predicateAnd(PointPredicateID.EARTHLY_HAND, winWithInitialHandSubPredicate, seatWindIsEastSubPredicate);
 
 export const HEAVENLY_HAND_PREDICATE : PointPredicate<WinningHand> = 
-predicateAnd(PointPredicateID.EARTHLY_HAND, winWithInitialHandSubPredicate, seatWindIsNotEastSubPredicate);
+    predicateAnd(PointPredicateID.HEAVENLY_HAND, winWithInitialHandSubPredicate, seatWindIsNotEastSubPredicate);

@@ -10,7 +10,6 @@ import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";
 import { meldIsPong } from "model/meld/pong";
 import WinContext from "model/winContext/winContext";
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { RoundContext } from "model/roundContext/roundContext";
 import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/winConditionPredicate";
 import { ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
@@ -31,31 +30,31 @@ export const atLeastFourConcealedMeldsSubPredicate : PointPredicate<MeldBasedWin
 
 
 const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
+    (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.SELF_TRIPLETS_ONLY_PONGS_ALLOWED)) {
-            return PointPredicateResult.and(PointPredicateID.SELF_TRIPLETS,
-                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
-                atLeastFourConcealedPongsSubPredicate(standardWinningHand, winCtx, roundCtx, config));
+            return predicateAnd(PointPredicateID.SELF_TRIPLETS,
+                onePairSubPredicate,
+                atLeastFourConcealedPongsSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         } else {
-            return PointPredicateResult.and(PointPredicateID.SELF_TRIPLETS,
-                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
-                atLeastFourConcealedPongsKongsSubPredicate(standardWinningHand, winCtx, roundCtx, config));
+            return predicateAnd(PointPredicateID.SELF_TRIPLETS,
+                onePairSubPredicate,
+                atLeastFourConcealedPongsKongsSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         }
     };
 export const SELF_TRIPLETS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SELF_TRIPLETS, selfTripletsMeldBasedPredicate);
 
 const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
+    (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.CONCEALED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
-            return PointPredicateResult.and(PointPredicateID.CONCEALED_HAND,
-                atLeastFourConcealedNonPairMeldsSubPredicate(standardWinningHand, winCtx, roundCtx, config),
-                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config),
-                ifLastTileWasDiscardThenItCompletedPairSubPredicate(standardWinningHand, winCtx, roundCtx, config));
+            return predicateAnd(PointPredicateID.CONCEALED_HAND,
+                atLeastFourConcealedNonPairMeldsSubPredicate,
+                onePairSubPredicate,
+                ifLastTileWasDiscardThenItCompletedPairSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         } else { // last discarded tile can complete any meld
-            return PointPredicateResult.and(PointPredicateID.CONCEALED_HAND,
+            return predicateAnd(PointPredicateID.CONCEALED_HAND,
                 // pair can count as one of the concealed melds
-                atLeastFourConcealedMeldsSubPredicate(standardWinningHand, winCtx, roundCtx, config),
-                onePairSubPredicate(standardWinningHand, winCtx, roundCtx, config));
+                atLeastFourConcealedMeldsSubPredicate,
+                onePairSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         }
     };
 export const CONCEALED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoSuccessSpecialPredicate(PointPredicateID.CONCEALED_HAND, concealedHandMeldBasedPredicate);
@@ -64,6 +63,7 @@ export const CONCEALED_HAND_PREDICATE : PointPredicate<WinningHand> = createPoin
 const fullyConcealedMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.FULLY_CONCEALED_HAND,
             atLeastFourConcealedNonPairMeldsSubPredicate, onePairSubPredicate, SELF_DRAW_PREDICATE);
+// since special hands are concealed except for the last tile, only need to check for a self drawn last tile
 const fullyConcealedSpecialHandPredicate : PointPredicate<SpecialWinningHand> = 
     (specialWinningHand: SpecialWinningHand) => {
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.FULLY_CONCEALED_HAND, specialWinningHand.isSelfDrawn(), 

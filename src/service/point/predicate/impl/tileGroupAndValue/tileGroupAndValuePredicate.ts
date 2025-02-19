@@ -10,17 +10,18 @@ import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand
 import { type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getSuitedTilesForSuitedTileGroup, HONOR_TILES, SIMPLE_TILES, SUITED_TILES, TERMINAL_TILES } from "common/deck";
-import PointPredicateFailureResult from "../result/pointPredicateFailureResult";
-import PointPredicateFailureResultTileDetail from "../result/tile/pointPredicateFailureResultTileDetail";
-import PointPredicateSingleSuccessResult from "../result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultTileDetail from "../result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateSuccessResultMeldDetail from "../result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
+import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
+import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
+import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 import { constructHonorTile } from "model/tile/group/honorTileConstructor";
 import { TileGroup } from "model/tile/tileGroup";
-import { createGenericPointPredicateRouter as createPointPredicateRouter } from "./util/pointPredicateUtil";
+import { createGenericPointPredicateRouter as createPointPredicateRouter } from "../util/pointPredicateUtil";
 
-// TODO break these up into sub predicates so that it may be easier to see where things failed?
+// TODO break this file up, it is too long.
+
 export const allOneSuitMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
     (meldBasedWinningHand : MeldBasedWinningHand) => {
         const tileGroupValueMaps = meldBasedWinningHand.tileGroupValueMaps;

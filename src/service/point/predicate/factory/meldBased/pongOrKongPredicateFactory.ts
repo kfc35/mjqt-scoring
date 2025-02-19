@@ -28,6 +28,6 @@ export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles
     return createMeldsExistPredicateIgnoreExposed(pointPredicateID, [...pongsToMatch, ...kongsToMatch], (numPongsKongsToMatch ?? tiles.length) * 2);
 }
 
-export function createPongOrKongQuantityPredicate(pointPredicateID : string, minNumPongOrKongs: number) : PointPredicate<MeldBasedWinningHand> {
-    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meld => meldIsPong(meld) || meldIsKong(meld), minNumPongOrKongs);
+export function createPongOrKongQuantityPredicate(pointPredicateID : string, minNumPongOrKongs?: number, maxNumPongOrKongs: number | undefined = minNumPongOrKongs) : PointPredicate<MeldBasedWinningHand> {
+    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meld => meldIsPong(meld) || meldIsKong(meld), minNumPongOrKongs, maxNumPongOrKongs);
 }

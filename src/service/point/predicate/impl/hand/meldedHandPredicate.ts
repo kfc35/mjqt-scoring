@@ -15,8 +15,8 @@ import { PointPredicateLogicOption } from "service/point/predicate/configuration
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
 
-const atLeastFourExposedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_FOUR_EXPOSED_NON_PAIR_MELDS, 
-    meld => !meldIsPair(meld), melds => melds.length >= 4, meld => meld.exposed);
+const containsFourExposedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_EXPOSED_NON_PAIR_MELDS, 
+    meld => !meldIsPair(meld), melds => melds.length == 4, meld => meld.exposed);
 
 const meldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {   
@@ -24,14 +24,14 @@ const meldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
         if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR)) {
             if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
                 return predicateAnd(PointPredicateID.MELDED_HAND,
-                    atLeastFourExposedNonPairMeldsSubPredicate,
+                    containsFourExposedNonPairMeldsSubPredicate,
                     onePairSubPredicate,
                     // the last tile must complete the pair, no matter if it is self draw or discard
                     lastTileCompletedPairSubPredicate)(meldBasedWinningHand, winContext, roundContext, config);
             } else { // no restrictions on hand if last tile was a discard. the pair can be self drawn.
                 // this is the most permissive option.
                 return predicateAnd(PointPredicateID.MELDED_HAND,
-                    atLeastFourExposedNonPairMeldsSubPredicate,
+                    containsFourExposedNonPairMeldsSubPredicate,
                     onePairSubPredicate,
                     ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate)(meldBasedWinningHand, winContext, roundContext, config);
                     // if the last tile was discard, it can have been used to complete either the pair or an exposed meld
@@ -39,13 +39,13 @@ const meldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
         } else if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             // this is the most restrictive option, and is the same as the fully melded hand predicate.
             return predicateAnd(PointPredicateID.MELDED_HAND,
-                atLeastFourExposedNonPairMeldsSubPredicate,
+                containsFourExposedNonPairMeldsSubPredicate,
                 onePairSubPredicate,
                 notSelfDrawSubPredicate,
                 ifLastTileWasDiscardThenItCompletedPairSubPredicate)(meldBasedWinningHand, winContext, roundContext, config);
         } else { // no restrictions on hand if last tile was a discard
             return predicateAnd(PointPredicateID.MELDED_HAND,
-                atLeastFourExposedNonPairMeldsSubPredicate,
+                containsFourExposedNonPairMeldsSubPredicate,
                 onePairSubPredicate,
                 notSelfDrawSubPredicate)(meldBasedWinningHand, winContext, roundContext, config);
                 // the last tile (a discard) can be used to complete either the pair or the fourth exposed meld.
@@ -55,6 +55,6 @@ export const MELDED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPr
 
 // four exposed non-pair melds, won by discard to finish the pair.
 const fullyMeldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.FULLY_MELDED_HAND, atLeastFourExposedNonPairMeldsSubPredicate, 
+    predicateAnd(PointPredicateID.FULLY_MELDED_HAND, containsFourExposedNonPairMeldsSubPredicate, 
         onePairSubPredicate, notSelfDrawSubPredicate, ifLastTileWasDiscardThenItCompletedPairSubPredicate);
 export const FULLY_MELDED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.FULLY_MELDED_HAND, fullyMeldedHandMeldBasedPredicate);

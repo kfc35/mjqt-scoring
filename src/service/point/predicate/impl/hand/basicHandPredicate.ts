@@ -4,9 +4,9 @@ import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredi
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { dragonPairSubPredicate, valuelessPairSubPredicate, windPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { twoDragonsPongKongSubPredicate, threeWindsPongKongSubPredicate } from "service/point/predicate/impl/meld/honorsPongKongSubPredicates";
-import { atLeastFourPongsKongsSubPredicate } from "../meld/cpkSubPredicate";
-import { atLeastFourKongsSubPredicate } from "../meld/cpkSubPredicate";
-import { atLeastFourChowsSubPredicate } from "../meld/cpkSubPredicate";
+import { containsFourPongsKongsSubPredicate } from "../meld/cpkSubPredicate";
+import { containsFourKongsSubPredicate } from "../meld/cpkSubPredicate";
+import { containsFourChowsSubPredicate } from "../meld/cpkSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
@@ -19,11 +19,11 @@ import { PointPredicateLogicOption } from "../../configuration/logic/pointPredic
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);
 const allChowsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.ALL_CHOWS, onePairSubPredicate, atLeastFourChowsSubPredicate);
+    predicateAnd(PointPredicateID.ALL_CHOWS, onePairSubPredicate, containsFourChowsSubPredicate);
 const allPongsKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.ALL_PONGS_AND_KONGS, onePairSubPredicate, atLeastFourPongsKongsSubPredicate);
+    predicateAnd(PointPredicateID.ALL_PONGS_AND_KONGS, onePairSubPredicate, containsFourPongsKongsSubPredicate);
 const allKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.ALL_KONGS, onePairSubPredicate, atLeastFourKongsSubPredicate);
+    predicateAnd(PointPredicateID.ALL_KONGS, onePairSubPredicate, containsFourKongsSubPredicate);
 const smallThreeDragonsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.SMALL_THREE_DRAGONS, dragonPairSubPredicate, twoDragonsPongKongSubPredicate);
 const smallFourWindsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 

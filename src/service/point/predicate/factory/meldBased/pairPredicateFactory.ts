@@ -28,6 +28,6 @@ export function createPairsExistPredicate(pointPredicateID : string, tiles: Suit
     return createMeldsExistPredicateIgnoreExposed(pointPredicateID, pairsToMatch, numPairsToMatch ?? tiles.length);
 }
 
-export function createPairQuantityPredicate(pointPredicateID : string, numMinPairs: number, numMaxPairs: number | undefined = numMinPairs) : PointPredicate<MeldBasedWinningHand> {
+export function createPairQuantityPredicate(pointPredicateID : string, numMinPairs?: number, numMaxPairs: number | undefined = numMinPairs) : PointPredicate<MeldBasedWinningHand> {
     return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsPair, numMinPairs, numMaxPairs);
 }

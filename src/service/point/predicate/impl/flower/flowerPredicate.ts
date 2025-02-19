@@ -83,7 +83,7 @@ export const NO_GENTLEMEN_OR_SEASONS_PREDICATE : PointPredicate<WinningHand> =
         const gentlemenAndSeasons = filterFlowerTiles(winningHand.flowerTiles, [...GENTLEMEN_TILES, ...SEASON_TILES]);
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.NO_GENTLEMEN_OR_SEASONS, 
             gentlemenAndSeasons.length === 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([winningHand.flowerTiles]).build(), 
+            new PointPredicateSuccessResultTileDetail.Builder().build(), 
             new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([gentlemenAndSeasons]).build());
     }
 

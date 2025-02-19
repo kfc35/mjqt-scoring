@@ -51,6 +51,6 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
     return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
 }
 
-export function createChowMinQuantityPredicate(pointPredicateID : string, minNumChows: number) : PointPredicate<MeldBasedWinningHand> {
-    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsChow, minNumChows);
+export function createChowQuantityPredicate(pointPredicateID : string, minNumChows?: number, maxNumChows: number | undefined = minNumChows) : PointPredicate<MeldBasedWinningHand> {
+    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsChow, minNumChows, maxNumChows);
 }

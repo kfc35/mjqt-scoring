@@ -5,11 +5,11 @@ import { SuitedTileValue, suitedTileValues } from "model/tile/tileValue";
 import SuitedTile from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { suitedTilesAreAllSameSuit, partitionTilesByGroup } from "common/tileUtils";
-import { allOneSuitMeldBasedPredicate } from "service/point/predicate/impl/tileGroupAndValuePredicate";
+import { allOneSuitMeldBasedPredicate } from "service/point/predicate/impl/tileGroupAndValue/tileGroupAndValuePredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
-import { atLeastFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
+import { containsFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
@@ -107,6 +107,6 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
 const nineGatesMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.NINE_GATES, allOneSuitMeldBasedPredicate, 
         sufficientTileQuantitiesNineGatesSubPredicate,
-        atLeastFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld
+        containsFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld
         onePairSubPredicate);
 export const NINE_GATES_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.NINE_GATES, nineGatesMeldBasedPredicate);

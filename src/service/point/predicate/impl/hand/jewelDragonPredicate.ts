@@ -6,7 +6,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { ALL_PONGS_AND_KONGS_PREDICATE } from "service/point/predicate/impl/hand/basicHandPredicate";
 import { GREEN_DRAGON_PONG_KONG_PREDICATE, RED_DRAGON_PONG_KONG_PREDICATE, WHITE_DRAGON_PONG_KONG_PREDICATE } from "service/point/predicate/impl/meld/dragonPongPredicate";
-import { allGivenSuitAndGivenDragonPredicate } from "service/point/predicate/impl/tileGroupAndValuePredicate";
+import { allGivenSuitAndGivenDragonPredicate } from "service/point/predicate/impl/tileGroupAndValue/tileGroupAndValuePredicate";
 import { TileGroup } from "model/tile/tileGroup";
 import { DragonTileValue } from "model/tile/tileValue";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";

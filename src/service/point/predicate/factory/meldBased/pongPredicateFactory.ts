@@ -26,6 +26,6 @@ export function createPongsExistPredicate(pointPredicateID : string, tiles: Suit
     return createMeldsExistPredicateIgnoreExposed(pointPredicateID, pongsToMatch, numPongsToMatch ?? tiles.length);
 }
 
-export function createPongQuantityPredicate(pointPredicateID : string, minNumPongs: number) : PointPredicate<MeldBasedWinningHand> {
-    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsPong, minNumPongs);
+export function createPongQuantityPredicate(pointPredicateID : string, minNumPongs?: number, maxNumPongs: number | undefined = minNumPongs) : PointPredicate<MeldBasedWinningHand> {
+    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsPong, minNumPongs, maxNumPongs);
 }

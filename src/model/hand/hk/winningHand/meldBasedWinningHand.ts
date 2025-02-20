@@ -2,7 +2,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import Meld from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
-import { getMeldAtIndex, meldHasTile, toFlatTiles } from "common/meldUtils";
+import { getMeldAtIndex, meldHasTile, meldToFlatTiles } from "common/meldUtils";
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { meldIsPair } from "model/meld/pair";
@@ -21,7 +21,7 @@ export class MeldBasedWinningHand implements WinningHand {
     protected _flowerTiles: FlowerTile[];
 
     constructor(melds: Meld[], meldWithWinningTileIndex: number, winningTile: SuitedOrHonorTile, flowerTiles: FlowerTile[]) {
-        const tiles: SuitedOrHonorTile[] = toFlatTiles(melds);
+        const tiles: SuitedOrHonorTile[] = meldToFlatTiles(melds);
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);
         assertEachTileHasQuantityLTEMaxPerTile(tiles);

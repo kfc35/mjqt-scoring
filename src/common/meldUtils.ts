@@ -22,11 +22,11 @@ export function meldsNumTiles(melds: readonly Meld[]) : number {
     return melds.map(meld => meld.tiles.length).reduce<number>((sum, len) => sum + len, 0);
 }
 
-export function toTiles(melds: readonly Meld[]) : SuitedOrHonorTile[][] {
+export function meldToTilesList(melds: readonly Meld[]) : SuitedOrHonorTile[][] {
     return melds.map(meld => meld.tiles);
 }
 
-export function toFlatTiles(melds: readonly Meld[]) : SuitedOrHonorTile[] {
+export function meldToFlatTiles(melds: readonly Meld[]) : SuitedOrHonorTile[] {
     return melds.map(meld => meld.tiles)
         .reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []);
 }

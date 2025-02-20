@@ -5,7 +5,7 @@ import { isSuitedTileValue, SuitedTileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
 import { addToMapValueSet, pushToMapValueArray } from "common/generic/mapUtils";
 import { meldIsChow } from "model/meld/chow";
-import { toFlatTiles, getMeldsSubsetFromIndicesSet } from "common/meldUtils";
+import { meldToFlatTiles, getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 
 export interface TileGroupValueMaps {
     getSuitedTileGroups(): Set<SuitedTileGroup>;
@@ -114,10 +114,10 @@ export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMap
         return [...tileGroups.values()].map(tileGroup => {
             if (isSuitedTileGroup(tileGroup)) {
                 const tiles = this.getTilesFromKnittedChows(tileGroup);
-                const meldTiles = toFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForSuitedTileGroup(tileGroup)));
+                const meldTiles = meldToFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForSuitedTileGroup(tileGroup)));
                 return [...tiles, ...meldTiles];
             } 
-            return toFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForHonorTileGroup(tileGroup)));
+            return meldToFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForHonorTileGroup(tileGroup)));
         });
     }
 
@@ -126,7 +126,7 @@ export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMap
             if (isSuitedTileValue(tileValue)) {
                 return this.getTilesForSuitedTileValue(tileValue);
             } 
-            return toFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForHonorTileValue(tileValue)));
+            return meldToFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForHonorTileValue(tileValue)));
         });
     }
 }

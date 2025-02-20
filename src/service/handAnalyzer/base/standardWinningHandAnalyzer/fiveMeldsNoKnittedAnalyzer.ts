@@ -4,7 +4,7 @@ import Meld from "model/meld/meld";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand"
 import { analyzeForHonorMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorMeldsAnalyzer";
 import { analyzeForNonKnittedSuitedMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/nonKnittedSuitedMeldsAnalyzer";
-import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, toFlatTiles, meldHasTile, getIndexOfMeld } from "common/meldUtils";
+import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, meldToFlatTiles, meldHasTile, getIndexOfMeld } from "common/meldUtils";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 
@@ -25,7 +25,7 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<MeldBasedWinningHand> =
     // all tiles in the hand should be represented within the melds
     .filter(melds => meldsNumTiles(melds) === hand.getTotalQuantity())
     .filter(melds => {
-        const meldTiles = toFlatTiles(melds);
+        const meldTiles = meldToFlatTiles(melds);
         const meldTileQuantityMap = new TileToQuantityMap(meldTiles);
         return meldTiles.every(tile => meldTileQuantityMap.getQuantity(tile) === hand.getQuantity(tile))
     })

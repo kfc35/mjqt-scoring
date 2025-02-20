@@ -2,7 +2,8 @@ import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
 import { type SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import SuitedTile, { isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { type HongKongTile, isHongKongTile } from "model/tile/hk/hongKongTile";
-import { Tile } from "model/tile/tile.js";
+import { Tile } from "model/tile/tile";
+import { TileValue } from "model/tile/tileValue";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { TileGroup } from "model/tile/tileGroup";
@@ -100,14 +101,38 @@ export function suitedTilesAreAllSameSuit(tiles: SuitedTile[]): boolean {
 }
 
 export function partitionTilesByGroup(tiles: Tile[]): Tile[][] {
-    const tileGroupToTileMap : Map<TileGroup, Tile[]> = new Map();
+    const tileGroupToTilesMap : Map<TileGroup, Tile[]> = new Map();
     tiles.forEach(tile => {
-        const tiles = tileGroupToTileMap.get(tile.group);
+        const tiles = tileGroupToTilesMap.get(tile.group);
         if (tiles) {
             tiles.push(tile);
         } else {
-            tileGroupToTileMap.set(tile.group, [tile]);
+            tileGroupToTilesMap.set(tile.group, [tile]);
         }
     });
-    return [...tileGroupToTileMap.values()];
+    return [...tileGroupToTilesMap.values()];
+}
+
+export function partitionTilesByTile(tiles: Tile[]): Tile[][] {
+    const outerTilesMap : Map<TileGroup, Map<TileValue, Tile[]>> = new Map();
+    tiles.forEach(tile => {
+        let tileValueMap = outerTilesMap.get(tile.group);
+        if (!tileValueMap) {
+            tileValueMap = new Map();
+            outerTilesMap.set(tile.group, tileValueMap);
+        }
+        const tiles = tileValueMap.get(tile.value);
+        if (tiles) {
+            tiles.push(tile);
+        } else {
+            tileValueMap.set(tile.value, [tile]);
+        }
+    });
+    return [...outerTilesMap.values()]
+        .map(innerMap => [...innerMap.values()])
+        .reduce<Tile[][]>((accum, tiles) => accum.concat(tiles), []);
+}
+
+export function tilesListToTiles(tilesList: ReadonlyArray<ReadonlyArray<Tile>>): Tile[] {
+    return tilesList.reduce<Tile[]>((accum, tiles) => accum.concat(tiles), []);
 }

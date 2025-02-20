@@ -8,7 +8,7 @@ import { handMinLengthWithoutFlowers, handMaxLength, handMaxNumUniqueFlowers, ha
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
 import Meld from "model/meld/meld";
-import { meldExistsInMelds, toFlatTiles } from "common/meldUtils";
+import { meldExistsInMelds, meldToFlatTiles } from "common/meldUtils";
 import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 
 /** A Hand is an unsorted collection of Mahjong Tiles.
@@ -61,7 +61,7 @@ export class Hand {
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
 
         if (userSpecifiedMelds && userSpecifiedMelds.length > 0) {
-            const meldTiles = toFlatTiles(userSpecifiedMelds);
+            const meldTiles = meldToFlatTiles(userSpecifiedMelds);
             const meldTileToQuantity = new TileToQuantityMap(meldTiles);
             for (const tile of meldTiles) {
                 if (meldTileToQuantity.getQuantity(tile) > tileToQuantity.getQuantity(tile)) {

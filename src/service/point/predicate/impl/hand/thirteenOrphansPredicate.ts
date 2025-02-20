@@ -10,8 +10,10 @@ import PointPredicateFailureResult from "../../result/pointPredicateFailureResul
 import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
 import PointPredicateFailureResultMeldDetail from "../../result/meldBased/pointPredicateFailureResultMeldDetail";
 import { getAllIndicesSet } from "common/meldUtils";
+import { createPointPredicateRouter } from "../util/pointPredicateUtil";
+import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 
-export const THIRTEEN_ORPHANS_PREDICATE : PointPredicate<SpecialWinningHand> = 
+export const thirteenOrphansSpecialPredicate : PointPredicate<SpecialWinningHand> = 
     (specialWinningHand: SpecialWinningHand) => {
         if (specialWinningHand.specialWinningHandType === SpecialWinningHandType.THIRTEEN_ORPHANS) {
             return new PointPredicateSingleSuccessResult.Builder()
@@ -31,7 +33,7 @@ export const THIRTEEN_ORPHANS_PREDICATE : PointPredicate<SpecialWinningHand> =
             ).build();
     }
 
-export const THIRTEEN_ORPHANS_PREDICATE_MELD_BASED : PointPredicate<MeldBasedWinningHand> = 
+export const thirteenOrphansMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand) => {
         return new PointPredicateFailureResult.Builder()
         .pointPredicateId(PointPredicateID.THIRTEEN_ORPHANS)
@@ -47,3 +49,6 @@ export const THIRTEEN_ORPHANS_PREDICATE_MELD_BASED : PointPredicate<MeldBasedWin
             .build()
         ).build();
     }
+
+export const THIRTEEN_ORPHANS_PREDICATE : PointPredicate<WinningHand> = 
+    createPointPredicateRouter(thirteenOrphansMeldBasedPredicate, thirteenOrphansSpecialPredicate);

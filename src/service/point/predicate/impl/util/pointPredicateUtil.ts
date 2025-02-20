@@ -31,7 +31,7 @@ export function createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId:
     return failureResultBuilder.build();
 }
 
-export function createGenericPointPredicateRouter(meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>,
+export function createPointPredicateRouter(meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>,
     specialPointPredicate: PointPredicate<SpecialWinningHand>): PointPredicate<WinningHand> {
     return (winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (winningHand instanceof SpecialWinningHand) {
@@ -53,13 +53,13 @@ function createAutoSuccessSpecialPredicate(pointPredicateId: string): PointPredi
 }
 
 export function createPointPredicateRouterWithAutoFailSpecialPredicate(pointPredicateId: string, meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>): PointPredicate<WinningHand> {
-    return createGenericPointPredicateRouter(meldBasedPointPredicate, 
+    return createPointPredicateRouter(meldBasedPointPredicate, 
         createAutoFailureSpecialPredicate(pointPredicateId)
     );
 }
 
 export function createPointPredicateRouterWithAutoSucessSpecialPredicate(pointPredicateId: string, meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>): PointPredicate<WinningHand> {
-    return createGenericPointPredicateRouter(meldBasedPointPredicate, 
+    return createPointPredicateRouter(meldBasedPointPredicate, 
         createAutoSuccessSpecialPredicate(pointPredicateId)
     );
 }

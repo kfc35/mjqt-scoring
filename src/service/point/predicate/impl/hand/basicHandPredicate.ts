@@ -2,11 +2,10 @@ import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinning
 import { createPairQuantityPredicate } from "service/point/predicate/factory/meldBased/pairPredicateFactory";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { dragonPairSubPredicate, valuelessPairSubPredicate, windPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
-import { twoDragonsPongKongSubPredicate, threeWindsPongKongSubPredicate } from "service/point/predicate/impl/meld/honorsPongKongSubPredicates";
-import { containsFourPongsKongsSubPredicate } from "../meld/cpkSubPredicate";
-import { containsFourKongsSubPredicate } from "../meld/cpkSubPredicate";
-import { containsFourChowsSubPredicate } from "../meld/cpkSubPredicate";
+import { valuelessPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
+import { containsFourPongsKongsSubPredicate } from "../meld/meldQuantitySubPredicate";
+import { containsFourKongsSubPredicate } from "../meld/meldQuantitySubPredicate";
+import { containsFourChowsSubPredicate } from "../meld/meldQuantitySubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
@@ -24,10 +23,6 @@ const allPongsKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
     predicateAnd(PointPredicateID.ALL_PONGS_AND_KONGS, onePairSubPredicate, containsFourPongsKongsSubPredicate);
 const allKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.ALL_KONGS, onePairSubPredicate, containsFourKongsSubPredicate);
-const smallThreeDragonsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.SMALL_THREE_DRAGONS, dragonPairSubPredicate, twoDragonsPongKongSubPredicate);
-const smallFourWindsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.SMALL_FOUR_WINDS, windPairSubPredicate, threeWindsPongKongSubPredicate);
 
 const commonHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
@@ -46,6 +41,4 @@ export const SEVEN_PAIRS_PREDICATE : PointPredicate<WinningHand> = createPointPr
 export const ALL_CHOWS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.ALL_CHOWS, allChowsMeldBasedPredicate);
 export const ALL_PONGS_AND_KONGS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.ALL_PONGS_AND_KONGS, allPongsKongsMeldBasedPredicate);
 export const ALL_KONGS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.ALL_KONGS, allKongsMeldBasedPredicate);
-export const SMALL_THREE_DRAGONS : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SMALL_THREE_DRAGONS, smallThreeDragonsMeldBasedPredicate);
-export const SMALL_FOUR_WINDS : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SMALL_FOUR_WINDS, smallFourWindsMeldBasedPredicate);
 export const COMMON_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.COMMON_HAND, commonHandMeldBasedPredicate);

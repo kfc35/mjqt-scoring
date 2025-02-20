@@ -51,10 +51,11 @@ const meldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
                 // the last tile (a discard) can be used to complete either the pair or the fourth exposed meld.
         }
     };
-export const MELDED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.MELDED_HAND, meldedHandMeldBasedPredicate);
 
 // four exposed non-pair melds, won by discard to finish the pair.
 const fullyMeldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.FULLY_MELDED_HAND, containsFourExposedNonPairMeldsSubPredicate, 
         onePairSubPredicate, notSelfDrawSubPredicate, ifLastTileWasDiscardThenItCompletedPairSubPredicate);
+
+export const MELDED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.MELDED_HAND, meldedHandMeldBasedPredicate);
 export const FULLY_MELDED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.FULLY_MELDED_HAND, fullyMeldedHandMeldBasedPredicate);

@@ -1,7 +1,7 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
-import { createGenericPointPredicateRouter, createPointPredicateRouterWithAutoFailSpecialPredicate, createPointPredicateRouterWithAutoSucessSpecialPredicate as createPointPredicateRouterWithAutoSuccessSpecialPredicate } from "../util/pointPredicateUtil";
+import { createPointPredicateRouter, createPointPredicateRouterWithAutoFailSpecialPredicate, createPointPredicateRouterWithAutoSucessSpecialPredicate as createPointPredicateRouterWithAutoSuccessSpecialPredicate } from "../util/pointPredicateUtil";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
@@ -28,7 +28,6 @@ const containsFourConcealedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWi
 export const containsFourConcealedMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS, 
     (meld) => !meld.exposed, (melds) => melds.length === 4, () => true);
 
-
 const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.SELF_TRIPLETS_ONLY_PONGS_ALLOWED)) {
@@ -41,7 +40,6 @@ const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
                 containsFourConcealedPongsKongsSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         }
     };
-export const SELF_TRIPLETS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SELF_TRIPLETS, selfTripletsMeldBasedPredicate);
 
 const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
@@ -57,7 +55,6 @@ const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
                 onePairSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         }
     };
-export const CONCEALED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoSuccessSpecialPredicate(PointPredicateID.CONCEALED_HAND, concealedHandMeldBasedPredicate);
 
 // four concealed non-pair melds, MUST win via self-draw
 const fullyConcealedMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
@@ -70,4 +67,7 @@ const fullyConcealedSpecialHandPredicate : PointPredicate<SpecialWinningHand> =
                     new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[specialWinningHand.winningTile]]).build(), 
                     new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[specialWinningHand.winningTile]]).build());
     }
-export const FULLY_CONCEALED_PREDICATE : PointPredicate<WinningHand> = createGenericPointPredicateRouter(fullyConcealedMeldBasedPredicate, fullyConcealedSpecialHandPredicate);
+
+export const SELF_TRIPLETS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SELF_TRIPLETS, selfTripletsMeldBasedPredicate);
+export const CONCEALED_HAND_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoSuccessSpecialPredicate(PointPredicateID.CONCEALED_HAND, concealedHandMeldBasedPredicate);
+export const FULLY_CONCEALED_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouter(fullyConcealedMeldBasedPredicate, fullyConcealedSpecialHandPredicate);

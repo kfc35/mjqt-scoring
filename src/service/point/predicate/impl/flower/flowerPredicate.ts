@@ -7,8 +7,8 @@ import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/pr
 import { FlowerTile } from "model/tile/group/flowerTile";
 import { FLOWER_TILES, GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
 import { tilesDoesNotContainTile } from "common/tileUtils";
-import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
+import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export const SEAT_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand, _winCtx: WinContext, roundCtx: RoundContext) => {

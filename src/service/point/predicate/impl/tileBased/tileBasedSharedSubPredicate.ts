@@ -3,11 +3,11 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { HONOR_TILES, SUITED_TILES } from "common/deck";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export function handContainsHonorsSubPredicate(winningHand: WinningHand, honorTileIndicesSet: Set<number> = new Set()) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;

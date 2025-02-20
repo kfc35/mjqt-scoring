@@ -4,7 +4,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { dragonPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 

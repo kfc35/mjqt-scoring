@@ -13,7 +13,7 @@ import { meldIsPair } from "model/meld/pair";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
-import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 
 const containsFourExposedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_EXPOSED_NON_PAIR_MELDS, 
     meld => !meldIsPair(meld), melds => melds.length == 4, meld => meld.exposed);

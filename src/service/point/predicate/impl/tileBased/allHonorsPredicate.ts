@@ -4,13 +4,13 @@ import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { PointPredicate } from "../../pointPredicate";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
-import PointPredicateResult from "../../result/pointPredicateResult";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
-import { createPointPredicateRouter } from "../util/pointPredicateUtil";
-import { handContainsHonorsSubPredicate } from "./tileBasedSharedSubPredicate";
+import { PointPredicate } from "service/point/predicate/pointPredicate";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { handContainsHonorsSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
 
 function handContainsNoSuitsSubPredicate(winningHand: WinningHand): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;

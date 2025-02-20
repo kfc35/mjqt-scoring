@@ -1,5 +1,5 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
@@ -15,12 +15,12 @@ import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 import { constructHonorTile } from "model/tile/group/honorTileConstructor";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import type { SuitedTileGroup } from "model/tile/group/suitedTile";
-import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
-import PointPredicateResult from "../../result/pointPredicateResult";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
-import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
 export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, meldBasedWinningHand: MeldBasedWinningHand,
     givenSuitedTileGroup: SuitedTileGroup, givenDragonTileValue: DragonTileValue): PointPredicateResult {

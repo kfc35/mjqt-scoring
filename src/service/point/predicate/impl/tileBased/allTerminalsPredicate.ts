@@ -6,14 +6,14 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { terminalSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
-import { PointPredicate } from "../../pointPredicate";
-import PointPredicateSuccessResultMeldDetail from "../../result/meldBased/pointPredicateSuccessResultMeldDetail";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
-import PointPredicateResult from "../../result/pointPredicateResult";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
-import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
-import { createPointPredicateRouter } from "../util/pointPredicateUtil";
+import { PointPredicate } from "service/point/predicate/pointPredicate";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 
 function allTerminalsPredicate(winningHand: WinningHand, terminalsIndicesSet: Set<number> = new Set()): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;

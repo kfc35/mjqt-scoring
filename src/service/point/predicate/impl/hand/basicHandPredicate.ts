@@ -3,17 +3,17 @@ import { createPairQuantityPredicate } from "service/point/predicate/factory/mel
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { valuelessPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
-import { containsFourPongsKongsSubPredicate } from "../meld/meldQuantitySubPredicate";
-import { containsFourKongsSubPredicate } from "../meld/meldQuantitySubPredicate";
-import { containsFourChowsSubPredicate } from "../meld/meldQuantitySubPredicate";
+import { containsFourPongsKongsSubPredicate } from "service/point/predicate/impl/meld/meldQuantitySubPredicate";
+import { containsFourKongsSubPredicate } from "service/point/predicate/impl/meld/meldQuantitySubPredicate";
+import { containsFourChowsSubPredicate } from "service/point/predicate/impl/meld/meldQuantitySubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/pointPredicateUtil";
-import { NO_GENTLEMEN_OR_SEASONS_PREDICATE } from "../flower/flowerPredicate";
+import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { NO_GENTLEMEN_OR_SEASONS_PREDICATE } from "service/point/predicate/impl/flower/flowerPredicate";
 import WinContext from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
-import { RootPointPredicateConfiguration } from "../../configuration/root/rootPointPredicateConfiguration";
-import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicConfiguration";
+import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);

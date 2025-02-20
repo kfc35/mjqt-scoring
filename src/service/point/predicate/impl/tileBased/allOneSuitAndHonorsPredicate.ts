@@ -1,12 +1,12 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import PointPredicateResult from "../../result/pointPredicateResult";
-import { handContainsOneSuitSubPredicate, handContainsHonorsSubPredicate } from "./tileBasedSharedSubPredicate";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import { handContainsOneSuitSubPredicate, handContainsHonorsSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
 import { consolidateSets } from "common/generic/setUtils";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
-import { PointPredicate } from "../../pointPredicate";
-import { createPointPredicateRouter } from "../util/pointPredicateUtil";
+import { PointPredicate } from "service/point/predicate/pointPredicate";
+import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 
 function allOneSuitAndHonorsPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set(), honorTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
     return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT,

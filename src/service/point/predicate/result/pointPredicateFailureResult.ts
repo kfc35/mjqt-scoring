@@ -1,6 +1,6 @@
-import PointPredicateFailureResultMeldDetail from "./meldBased/pointPredicateFailureResultMeldDetail";
-import PointPredicateResult from "./pointPredicateResult";
-import PointPredicateFailureResultTileDetail from "./tile/pointPredicateFailureResultTileDetail";
+import PointPredicateFailureResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export default class PointPredicateFailureResult extends PointPredicateResult{
     private _meldDetail: PointPredicateFailureResultMeldDetail | undefined;

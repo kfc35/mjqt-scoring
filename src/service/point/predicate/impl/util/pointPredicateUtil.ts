@@ -1,15 +1,15 @@
 import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultTileDetail from "../../result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
+import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { RoundContext } from "model/roundContext/roundContext";
 import WinContext from "model/winContext/winContext";
-import { RootPointPredicateConfiguration } from "../../configuration/root/rootPointPredicateConfiguration";
-import { PointPredicate } from "../../pointPredicate";
+import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicate } from "service/point/predicate/pointPredicate";
 
 export function createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId: string, 
     flag: boolean,
@@ -58,7 +58,7 @@ export function createPointPredicateRouterWithAutoFailSpecialPredicate(pointPred
     );
 }
 
-export function createPointPredicateRouterWithAutoSucessSpecialPredicate(pointPredicateId: string, meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>): PointPredicate<WinningHand> {
+export function createPointPredicateRouterWithAutoSuccessSpecialPredicate(pointPredicateId: string, meldBasedPointPredicate: PointPredicate<MeldBasedWinningHand>): PointPredicate<WinningHand> {
     return createPointPredicateRouter(meldBasedPointPredicate, 
         createAutoSuccessSpecialPredicate(pointPredicateId)
     );

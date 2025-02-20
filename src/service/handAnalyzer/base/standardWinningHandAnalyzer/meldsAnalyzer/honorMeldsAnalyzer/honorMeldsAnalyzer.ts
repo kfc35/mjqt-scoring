@@ -8,7 +8,7 @@ import Meld from "model/meld/meld";
 import Pair from "model/meld/pair";
 import Pong from "model/meld/pong";
 import Kong from "model/meld/kong";
-import HonorTileValueQuantityMemo from "./honorTileValueQuantityMemo";
+import HonorTileValueQuantityMemo from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorTileValueQuantityMemo";
 
 /* This logic assumes that the hand does not consist of more than one pair */
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {

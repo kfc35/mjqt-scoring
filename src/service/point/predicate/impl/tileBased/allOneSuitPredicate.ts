@@ -2,15 +2,15 @@ import { consolidateSets } from "common/generic/setUtils";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { PointPredicate } from "../../pointPredicate";
-import { createPointPredicateRouter } from "../util/pointPredicateUtil";
-import { handContainsOneSuitSubPredicate } from "./tileBasedSharedSubPredicate";
-import PointPredicateResult from "../../result/pointPredicateResult";
+import { PointPredicate } from "service/point/predicate/pointPredicate";
+import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { handContainsOneSuitSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
+import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import PointPredicateFailureResult from "../../result/pointPredicateFailureResult";
-import PointPredicateSingleSuccessResult from "../../result/pointPredicateSingleSuccessResult";
-import PointPredicateFailureResultTileDetail from "../../result/tile/pointPredicateFailureResultTileDetail";
+import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
+import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export const allOneSuitMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = (meldBasedWinningHand: MeldBasedWinningHand) => {
     const tileGroupValueMaps = meldBasedWinningHand.tileGroupValueMaps;

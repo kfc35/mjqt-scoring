@@ -7,7 +7,18 @@ import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
-export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], numPongsKongsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
+export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], 
+    minNumPongsKongsToMatch: number, maxNumPongsKongsToMatch: number) : PointPredicate<MeldBasedWinningHand> {
+    if (minNumPongsKongsToMatch < 0 || minNumPongsKongsToMatch > tiles.length) {
+        throw new Error(`minNumPongsKongsToMatch must be between 0 and tiles.length (${tiles.length})`);
+    }
+    if (maxNumPongsKongsToMatch < 0 || maxNumPongsKongsToMatch > tiles.length) {
+        throw new Error(`minNumPongsKongsToMatch must be between 0 and tiles.length (${tiles.length})`);
+    }
+    if (minNumPongsKongsToMatch > maxNumPongsKongsToMatch) {
+        throw new Error(`minNumPongsKongsToMatch must be < maxNumPongsKongsToMatch`);
+    }
+    
     const tileQuantityMap = new TileToQuantityMap(tiles);
     for (const tile of tiles) {
         if (tileQuantityMap.getQuantity(tile) * 4 > maxQuantityPerNonFlowerTile) {
@@ -20,14 +31,11 @@ export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles
         pongsToMatch.push(new Pong(tile));
         kongsToMatch.push(new Kong(tile));
     }
-
-    if (numPongsKongsToMatch && (numPongsKongsToMatch > tiles.length || numPongsKongsToMatch < 0)) {
-        throw new Error(`numPairsToMatch must be between 0 and tiles.length (${tiles.length})`);
-    }
     
-    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, [...pongsToMatch, ...kongsToMatch], (numPongsKongsToMatch ?? tiles.length) * 2);
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, [...pongsToMatch, ...kongsToMatch], 
+        minNumPongsKongsToMatch, maxNumPongsKongsToMatch);
 }
 
-export function createPongOrKongQuantityPredicate(pointPredicateID : string, minNumPongOrKongs?: number, maxNumPongOrKongs: number | undefined = minNumPongOrKongs) : PointPredicate<MeldBasedWinningHand> {
+export function createPongOrKongQuantityPredicate(pointPredicateID : string, minNumPongOrKongs: number, maxNumPongOrKongs: number | undefined = minNumPongOrKongs) : PointPredicate<MeldBasedWinningHand> {
     return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meld => meldIsPong(meld) || meldIsKong(meld), minNumPongOrKongs, maxNumPongOrKongs);
 }

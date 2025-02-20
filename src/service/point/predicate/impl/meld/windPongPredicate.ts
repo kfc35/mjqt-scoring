@@ -11,18 +11,18 @@ import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "../util/
 
 const seatWindPongKongMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {
-        const seatWindPredicate = createPongOrKongsExistPredicate(PointPredicateID.SEAT_WIND_PONG_KONG, [roundContext.getSeatWindAsWindTile()]);
+        const seatWindPredicate = createPongOrKongsExistPredicate(PointPredicateID.SEAT_WIND_PONG_KONG, [roundContext.getSeatWindAsWindTile()], 1, 1);
         return seatWindPredicate(standardWinningHand, winContext, roundContext, config);
     }
 
 const prevailingWindPongKongMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {
-        const prevailingWindPredicate = createPongOrKongsExistPredicate(PointPredicateID.PREVAILING_WIND_PONG_KONG, [roundContext.getPrevailingWindAsWindTile()]);
+        const prevailingWindPredicate = createPongOrKongsExistPredicate(PointPredicateID.PREVAILING_WIND_PONG_KONG, [roundContext.getPrevailingWindAsWindTile()], 1, 1);
         return prevailingWindPredicate(standardWinningHand, winContext, roundContext, config);
     }
 
 const bigFourWindsMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = 
-    createPongOrKongsExistPredicate(PointPredicateID.BIG_FOUR_WINDS, WIND_TILES);
+    createPongOrKongsExistPredicate(PointPredicateID.BIG_FOUR_WINDS, WIND_TILES, 4, 4);
 
 export const SEAT_WIND_PREDICATE : PointPredicate<WinningHand> = 
     createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SEAT_WIND_PONG_KONG, seatWindPongKongMeldBasedPredicate);

@@ -12,23 +12,23 @@ import { RootPointPredicateConfiguration } from "service/point/predicate/configu
 export const onePairSubPredicate : PointPredicate<MeldBasedWinningHand> = createPairQuantityPredicate(PointPredicateID.SUBPREDICATE_ONE_PAIR, 1, 1);
 
 export const dragonPairSubPredicate : PointPredicate<MeldBasedWinningHand> = 
-    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_DRAGON_PAIR, DRAGON_TILES, 1);
+    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_DRAGON_PAIR, DRAGON_TILES, 1, 1);
 
 export const valuedWindPairSubPredicate : PointPredicate<MeldBasedWinningHand> = (standardWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {
-    const valuedWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUED_WIND_PAIR, [roundContext.getSeatWindAsWindTile(), roundContext.getPrevailingWindAsWindTile()], 1);
+    const valuedWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUED_WIND_PAIR, [roundContext.getSeatWindAsWindTile(), roundContext.getPrevailingWindAsWindTile()], 1, 1);
     return valuedWindPredicate(standardWinningHand, winContext, roundContext, config);
 }
 
 export const valuelessWindPairSubPredicate : PointPredicate<MeldBasedWinningHand> = (standardWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {
-    const valuelessWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_WIND_PAIR, roundContext.otherWinds.map(windDirection => windDirectionToWindTile(windDirection)), 1);
+    const valuelessWindPredicate = createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_WIND_PAIR, roundContext.otherWinds.map(windDirection => windDirectionToWindTile(windDirection)), 1, 1);
     return valuelessWindPredicate(standardWinningHand, winContext, roundContext, config);
 }
 
 export const windPairSubPredicate : PointPredicate<MeldBasedWinningHand> = 
-    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_WIND_PAIR, WIND_TILES, 1);
+    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_WIND_PAIR, WIND_TILES, 1, 1);
 
 export const valuelessSuitedPairSubPredicate : PointPredicate<MeldBasedWinningHand> = 
-    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_SUITED_PAIR, [...BAMBOO_TILES, ...CIRCLE_TILES, ...CHARACTER_TILES], 1);
+    createPairsExistPredicate(PointPredicateID.SUBPREDICATE_VALUELESS_SUITED_PAIR, [...BAMBOO_TILES, ...CIRCLE_TILES, ...CHARACTER_TILES], 1, 1);
 
 export const valuelessPairSubPredicate : PointPredicate<MeldBasedWinningHand> = predicateOr(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR,
     valuelessWindPairSubPredicate, valuelessSuitedPairSubPredicate);

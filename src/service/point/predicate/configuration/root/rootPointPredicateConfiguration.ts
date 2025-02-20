@@ -32,9 +32,9 @@ export class RootPointPredicateConfiguration {
     clone(): RootPointPredicateConfiguration {
         const clone = new RootPointPredicateConfiguration();
         for (const [id, baseConfig] of this._pointPredicateIdToBaseConfiguration.entries()) {
-            clone.setBaseConfiguration(id, baseConfig);
+            clone.setBaseConfiguration(id, baseConfig.clone());
         }
-        clone.setLogicConfiguration(this._pointPredicateLogicConfiguration);
+        clone.setLogicConfiguration(this._pointPredicateLogicConfiguration.clone());
         return clone;
     }
 }

@@ -46,7 +46,7 @@ export function constructThirteenTilesWithOneDupAnalyzer(thirteenUniqueTiles: Su
         const tiles = [[...twelveNonDups].sort(), [...pair.tiles]];
         const indexOfWinningTile = tilesDoesNotContainTile(pair.tiles, hand.mostRecentTile()) ? 0 : 1;
         return [new SpecialWinningHand(tiles, indexOfWinningTile,
-            hand.mostRecentTile(), indexOfWinningTile != 1, hand.mostRecentTileIsSelfDrawn(), 
+            hand.mostRecentTile(), indexOfWinningTile !== 1, hand.mostRecentTileIsSelfDrawn(), 
             hand.flowerTiles, SpecialWinningHandType.THIRTEEN_ORPHANS)];
     };
 }

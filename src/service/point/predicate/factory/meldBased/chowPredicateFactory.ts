@@ -7,9 +7,19 @@ import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
 import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
-// Checks that all the given tile sequences exist as chows in a winning hand.
-// You can use this function for knitted tiles
-export function createChowsExistPredicateFromSequences(pointPredicateID : string, tileSequences: [SuitedTile, SuitedTile, SuitedTile][], numSequencesToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
+// Checks that all some of the given tile sequences exist as chows in a winning hand.
+export function createChowsExistPredicateFromSequences(pointPredicateID : string, 
+    tileSequences: [SuitedTile, SuitedTile, SuitedTile][], minNumChowsToMatch?: number, maxNumChowsToMatch?: number) : PointPredicate<MeldBasedWinningHand> {
+    if (!!minNumChowsToMatch && (minNumChowsToMatch < 0 || minNumChowsToMatch > tileSequences.length)) {
+        throw new Error(`minNumChowsToMatch, if defined, must be between 0 and tileSequences.length (${tileSequences.length})`);
+    }
+    if (!!maxNumChowsToMatch && (maxNumChowsToMatch < 0 || maxNumChowsToMatch > tileSequences.length)) {
+        throw new Error(`maxNumChowsToMatch, if defined, must be between 0 and tileSequences.length (${tileSequences.length})`);
+    }
+    if (!!minNumChowsToMatch && !!maxNumChowsToMatch && minNumChowsToMatch > maxNumChowsToMatch) {
+        throw new Error(`minNumChowsToMatch must be < maxNumChowsToMatch`);
+    }
+    
     const chows : Chow[] = [];
     for (const sequence of tileSequences) {
         if (sequence[0].group !== sequence[1].group 
@@ -21,14 +31,22 @@ export function createChowsExistPredicateFromSequences(pointPredicateID : string
             chows.push(new Chow(sequence));
         }
     }
-    if (numSequencesToMatch && (numSequencesToMatch > tileSequences.length || numSequencesToMatch < 0)) {
-        throw new Error(`numSequencesToMatch must be between 0 and tileSequences.length (${tileSequences.length})`);
-    }
-    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
+    
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, minNumChowsToMatch, maxNumChowsToMatch);
 }
 
 // Creates same suited tile sequences using the provided tiles as the lowest in a consecutive, non-knitted sequence, then checks for those sequences in the winning hand.
-export function createChowsExistPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[], numSequencesToMatch? : number) : PointPredicate<MeldBasedWinningHand> {
+export function createChowsExistPredicateFromTiles(pointPredicateID : string, tiles: SuitedTile[], minNumChowsToMatch? : number, maxNumChowsToMatch? : number) : PointPredicate<MeldBasedWinningHand> {
+    if (!!minNumChowsToMatch && (minNumChowsToMatch > tiles.length || minNumChowsToMatch < 0)) {
+        throw new Error(`minNumChowsToMatch, if defined, must be between 0 and tiles.length (${tiles.length})`);
+    }
+    if (!!maxNumChowsToMatch && (maxNumChowsToMatch > tiles.length)) {
+        throw new Error(`maxNumChowsToMatch must be between minNumPairsToMatch and tiles.length (${tiles.length})`);
+    }
+    if (!!minNumChowsToMatch && !!maxNumChowsToMatch && (minNumChowsToMatch > maxNumChowsToMatch)) {
+        throw new Error(`minNumChowsToMatch must be < maxNumChowsToMatch`);
+    }
+
     const chows : Chow[] = [];
     for (const tile of tiles) {
         const nextTileValue = getNextSuitedTileValue(tile.value);
@@ -45,12 +63,10 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
             [tile, nextTile, twoAfterTile]
         chows.push(new Chow(sequence));
     }
-    if (numSequencesToMatch && (numSequencesToMatch > tiles.length || numSequencesToMatch < 0)) {
-        throw new Error(`numSequencesToMatch must be between 0 and tiles.length (${tiles.length})`);
-    }
-    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, numSequencesToMatch ?? chows.length);
+
+    return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, minNumChowsToMatch, maxNumChowsToMatch);
 }
 
-export function createChowQuantityPredicate(pointPredicateID : string, minNumChows?: number, maxNumChows: number | undefined = minNumChows) : PointPredicate<MeldBasedWinningHand> {
+export function createChowQuantityPredicate(pointPredicateID : string, minNumChows: number, maxNumChows: number | undefined = minNumChows) : PointPredicate<MeldBasedWinningHand> {
     return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsChow, minNumChows, maxNumChows);
 }

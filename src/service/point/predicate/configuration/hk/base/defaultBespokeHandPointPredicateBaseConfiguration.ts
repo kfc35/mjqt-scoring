@@ -14,6 +14,8 @@ export const defaultNineGatesPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .addIncludedPointPredicate(PointPredicateID.CONCEALED_HAND)
+        .addIncludedPointPredicate(PointPredicateID.ALL_ONE_SUIT)
         .build();
 
 export const defaultThirteenOrphansPointPredicateBaseConfiguration = 
@@ -21,4 +23,5 @@ export const defaultThirteenOrphansPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .addIncludedPointPredicate(PointPredicateID.CONCEALED_HAND)
         .build();

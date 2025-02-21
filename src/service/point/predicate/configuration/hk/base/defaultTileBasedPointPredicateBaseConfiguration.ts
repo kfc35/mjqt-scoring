@@ -45,6 +45,7 @@ export const defaultAllHonorsPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .addIncludedPointPredicate(PointPredicateID.ALL_PONGS_AND_KONGS)
         .build();
 
 
@@ -53,6 +54,7 @@ export const defaultAllTerminalsPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .addIncludedPointPredicate(PointPredicateID.ALL_PONGS_AND_KONGS)
         .build();
 
 /** disabled by default */

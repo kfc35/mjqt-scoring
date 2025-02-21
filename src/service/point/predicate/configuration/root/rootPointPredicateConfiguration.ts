@@ -5,10 +5,12 @@ import { PointPredicateLogicConfiguration } from "service/point/predicate/config
 export class RootPointPredicateConfiguration {
     private _pointPredicateIdToBaseConfiguration: Map<PointPredicateID, PointPredicateBaseConfiguration>;
     private _pointPredicateLogicConfiguration: PointPredicateLogicConfiguration;
+    private _maxPoints: number;
     
-    constructor() { 
+    constructor(maxPoints: number) { 
         this._pointPredicateIdToBaseConfiguration = new Map();
         this._pointPredicateLogicConfiguration = new PointPredicateLogicConfiguration();
+        this._maxPoints = maxPoints;
     }
 
     getBaseConfiguration(pointPredicateId: PointPredicateID): PointPredicateBaseConfiguration | undefined {
@@ -21,7 +23,7 @@ export class RootPointPredicateConfiguration {
     }
 
     importBaseConfigurationMap(baseConfigurationMap: Map<PointPredicateID, PointPredicateBaseConfiguration>) {
-        baseConfigurationMap.forEach((val, key) => this._pointPredicateIdToBaseConfiguration.set(key, val));
+        baseConfigurationMap.forEach((val, key) => this._pointPredicateIdToBaseConfiguration.set(key, val.clone()));
     }
 
     getLogicConfiguration() {
@@ -36,8 +38,16 @@ export class RootPointPredicateConfiguration {
         this._pointPredicateLogicConfiguration.override(logicConfig);
     }
 
+    get maxPoints(): number {
+        return this._maxPoints;
+    }
+
+    set maxPoints(maxPoints: number) {
+        this._maxPoints = maxPoints;
+    }
+
     clone(): RootPointPredicateConfiguration {
-        const clone = new RootPointPredicateConfiguration();
+        const clone = new RootPointPredicateConfiguration(this._maxPoints);
         for (const [id, baseConfig] of this._pointPredicateIdToBaseConfiguration.entries()) {
             clone.setBaseConfiguration(id, baseConfig.clone());
         }

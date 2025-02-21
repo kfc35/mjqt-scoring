@@ -3,7 +3,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { ONE_CIRCLE } from "common/deck";
-import { WIN_BY_LAST_TILE_PREDICATE } from "service/point/predicate/impl/winCondition/winConditionPredicate";
+import { WIN_BY_LAST_TILE_PREDICATE } from "service/point/predicate/impl/winCondition/basicWinConditionPredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";

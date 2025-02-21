@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateBaseConfiguration, { MAX_POINTS } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 
-export function createDefaultJewelDragonPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
+export default function createDefaultTileBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
     /* enabled by default */
     map.set(PointPredicateID.ALL_HONORS_AND_TERMINALS, defaultAllHonorsAndTerminalsPointPredicateBaseConfiguration);

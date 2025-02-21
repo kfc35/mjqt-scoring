@@ -20,13 +20,20 @@ export class RootPointPredicateConfiguration {
         return this;
     }
 
+    importBaseConfigurationMap(baseConfigurationMap: Map<PointPredicateID, PointPredicateBaseConfiguration>) {
+        baseConfigurationMap.forEach((val, key) => this._pointPredicateIdToBaseConfiguration.set(key, val));
+    }
+
     getLogicConfiguration() {
         return this._pointPredicateLogicConfiguration;
     }
 
-    setLogicConfiguration(logicConfig: PointPredicateLogicConfiguration): this {
+    setLogicConfiguration(logicConfig: PointPredicateLogicConfiguration) {
         this._pointPredicateLogicConfiguration = logicConfig;
-        return this;
+    }
+
+    importLogicConfiguration(logicConfig: PointPredicateLogicConfiguration){
+        this._pointPredicateLogicConfiguration.override(logicConfig);
     }
 
     clone(): RootPointPredicateConfiguration {

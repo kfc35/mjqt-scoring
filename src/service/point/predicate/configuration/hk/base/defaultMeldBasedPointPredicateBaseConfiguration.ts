@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateBaseConfiguration, { MAX_POINTS } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 
-export function createMeldBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
+export default function createDefaultMeldBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
 
     map.set(PointPredicateID.GREEN_DRAGON_PONG_KONG, defaultGreenDragonPongKongBaseConfiguration);

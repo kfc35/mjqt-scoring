@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateBaseConfiguration, { MAX_POINTS } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 
-export function createDefaultBasicWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
+export default function createDefaultBasicWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
     /* enabled by default */
     map.set(PointPredicateID.SELF_DRAW, defaultSelfDrawPointPredicateBaseConfiguration);

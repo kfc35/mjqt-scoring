@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateBaseConfiguration, { MAX_POINTS } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 
-export function createDefaultHandBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
+export default function createDefaultBasicHandBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
     /* enabled by default */
     map.set(PointPredicateID.ALL_CHOWS, defaultAllChowsPointPredicateBaseConfiguration);
@@ -14,7 +14,6 @@ export function createDefaultHandBasedPointPredicateBaseConfigurationMap(): Map<
 }
 
 /** default enabled */
-
 export const defaultAllChowsPointPredicateBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)

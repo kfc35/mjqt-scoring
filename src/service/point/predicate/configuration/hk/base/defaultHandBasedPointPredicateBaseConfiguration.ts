@@ -10,7 +10,6 @@ export function createDefaultHandBasedPointPredicateBaseConfigurationMap(): Map<
     map.set(PointPredicateID.SEVEN_PAIRS, defaultSevenPairsPointPredicateBaseConfiguration);
     map.set(PointPredicateID.ALL_KONGS, defaultAllKongsPointPredicateBaseConfiguration);
     
-
     return map;
 }
 

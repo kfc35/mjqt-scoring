@@ -29,6 +29,7 @@ export const thirteenOrphansSpecialPredicate : PointPredicate<SpecialWinningHand
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
                 .tilesThatAreMissingToSatisfyPredicate([thirteenOrphanTiles])
+                .tilesThatAreMissingAnyOfToSatisfyPredicate([thirteenOrphanTiles])
                 .build()
             ).build();
     }
@@ -46,6 +47,7 @@ export const thirteenOrphansMeldBasedPredicate : PointPredicate<MeldBasedWinning
         .tileDetail(
             new PointPredicateFailureResultTileDetail.Builder()
             .tilesThatAreMissingToSatisfyPredicate([thirteenOrphanTiles])
+            .tilesThatAreMissingAnyOfToSatisfyPredicate([thirteenOrphanTiles])
             .build()
         ).build();
     }

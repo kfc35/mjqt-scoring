@@ -95,6 +95,11 @@ export function tilesListIsEmpty(tiles: ReadonlyArray<ReadonlyArray<Tile>>): boo
         (tiles.length === 1 && (!tiles[0] || (tiles[0].length === 0))); // tiles = [[]] or tiles = [undefined]
 }
 
+export function wrappedTilesListIsEmpty(tiles: ReadonlyArray<ReadonlyArray<ReadonlyArray<Tile>>>): boolean {
+    return tiles.length === 0 || // tiles = []
+        (tiles.length === 1 && (!tiles[0] || tilesListIsEmpty(tiles[0])));
+}
+
 export function suitedTilesAreAllSameSuit(tiles: SuitedTile[]): boolean {
     const tileGroups : Set<SuitedTileGroup> = new Set(tiles.map(tile => tile.group));
     return tileGroups.size === 1;
@@ -106,9 +111,11 @@ export function partitionTilesByGroup(tiles: Tile[]): Tile[][] {
         const tiles = tileGroupToTilesMap.get(tile.group);
         if (tiles) {
             tiles.push(tile);
+            tiles.sort();
         } else {
             tileGroupToTilesMap.set(tile.group, [tile]);
         }
+        
     });
     return [...tileGroupToTilesMap.values()];
 }

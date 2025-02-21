@@ -14,12 +14,13 @@ import PointPredicateSuccessResultMeldDetail from "service/point/predicate/resul
 import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { partitionTilesByGroup } from "common/tileUtils";
 
 function allTerminalsPredicate(winningHand: WinningHand, terminalsIndicesSet: Set<number> = new Set()): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileValues = tileGroupValueMaps.getSuitedTileValues();
-    if (suitedTileValues.size <= terminalSuitedTileValues.size &&
-        [...suitedTileValues.keys()].every(stv => terminalSuitedTileValues.has(stv)) &&
+    if ([...suitedTileValues].every(stv => terminalSuitedTileValues.has(stv)) &&
+        suitedTileValues.size > 0 && 
         tileGroupValueMaps.getHonorTileGroups().size === 0) {
         const terminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(suitedTileValues);
         return new PointPredicateSingleSuccessResult.Builder()
@@ -39,14 +40,15 @@ function allTerminalsPredicate(winningHand: WinningHand, terminalsIndicesSet: Se
     const honorTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(tileGroupValueMaps.getHonorTileGroups());
     const nonTerminalTileValues: Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !terminalSuitedTileValues.has(stv)));
     const nonTerminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonTerminalTileValues).filter(tiles => tiles.length > 0);
+    const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
+            .tilesThatFailPredicate([...honorTiles, ...nonTerminalTiles]);
+    if (([...suitedTileValues].filter(stv => terminalSuitedTileValues.has(stv))).length === 0) {
+        tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(TERMINAL_TILES));
+    }
+
     return new PointPredicateFailureResult.Builder()
         .pointPredicateId(PointPredicateID.ALL_TERMINALS)
-        .tileDetail(
-            new PointPredicateFailureResultTileDetail.Builder()
-                .tilesThatFailPredicate([...honorTiles, ...nonTerminalTiles])
-                .tilesThatAreMissingToSatisfyPredicate([TERMINAL_TILES])
-                .build()
-        )
+        .tileDetail(tileDetail.build())
         .build();
 }
 

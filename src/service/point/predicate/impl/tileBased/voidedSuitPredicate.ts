@@ -12,6 +12,8 @@ import PointPredicateSuccessResultMeldDetail from "service/point/predicate/resul
 import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { partitionTilesByGroup } from "common/tileUtils";
+import { SUITED_TILES } from "common/deck";
 
 function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
@@ -33,14 +35,24 @@ function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set
             )
             .build();
     }
+    if (suitedTileGroups.size > 0) {
+        return new PointPredicateFailureResult.Builder()
+            .pointPredicateId(PointPredicateID.VOIDED_SUIT)
+            .tileDetail(
+                new PointPredicateFailureResultTileDetail.Builder()
+                    .tilesThatFailPredicate(tilesSepBySuit)
+                    .build()
+            )
+             .build();
+    }
     return new PointPredicateFailureResult.Builder()
         .pointPredicateId(PointPredicateID.VOIDED_SUIT)
         .tileDetail(
             new PointPredicateFailureResultTileDetail.Builder()
-                .tilesThatFailPredicate(tilesSepBySuit)
+                .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
                 .build()
         )
-        .build();
+            .build();
 }
 
 const voidedSuitMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = (meldBasedWinningHand: MeldBasedWinningHand) => {

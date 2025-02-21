@@ -8,6 +8,7 @@ import PointPredicateSuccessResultTileDetail from "service/point/predicate/resul
 import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { partitionTilesByGroup } from "common/tileUtils";
 
 export function handContainsHonorsSubPredicate(winningHand: WinningHand, honorTileIndicesSet: Set<number> = new Set()) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
@@ -32,7 +33,7 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand, honorTi
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
-                    .tilesThatAreMissingToSatisfyPredicate([HONOR_TILES])
+                    .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(HONOR_TILES))
                     .build()
             )
             .build();
@@ -71,7 +72,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand, suited
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
-                    .tilesThatAreMissingToSatisfyPredicate([SUITED_TILES])
+                    .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
                     .build()
             )
             .build();

@@ -14,12 +14,13 @@ import PointPredicateSuccessResultMeldDetail from "service/point/predicate/resul
 import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { partitionTilesByGroup } from "common/tileUtils";
 
 function allSimplesPredicate(winningHand: WinningHand, simplesIndicesSet: Set<number> = new Set()): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileValues: Set<SuitedTileValue> = tileGroupValueMaps.getSuitedTileValues();
-    if (suitedTileValues.size <= simpleSuitedTileValues.size &&
-        [...suitedTileValues.keys()].every(stv => simpleSuitedTileValues.has(stv)) &&
+    if ([...suitedTileValues.keys()].every(stv => simpleSuitedTileValues.has(stv)) &&
+        suitedTileValues.size > 0 &&
         tileGroupValueMaps.getHonorTileGroups().size === 0) {
         const simpleTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(suitedTileValues);
 
@@ -41,15 +42,16 @@ function allSimplesPredicate(winningHand: WinningHand, simplesIndicesSet: Set<nu
     const honorTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(tileGroupValueMaps.getHonorTileGroups());
     const nonSimpleTileValues: Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !simpleSuitedTileValues.has(stv)));
     const nonSimpleTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonSimpleTileValues).filter(tiles => tiles.length > 0);
+    const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
+        .tilesThatFailPredicate([...honorTiles, ...nonSimpleTiles]);
+    if (([...suitedTileValues].filter(stv => simpleSuitedTileValues.has(stv))).length === 0) {
+        tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SIMPLE_TILES));
+    }
+    
 
     return new PointPredicateFailureResult.Builder()
         .pointPredicateId(PointPredicateID.ALL_SIMPLES)
-        .tileDetail(
-            new PointPredicateFailureResultTileDetail.Builder()
-                .tilesThatFailPredicate([...honorTiles, ...nonSimpleTiles])
-                .tilesThatAreMissingToSatisfyPredicate([SIMPLE_TILES])
-                .build()
-        )
+        .tileDetail(tileDetail.build())
         .build();
 }
 

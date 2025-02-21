@@ -9,6 +9,7 @@ import { FLOWER_TILES, GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
 import { tilesDoesNotContainTile } from "common/tileUtils";
 import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { partitionTilesByGroup } from "common/tileUtils";
 
 export const SEAT_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand, _winCtx: WinContext, roundCtx: RoundContext) => {
@@ -52,7 +53,7 @@ export const ANY_GENTLEMAN_OR_SEASON_PREDICATE : PointPredicate<WinningHand> =
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.ANY_GENTLEMAN_OR_SEASON, 
             gentlemenAndSeasons.length > 0, 
             new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([gentlemenAndSeasons]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate([FLOWER_TILES]).build());
+            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingAnyOfToSatisfyPredicate([FLOWER_TILES]).build());
     }
 
 export const ALL_GENTLEMEN_PREDICATE : PointPredicate<WinningHand> = 
@@ -84,7 +85,7 @@ export const NO_GENTLEMEN_OR_SEASONS_PREDICATE : PointPredicate<WinningHand> =
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.NO_GENTLEMEN_OR_SEASONS, 
             gentlemenAndSeasons.length === 0, 
             new PointPredicateSuccessResultTileDetail.Builder().build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([gentlemenAndSeasons]).build());
+            new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate(partitionTilesByGroup(gentlemenAndSeasons)).build());
     }
 
 function filterFlowerTiles(flowerTiles: FlowerTile[], tilesToKeep: FlowerTile[]): FlowerTile[] {

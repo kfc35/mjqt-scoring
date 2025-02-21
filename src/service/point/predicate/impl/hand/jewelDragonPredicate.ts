@@ -51,23 +51,24 @@ export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, me
             .build();
     }
 
+    const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
     const failedTiles: SuitedOrHonorTile[][] = [];
-    const missingTiles: SuitedOrHonorTile[][] = [];
+    const missingTilesAnyOf: SuitedOrHonorTile[][] = [];
     if (suitedTileGroups.size > 1) {
         failedTiles.push(...suitedTilesSepBySuit.filter(suitedTileList => !!suitedTileList[0] && suitedTileList[0].group !== givenSuitedTileGroup));
     } else if (suitedTileGroups.size === 0) {
-        missingTiles.push(getSuitedTilesForSuitedTileGroup(givenSuitedTileGroup));
+        missingTilesAnyOf.push(getSuitedTilesForSuitedTileGroup(givenSuitedTileGroup));
     } else if (honorTileValues.size > 1) {
         failedTiles.push(...honorTilesSepbyValue.filter(honorTileList => !!honorTileList[0] && honorTileList[0].value !== givenDragonTileValue));
     } else if (honorTileValues.size === 0) {
-        missingTiles.push([constructHonorTile(TileGroup.DRAGON, givenDragonTileValue)]);
+        tileDetail.tilesThatAreMissingToSatisfyPredicate([[constructHonorTile(TileGroup.DRAGON, givenDragonTileValue)]]);
+        missingTilesAnyOf.push([constructHonorTile(TileGroup.DRAGON, givenDragonTileValue)]);
     }
-    const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
     if (!!failedTiles) {
         tileDetail.tilesThatFailPredicate(failedTiles);
     }
-    if (!!missingTiles) {
-        tileDetail.tilesThatAreMissingToSatisfyPredicate(missingTiles);
+    if (!!missingTilesAnyOf) {
+        tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(missingTilesAnyOf);
     }
     return new PointPredicateFailureResult.Builder()
         .pointPredicateId(pointPredicateId)

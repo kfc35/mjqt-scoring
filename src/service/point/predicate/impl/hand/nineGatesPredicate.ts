@@ -2,7 +2,7 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SuitedTileValue, suitedTileValues } from "model/tile/tileValue";
-import SuitedTile, { isSuitedTile } from "model/tile/group/suitedTile";
+import SuitedTile from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { partitionTilesByGroup } from "common/tileUtils";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
@@ -17,22 +17,13 @@ import PointPredicateFailureResult from "service/point/predicate/result/pointPre
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
-import { SUITED_TILES } from "common/deck";
 import { meldToFlatTiles } from "common/meldUtils";
 import { isHonorTile } from "model/tile/group/honorTile";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
-        /* check that it is all one suit */
-        if (tileGroupValueMaps.getSuitedTileGroups().size > 1) {
-            return new PointPredicateFailureResult.Builder()
-                    .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
-                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
-                        .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds).filter(tile => isSuitedTile(tile))))
-                        .build()
-                    ).build();
-        }
+        /* check that it is all one suit no honors */
         if (tileGroupValueMaps.getHonorTileGroups().size > 0) {
             return new PointPredicateFailureResult.Builder()
                     .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
@@ -41,14 +32,17 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
                         .build()
                     ).build();
         }
-        if (tileGroupValueMaps.getSuitedTileGroups().size < 1) {
+        if (tileGroupValueMaps.getSuitedTileGroups().size > 1) {
             return new PointPredicateFailureResult.Builder()
                     .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
                     .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
-                        .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds).filter(tile => isSuitedTile(tile))))
-                        .tilesThatAreMissingToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
+                        .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds)))
                         .build()
                     ).build();
+        }
+        // There are no honorTileGroups, so there should be no need to check for suitedTileGroups().size === 0 
+        if (tileGroupValueMaps.getSuitedTileGroups().size === 0) {
+            throw new Error('tileGroupValueMaps.getSuitedTileGroups().size === 0, which should not happen.');
         }
 
         /* start checking for quantities */
@@ -56,6 +50,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         const tilesOrderedBySTV: SuitedTile[][] = [];
         const failingTiles: SuitedTile[][] = [];
         const missingTiles: SuitedTile[][] = [];
+        const missingTilesAnyOf: SuitedTile[][] = [];
         const extraTile: SuitedTile[] = [];
         for (const stv of suitedTileValues) {
             const suitedTiles : SuitedTile[] = tileGroupValueMaps.getTilesForSuitedTileValue(stv);
@@ -94,12 +89,11 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         }
         if (extraTile.length < 1) { // this should not happen because of the logic... but in case it does...
             // any tile will do as an extra tile.
-            // TODO should we distinguish between "any of" vs "missing THESE specific tiles" ? 
             const extraTileCandidates = (suitedTileValues.map(stv => constructSuitedTile(suitedTileGroup, stv)));
-            missingTiles.push(extraTileCandidates);
+            missingTilesAnyOf.push(extraTileCandidates);
         }
 
-        if (!!failingTiles || !!missingTiles) {
+        if (!!failingTiles || !!missingTiles || !!missingTilesAnyOf) {
             const failureBuilder = new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES);
             const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
             if (!!failingTiles) {
@@ -107,6 +101,9 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
             }
             if (!!missingTiles) {
                 tileDetail.tilesThatAreMissingToSatisfyPredicate(missingTiles);
+            }
+            if (!!missingTilesAnyOf) {
+                tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(missingTilesAnyOf);
             }
 
             return failureBuilder.tileDetail(tileDetail.build()).build();

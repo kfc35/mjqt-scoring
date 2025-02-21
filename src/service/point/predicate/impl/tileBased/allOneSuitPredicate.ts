@@ -12,25 +12,7 @@ import PointPredicateFailureResult from "service/point/predicate/result/pointPre
 import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
-export const allOneSuitMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = (meldBasedWinningHand: MeldBasedWinningHand) => {
-    const tileGroupValueMaps = meldBasedWinningHand.tileGroupValueMaps;
-    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
-    const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
-    return allOneSuitPredicate(meldBasedWinningHand, suitedTileIndices);
-};
-
-const allOneSuitSpecialPredicate: PointPredicate<SpecialWinningHand> = (specialWinningHand: SpecialWinningHand) => {
-    return allOneSuitPredicate(specialWinningHand);
-};
-
-function allOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<number> = new Set()) : PointPredicateResult {
-    return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT, 
-        handContainsOneSuitSubPredicate(winningHand, wrappedSuitedTileIndicesSet),
-        handContainsNoHonorsSubPredicate(winningHand)
-    );
-}
-
-export const ALL_ONE_SUIT_PREDICATE: PointPredicate<WinningHand> = createPointPredicateRouter(allOneSuitMeldBasedPredicate, allOneSuitSpecialPredicate);export function handContainsNoHonorsSubPredicate(winningHand: WinningHand): PointPredicateResult {
+function handContainsNoHonorsSubPredicate(winningHand: WinningHand): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
     const honorTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
@@ -49,4 +31,24 @@ export const ALL_ONE_SUIT_PREDICATE: PointPredicate<WinningHand> = createPointPr
             .build();
     }
 }
+
+const allOneSuitMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = (meldBasedWinningHand: MeldBasedWinningHand) => {
+    const tileGroupValueMaps = meldBasedWinningHand.tileGroupValueMaps;
+    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
+    const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
+    return allOneSuitPredicate(meldBasedWinningHand, suitedTileIndices);
+};
+
+const allOneSuitSpecialPredicate: PointPredicate<SpecialWinningHand> = (specialWinningHand: SpecialWinningHand) => {
+    return allOneSuitPredicate(specialWinningHand);
+};
+
+function allOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<number> = new Set()) : PointPredicateResult {
+    return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT, 
+        handContainsOneSuitSubPredicate(winningHand, wrappedSuitedTileIndicesSet),
+        handContainsNoHonorsSubPredicate(winningHand)
+    );
+}
+
+export const ALL_ONE_SUIT_PREDICATE: PointPredicate<WinningHand> = createPointPredicateRouter(allOneSuitMeldBasedPredicate, allOneSuitSpecialPredicate);
 

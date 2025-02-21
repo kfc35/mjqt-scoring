@@ -14,14 +14,16 @@ import PointPredicateSuccessResultMeldDetail from "service/point/predicate/resul
 import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { partitionTilesByGroup } from "common/tileUtils";
+import type { Tile } from "model/tile/tile";
 
 function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTerminalsIndicesSet: Set<number> = new Set()): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileValues = tileGroupValueMaps.getSuitedTileValues();
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
     const honorTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
-    if (suitedTileValues.size === terminalSuitedTileValues.size &&
-        [...terminalSuitedTileValues.keys()].every(terminal => suitedTileValues.has(terminal)) &&
+    if ([...suitedTileValues].every(stv => terminalSuitedTileValues.has(stv)) &&
+        suitedTileValues.size > 0 && 
         honorTileGroups.size !== 0) {
         const terminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(suitedTileValues);
         return new PointPredicateSingleSuccessResult.Builder()
@@ -41,15 +43,22 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
 
     const nonTerminalTileValues: Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !terminalSuitedTileValues.has(stv)));
     const nonTerminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonTerminalTileValues).filter(tiles => tiles.length > 0);
+    const missingAnyOf: Tile[] = [];
+    if (honorTileGroups.size === 0 ) {
+        missingAnyOf.push(...HONOR_TILES);
+    }
+    if (([...suitedTileValues].filter(stv => terminalSuitedTileValues.has(stv))).length === 0) {
+        missingAnyOf.push(...TERMINAL_TILES);
+    }
+    const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
+        .tilesThatFailPredicate(nonTerminalTiles);
+    if (!!missingAnyOf) {
+        tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(missingAnyOf));
+    }
 
     return new PointPredicateFailureResult.Builder()
         .pointPredicateId(PointPredicateID.ALL_HONORS_AND_TERMINALS)
-        .tileDetail(
-            new PointPredicateFailureResultTileDetail.Builder()
-                .tilesThatFailPredicate(nonTerminalTiles)
-                .tilesThatAreMissingToSatisfyPredicate([HONOR_TILES, TERMINAL_TILES])
-                .build()
-        )
+        .tileDetail(tileDetail.build())
         .build();
 }
 

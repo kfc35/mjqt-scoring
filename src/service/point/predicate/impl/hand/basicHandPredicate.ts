@@ -13,7 +13,7 @@ import { NO_GENTLEMEN_OR_SEASONS_PREDICATE } from "service/point/predicate/impl/
 import WinContext from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
-import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
 
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     createPairQuantityPredicate(PointPredicateID.SEVEN_PAIRS, 7, 7);

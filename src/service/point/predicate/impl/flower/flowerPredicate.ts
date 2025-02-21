@@ -5,7 +5,7 @@ import WinContext from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { FlowerTile } from "model/tile/group/flowerTile";
-import { FLOWER_TILES, GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
+import { GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
 import { tilesDoesNotContainTile } from "common/tileUtils";
 import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
@@ -47,6 +47,7 @@ export const PREVAILING_SEASON_PREDICATE : PointPredicate<WinningHand> =
             new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate([[seasonTileToFind]]).build());
     }
 
+/** This needs to be re-done to a multi success result detail when implementing international rules.
 export const ANY_GENTLEMAN_OR_SEASON_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {
         const gentlemenAndSeasons = filterFlowerTiles(winningHand.flowerTiles, [...GENTLEMEN_TILES, ...SEASON_TILES]);
@@ -55,6 +56,7 @@ export const ANY_GENTLEMAN_OR_SEASON_PREDICATE : PointPredicate<WinningHand> =
             new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([gentlemenAndSeasons]).build(), 
             new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingAnyOfToSatisfyPredicate([FLOWER_TILES]).build());
     }
+**/
 
 export const ALL_GENTLEMEN_PREDICATE : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {

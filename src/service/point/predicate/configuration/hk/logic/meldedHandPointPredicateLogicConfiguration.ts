@@ -1,4 +1,5 @@
-import { PointPredicateLogicConfiguration, PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicOption } from "../../logic/pointPredicateLogicOption";
 
 export default class MeldedHandPointPredicateLogicConfiguration extends PointPredicateLogicConfiguration {
     constructor(lastDiscardedTileMustCompletePair: boolean, allowSelfDrawToCompletePair: boolean) {

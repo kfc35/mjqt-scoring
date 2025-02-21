@@ -7,7 +7,7 @@ import { winByAnyReplacementPredicate, WIN_BY_KONG_PREDICATE } from "service/poi
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import Chow, { meldIsChow } from "model/meld/chow";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
-import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
 import WinContext from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";

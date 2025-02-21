@@ -4,7 +4,7 @@ import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredi
 import { createPointPredicateRouter, createPointPredicateRouterWithAutoFailSpecialPredicate, createPointPredicateRouterWithAutoSuccessSpecialPredicate, createPPResultBasedOnBooleanFlagWithTileDetail} from "service/point/predicate/impl/util/pointPredicateUtil";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
-import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
 import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";

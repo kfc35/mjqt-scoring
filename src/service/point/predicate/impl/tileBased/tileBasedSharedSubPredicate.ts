@@ -78,3 +78,42 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand, suited
             .build();
     }
 }
+
+export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
+     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
+    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
+    const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
+    if (suitedTileGroups.size > 1) {
+        return new PointPredicateSingleSuccessResult.Builder()
+            .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
+            .meldDetail(
+                new PointPredicateSuccessResultMeldDetail.Builder()
+                    .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)
+                    .build()
+            )
+            .tileDetail(
+                new PointPredicateSuccessResultTileDetail.Builder()
+                    .tilesThatSatisfyPredicate(tilesSepBySuit)
+                    .build()
+            )
+            .build();
+    } else if (suitedTileGroups.size === 1) {
+        return new PointPredicateFailureResult.Builder()
+            .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
+            .tileDetail(
+                new PointPredicateFailureResultTileDetail.Builder()
+                    .tilesThatFailPredicate(tilesSepBySuit)
+                    .build()
+            )
+            .build();
+    } else {
+        return new PointPredicateFailureResult.Builder()
+            .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
+            .tileDetail(
+                new PointPredicateFailureResultTileDetail.Builder()
+                    .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
+                    .build()
+            )
+            .build();
+    }
+}

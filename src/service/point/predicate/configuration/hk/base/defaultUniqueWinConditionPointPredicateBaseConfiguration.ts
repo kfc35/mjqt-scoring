@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateBaseConfiguration from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 
-export function createDefaultWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
+export function createDefaultUniqueWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
     /* enabled by default */
     map.set(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, defaultPlumBlossomOnTheRoofPointPredicateBaseConfiguration);

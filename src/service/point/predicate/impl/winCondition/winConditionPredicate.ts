@@ -86,7 +86,7 @@ export const winByAnyDoubleReplacementPredicate : PointPredicate<WinningHand> =
 
 const winWithInitialHandSubPredicate : PointPredicate<WinningHand> = 
     (winningHand: WinningHand, winContext: WinContext) => {
-        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.WIN_WITH_INITIAL_HAND, winContext.winWithInitialHand, 
+        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_WIN_WITH_INITIAL_HAND, winContext.winWithInitialHand, 
             new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([...winningHand.tiles.map(tileSublist => [...tileSublist])]).build());
     }
 

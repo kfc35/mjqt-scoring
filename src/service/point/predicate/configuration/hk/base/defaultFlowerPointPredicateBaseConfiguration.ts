@@ -17,46 +17,33 @@ export function createDefaultFlowerPointPredicateBaseConfigurationMap(): Map<Poi
     return map;
 }
 
+/* enabled by default */
 export const defaultNoGentlemenOrSeasonsBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)
         .points(1)
-        .isBonus(true)
+        .isBonus(false)
         .build();
 
 export const defaultSeatGentlemanBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)
         .points(1)
-        .isBonus(true)
+        .isBonus(false)
         .build();
 
 export const defaultSeatSeasonBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)
         .points(1)
-        .isBonus(true)
-        .build();
-
-export const defaultPrevailingGentlemanBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
-        .enabled(false)
-        .points(1)
-        .isBonus(true)
-        .build();
-    
-export const defaultPrevailingSeasonBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
-        .enabled(false)
-        .points(1)
-        .isBonus(true)
+        .isBonus(false)
         .build();
 
 export const defaultAllGentlemenBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)
         .points(2)
-        .isBonus(true)
+        .isBonus(false)
         .addIncludedPointPredicate(PointPredicateID.SEAT_GENTLEMAN)
         .addIncludedPointPredicate(PointPredicateID.PREVAILING_GENTLEMAN)
         .build();
@@ -65,16 +52,31 @@ export const defaultAllSeasonsBaseConfiguration =
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)
         .points(2)
-        .isBonus(true)
+        .isBonus(false)
         .addIncludedPointPredicate(PointPredicateID.SEAT_SEASON)
         .addIncludedPointPredicate(PointPredicateID.PREVAILING_SEASON)
+        .build();
+
+/* disabled by default */
+export const defaultPrevailingGentlemanBaseConfiguration = 
+    new PointPredicateBaseConfiguration.Builder()
+        .enabled(false)
+        .points(1)
+        .isBonus(false)
+        .build();
+    
+export const defaultPrevailingSeasonBaseConfiguration = 
+    new PointPredicateBaseConfiguration.Builder()
+        .enabled(false)
+        .points(1)
+        .isBonus(false)
         .build();
 
 export const defaultAllGentlemenAndSeasonsBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(false)
         .points(MAX_POINTS)
-        .isBonus(true)
+        .isBonus(false)
         .addIncludedPointPredicate(PointPredicateID.SEAT_GENTLEMAN)
         .addIncludedPointPredicate(PointPredicateID.SEAT_SEASON)
         .addIncludedPointPredicate(PointPredicateID.PREVAILING_GENTLEMAN)

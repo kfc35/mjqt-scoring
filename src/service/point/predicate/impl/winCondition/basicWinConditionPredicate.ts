@@ -78,7 +78,7 @@ export const WIN_BY_MIXED_DOUBLE_PREDICATE : PointPredicate<WinningHand> =
             new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[winningHand.winningTile]]).build());
     }
 
-export const winByAnyReplacementPredicate : PointPredicate<WinningHand> = 
+export const winByAnyReplacementSubPredicate : PointPredicate<WinningHand> = 
     predicateOr(PointPredicateID.SUBPREDICATE_WIN_BY_ANY_REPLACEMENT, WIN_BY_KONG_PREDICATE, WIN_BY_FLOWER_PREDICATE, WIN_BY_DOUBLE_KONG_PREDICATE, WIN_BY_DOUBLE_FLOWER_PREDICATE, WIN_BY_MIXED_DOUBLE_PREDICATE);
 
 export const winByAnyDoubleReplacementPredicate : PointPredicate<WinningHand> = 

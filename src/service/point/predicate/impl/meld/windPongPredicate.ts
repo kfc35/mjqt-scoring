@@ -31,7 +31,7 @@ const smallFourWindsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
 const bigFourWindsMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = 
     createPongOrKongsExistPredicate(PointPredicateID.BIG_FOUR_WINDS, WIND_TILES, 4, 4);
 
-export const SEAT_WIND_PREDICATE : PointPredicate<WinningHand> = 
+export const SEAT_WIND_PONG_KONG_PREDICATE : PointPredicate<WinningHand> = 
     createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SEAT_WIND_PONG_KONG, seatWindPongKongMeldBasedPredicate);
 export const PREVAILING_WIND_PONG_KONG_PREDICATE : PointPredicate<WinningHand> = 
     createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.PREVAILING_WIND_PONG_KONG, prevailingWindPongKongMeldBasedPredicate);

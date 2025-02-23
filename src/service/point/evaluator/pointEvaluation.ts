@@ -35,4 +35,11 @@ export default class PointEvaluation {
     get ignoredResults(): PointPredicateResult[] {
         return this._results.filter(result => this._ignoredPointPredicateIds.has(result.pointPredicateId));
     }
+
+    compareTo(otherEval : PointEvaluation) : number {
+        if (this._points === otherEval.points) {
+            return 0;
+        }
+        return this._points < otherEval.points ? -1 : +1
+    }
 }

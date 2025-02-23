@@ -1,0 +1,22 @@
+export enum WinningHandFaan {
+    CHICKEN = 'CHICKEN',
+    ALL_CHOWS = 'ALL_CHOWS',
+    PIN_WOO = 'PIN_WOO', // ALL_CHOWS, NO_GENTLEMEN_OR_SEASONS, AND VALUELESS_PAIR
+    ALL_IN_TRIPLETS = 'ALL_IN_TRIPLETS', 
+    SEVEN_PAIRS = 'SEVEN_PAIRS',
+    MIXED_ONE_SUIT = 'MIXED_ONE_SUIT',
+    ALL_ONE_SUIT = 'ALL_ONE_SUIT',
+    ALL_HONORS = 'ALL_HONORS',
+    ALL_TERMINALS = 'ALL_TERMINALS',
+    SMALL_DRAGONS = 'SMALL_DRAGONS', // 2 dragon pongs, pair of third
+    GREAT_DRAGONS = 'GREAT_DRAGONS', // 3 dragon pongs
+    SMALL_WINDS = 'SMALL_WINDS', // 3 wind pongs, pair of fourth. sometimes has restrictions on fourth pair
+    GREAT_WINDS = 'GREAT_WINDS', // 4 winds pongs
+    THIRTEEN_ORPHANS = 'THIRTEEN_ORPHANS',
+    ALL_KONGS = 'ALL_KONGS',
+    SELF_TRIPLETS = 'SELF_TRIPLETS',
+    NINE_GATES = 'NINE_GATES',
+    CONCEALED_HAND = 'CONCEALED_HAND', // AKA Win From Wall
+    FULLY_CONCEALED_HAND = 'FULLY_CONCEALED_HAND',
+    MELDED_HAND = 'MELDED_HAND',
+}

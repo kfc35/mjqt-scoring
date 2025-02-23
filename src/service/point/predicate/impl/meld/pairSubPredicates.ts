@@ -4,7 +4,7 @@ import { createPairQuantityPredicate } from "service/point/predicate/factory/mel
 import { createPairsExistPredicate } from "service/point/predicate/factory/meldBased/pairPredicateFactory";
 import { PointPredicate, predicateOr } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import WinContext from "model/winContext/winContext";
 import { windDirectionToWindTile } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";

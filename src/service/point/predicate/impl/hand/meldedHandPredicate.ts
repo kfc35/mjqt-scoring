@@ -3,7 +3,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import WinContext from "model/winContext/winContext";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/basicWinConditionSubPredicate";
 import { lastTileCompletedPairSubPredicate, 
     ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate, 
@@ -20,7 +20,7 @@ const containsFourExposedNonPairMeldsSubPredicate : PointPredicate<MeldBasedWinn
 
 const meldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winContext: WinContext, roundContext: RoundContext, config: RootPointPredicateConfiguration) => {   
-        const logicConfig = config.getLogicConfiguration();
+        const logicConfig = config.pointPredicateLogicConfiguration;
         if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR)) {
             if (logicConfig.getOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
                 return predicateAnd(PointPredicateID.MELDED_HAND,

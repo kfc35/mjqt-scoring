@@ -10,7 +10,7 @@ import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";
 import { meldIsPong } from "model/meld/pong";
 import WinContext from "model/winContext/winContext";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/basicWinConditionPredicate";
 import { ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
@@ -29,7 +29,7 @@ export const containsFourConcealedMeldsSubPredicate : PointPredicate<MeldBasedWi
 
 const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
-        if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.SELF_TRIPLETS_ONLY_PONGS_ALLOWED)) {
+        if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.SELF_TRIPLETS_ONLY_PONGS_ALLOWED)) {
             return predicateAnd(PointPredicateID.SELF_TRIPLETS,
                 onePairSubPredicate,
                 containsFourConcealedPongsSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
@@ -42,7 +42,7 @@ const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
 
 const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
-        if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.CONCEALED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
+        if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.CONCEALED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             return predicateAnd(PointPredicateID.CONCEALED_HAND,
                 containsFourConcealedNonPairMeldsSubPredicate,
                 onePairSubPredicate,

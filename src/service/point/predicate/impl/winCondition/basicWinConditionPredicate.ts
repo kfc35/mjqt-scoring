@@ -5,7 +5,7 @@ import WinContext from "model/winContext/winContext";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 
 export const SELF_DRAW_PREDICATE : PointPredicate<WinningHand> = 

@@ -1,11 +1,11 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 
 export const MAX_POINTS = `MAX` as const;
-export type pointType = number | typeof MAX_POINTS;
+export type PointType = number | typeof MAX_POINTS;
 
 export default class PointPredicateBaseConfiguration {
     private _enabled: boolean;
-    private _points: pointType;
+    private _points: PointType; 
     private _isBonus: boolean;
 
     // i.e. all one suit includes points from all one suit and honors, so pts from the latter should be ignored
@@ -13,7 +13,7 @@ export default class PointPredicateBaseConfiguration {
     private _includedPointPredicates: Set<PointPredicateID>
 
     constructor(enabled: boolean, 
-        points: pointType, 
+        points: PointType, 
         isBonus: boolean,
         includedPointPredicates: Set<PointPredicateID>) {
         this._enabled = enabled;
@@ -26,7 +26,7 @@ export default class PointPredicateBaseConfiguration {
         return this._enabled;
     }
     
-    get points(): pointType {
+    get points(): PointType {
         return this._points;
     }
 
@@ -40,7 +40,7 @@ export default class PointPredicateBaseConfiguration {
 
     static Builder = class {
         _enabled: boolean = true;
-        _points: pointType = 0;
+        _points: PointType = 0;
         _isBonus: boolean = false;
         _includedPointPredicates: Set<PointPredicateID> = new Set();
 
@@ -49,7 +49,7 @@ export default class PointPredicateBaseConfiguration {
             return this;
         }
 
-        points(points: pointType) {
+        points(points: PointType) {
             this._points = points;
             return this;
         }

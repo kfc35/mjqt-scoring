@@ -3,7 +3,7 @@ import GentlemanTile from "model/tile/group/gentlemanTile";
 import SeasonTile from "model/tile/group/seasonTile";
 import WindTile from "model/tile/group/windTile";
 
-export class RoundContext {
+export default class RoundContext {
     private _prevailingWind : WindDirection;
     private _seatWind : WindDirection;
 

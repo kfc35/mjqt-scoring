@@ -6,7 +6,7 @@ import PointPredicateFailureResultTileDetail from "service/point/predicate/resul
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import WinContext from "model/winContext/winContext";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicate } from "service/point/predicate/pointPredicate";

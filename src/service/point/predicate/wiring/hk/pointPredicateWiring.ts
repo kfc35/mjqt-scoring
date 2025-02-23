@@ -1,4 +1,3 @@
-import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import createFlowerPointPredicateWiring from "service/point/predicate/wiring/hk/flowerPointPredicateWiring";
@@ -7,10 +6,10 @@ import createMeldBasedPointPredicateWiring from "service/point/predicate/wiring/
 import createTileBasedPointPredicateWiring from "service/point/predicate/wiring/hk/tileBasedPointPredicateWiring";
 import createWinConditionPointPredicateWiring from "service/point/predicate/wiring/hk/winConditionPointPredicateWiring";
 
-export const pointPredicateWiring : Map<PointPredicateID, PointPredicate<WinningHand>> = createPointPredicateBaseWiring();
+export const pointPredicateWiring : Map<string, PointPredicate<WinningHand>> = createPointPredicateBaseWiring();
 
-function createPointPredicateBaseWiring(): Map<PointPredicateID, PointPredicate<WinningHand>> {
-    const pointPredicateWiring : Map<PointPredicateID, PointPredicate<WinningHand>> = new Map();
+function createPointPredicateBaseWiring(): Map<string, PointPredicate<WinningHand>> {
+    const pointPredicateWiring : Map<string, PointPredicate<WinningHand>> = new Map();
 
     const flowerPointPredicateWiring = createFlowerPointPredicateWiring();
     flowerPointPredicateWiring.forEach((val, key) => pointPredicateWiring.set(key, val));

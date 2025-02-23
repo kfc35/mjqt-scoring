@@ -1,5 +1,5 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand"
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import WinContext from "model/winContext/winContext"
 import PointPredicateResult from "service/point/predicate/result/pointPredicateResult"
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";

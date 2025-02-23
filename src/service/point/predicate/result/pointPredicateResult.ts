@@ -4,7 +4,7 @@ export default class PointPredicateResult {
     protected _subPredicateResults: PointPredicateResult[];
 
     constructor(pointPredicateId: string, 
-        success: boolean, 
+        success: boolean,
         subPredicateResults?: PointPredicateResult[]) {
         this._pointPredicateId = pointPredicateId;
         this._success = success;
@@ -55,14 +55,4 @@ export default class PointPredicateResult {
     or(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
         return PointPredicateResult.or(newPointPredicateId, this, ...otherResults);
     }
-}
-
-export function createPointPredicateSuccessResult(pointPredicateId: string,
-    subPredicateResults?: PointPredicateResult[]) {
-    return new PointPredicateResult(pointPredicateId, true, subPredicateResults);
-}
-
-export function createPointPredicateFailureResult(pointPredicateId: string,
-    subPredicateResults?: PointPredicateResult[]) {
-    return new PointPredicateResult(pointPredicateId, false, subPredicateResults);
 }

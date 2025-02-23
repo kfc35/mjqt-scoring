@@ -1,5 +1,9 @@
+import { getEnumKeys } from "common/generic/enumUtils";
+
 export enum PointPredicateID {
-    /** Subpredicates - Composed with each other to make more complex predicates **/
+    /** Subpredicates - Composed with each other to make more complex predicates.
+     * They do not give points by themselves in mahjong hands.
+     * Subpredicates must start with the prefix "SUBPREDICATE" **/
     // Hand Subpredicates
     SUBPREDICATE_ONE_PAIR = 'SUBPREDICATE_ONE_PAIR',
     SUBPREDICATE_CONTAINS_FOUR_CHOWS = 'SUBPREDICATE_CONTAINS_FOUR_CHOWS', 
@@ -45,7 +49,7 @@ export enum PointPredicateID {
     SUBPREDICATE_SEAT_WIND_IS_EAST = 'SUBPREDICATE_SEAT_WIND_IS_EAST',
     SUBPREDICATE_NOT_SEAT_WIND_IS_EAST = 'SUBPREDICATE_NOT_SEAT_WIND_IS_EAST',
     
-
+    CHICKEN_HAND = 'CHICKEN_HAND',
     ALL_CHOWS = 'ALL_CHOWS',
     COMMON_HAND = 'COMMON_HAND', // could be considered more complex than all chows
     ALL_PONGS_AND_KONGS = 'ALL_PONGS_AND_KONGS', // aka "ALL_IN_TRIPLETS"
@@ -119,3 +123,9 @@ export enum PointPredicateID {
     ALL_GENTLEMAN_AND_SEASONS = 'ALL_GENTLEMEN_AND_SEASONS',
     NO_GENTLEMEN_OR_SEASONS = 'NO_GENTLEMEN_OR_SEASONS',
 }
+
+export const subpredicateIds: ReadonlySet<PointPredicateID> = new Set(...[
+    getEnumKeys(PointPredicateID)
+        .filter(key => key.includes("SUBPREDICATE"))
+        .map(key => PointPredicateID[key])
+]);

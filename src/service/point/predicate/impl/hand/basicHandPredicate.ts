@@ -11,7 +11,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { NO_GENTLEMEN_OR_SEASONS_PREDICATE } from "service/point/predicate/impl/flower/flowerPredicate";
 import WinContext from "model/winContext/winContext";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
 import { handContainsMoreThanOneSuitSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
@@ -35,7 +35,7 @@ const handContainsMoreThanOneSuitMeldBasedPredicate: PointPredicate<MeldBasedWin
 };
 const commonHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
-        if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.COMMON_HAND_MUST_HAVE_VALUELESS_PAIR)) { 
+        if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.COMMON_HAND_MUST_HAVE_VALUELESS_PAIR)) { 
             return predicateAnd(PointPredicateID.COMMON_HAND, 
                 allChowsMeldBasedPredicate, 
                 handContainsMoreThanOneSuitMeldBasedPredicate,

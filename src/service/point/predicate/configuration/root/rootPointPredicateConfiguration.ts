@@ -1,9 +1,8 @@
-import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import PointPredicateBaseConfiguration from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 
 export class RootPointPredicateConfiguration {
-    private _pointPredicateIdToBaseConfiguration: Map<PointPredicateID, PointPredicateBaseConfiguration>;
+    private _pointPredicateIdToBaseConfiguration: Map<string, PointPredicateBaseConfiguration>;
     private _pointPredicateLogicConfiguration: PointPredicateLogicConfiguration;
     private _maxPoints: number;
     
@@ -13,20 +12,24 @@ export class RootPointPredicateConfiguration {
         this._maxPoints = maxPoints;
     }
 
-    getBaseConfiguration(pointPredicateId: PointPredicateID): PointPredicateBaseConfiguration | undefined {
+    get pointPredicateIdToBaseConfiguration() {
+        return this._pointPredicateIdToBaseConfiguration;
+    }
+
+    getBaseConfiguration(pointPredicateId: string): PointPredicateBaseConfiguration | undefined {
         return this._pointPredicateIdToBaseConfiguration.get(pointPredicateId);
     }
 
-    setBaseConfiguration(pointPredicateId: PointPredicateID, baseConfig: PointPredicateBaseConfiguration): this {
+    setBaseConfiguration(pointPredicateId: string, baseConfig: PointPredicateBaseConfiguration): this {
         this._pointPredicateIdToBaseConfiguration.set(pointPredicateId, baseConfig);
         return this;
     }
 
-    importBaseConfigurationMap(baseConfigurationMap: Map<PointPredicateID, PointPredicateBaseConfiguration>) {
+    importBaseConfigurationMap(baseConfigurationMap: Map<string, PointPredicateBaseConfiguration>) {
         baseConfigurationMap.forEach((val, key) => this._pointPredicateIdToBaseConfiguration.set(key, val.clone()));
     }
 
-    getLogicConfiguration() {
+    get pointPredicateLogicConfiguration() {
         return this._pointPredicateLogicConfiguration;
     }
 

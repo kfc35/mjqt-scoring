@@ -9,7 +9,7 @@ import Chow, { meldIsChow } from "model/meld/chow";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
 import WinContext from "model/winContext/winContext";
-import { RoundContext } from "model/roundContext/roundContext";
+import RoundContext from "model/roundContext/roundContext";
 import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
 import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
@@ -56,7 +56,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
 
 const replacementPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
-        if (config.getLogicConfiguration().getOptionValue(PointPredicateLogicOption.PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED)) {
+        if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED)) {
             return winByAnyReplacementSubPredicate(standardWinningHand, winCtx, roundCtx, config);
         }
         return WIN_BY_KONG_PREDICATE(standardWinningHand, winCtx, roundCtx, config);

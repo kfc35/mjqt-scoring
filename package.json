@@ -1,10 +1,17 @@
 {
   "name": "mjqt-scoring",
-  "version": "0.1.3-alpha",
+  "version": "0.1.3-beta",
   "description": "Typescript Utilities to calculate a given hand's Mahjong score.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/*", "src/*", "COPYING", "COPYING.LESSER", "package.json", "README.md"],
+  "files": [
+    "dist/*",
+    "src/*",
+    "COPYING",
+    "COPYING.LESSER",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "npm run clean",

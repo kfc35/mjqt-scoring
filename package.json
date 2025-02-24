@@ -1,6 +1,6 @@
 {
   "name": "mjqt-scoring",
-  "version": "0.1.1-alpha",
+  "version": "0.1.1-beta",
   "description": "Typescript Utilities to calculate a given hand's Mahjong score.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,10 @@
     "preversion": "npm run build",
     "postversion": "git push --follow-tags"
   },
-  "keywords": ["mahjong", "typescript"],
+  "keywords": [
+    "mahjong",
+    "typescript"
+  ],
   "author": "Kevin Chen",
   "license": "LGPL-3.0-or-later",
   "devDependencies": {

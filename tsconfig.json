@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/recommended/tsconfig.json",
-  "exclude": ["./node_modules", "./dist/**"],
+  "include": ["./src", "./COPYING", "./COPYING.LESSER", "./package.json", "./README.md"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

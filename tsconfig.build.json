@@ -1,5 +1,5 @@
 {
     "extends": "./tsconfig.json",
-    "exclude": ["./src/**/*.test.ts"], // do not write test files to dist
+    "exclude": ["./node_modules", "./src/**/*.test.ts"], // do not write test files to dist
 }
   

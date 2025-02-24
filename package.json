@@ -1,5 +1,5 @@
 {
-  "name": "mahjong-scoring",
+  "name": "mjqt-scoring",
   "version": "0.1.0",
   "description": "Typescript Utilities to calculate a given hand's Mahjong score.",
   "main": "index.js",

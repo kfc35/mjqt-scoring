@@ -2,8 +2,7 @@
 export * from "api/scorer";
 
 /** common */
-export * from "common/deck";
-export { ONE_BAMBOO } from "common/deck";
+export * from "common/deck"
 export * from "common/meldUtils";
 export * from "common/tileUtils";
 

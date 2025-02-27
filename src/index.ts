@@ -37,6 +37,12 @@ export * from "model/tile/group/windTile";
 export * from "model/tile/hk/hongKongTile";
 export * from "model/tile/quantityMap/tileQuantityMap";
 
+export * from "model/meld/meld";
+export * from "model/meld/pair";
+export * from "model/meld/chow";
+export * from "model/meld/pong";
+export * from "model/meld/kong";
+
 export * from "model/roundContext/roundContext";
 export * from "model/roundContext/windDirection";
 

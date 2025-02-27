@@ -30,7 +30,7 @@ export default function evaluateWinningHand(winningHand: WinningHand, winCtx: Wi
         const pointPPR: PointPredicateResult[] = [...pointPredicateIdToResultMap.values()].filter(result => !pointPredicateIdsToIgnore.has(result.pointPredicateId));
         const points = pointPPR.map(ppr => rootConfig.getBaseConfiguration(ppr.pointPredicateId)?.points).reduce<number>((accum, pts) => addPoints(accum, pts, rootConfig), 0);
 
-        return new PointEvaluation(points, [...pointPredicateIdToResultMap.values()].sort((a, b) => sortByPoints(a, b, rootConfig)), pointPredicateIdsToIgnore);
+        return new PointEvaluation(winningHand, points, [...pointPredicateIdToResultMap.values()].sort((a, b) => sortByPoints(a, b, rootConfig)), pointPredicateIdsToIgnore);
 }
 
 function getPointPredicatesIdsToIgnoreFromResults(results: PointPredicateResult[], rootPointPredicateConfig: RootPointPredicateConfiguration) : Set<string> {

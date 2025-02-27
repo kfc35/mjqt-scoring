@@ -1,15 +1,22 @@
 
+import type { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
 
 export default class PointEvaluation {
+    private _winningHand: WinningHand;
     private _points: number;
     private _results: PointPredicateResult[];
     private _ignoredPointPredicateIds: Set<string>;
 
-    constructor(points: number, results: PointPredicateResult[], ignoredPointPredicateIds: Set<string>) {
+    constructor(winningHand: WinningHand, points: number, results: PointPredicateResult[], ignoredPointPredicateIds: Set<string>) {
+        this._winningHand = winningHand;
         this._points = points;
         this._results = results;
         this._ignoredPointPredicateIds = ignoredPointPredicateIds;
+    }
+
+    get winningHand(): WinningHand {
+        return this._winningHand;
     }
 
     get points(): number {

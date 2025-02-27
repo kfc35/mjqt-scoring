@@ -1,6 +1,6 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import Pong, { meldIsPong } from "model/meld/pong";
-import Kong, { meldIsKong } from "model/meld/kong";
+import { Pong, meldIsPong } from "model/meld/pong";
+import { Kong, meldIsKong } from "model/meld/kong";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";

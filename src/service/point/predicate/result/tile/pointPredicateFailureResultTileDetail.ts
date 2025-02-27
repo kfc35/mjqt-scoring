@@ -1,6 +1,6 @@
 import { Tile } from "model/tile/tile";
 
-export default class PointPredicateFailureResultTileDetail {
+export class PointPredicateFailureResultTileDetail {
     protected _tilesThatPartiallySatisfyPredicate: Tile[][];
     protected _tilesThatFailPredicate: Tile[][];
 

@@ -2,7 +2,7 @@ import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { MeldType } from "model/meld/meldType";
 import { assertTilesSuitedOrHonor } from "common/tileUtils";
 
-export default abstract class Meld {
+export abstract class Meld {
     protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]];
     protected _type: MeldType;
     /*  _exposed = false if the meld was completed without the need of a discard.

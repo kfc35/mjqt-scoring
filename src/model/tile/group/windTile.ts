@@ -1,8 +1,8 @@
 import { TileGroup } from "model/tile/tileGroup";
 import { WindTileValue } from "model/tile/tileValue";
-import HonorTile from "model/tile/group/honorTile";
+import { HonorTile } from "model/tile/group/honorTile";
 
-export default class WindTile extends HonorTile {
+export class WindTile extends HonorTile {
     declare protected _value: WindTileValue;
     
     constructor(value: WindTileValue) {

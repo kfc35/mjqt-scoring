@@ -1,8 +1,8 @@
-import SuitedTile from "model/tile/group/suitedTile";
-import Meld  from "model/meld/meld.js";
+import { SuitedTile } from "model/tile/group/suitedTile";
+import { Meld}   from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
 
-export default class Chow extends Meld {
+export class Chow extends Meld {
     // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"
     declare protected _tiles: [SuitedTile, SuitedTile, SuitedTile];
 

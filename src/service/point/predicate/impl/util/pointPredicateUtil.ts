@@ -1,13 +1,13 @@
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
-import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
-import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
+import { PointPredicateSingleSuccessResult } from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import RoundContext from "model/roundContext/roundContext";
-import WinContext from "model/winContext/winContext";
+import { RoundContext } from "model/roundContext/roundContext";
+import { WinContext } from "model/winContext/winContext";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 

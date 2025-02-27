@@ -1,8 +1,8 @@
 import { TileGroup } from "model/tile/tileGroup";
-import SuitedTile from "model/tile/group/suitedTile";
+import { SuitedTile } from "model/tile/group/suitedTile";
 import { SuitedTileValue } from "model/tile/tileValue";
 
-export default class CharacterTile extends SuitedTile {
+export class CharacterTile extends SuitedTile {
     constructor(value: SuitedTileValue) {
         super(TileGroup.CHARACTER, value);
     }

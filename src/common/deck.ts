@@ -1,10 +1,10 @@
-import GentlemanTile from "model/tile/group/gentlemanTile";
-import SeasonTile from "model/tile/group/seasonTile";
-import DragonTile from "model/tile/group/dragonTile";
-import WindTile from "model/tile/group/windTile";
-import BambooTile from "model/tile/group/bambooTile";
-import CharacterTile from "model/tile/group/characterTile";
-import CircleTile from "model/tile/group/circleTile";
+import { GentlemanTile } from "model/tile/group/gentlemanTile";
+import { SeasonTile } from "model/tile/group/seasonTile";
+import { DragonTile } from "model/tile/group/dragonTile";
+import { WindTile } from "model/tile/group/windTile";
+import { BambooTile } from "model/tile/group/bambooTile";
+import { CharacterTile } from "model/tile/group/characterTile";
+import { CircleTile } from "model/tile/group/circleTile";
 import { GentlemanTileValue, SeasonTileValue, DragonTileValue, WindTileValue, SuitedTileValue } from "model/tile/tileValue";
 import { SuitedTileGroup } from "model/tile/group/suitedTile";
 import { TileGroup } from "model/tile/tileGroup";

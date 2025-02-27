@@ -1,6 +1,6 @@
 import { Hand } from "model/hand/hk/hand";
 import { getHonorTileValues, honorTileGroups, HonorTileValue } from "model/tile/group/honorTile";
-export default class HonorTileValueQuantityMemo {
+export class HonorTileValueQuantityMemo {
     private _memo: Map<HonorTileValue, number>;
 
     constructor(hand: Hand);

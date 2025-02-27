@@ -1,8 +1,8 @@
 
 import type { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
 
-export default class PointEvaluation {
+export class PointEvaluation {
     private _winningHand: WinningHand;
     private _points: number;
     private _results: PointPredicateResult[];

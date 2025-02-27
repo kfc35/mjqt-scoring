@@ -1,6 +1,6 @@
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 
-export default class PointPredicateFailureResultMeldDetail {
+export class PointPredicateFailureResultMeldDetail {
     protected _meldsThatPartiallySatisfyPredicate: Meld[];
     protected _meldIndicesThatPartiallySatisfyPredicate: Set<number>;
 

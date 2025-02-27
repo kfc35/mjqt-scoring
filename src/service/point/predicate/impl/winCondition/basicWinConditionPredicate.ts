@@ -1,11 +1,11 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd, predicateOr } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import WinContext from "model/winContext/winContext";
+import { WinContext } from "model/winContext/winContext";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
-import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
-import RoundContext from "model/roundContext/roundContext";
+import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 
 export const SELF_DRAW_PREDICATE : PointPredicate<WinningHand> = 

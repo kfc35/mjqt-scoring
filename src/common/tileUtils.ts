@@ -1,6 +1,6 @@
 import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
 import { type SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import SuitedTile, { isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
+import { SuitedTile, isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { type HongKongTile, isHongKongTile } from "model/tile/hk/hongKongTile";
 import { Tile } from "model/tile/tile";
 import { TileValue } from "model/tile/tileValue";

@@ -2,7 +2,7 @@ import { Hand } from "model/hand/hk/hand";
 import { type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { SuitedTileValue, suitedTileValues, getNextSuitedTileValue } from "model/tile/tileValue";
 
-export default class SuitedTileValueQuantityMemo {
+export class SuitedTileValueQuantityMemo {
     private _memo: number[];
 
     constructor(hand: Hand, tileGroup: SuitedTileGroup);

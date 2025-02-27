@@ -2,8 +2,8 @@ import type { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHan
 import { Hand } from "model/hand/hk/hand";
 import { oneFourSeven, twoFiveEight, threeSixNine} from "model/tile/tileValue";
 import { type SuitedTileGroup, suitedTileGroups } from "model/tile/group/suitedTile";
-import Chow from "model/meld/chow";
-import Meld from "model/meld/meld";
+import { Chow } from "model/meld/chow";
+import { Meld } from "model/meld/meld";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getIndexOfMeldIgnoreExposed } from "common/meldUtils";

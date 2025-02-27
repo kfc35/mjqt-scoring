@@ -1,9 +1,9 @@
-import SuitedTile, { type SuitedTileGroup } from "model/tile/group/suitedTile";
+import { SuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { SuitedTileValue } from "model/tile/tileValue";
 import { TileGroup } from "model/tile/tileGroup";
-import BambooTile from "model/tile/group/bambooTile";
-import CharacterTile from "model/tile/group/characterTile";
-import CircleTile from "model/tile/group/circleTile";
+import { BambooTile } from "model/tile/group/bambooTile";
+import { CharacterTile } from "model/tile/group/characterTile";
+import { CircleTile } from "model/tile/group/circleTile";
 
 export function constructSuitedTile(group: SuitedTileGroup, value: SuitedTileValue) : SuitedTile {
     switch (group) {

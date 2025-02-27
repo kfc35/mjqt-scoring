@@ -4,11 +4,11 @@ import { type HonorTileGroup, HonorTileValue, isHonorTile } from "model/tile/gro
 import { TileGroup } from "model/tile/tileGroup";
 import { dragonTileValues, windTileValues } from "model/tile/tileValue";
 import { constructHonorTile } from "model/tile/group/honorTileConstructor";
-import Meld from "model/meld/meld";
-import Pair from "model/meld/pair";
-import Pong from "model/meld/pong";
-import Kong from "model/meld/kong";
-import HonorTileValueQuantityMemo from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorTileValueQuantityMemo";
+import { Meld } from "model/meld/meld";
+import { Pair } from "model/meld/pair";
+import { Pong } from "model/meld/pong";
+import { Kong } from "model/meld/kong";
+import { HonorTileValueQuantityMemo } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorTileValueQuantityMemo";
 
 /* This logic assumes that the hand does not consist of more than one pair */
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {

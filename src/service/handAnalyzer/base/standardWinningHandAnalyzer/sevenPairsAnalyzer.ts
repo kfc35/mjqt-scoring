@@ -1,7 +1,7 @@
 import { HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { Hand } from "model/hand/hk/hand";
-import Meld from "model/meld/meld";
-import Pair, { meldIsPair } from "model/meld/pair";
+import { Meld } from "model/meld/meld";
+import { Pair, meldIsPair } from "model/meld/pair";
 import { isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { meldsNotNullAndCorrectLength, meldsAreSubset } from "common/meldUtils";

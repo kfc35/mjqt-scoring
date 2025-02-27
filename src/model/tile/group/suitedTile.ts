@@ -2,7 +2,7 @@ import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
 import { SuitedTileValue, isSuitedTileValue, isTerminalSuitedTileValue } from "model/tile/tileValue";
 
-export default abstract class SuitedTile extends Tile {
+export abstract class SuitedTile extends Tile {
     declare protected _value: SuitedTileValue;
     declare protected _group: SuitedTileGroup;
 

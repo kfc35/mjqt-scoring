@@ -1,8 +1,8 @@
-import HonorTile, { type HonorTileGroup } from "model/tile/group/honorTile";
+import {HonorTile,  type HonorTileGroup } from "model/tile/group/honorTile";
 import { type HonorTileValue } from "model/tile/group/honorTile";
 import { TileGroup } from "model/tile/tileGroup";
-import DragonTile from "model/tile/group/dragonTile";
-import WindTile from "model/tile/group/windTile";
+import { DragonTile } from "model/tile/group/dragonTile";
+import { WindTile } from "model/tile/group/windTile";
 import { isDragonTileValue, isWindTileValue } from "model/tile/tileValue";
 
 export function constructHonorTile(group: HonorTileGroup, value: HonorTileValue) : HonorTile {

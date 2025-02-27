@@ -1,14 +1,14 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
-import WinContext from "model/winContext/winContext";
-import RoundContext from "model/roundContext/roundContext";
+import { WinContext } from "model/winContext/winContext";
+import { RoundContext } from "model/roundContext/roundContext";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { FlowerTile } from "model/tile/group/flowerTile";
 import { GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
 import { tilesDoesNotContainTile } from "common/tileUtils";
-import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { partitionTilesByGroup } from "common/tileUtils";
 
 export const SEAT_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 

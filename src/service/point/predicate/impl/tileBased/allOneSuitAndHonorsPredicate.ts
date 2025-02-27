@@ -1,6 +1,6 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
+import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
 import { handContainsOneSuitSubPredicate, handContainsHonorsSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
 import { consolidateSets } from "common/generic/setUtils";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";

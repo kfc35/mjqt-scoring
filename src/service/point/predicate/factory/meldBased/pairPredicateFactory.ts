@@ -1,7 +1,7 @@
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import Pair, { meldIsPair } from "model/meld/pair";
+import { Pair, meldIsPair } from "model/meld/pair";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";

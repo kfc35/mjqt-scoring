@@ -2,12 +2,12 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { meldIsChow } from "model/meld/chow";
-import Chow from "model/meld/chow";
-import Meld from "model/meld/meld";
+import { Chow } from "model/meld/chow";
+import { Meld } from "model/meld/meld";
 import { Tile } from "model/tile/tile";
-import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
-import PointPredicateFailureResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export const CLOSED_WAIT_PREDICATE : PointPredicate<MeldBasedWinningHand> = (winningHand : MeldBasedWinningHand) => {
     if (!meldIsChow(winningHand.meldWithWinningTile)) {

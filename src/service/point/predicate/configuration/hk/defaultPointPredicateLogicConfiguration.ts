@@ -1,8 +1,8 @@
-import ConcealedHandPointPredicateLogicConfiguration from "service/point/predicate/configuration/hk/logic/concealedHandPointPredicateLogicConfiguration";
-import MeldedHandPointPredicateLogicConfiguration from "service/point/predicate/configuration/hk/logic/meldedHandPointPredicateLogicConfiguration";
-import SelfTripletsPointPredicateLogicConfiguration from "service/point/predicate/configuration/hk/logic/selfTripletsPointPredicateLogicConfiguration";
-import PlumBlossomOnRoofPointPredicateLogicConfiguration from "service/point/predicate/configuration/hk/logic/plumBlossomOnRoofPointPredicateLogicConfiguration";
-import CommonHandPointPredicateLogicConfiguration from "service/point/predicate/configuration/hk/logic/commonHandPointPredicateLogicConfiguration";
+import { ConcealedHandPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/concealedHandPointPredicateLogicConfiguration";
+import { MeldedHandPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/meldedHandPointPredicateLogicConfiguration";
+import { SelfTripletsPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/selfTripletsPointPredicateLogicConfiguration";
+import { PlumBlossomOnRoofPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/plumBlossomOnRoofPointPredicateLogicConfiguration";
+import { CommonHandPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/commonHandPointPredicateLogicConfiguration";
 import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 
 /** refer to PointPredicateLogicOption for details on defaults. */

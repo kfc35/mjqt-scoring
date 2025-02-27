@@ -3,7 +3,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 export const MAX_POINTS = `MAX` as const;
 export type PointType = number | typeof MAX_POINTS;
 
-export default class PointPredicateBaseConfiguration {
+export class PointPredicateBaseConfiguration {
     private _enabled: boolean;
     private _points: PointType; 
     private _isBonus: boolean;

@@ -2,7 +2,7 @@ import { Hand } from "model/hand/hk/hand";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { type HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import Pair from "model/meld/pair";
+import { Pair } from "model/meld/pair";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { assertTilesSuitedOrHonor, tilesUnique } from "common/tileUtils";
 import { assertTilesNotNullAndCorrectLength, tilesDoesNotContainTile } from "common/tileUtils";

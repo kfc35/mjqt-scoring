@@ -2,17 +2,17 @@ import { MeldsAnalyzer } from "service/handAnalyzer/base/standardWinningHandAnal
 import { Hand } from "model/hand/hk/hand"
 import { isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
-import Meld from "model/meld/meld";
-import Pair from "model/meld/pair";
-import Chow, { meldIsChow } from "model/meld/chow";
-import Pong from "model/meld/pong";
-import Kong from "model/meld/kong";
+import { Meld } from "model/meld/meld";
+import { Pair } from "model/meld/pair";
+import { Chow, meldIsChow } from "model/meld/chow";
+import { Pong } from "model/meld/pong";
+import { Kong } from "model/meld/kong";
 import { meldPairLength, meldPongLength, meldKongLength } from "model/meld/meldConstants";
 import { cartesianProduct } from "common/meldUtils";
 import { TileGroup } from "model/tile/tileGroup";
 import { SuitedTileValue, getNextSuitedTileValue } from "model/tile/tileValue";
-import SuitedTileValueQuantityMemo from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/suitedTileValueQuantityMemo";
-import SuitedTile from "model/tile/group/suitedTile";
+import { SuitedTileValueQuantityMemo } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/suitedTileValueQuantityMemo";
+import { SuitedTile } from "model/tile/group/suitedTile";
 
 export const analyzeForNonKnittedSuitedMelds : MeldsAnalyzer = (hand: Hand) => {
     const bambooMelds = getSuitedMelds(hand, TileGroup.BAMBOO);

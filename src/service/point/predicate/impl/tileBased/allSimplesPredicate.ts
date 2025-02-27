@@ -7,12 +7,12 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { simpleSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import PointPredicateResult from "service/point/predicate/result/pointPredicateResult";
-import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
-import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
+import { PointPredicateSingleSuccessResult } from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { partitionTilesByGroup } from "common/tileUtils";
 

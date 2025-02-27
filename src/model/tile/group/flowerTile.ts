@@ -1,7 +1,7 @@
 import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
-import GentlemanTile, { isGentlemanTile } from "model/tile/group/gentlemanTile";
-import SeasonTile, { isSeasonTile } from "model/tile/group/seasonTile";
+import { GentlemanTile, isGentlemanTile } from "model/tile/group/gentlemanTile";
+import { SeasonTile, isSeasonTile } from "model/tile/group/seasonTile";
 import { GentlemanTileValue, SeasonTileValue } from "model/tile/tileValue";
 
 // Note: These flower tiles are standard in most East Asian mahjong games.

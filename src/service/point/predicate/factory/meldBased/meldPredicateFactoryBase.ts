@@ -1,12 +1,12 @@
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
-import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
-import PointPredicateFailureResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateSingleSuccessResult } from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSuccessResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are between minNumMatches and maxNumMatches matches. 
    If both minNumMatches and maxNumMatches are undefined, meldsToMatch must all be found in the winning hand */

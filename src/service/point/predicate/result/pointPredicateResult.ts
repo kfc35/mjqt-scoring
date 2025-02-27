@@ -1,4 +1,4 @@
-export default class PointPredicateResult {
+export class PointPredicateResult {
     protected _pointPredicateId: string;
     protected _success: boolean;
     protected _subPredicateResults: PointPredicateResult[];

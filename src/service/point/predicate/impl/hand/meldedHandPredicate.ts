@@ -2,8 +2,8 @@ import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinning
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import WinContext from "model/winContext/winContext";
-import RoundContext from "model/roundContext/roundContext";
+import { WinContext } from "model/winContext/winContext";
+import { RoundContext } from "model/roundContext/roundContext";
 import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/basicWinConditionSubPredicate";
 import { lastTileCompletedPairSubPredicate, 
     ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate, 

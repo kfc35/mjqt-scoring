@@ -1,6 +1,6 @@
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 
-export default class PointPredicateSuccessResultMeldDetail {
+export class PointPredicateSuccessResultMeldDetail {
     protected _meldsThatSatisfyPredicate: Meld[];
     // indices refer to melds[] from the associated WinningHand 
     protected _meldIndicesThatSatisfyPredicate: Set<number>;

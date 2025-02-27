@@ -1,4 +1,4 @@
-import PointPredicateBaseConfiguration from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
 import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 
 export class RootPointPredicateConfiguration {

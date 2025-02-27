@@ -1,7 +1,7 @@
 import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
 import { PointPredicateLogicOption } from "../../logic/pointPredicateLogicOption";
 
-export default class MeldedHandPointPredicateLogicConfiguration extends PointPredicateLogicConfiguration {
+export class MeldedHandPointPredicateLogicConfiguration extends PointPredicateLogicConfiguration {
     constructor(lastDiscardedTileMustCompletePair: boolean, allowSelfDrawToCompletePair: boolean) {
         const optionToValue: Map<PointPredicateLogicOption, boolean> = new Map();
         optionToValue.set(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR, lastDiscardedTileMustCompletePair);

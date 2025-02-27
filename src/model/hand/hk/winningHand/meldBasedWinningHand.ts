@@ -1,5 +1,5 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
 import { getMeldAtIndex, meldHasTile, meldToFlatTiles } from "common/meldUtils";

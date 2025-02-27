@@ -1,6 +1,6 @@
 import { HandAnalyzer } from "service/handAnalyzer/hk/handAnalyzer";
 import { Hand } from "model/hand/hk/hand"
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand"
 import { analyzeForHonorMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorMeldsAnalyzer";
 import { analyzeForNonKnittedSuitedMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/suitedMeldsAnalyzer/nonKnittedSuitedMeldsAnalyzer";

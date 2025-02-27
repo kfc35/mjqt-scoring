@@ -1,8 +1,8 @@
 import { GentlemanTileValue, WindTileValue } from "model/tile/tileValue";
-import WindTile from "model/tile/group/windTile";
+import { WindTile } from "model/tile/group/windTile";
 import { SeasonTileValue } from "model/tile/tileValue";
-import SeasonTile from "model/tile/group/seasonTile";
-import GentlemanTile from "model/tile/group/gentlemanTile";
+import { SeasonTile } from "model/tile/group/seasonTile";
+import { GentlemanTile } from "model/tile/group/gentlemanTile";
 import { getEnumKeys } from "common/generic/enumUtils";
 
 export enum WindDirection {

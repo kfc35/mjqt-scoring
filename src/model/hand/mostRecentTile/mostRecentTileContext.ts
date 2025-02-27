@@ -1,5 +1,5 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 
 export class MostRecentTileContext {
     private _tile: SuitedOrHonorTile;

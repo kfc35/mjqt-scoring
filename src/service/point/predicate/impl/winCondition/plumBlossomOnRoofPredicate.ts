@@ -5,17 +5,17 @@ import { createPointPredicateRouterWithAutoFailSpecialPredicate, createPPResultB
 import { FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE } from "common/deck";
 import { winByAnyReplacementSubPredicate, WIN_BY_KONG_PREDICATE } from "service/point/predicate/impl/winCondition/basicWinConditionPredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
-import Chow, { meldIsChow } from "model/meld/chow";
+import { Chow, meldIsChow } from "model/meld/chow";
 import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
-import WinContext from "model/winContext/winContext";
-import RoundContext from "model/roundContext/roundContext";
-import PointPredicateSingleSuccessResult from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-import PointPredicateSuccessResultTileDetail from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import PointPredicateSuccessResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import PointPredicateFailureResult from "service/point/predicate/result/pointPredicateFailureResult";
-import PointPredicateFailureResultMeldDetail from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import PointPredicateFailureResultTileDetail from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { WinContext } from "model/winContext/winContext";
+import { RoundContext } from "model/roundContext/roundContext";
+import { PointPredicateSingleSuccessResult } from "service/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 const winningTileIsFiveCircleSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {

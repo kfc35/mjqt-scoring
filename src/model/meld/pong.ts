@@ -1,9 +1,9 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import Meld  from "model/meld/meld.js";
+import { Meld }  from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
 import { assertTileSuitedOrHonor } from "common/tileUtils";
 
-export default class Pong extends Meld {
+export class Pong extends Meld {
     declare protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile, SuitedOrHonorTile];
 
     constructor(tile: SuitedOrHonorTile, exposed: boolean = false) {

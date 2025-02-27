@@ -1,9 +1,9 @@
 import { WindDirection, windDirectionToWindTile, windDirectionToSeasonTile, windDirectionToGentlemanTile, windDirections } from "model/roundContext/windDirection";
-import GentlemanTile from "model/tile/group/gentlemanTile";
-import SeasonTile from "model/tile/group/seasonTile";
-import WindTile from "model/tile/group/windTile";
+import { GentlemanTile } from "model/tile/group/gentlemanTile";
+import { SeasonTile } from "model/tile/group/seasonTile";
+import { WindTile } from "model/tile/group/windTile";
 
-export default class RoundContext {
+export class RoundContext {
     private _prevailingWind : WindDirection;
     private _seatWind : WindDirection;
 

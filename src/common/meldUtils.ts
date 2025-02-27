@@ -1,4 +1,4 @@
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 import { Tile } from "model/tile/tile";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { meldIsPair } from "model/meld/pair";

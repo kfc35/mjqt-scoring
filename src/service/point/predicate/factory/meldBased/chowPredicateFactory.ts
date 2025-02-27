@@ -1,7 +1,7 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import Chow, { meldIsChow } from "model/meld/chow";
-import SuitedTile from "model/tile/group/suitedTile";
+import { Chow, meldIsChow } from "model/meld/chow";
+import { SuitedTile } from "model/tile/group/suitedTile";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";

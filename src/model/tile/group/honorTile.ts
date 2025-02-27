@@ -2,7 +2,7 @@ import { Tile } from "model/tile/tile";
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue, DragonTileValue, isDragonTileValue, WindTileValue, isWindTileValue, dragonTileValues, windTileValues } from "model/tile/tileValue";
 
-export default abstract class HonorTile extends Tile {
+export abstract class HonorTile extends Tile {
     declare protected _value: HonorTileValue;
     declare protected _group: HonorTileGroup;
 

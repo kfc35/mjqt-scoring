@@ -7,7 +7,7 @@ import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { handMinLengthWithoutFlowers, handMaxLength, handMaxNumUniqueFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { TileGroup } from "model/tile/tileGroup";
 import { type TileValue } from "model/tile/tileValue";
-import Meld from "model/meld/meld";
+import { Meld } from "model/meld/meld";
 import { meldExistsInMelds, meldToFlatTiles } from "common/meldUtils";
 import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 

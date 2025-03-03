@@ -2,8 +2,8 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export const notSelfDrawSubPredicate : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {

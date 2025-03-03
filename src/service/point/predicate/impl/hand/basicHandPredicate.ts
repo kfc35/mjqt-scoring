@@ -12,8 +12,8 @@ import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/
 import { NO_GENTLEMEN_OR_SEASONS_PREDICATE } from "service/point/predicate/impl/flower/flowerPredicate";
 import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
-import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 import { handContainsMoreThanOneSuitSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
 import { consolidateSets } from "common/generic/setUtils";
 import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/basicWinConditionPredicate";

@@ -1,3 +1,4 @@
+/** Every one of these logic options is connected to one PointPredicateID in pointPredicateIdToLogicOptionMap. **/
 export enum PointPredicateLogicOption {
     /** A regular concealed hand can be won by discard.
      * This option restricts concealed hands such that the discard can only complete the pair, rather than any of the melds

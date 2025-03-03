@@ -16,6 +16,19 @@ export * from "model/hand/hk/winningHand/winningHand";
 export * from "model/hand/mostRecentTile/mostRecentTileContext";
 
 export * from "model/point/predicate/pointPredicateID";
+export * from "model/point/evaluation/pointEvaluation";
+export * from "model/point/configuration/root/rootPointPredicateConfiguration";
+export * from "model/point/configuration/base/pointPredicateBaseConfiguration";
+export * from "model/point/configuration/logic/pointPredicateIdToLogicOptionMap";
+export * from "model/point/configuration/logic/pointPredicateLogicConfiguration";
+export * from "model/point/configuration/logic/pointPredicateLogicOption";
+export * from "model/point/predicate/result/pointPredicateResult";
+export * from "model/point/predicate/result/pointPredicateFailureResult";
+export * from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+export * from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+export * from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+export * from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+export * from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
 export * from "model/tile/tile";
 export * from "model/tile/tileGroup";
@@ -50,22 +63,8 @@ export * from "model/winContext/winContext";
 
 /** service */
 export * from "service/handAnalyzer/hk/handAnalyzer";
-export * from "service/point/evaluator/pointEvaluation";
-export * from "service/point/evaluator/hk/pointEvaluator";
 export * from "service/point/evaluator/hk/pointEvaluator";
 
-export * from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
-export * from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
-export * from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
-export * from "service/point/predicate/configuration/logic/pointPredicateLogicOption";
 export * from "service/point/predicate/configuration/hk/defaultPointPredicateBaseConfiguration";
 export * from "service/point/predicate/configuration/hk/defaultPointPredicateLogicConfiguration";
 export * from "service/point/predicate/configuration/hk/defaultRootPointPredicateConfiguration";
-
-export * from "service/point/predicate/result/pointPredicateResult";
-export * from "service/point/predicate/result/pointPredicateFailureResult";
-export * from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-export * from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-export * from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-export * from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
-export * from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";

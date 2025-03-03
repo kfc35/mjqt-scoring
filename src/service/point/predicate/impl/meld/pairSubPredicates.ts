@@ -7,7 +7,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WinContext } from "model/winContext/winContext";
 import { windDirectionToWindTile } from "model/roundContext/windDirection";
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 
 export const onePairSubPredicate : PointPredicate<MeldBasedWinningHand> = createPairQuantityPredicate(PointPredicateID.SUBPREDICATE_ONE_PAIR, 1, 1);
 

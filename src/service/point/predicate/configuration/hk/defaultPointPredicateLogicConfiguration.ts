@@ -3,7 +3,7 @@ import { MeldedHandPointPredicateLogicConfiguration } from "service/point/predic
 import { SelfTripletsPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/selfTripletsPointPredicateLogicConfiguration";
 import { PlumBlossomOnRoofPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/plumBlossomOnRoofPointPredicateLogicConfiguration";
 import { CommonHandPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/logic/commonHandPointPredicateLogicConfiguration";
-import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicConfiguration } from "model/point/configuration/logic/pointPredicateLogicConfiguration";
 
 /** refer to PointPredicateLogicOption for details on defaults. */
 export const defaultConcealedHandPointPredicateLogicConfiguration = new ConcealedHandPointPredicateLogicConfiguration(false);

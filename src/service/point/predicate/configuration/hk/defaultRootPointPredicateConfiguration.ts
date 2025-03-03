@@ -1,6 +1,6 @@
 import { defaultPointPredicateBaseConfigurationMap } from "service/point/predicate/configuration/hk/defaultPointPredicateBaseConfiguration";
 import { defaultPointPredicateLogicConfiguration } from "service/point/predicate/configuration/hk/defaultPointPredicateLogicConfiguration";
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 
 export const DEFAULT_MAX_POINTS: number = 13;
 export const defaultRootPointPredicateConfiguration = createDefaultRootPointPredicateConfiguration();

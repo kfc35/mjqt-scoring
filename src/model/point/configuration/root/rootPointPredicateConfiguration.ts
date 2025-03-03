@@ -1,5 +1,5 @@
-import { PointPredicateBaseConfiguration } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
-import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateLogicConfiguration } from "model/point/configuration/logic/pointPredicateLogicConfiguration";
 
 export class RootPointPredicateConfiguration {
     private _pointPredicateIdToBaseConfiguration: Map<string, PointPredicateBaseConfiguration>;

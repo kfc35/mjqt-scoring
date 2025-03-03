@@ -15,12 +15,12 @@ import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 import { constructHonorTile } from "model/tile/group/honorTileConstructor";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import type { SuitedTileGroup } from "model/tile/group/suitedTile";
-import { PointPredicateSuccessResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
-import { PointPredicateSuccessResultTileDetail } from "service/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
+import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
 export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, meldBasedWinningHand: MeldBasedWinningHand,
     givenSuitedTileGroup: SuitedTileGroup, givenDragonTileValue: DragonTileValue): PointPredicateResult {

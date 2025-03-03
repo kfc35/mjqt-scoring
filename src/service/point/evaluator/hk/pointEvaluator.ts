@@ -1,13 +1,13 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WinContext } from "model/winContext/winContext";
-import { PointEvaluation } from "service/point/evaluator/pointEvaluation";
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { PointEvaluation } from "model/point/evaluation/pointEvaluation";
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { calculateChickenHandResultFromResults } from "service/point/predicate/impl/chicken/chickenHandPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
+import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { pointPredicateWiring } from "service/point/predicate/wiring/hk/pointPredicateWiring";
-import { MAX_POINTS, type PointType } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
+import { MAX_POINTS, type PointType } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 
 export default function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext,
     rootConfig: RootPointPredicateConfiguration): PointEvaluation {

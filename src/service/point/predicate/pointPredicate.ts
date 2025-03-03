@@ -1,8 +1,8 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand"
 import { RoundContext } from "model/roundContext/roundContext";
 import { WinContext } from "model/winContext/winContext"
-import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult"
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult"
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 
 /** 
  * PointPredicates apply to WinningHands and WinContext. 

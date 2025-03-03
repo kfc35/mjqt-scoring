@@ -1,5 +1,5 @@
 import { getEnumKeys } from "common/generic/enumUtils";
-import { PointPredicateLogicOption } from "service/point/predicate/configuration/logic/pointPredicateLogicOption";
+import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 
 export const pointPredicateLogicOptions: readonly PointPredicateLogicOption[] = 
     getEnumKeys(PointPredicateLogicOption).map(key => PointPredicateLogicOption[key]);

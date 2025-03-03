@@ -6,7 +6,7 @@ import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { createPongOrKongsExistPredicate } from "service/point/predicate/factory/meldBased/pongOrKongPredicateFactory";
 import { WIND_TILES } from "common/deck";
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { windPairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { predicateAnd } from "service/point/predicate/pointPredicate";

@@ -1,8 +1,8 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "service/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateFailureResult } from "service/point/predicate/result/pointPredicateFailureResult"
-import type { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
+import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult"
+import type { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 
 /** For calculating chicken hand, as an exception, we work on point predicate results.
  * This is to save on the extra computation of re-applying predicates

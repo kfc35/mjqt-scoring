@@ -1,4 +1,4 @@
-import { PointPredicateBaseConfiguration } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import createDefaultBasicHandBasedPointPredicateBaseConfigurationMap from "service/point/predicate/configuration/hk/base/defaultBasicHandBasedPointPredicateBaseConfiguration";
 import createDefaultBasicWinConditionPointPredicateBaseConfigurationMap from "service/point/predicate/configuration/hk/base/defaultBasicWinConditionPointPredicateBaseConfiguration";

@@ -1,6 +1,6 @@
-import { PointPredicateFailureResultMeldDetail } from "service/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import { PointPredicateResult } from "service/point/predicate/result/pointPredicateResult";
-import { PointPredicateFailureResultTileDetail } from "service/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
+import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 export class PointPredicateFailureResult extends PointPredicateResult{
     private _meldDetail: PointPredicateFailureResultMeldDetail | undefined;

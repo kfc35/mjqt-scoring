@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration, MAX_POINTS } from "service/point/predicate/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, MAX_POINTS } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 
 export default function createDefaultMeldBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();

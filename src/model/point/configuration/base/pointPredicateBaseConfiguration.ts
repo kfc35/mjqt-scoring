@@ -34,6 +34,19 @@ export class PointPredicateBaseConfiguration {
         return this._isBonus;
     }
 
+    set enabled(enabled: boolean) {
+        this._enabled = enabled;
+    }
+    
+    set points(points: PointType) {
+        this._points = points;
+    }
+
+    set isBonus(isBonus: boolean) {
+        this._isBonus = isBonus;
+    }
+
+    // only a getter
     get includedPointPredicates(): ReadonlySet<PointPredicateID> {
         return this._includedPointPredicates;
     }

@@ -10,8 +10,8 @@ import { lastTileCompletedPairSubPredicate,
     ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
 import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
-import { RootPointPredicateConfiguration } from "service/point/predicate/configuration/root/rootPointPredicateConfiguration";
-import { PointPredicateLogicOption } from "../../configuration/logic/pointPredicateLogicOption";
+import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
+import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 

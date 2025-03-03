@@ -1,5 +1,5 @@
-import { PointPredicateLogicConfiguration } from "service/point/predicate/configuration/logic/pointPredicateLogicConfiguration";
-import { PointPredicateLogicOption } from "../../logic/pointPredicateLogicOption";
+import { PointPredicateLogicConfiguration } from "model/point/configuration/logic/pointPredicateLogicConfiguration";
+import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 
 export class SelfTripletsPointPredicateLogicConfiguration extends PointPredicateLogicConfiguration {
     constructor(onlyPongsAllowed: boolean) {

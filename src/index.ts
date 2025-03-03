@@ -19,6 +19,7 @@ export * from "model/point/predicate/pointPredicateID";
 export * from "model/point/evaluation/pointEvaluation";
 export * from "model/point/configuration/root/rootPointPredicateConfiguration";
 export * from "model/point/configuration/base/pointPredicateBaseConfiguration";
+export * from "model/point/configuration/base/pointType";
 export * from "model/point/configuration/logic/pointPredicateIdToLogicOptionMap";
 export * from "model/point/configuration/logic/pointPredicateLogicConfiguration";
 export * from "model/point/configuration/logic/pointPredicateLogicOption";

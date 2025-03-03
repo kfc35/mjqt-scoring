@@ -7,7 +7,8 @@ import { calculateChickenHandResultFromResults } from "service/point/predicate/i
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { pointPredicateWiring } from "service/point/predicate/wiring/hk/pointPredicateWiring";
-import { MAX_POINTS, type PointType } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { type PointType } from "model/point/configuration/base/pointType";
+import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext,
     rootConfig: RootPointPredicateConfiguration): PointEvaluation {

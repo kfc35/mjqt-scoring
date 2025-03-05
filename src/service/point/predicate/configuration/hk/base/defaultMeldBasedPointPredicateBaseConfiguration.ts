@@ -81,5 +81,6 @@ export const defaultBigFourWindsBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.ALL_PONGS_AND_KONGS)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.ALL_PONGS_AND_KONGS]))
         .build();

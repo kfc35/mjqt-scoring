@@ -29,6 +29,8 @@ export const defaultSelfTripletsPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.ALL_PONGS_AND_KONGS, PointPredicateID.CONCEALED_HAND]))
         .build();
 
 /** default disabled */
@@ -37,8 +39,8 @@ export const defaultFullyConcealedHandPointPredicateBaseConfiguration =
         .enabled(false)
         .points(3)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
-        .addIncludedPointPredicate(PointPredicateID.CONCEALED_HAND)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SELF_DRAW, PointPredicateID.CONCEALED_HAND]))
         .build();
 
 export const defaultMeldedHandPointPredicateBaseConfiguration = 
@@ -53,5 +55,6 @@ export const defaultFullyMeldedHandPointPredicateBaseConfiguration =
         .enabled(false)
         .points(6)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.MELDED_HAND)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.MELDED_HAND]))
         .build();

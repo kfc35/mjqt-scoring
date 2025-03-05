@@ -35,7 +35,8 @@ export const defaultRobbingKongPredicateBaseConfiguration =
         .enabled(true)
         .points(1)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.LAST_OF_ITS_KIND)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.LAST_OF_ITS_KIND]))
         .build();
 
 export const defaultWinByLastTilePredicateBaseConfiguration = 
@@ -59,7 +60,8 @@ export const defaultWinByKongPredicateBaseConfiguration =
         .enabled(true)
         .points(2)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SELF_DRAW]))
         .build();
 
 export const defaultWinByDoubleKongPredicateBaseConfiguration = 
@@ -67,8 +69,8 @@ export const defaultWinByDoubleKongPredicateBaseConfiguration =
         .enabled(true)
         .points(9)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_KONG)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SELF_DRAW, PointPredicateID.WIN_BY_KONG]))
         .build();
 
 export const defaultEarthlyHandPredicateBaseConfiguration = 
@@ -92,7 +94,8 @@ export const defaultWinByFlowerPredicateBaseConfiguration =
         .enabled(false)
         .points(2)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SELF_DRAW]))
         .build();
 
 export const defaultWinByDoubleFlowerPredicateBaseConfiguration = 
@@ -100,8 +103,8 @@ export const defaultWinByDoubleFlowerPredicateBaseConfiguration =
         .enabled(false)
         .points(9)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_FLOWER)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SELF_DRAW, PointPredicateID.WIN_BY_FLOWER]))
         .build();
 
 export const defaultWinByMixedDoubleReplacementPredicateBaseConfiguration = 
@@ -109,9 +112,8 @@ export const defaultWinByMixedDoubleReplacementPredicateBaseConfiguration =
         .enabled(false)
         .points(9)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_KONG)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_FLOWER)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SELF_DRAW, PointPredicateID.WIN_BY_KONG, PointPredicateID.WIN_BY_FLOWER]))
         .build();
 
 export const defaultLastOfItsKindPredicateBaseConfiguration = 

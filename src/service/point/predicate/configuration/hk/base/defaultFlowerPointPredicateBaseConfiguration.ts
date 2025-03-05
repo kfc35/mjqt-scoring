@@ -45,8 +45,8 @@ export const defaultAllGentlemenBaseConfiguration =
         .enabled(true)
         .points(2)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SEAT_GENTLEMAN)
-        .addIncludedPointPredicate(PointPredicateID.PREVAILING_GENTLEMAN)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SEAT_GENTLEMAN, PointPredicateID.PREVAILING_GENTLEMAN]))
         .build();
 
 export const defaultAllSeasonsBaseConfiguration = 
@@ -54,8 +54,8 @@ export const defaultAllSeasonsBaseConfiguration =
         .enabled(true)
         .points(2)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SEAT_SEASON)
-        .addIncludedPointPredicate(PointPredicateID.PREVAILING_SEASON)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SEAT_SEASON, PointPredicateID.PREVAILING_SEASON]))
         .build();
 
 /* disabled by default */
@@ -78,10 +78,8 @@ export const defaultAllGentlemenAndSeasonsBaseConfiguration =
         .enabled(false)
         .points(MAX_POINTS)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.SEAT_GENTLEMAN)
-        .addIncludedPointPredicate(PointPredicateID.SEAT_SEASON)
-        .addIncludedPointPredicate(PointPredicateID.PREVAILING_GENTLEMAN)
-        .addIncludedPointPredicate(PointPredicateID.PREVAILING_SEASON)
-        .addIncludedPointPredicate(PointPredicateID.ALL_GENTLEMEN)
-        .addIncludedPointPredicate(PointPredicateID.ALL_SEASONS)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.SEAT_GENTLEMAN, PointPredicateID.SEAT_SEASON, 
+                PointPredicateID.PREVAILING_GENTLEMAN, PointPredicateID.PREVAILING_SEASON,
+                PointPredicateID.ALL_GENTLEMEN, PointPredicateID.ALL_SEASONS]))
         .build();

@@ -16,6 +16,8 @@ export const defaultJadeDragonPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.ALL_PONGS_AND_KONGS]))
         .build();
 
 export const defaultRubyDragonPointPredicateBaseConfiguration = 
@@ -23,6 +25,8 @@ export const defaultRubyDragonPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.ALL_PONGS_AND_KONGS]))
         .build();
 
 export const defaultPearlDragonPointPredicateBaseConfiguration = 
@@ -30,4 +34,6 @@ export const defaultPearlDragonPointPredicateBaseConfiguration =
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.ALL_PONGS_AND_KONGS]))
         .build();

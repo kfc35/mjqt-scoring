@@ -36,10 +36,12 @@ export default function evaluateWinningHand(winningHand: WinningHand, winCtx: Wi
 
 function getPointPredicatesIdsToIgnoreFromResults(results: PointPredicateResult[], rootPointPredicateConfig: RootPointPredicateConfiguration) : Set<string> {
     const pointPredicateIdsToIgnore: Set<string> = new Set();
+    const logicConfig = rootPointPredicateConfig.pointPredicateLogicConfiguration;
     for (const result of results) {
-        const config = rootPointPredicateConfig.getBaseConfiguration(result.pointPredicateId);
-        if (result.success && !!config && !!config.includedPointPredicates && config.includedPointPredicates.size > 0) {
-            config.includedPointPredicates.forEach(pp => pointPredicateIdsToIgnore.add(pp));
+        const baseConfig = rootPointPredicateConfig.getBaseConfiguration(result.pointPredicateId);
+        const includedPointPredicates = baseConfig?.generateIncludedPointPredicates(logicConfig);
+        if (result.success && !!baseConfig && !!includedPointPredicates && includedPointPredicates.size > 0) {
+            includedPointPredicates.forEach(pp => pointPredicateIdsToIgnore.add(pp));
         }
     }
     return pointPredicateIdsToIgnore;

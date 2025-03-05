@@ -27,9 +27,8 @@ export const defaultCommonHandPointPredicateBaseConfiguration =
         .enabled(true)
         .points(3)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.ALL_CHOWS)
-        .addIncludedPointPredicate(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)
-        .addIncludedPointPredicate(PointPredicateID.SELF_DRAW)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.ALL_CHOWS, PointPredicateID.NO_GENTLEMEN_OR_SEASONS, PointPredicateID.SELF_DRAW]))
         .build();
 
 export const defaultAllPongsKongsPointPredicateBaseConfiguration = 

@@ -1,5 +1,6 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 
 export default function createDefaultUniqueWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
@@ -15,8 +16,9 @@ export const defaultPlumBlossomOnTheRoofPointPredicateBaseConfiguration =
         .enabled(true)
         .points(3)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_KONG)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_FLOWER)
+        .includedPointPredicatesGenerator(
+            (logicConfig) => (logicConfig.getOptionValue(PointPredicateLogicOption.PLUM_BLOSSOM_ON_ROOF_ANY_REPLACEMENT_ALLOWED) ? 
+                new Set([PointPredicateID.WIN_BY_KONG, PointPredicateID.WIN_BY_FLOWER]) : new Set([PointPredicateID.WIN_BY_KONG])))
         .build();
 
 export const defaultMoonFromTheBottomOfTheSeaPointPredicateBaseConfiguration = 
@@ -24,5 +26,6 @@ export const defaultMoonFromTheBottomOfTheSeaPointPredicateBaseConfiguration =
         .enabled(true)
         .points(3)
         .isBonus(false)
-        .addIncludedPointPredicate(PointPredicateID.WIN_BY_LAST_TILE)
+        .includedPointPredicatesGenerator(
+            () => new Set([PointPredicateID.WIN_BY_LAST_TILE]))
         .build();

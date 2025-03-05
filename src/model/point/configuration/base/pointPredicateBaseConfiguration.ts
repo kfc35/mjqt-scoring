@@ -1,4 +1,3 @@
-import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateLogicConfiguration } from "../logic/pointPredicateLogicConfiguration";
 import type { PointType } from "model/point/configuration/base/pointType";
 
@@ -10,12 +9,12 @@ export class PointPredicateBaseConfiguration {
     // i.e. all one suit includes points from all one suit and honors, so pts from the latter should be ignored
     // a "fully concealed" hand includes a regular concealed hand, so pts from the latter should be ignored
     // some included point predicates can shift based on the logic config.
-    private _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<PointPredicateID>
+    private _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<string>
 
     constructor(enabled: boolean, 
         points: PointType, 
         isBonus: boolean,
-        includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<PointPredicateID>) {
+        includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<string>) {
         this._enabled = enabled;
         this._points = points;
         this._isBonus = isBonus;
@@ -46,7 +45,7 @@ export class PointPredicateBaseConfiguration {
         this._isBonus = isBonus;
     }
 
-    generateIncludedPointPredicates(logicConfig: PointPredicateLogicConfiguration): ReadonlySet<PointPredicateID> {
+    generateIncludedPointPredicates(logicConfig: PointPredicateLogicConfiguration): ReadonlySet<string> {
         return this._includedPointPredicatesGenerator(logicConfig);
     }
 
@@ -54,7 +53,7 @@ export class PointPredicateBaseConfiguration {
         _enabled: boolean = true;
         _points: PointType = 0;
         _isBonus: boolean = false;
-        _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<PointPredicateID> 
+        _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> 
             = () => new Set();
 
         enabled(enabled: boolean) {
@@ -72,7 +71,7 @@ export class PointPredicateBaseConfiguration {
             return this;
         }
 
-        includedPointPredicatesGenerator(generator: (logicConfig: PointPredicateLogicConfiguration) => Set<PointPredicateID> ) {
+        includedPointPredicatesGenerator(generator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> ) {
             this._includedPointPredicatesGenerator = generator;
             return this;
         }

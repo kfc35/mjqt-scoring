@@ -1,3 +1,5 @@
+import { getEnumKeys } from "common/generic/enumUtils";
+
 /** Every one of these logic options is connected to one PointPredicateID in pointPredicateIdToLogicOptionMap. **/
 export enum PointPredicateLogicOption {
     /** A regular concealed hand can be won by discard.
@@ -28,3 +30,7 @@ export enum PointPredicateLogicOption {
     // A common hand must have a valueless pair (non seat/prevailing wind pair or a suited pair only). Default = false
     COMMON_HAND_MUST_HAVE_VALUELESS_PAIR = "COMMON_HAND_MUST_HAVE_VALUELESS_PAIR"
 }
+
+export const pointPredicateLogicOptions: readonly PointPredicateLogicOption[] = 
+    getEnumKeys(PointPredicateLogicOption).map(key => PointPredicateLogicOption[key]);
+

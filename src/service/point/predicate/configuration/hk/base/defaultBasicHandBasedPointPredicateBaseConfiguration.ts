@@ -5,6 +5,7 @@ import { MAX_POINTS } from "model/point/configuration/base/pointType";
 export default function createDefaultBasicHandBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
     const map: Map<PointPredicateID, PointPredicateBaseConfiguration> = new Map();
     /* enabled by default */
+    map.set(PointPredicateID.CHICKEN_HAND, defaultChickenHandPointPredicateBaseConfiguration);
     map.set(PointPredicateID.ALL_CHOWS, defaultAllChowsPointPredicateBaseConfiguration);
     map.set(PointPredicateID.COMMON_HAND, defaultCommonHandPointPredicateBaseConfiguration);
     map.set(PointPredicateID.ALL_PONGS_AND_KONGS, defaultAllPongsKongsPointPredicateBaseConfiguration);
@@ -15,6 +16,13 @@ export default function createDefaultBasicHandBasedPointPredicateBaseConfigurati
 }
 
 /** default enabled */
+export const defaultChickenHandPointPredicateBaseConfiguration = 
+    new PointPredicateBaseConfiguration.Builder()
+        .enabled(true)
+        .points(0)
+        .isBonus(false)
+        .build();
+
 export const defaultAllChowsPointPredicateBaseConfiguration = 
     new PointPredicateBaseConfiguration.Builder()
         .enabled(true)

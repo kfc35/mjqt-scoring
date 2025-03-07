@@ -44,9 +44,13 @@ export class PointEvaluation {
     }
 
     compareTo(otherEval : PointEvaluation) : number {
-        if (this._points === otherEval.points) {
-            return 0;
-        }
-        return this._points < otherEval.points ? -1 : +1
+        return comparePointEvaluations(this, otherEval);
     }
+}
+
+function comparePointEvaluations(a: PointEvaluation, b: PointEvaluation): number {
+    if (a.points === b.points) {
+        return 0;
+    }
+    return a.points < b.points ? -1 : +1
 }

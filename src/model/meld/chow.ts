@@ -1,6 +1,7 @@
 import { SuitedTile } from "model/tile/group/suitedTile";
-import { Meld}   from "model/meld/meld.js";
+import { Meld }   from "model/meld/meld.js";
 import { MeldType } from "model/meld/meldType";
+import { compareTilesByValueOnly } from "model/tile/tile";
 
 export class Chow extends Meld {
     // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"
@@ -13,9 +14,7 @@ export class Chow extends Meld {
         }
         
         const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].clone(), tiles[1].clone(), tiles[2].clone()];
-        tilesCopy.sort(function(tile1: SuitedTile, tile2: SuitedTile){
-            return tile1.compareToValueOnly(tile2);
-        });
+        tilesCopy.sort(compareTilesByValueOnly);
         if (!tilesCopy[0].isOneBefore(tilesCopy[1])
             || !tilesCopy[1].isOneBefore(tilesCopy[2])) {
             throw new TypeError("Tiles in a Chow must be a consecutive run (e.g. 1,2,3 or 2,3,4 ... or 7,8,9).");

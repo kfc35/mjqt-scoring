@@ -22,10 +22,6 @@ export function meldsNumTiles(melds: readonly Meld[]) : number {
     return melds.map(meld => meld.tiles.length).reduce<number>((sum, len) => sum + len, 0);
 }
 
-export function meldToTilesList(melds: readonly Meld[]) : SuitedOrHonorTile[][] {
-    return melds.map(meld => meld.tiles);
-}
-
 export function meldToFlatTiles(melds: readonly Meld[]) : SuitedOrHonorTile[] {
     return melds.map(meld => meld.tiles)
         .reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []);
@@ -40,50 +36,34 @@ export function meldHasTile(meld: Meld, tile: Tile) : boolean {
     return false;
 }
 
-export function meldsAreSubset(melds: readonly Meld[], potentialSubset: readonly Meld[], ignoreExposed? : boolean) : boolean {
+export function meldsAreSubset(melds: readonly Meld[], potentialSubset: readonly Meld[]) : boolean {
     const haystack = [...melds];
     for (const needle of potentialSubset) {
         for (let i = 0; i < haystack.length; i++) {
-            if (needle.equals(haystack[i], ignoreExposed)) {
+            if (needle.equals(haystack[i], false)) {
                 haystack.splice(i, 1);
                 break;
             }
         }
-        return false;
     }
-    return true;
+    return melds.length - haystack.length === potentialSubset.length;
 }
 
-export function meldsIntersection(meldsOne: readonly Meld[], meldsTwo: readonly Meld[], ignoreExposed? : boolean) : Meld[] {
-    const intersection = [];
-    const meldsTwoCopy = [...meldsTwo];
-    for (const meldOne of meldsOne) {
-        for (let i = 0; i < meldsTwoCopy.length; i++) {
-            if (meldOne.equals(meldsTwoCopy[i], ignoreExposed)) {
-                intersection.push(meldOne.clone());
-                meldsTwoCopy.splice(i, 1)
-                break;
-            }
-        }
-    }
-    return intersection;
-}
-
-export function getIndexOfMeld(melds: readonly Meld[], meldToFind: Meld, ignoreExposed: boolean = false) : number {
+export function getIndexOfMeld(melds: readonly Meld[], meldToFind: Meld, ignoreExposed: boolean = false) : number | undefined {
     for (const [index, meld] of melds.entries()) {
         if (meld.equals(meldToFind, ignoreExposed)) {
             return index;
         }
     }
-    return -1;
+    return undefined;
 }
 
-export function getIndexOfMeldIgnoreExposed(melds: readonly Meld[], meld: Meld) : number {
+export function getIndexOfMeldIgnoreExposed(melds: readonly Meld[], meld: Meld) : number | undefined {
     return getIndexOfMeld(melds, meld, true);
 }
 
 export function meldExistsInMelds(melds: readonly Meld[], meldToCheck: Meld, ignoreExposed: boolean = false) : boolean {
-    return getIndexOfMeld(melds, meldToCheck, ignoreExposed) !== -1
+    return getIndexOfMeld(melds, meldToCheck, ignoreExposed) !== undefined
 }
 
 export function meldExistsInMeldsIgnoreExposed(melds: readonly Meld[], meldToCheck: Meld) : boolean {

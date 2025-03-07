@@ -9,6 +9,7 @@ import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getIndexOfMeldIgnoreExposed } from "common/meldUtils";
 import { meldExistsInMeldsIgnoreExposed } from "common/meldUtils";
 
+/* TODO refactor to not have to compare userSpecifiedMelds with equals ignoreExposed */
 export const analyzeForKnittedStraightMelds : MeldsAnalyzer = (hand: Hand) => {
     for (const firstSuitedTileGroup of suitedTileGroups) {
         if (tileQuantitiesGreaterThanZero(hand, firstSuitedTileGroup, oneFourSeven)) {
@@ -65,7 +66,7 @@ function getKnittedStraight(hand: Hand, firstSuitedTileGroup: SuitedTileGroup, s
         // Ensure the chows have the correct exposed flag if it has a match in userSpecifiedMelds
         if (meldExistsInMeldsIgnoreExposed(hand.userSpecifiedMelds, knittedChow)) {
             const indexOfMeld = getIndexOfMeldIgnoreExposed(hand.userSpecifiedMelds, knittedChow);
-            const matchingMeld = hand.userSpecifiedMelds[indexOfMeld];
+            const matchingMeld = (!indexOfMeld ? undefined : hand.userSpecifiedMelds[indexOfMeld]);
             if (matchingMeld) {
                 knittedStraight.push(matchingMeld.clone());
             } else {
@@ -77,3 +78,26 @@ function getKnittedStraight(hand: Hand, firstSuitedTileGroup: SuitedTileGroup, s
     }
     return knittedStraight;
 }
+
+/**
+function getKnittedStraightsFromChows(chows: Chow[]): Chow[][] {
+    const knittedChows = chows.filter(chow => chow.isKnitted())
+        .sort((a, b) => a.tiles[0].compareToValueOnly(b.tiles[0]));
+    const knittedStraights: Chow[][] = [];
+    for (const knittedChow of knittedChows) {
+        const knittedStraight: Chow[] = [];
+        if (knittedChow.tiles[0].value === SuitedTileValue.ONE) {
+            knittedStraight.push(knittedChow);
+            for (const secondKnittedChow of knittedChows) {
+                if (knittedChow.compatibleStraight(secondKnittedChow)) {
+                    knittedStraight.push(secondKnittedChow);
+                }
+            }
+        }
+        if (knittedStraight.length === 3) {
+            knittedStraights.push(knittedStraight);
+        }
+    }
+ 
+    return knittedStraights;
+} **/

@@ -1,16 +1,17 @@
 import { SuitedTile } from "model/tile/group/suitedTile";
-import { Meld }   from "model/meld/meld.js";
+import { Meld }   from "model/meld/meld";
 import { MeldType } from "model/meld/meldType";
 import { compareTilesByValueOnly } from "model/tile/tile";
+import { getNextSuitedTileValue } from "model/tile/tileValue";
 
 export class Chow extends Meld {
     // Chow's must be Suited Tiles because it is the only group to have the notion of "consecutivity"
     declare protected _tiles: [SuitedTile, SuitedTile, SuitedTile];
 
     constructor(tiles: [SuitedTile, SuitedTile, SuitedTile], exposed: boolean = false) {
-        if (!(tiles[0].group === tiles[1].group && tiles[1].group === tiles[2].group && tiles[0].group === tiles[2].group) || 
+        if (!(tiles[0].group === tiles[1].group && tiles[1].group === tiles[2].group && tiles[0].group === tiles[2].group) && 
         !(tiles[0].group !== tiles[1].group && tiles[1].group !== tiles[2].group && tiles[0].group !== tiles[2].group))  {
-            throw new Error('A chow must be either all the same suit or knitted (all different suites)');
+            throw new Error('A chow must be either all the same suit or knitted (all different suits)');
         }
         
         const tilesCopy : [SuitedTile, SuitedTile, SuitedTile] = [tiles[0].clone(), tiles[1].clone(), tiles[2].clone()];
@@ -36,6 +37,10 @@ export class Chow extends Meld {
         return !this.isKnitted(); // can only be knitted or all the same suit by assertion in the constructor.
     }
 
+    compatibleStraight(higherChow: Chow) : boolean {
+        return canMakeStraight(this, higherChow);
+    }
+
     override get tiles(): [SuitedTile, SuitedTile, SuitedTile] {
         return this._tiles;
     }
@@ -43,4 +48,11 @@ export class Chow extends Meld {
 
 export function meldIsChow(meld: Meld): meld is Chow {
     return meld.type == MeldType.CHOW;
+}
+
+export function canMakeStraight(lowerChow: Chow, higherChow: Chow): boolean {
+    const valuesAreCompatible = getNextSuitedTileValue(lowerChow.tiles[2].value) === higherChow.tiles[0].value;
+        return valuesAreCompatible && higherChow.tiles[0].group === lowerChow.tiles[0].group 
+            && higherChow.tiles[1].group === lowerChow.tiles[1].group && 
+            higherChow.tiles[2].group === lowerChow.tiles[2].group;
 }

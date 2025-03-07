@@ -75,7 +75,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
                 return [];
             }
 
-            if (!!hand.userSpecifiedMelds && !meldsAreSubset(melds, hand.userSpecifiedMelds, false)) {
+            if (!!hand.userSpecifiedMelds && !meldsAreSubset(melds, hand.userSpecifiedMelds)) {
                 return []
             }
 

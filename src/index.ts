@@ -63,7 +63,6 @@ export * from "model/roundContext/windDirection";
 export * from "model/winContext/winContext";
 
 /** service */
-export * from "service/handAnalyzer/hk/handAnalyzer";
 export * from "service/point/evaluator/hk/pointEvaluator";
 
 export * from "service/point/predicate/configuration/hk/defaultPointPredicateBaseConfiguration";

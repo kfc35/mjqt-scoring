@@ -30,21 +30,29 @@ export abstract class Tile {
     }
 
     compareTo(otherTile : Tile) : number {
-        if (this._group === otherTile.group) {
-            if (this._value === otherTile.value) {
-                return 0;
-            }
-            return this._value < otherTile.value ? -1 : +1
-        }
-        return this._group < otherTile.group ? -1 : +1
+        return compareTiles(this, otherTile);
     }
 
     compareToValueOnly(otherTile : Tile) : number {
-        if (this._value === otherTile.value) {
-            return 0;
-        }
-        return this._value < otherTile.value ? -1 : +1
+        return compareTilesByValueOnly(this, otherTile);
     }
     
     abstract clone(): Tile;
+}
+
+export function compareTiles(a: Tile, b: Tile) : number {
+    if (a.group === b.group) {
+        if (a.value === b.value) {
+            return 0;
+        }
+        return a.value < b.value ? -1 : +1
+    }
+    return a.group < b.group ? -1 : +1
+}
+
+export function compareTilesByValueOnly(a: Tile, b: Tile) : number {
+    if (a.value === b.value) {
+        return 0;
+    }
+    return a.value < b.value ? -1 : +1
 }

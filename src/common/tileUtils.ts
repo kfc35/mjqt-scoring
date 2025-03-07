@@ -1,9 +1,8 @@
 import { type FlowerTile, isFlowerTile } from "model/tile/group/flowerTile";
 import { type SuitedOrHonorTile, isSuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { SuitedTile, isSuitedTile, type SuitedTileGroup } from "model/tile/group/suitedTile";
+import { isSuitedTile } from "model/tile/group/suitedTile";
 import { type HongKongTile, isHongKongTile } from "model/tile/hk/hongKongTile";
-import { Tile } from "model/tile/tile";
-import { TileValue } from "model/tile/tileValue";
+import { Tile, compareTiles } from "model/tile/tile";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
 import { TileGroup } from "model/tile/tileGroup";
@@ -12,12 +11,15 @@ export function assertTilesNotNullAndCorrectLength(tiles: Tile[], minLength: num
     if (!tiles || !tiles.every(tile => !!tile)) {
         throw new Error("tiles and its items cannot be null or undefined.");
     }
+    if (minLength > maxLength || minLength < 0 || maxLength < 0) {
+        throw new Error("lengths must be > 0, and minLength must be less than or equal to maxLength");
+    }
     if (tiles.length < minLength || tiles.length > maxLength) {
         throw new Error("tiles must have length between " + minLength + " and " + maxLength);
     }
 }
 
-export function assertTilesHaveSameSuitedGroup(tiles: Tile[]): tiles is SuitedTile[] {
+export function assertTilesHaveSameSuitedGroup(tiles: Tile[]) {
     const firstTile = tiles[0];
     if (!firstTile) {
         throw new Error("tiles cannot be empty");
@@ -25,7 +27,6 @@ export function assertTilesHaveSameSuitedGroup(tiles: Tile[]): tiles is SuitedTi
     if (!tiles.every((tile) => isSuitedTile(tile) && !!tile && tile.group === firstTile.group)) {
         throw new Error("Each tile must be of the same SuitedTile TileGroup"); 
     }
-    return true;
 }
 
 export function assertTilesSuitedOrHonor(tiles: Tile[]): tiles is SuitedOrHonorTile[] {
@@ -49,13 +50,6 @@ export function assertTilesFlower(tiles: Tile[]): tiles is FlowerTile[] {
     return true;
 }
 
-export function assertTileFlower(tile: Tile): tile is FlowerTile {
-    if (!isSuitedOrHonorTile(tile)) {
-        throw new Error("Tile must be a FlowerTile."); 
-    }
-    return true;
-}
-
 export function assertTilesHongKongTile(tiles: Tile[]): tiles is HongKongTile[] {
     if (!tiles.every(tile => isHongKongTile(tile))) {
         throw new Error("Tiles must only contain HongKongTiles."); 
@@ -71,7 +65,7 @@ export function tilesUnique(tiles: Tile[]): boolean {
     if (!tiles) {
         throw new Error("tiles cannot be null or undefined.");
     }
-    const sortedTiles = [...tiles].sort();
+    const sortedTiles = [...tiles].sort(compareTiles);
     if (!sortedTiles.every(tile => !!tile)) {
         throw new Error("tiles' items cannot be null or undefined.");
     }
@@ -90,56 +84,17 @@ export function assertEachTileHasQuantityLTEMaxPerTile(tiles: SuitedOrHonorTile[
     }
 }
 
-export function tilesListIsEmpty(tiles: ReadonlyArray<ReadonlyArray<Tile>>): boolean {
-    return tiles.length === 0 || // tiles = []
-        (tiles.length === 1 && (!tiles[0] || (tiles[0].length === 0))); // tiles = [[]] or tiles = [undefined]
-}
-
-export function wrappedTilesListIsEmpty(tiles: ReadonlyArray<ReadonlyArray<ReadonlyArray<Tile>>>): boolean {
-    return tiles.length === 0 || // tiles = []
-        (tiles.length === 1 && (!tiles[0] || tilesListIsEmpty(tiles[0])));
-}
-
-export function suitedTilesAreAllSameSuit(tiles: SuitedTile[]): boolean {
-    const tileGroups : Set<SuitedTileGroup> = new Set(tiles.map(tile => tile.group));
-    return tileGroups.size === 1;
-}
-
 export function partitionTilesByGroup(tiles: Tile[]): Tile[][] {
     const tileGroupToTilesMap : Map<TileGroup, Tile[]> = new Map();
     tiles.forEach(tile => {
         const tiles = tileGroupToTilesMap.get(tile.group);
         if (tiles) {
             tiles.push(tile);
-            tiles.sort();
+            tiles.sort(compareTiles);
         } else {
             tileGroupToTilesMap.set(tile.group, [tile]);
         }
         
     });
     return [...tileGroupToTilesMap.values()];
-}
-
-export function partitionTilesByTile(tiles: Tile[]): Tile[][] {
-    const outerTilesMap : Map<TileGroup, Map<TileValue, Tile[]>> = new Map();
-    tiles.forEach(tile => {
-        let tileValueMap = outerTilesMap.get(tile.group);
-        if (!tileValueMap) {
-            tileValueMap = new Map();
-            outerTilesMap.set(tile.group, tileValueMap);
-        }
-        const tiles = tileValueMap.get(tile.value);
-        if (tiles) {
-            tiles.push(tile);
-        } else {
-            tileValueMap.set(tile.value, [tile]);
-        }
-    });
-    return [...outerTilesMap.values()]
-        .map(innerMap => [...innerMap.values()])
-        .reduce<Tile[][]>((accum, tiles) => accum.concat(tiles), []);
-}
-
-export function tilesListToTiles(tilesList: ReadonlyArray<ReadonlyArray<Tile>>): Tile[] {
-    return tilesList.reduce<Tile[]>((accum, tiles) => accum.concat(tiles), []);
 }

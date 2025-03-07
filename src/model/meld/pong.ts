@@ -1,5 +1,5 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
-import { Meld }  from "model/meld/meld.js";
+import { Meld }  from "model/meld/meld";
 import { MeldType } from "model/meld/meldType";
 import { assertTileSuitedOrHonor } from "common/tileUtils";
 

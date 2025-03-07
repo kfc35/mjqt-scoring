@@ -8,6 +8,10 @@ import { analyzeHandForWinningHands } from "service/handAnalyzer/hk/handAnalyzer
 import evaluateWinningHand from "service/point/evaluator/hk/pointEvaluator";
 import { PointEvaluation } from "model/point/evaluation/pointEvaluation";
 
+export function analyzeForWinningHands(hand: Hand) {
+    return analyzeHandForWinningHands(hand);
+}
+
 export function evaluateHand(hand: Hand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
     if (!rootConfig) {
         rootConfig = defaultRootPointPredicateConfiguration;

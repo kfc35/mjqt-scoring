@@ -36,10 +36,6 @@ export class PointPredicateResult {
         return new PointPredicateResult(`(${andPointPredicateId})`, true, [...results]);
     }
 
-    and(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
-        return PointPredicateResult.and(newPointPredicateId, this, ...otherResults);
-    }
-
     static or(newPointPredicateId?: string, ...results: PointPredicateResult[]) {
         const orPointPredicateId: string = newPointPredicateId ?? `(${results.map(result => result.pointPredicateId).reduce((accum, pointPredicateId) => accum.concat("_||_" + pointPredicateId))})`;
         for (const [index, result] of results.entries()) {
@@ -50,9 +46,5 @@ export class PointPredicateResult {
             }
         }
         return new PointPredicateResult(orPointPredicateId, false, [...results]);
-    }
-
-    or(newPointPredicateId?: string, ...otherResults: PointPredicateResult[]) {
-        return PointPredicateResult.or(newPointPredicateId, this, ...otherResults);
     }
 }

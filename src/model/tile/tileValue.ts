@@ -81,9 +81,11 @@ export const simpleSuitedTileValues : ReadonlySet<SuitedTileValue> = new Set([Su
     SuitedTileValue.FIVE, SuitedTileValue.SIX, SuitedTileValue.SEVEN, SuitedTileValue.EIGHT]);
 export const terminalSuitedTileValues: ReadonlySet<SuitedTileValue> = new Set([SuitedTileValue.ONE, SuitedTileValue.NINE]);
 
+export const suitedTileEnumKeys = getEnumKeys(SuitedTileValue);
 export const suitedTileValues : SuitedTileValue[] = 
-    getEnumKeys(SuitedTileValue).map(key => SuitedTileValue[key])
+    suitedTileEnumKeys.map(key => SuitedTileValue[key])
     .sort((v1, v2) => v1.valueOf() - v2.valueOf()); // just in case, sort explicitly by value.
+
 
 export function isSuitedTileValue(tileValue: TileValue): tileValue is SuitedTileValue {
     const acceptableTileValues: TileValue[] = suitedTileValues;

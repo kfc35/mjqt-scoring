@@ -14,6 +14,11 @@ export class Kong extends Meld {
     clone(exposedOverride? : boolean) {
         return new Kong(this._tiles[0], exposedOverride ?? this.exposed);
     }
+
+    override toString(): string {
+        const exposedPrefix = (this._exposed ? "Exposed" : "Self-Drawn");
+        return `${exposedPrefix} Kong(${this._tiles[0]}, ${this._tiles[1]}, ${this._tiles[2]}, ${this._tiles[3]})`;
+    }
 }
 
 export function meldIsKong(meld: Meld): meld is Kong {

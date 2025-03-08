@@ -17,6 +17,11 @@ export class Pair extends Meld {
     clone(exposedOverride? : boolean) {
         return new Pair(this._tiles[0], exposedOverride ?? this.exposed);
     }
+
+    override toString(): string {
+        const exposedPrefix = (this._exposed ? "Exposed" : "Self-Drawn");
+        return `${exposedPrefix} Pair(${this._tiles[0]}, ${this._tiles[1]})`;
+    }
 }
 
 export function meldIsPair(meld: Meld): meld is Pair {

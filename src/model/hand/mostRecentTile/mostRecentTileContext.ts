@@ -1,5 +1,6 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { Meld } from "model/meld/meld";
+import { tilesDoesNotContainTile } from "common/tileUtils";
 
 export class MostRecentTileContext {
     private _tile: SuitedOrHonorTile;
@@ -8,11 +9,14 @@ export class MostRecentTileContext {
     private _isSelfDrawn: boolean;
     
     constructor(tile: SuitedOrHonorTile, isSelfDrawn: boolean);
-    constructor(tile: SuitedOrHonorTile, userSpecifiedMeld?: Meld);
+    constructor(tile: SuitedOrHonorTile, userSpecifiedMeld: Meld);
     constructor(tile: SuitedOrHonorTile,
-        isSelfDrawnOrUserSpecifiedMeld: boolean | Meld | undefined) {
+        isSelfDrawnOrUserSpecifiedMeld: boolean | Meld) {
             this._tile = tile;
-            if (isSelfDrawnOrUserSpecifiedMeld instanceof Meld || isSelfDrawnOrUserSpecifiedMeld === undefined) {
+            if (isSelfDrawnOrUserSpecifiedMeld instanceof Meld) {
+                if (tilesDoesNotContainTile(isSelfDrawnOrUserSpecifiedMeld.tiles, tile)) {
+                    throw new Error(`userSpecifiedMeld (${isSelfDrawnOrUserSpecifiedMeld}) must contain tile ${tile}`);
+                }
                 this._userSpecifiedMeld = isSelfDrawnOrUserSpecifiedMeld;
                 this._isSelfDrawn = (!!this._userSpecifiedMeld ? !this._userSpecifiedMeld.exposed : false);
             } else {

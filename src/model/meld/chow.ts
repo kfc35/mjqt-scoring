@@ -44,6 +44,11 @@ export class Chow extends Meld {
     override get tiles(): [SuitedTile, SuitedTile, SuitedTile] {
         return this._tiles;
     }
+
+    override toString(): string {
+        const exposedPrefix = (this._exposed ? "Exposed" : "Self-Drawn");
+        return `${exposedPrefix} Chow(${this._tiles[0]}, ${this._tiles[1]}, ${this._tiles[2]})`
+    }
 }
 
 export function meldIsChow(meld: Meld): meld is Chow {

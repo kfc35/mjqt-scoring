@@ -14,6 +14,11 @@ export class Pong extends Meld {
     clone(exposedOverride? : boolean) {
         return new Pong(this._tiles[0], exposedOverride ?? this.exposed);
     }
+
+    override toString(): string {
+        const exposedPrefix = (this._exposed ? "Exposed" : "Self-Drawn");
+        return `${exposedPrefix} Pong(${this._tiles[0]}, ${this._tiles[1]}, ${this._tiles[2]})`;
+    }
 }
 
 export function meldIsPong(meld: Meld): meld is Pong {

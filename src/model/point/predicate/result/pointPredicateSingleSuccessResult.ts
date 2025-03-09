@@ -9,9 +9,6 @@ export class PointPredicateSingleSuccessResult extends PointPredicateResult {
     constructor(pointPredicateId: string, 
         meldDetail?: PointPredicateSuccessResultMeldDetail | undefined,
         tileDetail?: PointPredicateSuccessResultTileDetail | undefined) {
-            if (pointPredicateId.trim() === "") {
-                throw new Error('pointPredicateId cannot be empty / just spaces.');
-            }
             super(pointPredicateId, true, []);
             this._meldDetail = meldDetail;
             this._tileDetail = tileDetail;

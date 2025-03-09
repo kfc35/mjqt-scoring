@@ -5,7 +5,7 @@ import { GentlemanTile } from "model/tile/group/gentlemanTile";
 import { WindTile } from "model/tile/group/windTile";
 import { SeasonTile } from "model/tile/group/seasonTile";
 
-describe('roundContext.ts implementing classes', () => {
+describe('roundContext.ts', () => {
     describe('prevailing wind = seat wind', () => {
         const roundContext = new RoundContext(WindDirection.SOUTH, WindDirection.SOUTH);
         

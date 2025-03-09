@@ -44,11 +44,11 @@ export class PointEvaluation {
     }
 
     compareTo(otherEval : PointEvaluation) : number {
-        return comparePointEvaluations(this, otherEval);
+        return comparePointEvaluationsByPoints(this, otherEval);
     }
 }
 
-function comparePointEvaluations(a: PointEvaluation, b: PointEvaluation): number {
+function comparePointEvaluationsByPoints(a: PointEvaluation, b: PointEvaluation): number {
     if (a.points === b.points) {
         return 0;
     }

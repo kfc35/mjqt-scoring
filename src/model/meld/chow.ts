@@ -37,8 +37,8 @@ export class Chow extends Meld {
         return !this.isKnitted(); // can only be knitted or all the same suit by assertion in the constructor.
     }
 
-    compatibleStraight(higherChow: Chow) : boolean {
-        return canMakeStraight(this, higherChow);
+    canMakeShortStraight(higherChow: Chow) : boolean {
+        return canMakeShortStraight(this, higherChow);
     }
 
     override get tiles(): [SuitedTile, SuitedTile, SuitedTile] {
@@ -55,7 +55,7 @@ export function meldIsChow(meld: Meld): meld is Chow {
     return meld.type == MeldType.CHOW;
 }
 
-export function canMakeStraight(lowerChow: Chow, higherChow: Chow): boolean {
+export function canMakeShortStraight(lowerChow: Chow, higherChow: Chow): boolean {
     const valuesAreCompatible = getNextSuitedTileValue(lowerChow.tiles[2].value) === higherChow.tiles[0].value;
         return valuesAreCompatible && higherChow.tiles[0].group === lowerChow.tiles[0].group 
             && higherChow.tiles[1].group === lowerChow.tiles[1].group && 

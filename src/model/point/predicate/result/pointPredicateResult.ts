@@ -6,6 +6,9 @@ export class PointPredicateResult {
     constructor(pointPredicateId: string, 
         success: boolean,
         subPredicateResults?: PointPredicateResult[]) {
+        if (pointPredicateId.trim() === "") {
+            throw new Error('pointPredicateId cannot be empty / just spaces.');
+        }
         this._pointPredicateId = pointPredicateId;
         this._success = success;
         this._subPredicateResults = subPredicateResults ?? [];

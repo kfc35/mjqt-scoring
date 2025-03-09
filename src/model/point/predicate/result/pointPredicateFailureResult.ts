@@ -9,8 +9,8 @@ export class PointPredicateFailureResult extends PointPredicateResult{
     constructor(pointPredicateId: string, 
         meldDetail?: PointPredicateFailureResultMeldDetail | undefined,
         tileDetail?: PointPredicateFailureResultTileDetail | undefined) {
-            if (!pointPredicateId || pointPredicateId === "") {
-                throw new Error('pointPredicateId cannot both be undefined.');
+            if (pointPredicateId.trim() === "") {
+                throw new Error('pointPredicateId cannot be empty / just spaces.');
             }
             super(pointPredicateId, false, []);
             this._meldDetail = meldDetail;

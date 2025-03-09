@@ -5,6 +5,7 @@ import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEachTileHasQuantityLTEMaxPerTile, assertTilesFlower, tilesUnique } from "common/tileUtils";
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 import { SpecialWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
+import { tilesDoesNotContainTile } from "common/tileUtils";
 
 /** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
  * but still constitutes a win. Every tile besides the last tile MUST have been received via self draw. */
@@ -30,8 +31,12 @@ export class SpecialWinningHand implements WinningHand {
         assertTilesNotNullAndCorrectLength(unwrappedTiles, handMinLengthWithoutFlowers, handMinLengthWithoutFlowers);
         assertTilesSuitedOrHonor(unwrappedTiles);
         assertEachTileHasQuantityLTEMaxPerTile(unwrappedTiles);
-        if (!tiles[tilesIndexWithWinningTile]) {
+        const tilesWithWinningTile = tiles[tilesIndexWithWinningTile];
+        if (!tilesWithWinningTile) {
             throw new Error(`tiles at tilesIndexWithWinningTile (${tilesIndexWithWinningTile}) must be defined`);
+        }
+        if (tilesDoesNotContainTile(tilesWithWinningTile, winningTile)) {
+            throw new Error(`tiles at tilesIndexWithWinningTile (${tilesIndexWithWinningTile}) must contain the specified winning tile`);
         }
         
         this._tiles = tiles;

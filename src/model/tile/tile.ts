@@ -1,5 +1,5 @@
 import { TileGroup } from "model/tile/tileGroup";
-import { type TileValue } from "model/tile/tileValue";
+import { suitedTileEnumKeys, type TileValue, isSuitedTileValue } from "model/tile/tileValue";
 
 export abstract class Tile {
     protected _group: TileGroup;
@@ -35,6 +35,11 @@ export abstract class Tile {
 
     compareToValueOnly(otherTile : Tile) : number {
         return compareTilesByValueOnly(this, otherTile);
+    }
+
+    toString(): string {
+        const valueStr = (isSuitedTileValue(this._value) ? suitedTileEnumKeys[this._value.valueOf()] : this._value.valueOf());
+        return `${valueStr}_${this._group.valueOf()}`
     }
     
     abstract clone(): Tile;

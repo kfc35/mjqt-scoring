@@ -51,42 +51,52 @@ export class WinContext {
 
         winByRobbingAKong(winByRobbingAKong: boolean) {
             this._winByRobbingAKong = winByRobbingAKong;
+            return this;
         }
 
         mostRecentTileIsLastOfItsKind(mostRecentTileIsLastOfItsKind: boolean) {
             this._mostRecentTileIsLastOfItsKind = mostRecentTileIsLastOfItsKind;
+            return this;
         }
 
         winByLastTileOnWall(winByLastTileOnWall: boolean) {
             this._winByLastTileOnWall = winByLastTileOnWall;
+            return this;
         }
 
         winByLastDiscardOfGame(winByLastDiscardOfGame: boolean) {
             this._winByLastDiscardOfGame = winByLastDiscardOfGame;
+            return this;
         }
 
         winByKongReplacement(winByKongReplacement: boolean) {
             this._winByKongReplacement = winByKongReplacement;
+            return this;
         }
 
         winByFlowerReplacement(winByFlowerReplacement: boolean) {
             this._winByFlowerReplacement = winByFlowerReplacement;
+            return this;
         }
 
         winByKongOnKongReplacement(winByKongOnKongReplacement: boolean) {
             this._winByKongOnKongReplacement = winByKongOnKongReplacement;
+            return this;
         }
 
         winByFlowerOnFlowerReplacement(winByFlowerOnFlowerReplacement: boolean) {
             this._winByFlowerOnFlowerReplacement = winByFlowerOnFlowerReplacement;
+            return this;
         }
 
         winByMixedDoubleReplacement(winByMixedDoubleReplacement: boolean) {
             this._winByMixedDoubleReplacement = winByMixedDoubleReplacement;
+            return this;
         }
 
         winWithInitialHand(winWithInitialHand: boolean) {
             this._winWithInitialHand = winWithInitialHand;
+            return this;
         }
 
         build() {

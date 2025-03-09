@@ -6,19 +6,21 @@ import { Meld } from "model/meld/meld";
 import { addToMapValueSet, pushToMapValueArray } from "common/generic/mapUtils";
 import { meldIsChow } from "model/meld/chow";
 import { meldToFlatTiles, getMeldsSubsetFromIndicesSet } from "common/meldUtils";
+import { consolidateSets } from "common/generic/setUtils";
 
 export interface TileGroupValueMaps {
     getSuitedTileGroups(): Set<SuitedTileGroup>;
     getSuitedTileValues(): Set<SuitedTileValue>;
     getHonorTileGroups(): Set<HonorTileGroup>;
     getHonorTileValues(): Set<HonorTileValue>;
+    getTilesForSuitedTileValue(stv: SuitedTileValue): SuitedTile[];
     getTilesForTileGroups(tileGroups: ReadonlySet<SuitedTileGroup | HonorTileGroup>): SuitedOrHonorTile[][];
     getTilesForTileValues(tileValues: ReadonlySet<SuitedOrHonorTileValue>): SuitedOrHonorTile[][]
 }
 
 export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMaps {
     private _melds: readonly Meld[];
-    private _knittedChowIndices: Set<number>;
+    private _knittedChowIndices: Set<number>; // all suited tile groups are present in each meld at these indices
     private _suitedTileGroupToKnittedChowTiles: Map<SuitedTileGroup, SuitedTile[]>;
     private _suitedTileGroupToNonKnittedMeldIndices: Map<SuitedTileGroup, Set<number>>;
     private _suitedTileValueToMeldIndices: Map<SuitedTileValue, Set<number>>;
@@ -47,11 +49,11 @@ export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMap
                 }
 
                 meld.tiles.forEach(tile => {
-                    if (isSuitedTile(tile)) { // guaranteed to be true but just in case, 
+                    if (isSuitedTile(tile)) { // guaranteed to be true
                         addToMapValueSet(this._suitedTileValueToMeldIndices, tile.value, index);
                         pushToMapValueArray(this._suitedTileValueToTiles, tile.value, tile);
-                    } else {
-                        throw new Error(`Found a non suited tile ${tile.group} ${tile.value} in what should be a suited meld (first tile ${firstTile.group} ${firstTile.value})`);
+                    } else { // this should not happen
+                        throw new Error(`This should not happen: found a non suited tile ${tile.group} ${tile.value} in what should be a suited meld (first tile ${firstTile.group} ${firstTile.value})`);
                     }
                 });
             }
@@ -78,8 +80,12 @@ export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMap
         return this._suitedTileGroupToKnittedChowTiles.get(suitedTileGroup) ?? [];
     }
 
-    getMeldIndicesForSuitedTileGroup(suitedTileGroup: SuitedTileGroup): Set<number> {
+    getNonKnittedMeldIndicesForSuitedTileGroup(suitedTileGroup: SuitedTileGroup): Set<number> {
         return this._suitedTileGroupToNonKnittedMeldIndices.get(suitedTileGroup) ?? new Set();
+    }
+
+    getMeldIndicesForSuitedTileGroup(suitedTileGroup: SuitedTileGroup): Set<number> {
+        return consolidateSets([this.getNonKnittedMeldIndicesForSuitedTileGroup(suitedTileGroup), this.getKnittedChowIndices()]);
     }
 
     getTilesForSuitedTileValue(suitedTileValue: SuitedTileValue): SuitedTile[] {
@@ -114,7 +120,7 @@ export class MeldBasedWinningHandTileGroupValueMaps implements TileGroupValueMap
         return [...tileGroups.values()].map(tileGroup => {
             if (isSuitedTileGroup(tileGroup)) {
                 const tiles = this.getTilesFromKnittedChows(tileGroup);
-                const meldTiles = meldToFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForSuitedTileGroup(tileGroup)));
+                const meldTiles = meldToFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getNonKnittedMeldIndicesForSuitedTileGroup(tileGroup)));
                 return [...tiles, ...meldTiles];
             } 
             return meldToFlatTiles(getMeldsSubsetFromIndicesSet(this._melds, this.getMeldIndicesForHonorTileGroup(tileGroup)));

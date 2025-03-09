@@ -2,16 +2,24 @@ import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { Meld }  from "model/meld/meld";
 import { MeldType } from "model/meld/meldType";
 import { assertTileSuitedOrHonor } from "common/tileUtils";
+import { isSuitedTile } from "model/tile/group/suitedTile";
+import { SuitedTile } from "model/tile/group/suitedTile";
+import { HonorTile } from "model/tile/group/honorTile";
 
 /**
  * Pairs can only be marked as "exposed" if they are completed via discard as your last meld.
  */
 export class Pair extends Meld {
-    declare protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile];
+    declare protected _tiles: [SuitedTile, SuitedTile] | [HonorTile, HonorTile];
 
     constructor(tile: SuitedOrHonorTile, exposed : boolean = false) {
         assertTileSuitedOrHonor(tile);
-        super([tile.clone(), tile.clone()], MeldType.PAIR, exposed);
+        
+        if (isSuitedTile(tile)) { // in order to separate Suited and Honor tiles
+            super([tile.clone(), tile.clone()], MeldType.PAIR, exposed);
+        } else {
+            super([tile.clone(), tile.clone()], MeldType.KONG, exposed);
+        }
     }
 
     clone(exposedOverride? : boolean) {

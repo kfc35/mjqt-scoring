@@ -1,9 +1,11 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { MeldType } from "model/meld/meldType";
 import { assertTilesSuitedOrHonor } from "common/tileUtils";
+import type { SuitedTile } from "model/tile/group/suitedTile";
+import type { HonorTile } from "model/tile/group/honorTile";
 
 export abstract class Meld {
-    protected _tiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]];
+    protected _tiles: [SuitedTile, SuitedTile, ...SuitedTile[]] | [HonorTile, HonorTile, ...HonorTile[]];
     protected _type: MeldType;
     /*  _exposed = false if the meld was completed without the need of a discard.
         _exposed = true if a discard was used to complete the meld. 
@@ -11,14 +13,15 @@ export abstract class Meld {
     protected _exposed: boolean;
 
     /** implementing classes should ensure that tiles are ordered in their desired way for comparisons (applies to chows) */
-    constructor(sortedTiles: [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]], type: MeldType, exposed: boolean = false) {
+    constructor(sortedTiles: [SuitedTile, SuitedTile, ...SuitedTile[]] | [HonorTile, HonorTile, ...HonorTile[]], 
+        type: MeldType, exposed: boolean = false) {
         assertTilesSuitedOrHonor(sortedTiles);
         this._tiles = sortedTiles;
         this._type = type;
         this._exposed = exposed;
     }
 
-    get tiles(): [SuitedOrHonorTile, SuitedOrHonorTile, ...SuitedOrHonorTile[]] {
+    get tiles(): [SuitedTile, SuitedTile, ...SuitedTile[]] | [HonorTile, HonorTile, ...HonorTile[]] {
         return this._tiles;
     }
 

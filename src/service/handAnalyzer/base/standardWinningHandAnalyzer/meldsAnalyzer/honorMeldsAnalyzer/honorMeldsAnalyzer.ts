@@ -9,6 +9,7 @@ import { Pair } from "model/meld/pair";
 import { Pong } from "model/meld/pong";
 import { Kong } from "model/meld/kong";
 import { HonorTileValueQuantityMemo } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorTileValueQuantityMemo";
+import { cartesianProduct } from "common/meldUtils";
 
 /* This logic assumes that the hand does not consist of more than one pair */
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
@@ -18,12 +19,9 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     const dragonMelds = getHonorMelds(TileGroup.DRAGON, dragonTileValues, quantityMemo);
     const windMelds = getHonorMelds(TileGroup.WIND, windTileValues, quantityMemo);
     
-    const honorMelds: Meld[] = [];
-    honorMelds.push(...userSpecifiedHonorMelds);
-    honorMelds.push(...dragonMelds);
-    honorMelds.push(...windMelds);
+    const honorMelds: Meld[][] = cartesianProduct(cartesianProduct([userSpecifiedHonorMelds], dragonMelds), windMelds);
 
-    return [honorMelds];
+    return honorMelds;
 }
 
 function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: HonorTileValueQuantityMemo) {
@@ -33,38 +31,40 @@ function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: Ho
         const firstTile = meld.getFirstTile();
         if (isHonorTile(firstTile) && quantityMemo.getQuantity(firstTile.value) >= meld.tiles.length) {
             quantityMemo.decreaseQuantity(firstTile.value, meld.tiles.length);
-            userSpecifiedMelds.push(meld);
+            userSpecifiedHonorMelds.push(meld);
         }
     };
 
     return userSpecifiedHonorMelds.map(meld => meld.clone());
 }
 
-function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[] {
-    const melds : Meld[] = [];
+function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[][] {
+    let meldsToReturn : Meld[][] = [];
     for (const tileValue of tileValues) {
         const quantity = quantityMemo.getQuantity(tileValue);
-        const meld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);
-        if (meld) {
-            melds.push(meld);
-            quantityMemo.decreaseQuantity(tileValue, meld.tiles.length);
+        const honorMelds: Meld[][] | undefined = getHonorMeldsIfPossible(quantity, tileGroup, tileValue);
+        if (honorMelds && honorMelds[0]) {
+            const product = cartesianProduct(meldsToReturn, honorMelds);
+            meldsToReturn = product;
+            quantityMemo.decreaseQuantity(tileValue, quantity);
         }
     }
-    return melds;
+    return meldsToReturn;
 }
 
-function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
+function getHonorMeldsIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld[][] | undefined {
     if (quantity < 2 && quantity >= 0) {
         // quantity === 0 is a no-op. 
         // quantity === 1 means the hand does not have a winning hand probably. Not a fatal error, just continue.
         return undefined; 
     /** default to not exposed for every non user specified meld. */
     } else if (quantity === 2) {
-        return new Pair(constructHonorTile(tileGroup, tileValue));
+        return [[new Pair(constructHonorTile(tileGroup, tileValue))]];
     } else if (quantity === 3) {
-        return new Pong(constructHonorTile(tileGroup, tileValue));
-    } else if (quantity === 4) {
-        return new Kong(constructHonorTile(tileGroup, tileValue));
+        return [[new Pong(constructHonorTile(tileGroup, tileValue))]];
+    } else if (quantity === 4) { // either 1 kong or 2 pairs
+        const tile = constructHonorTile(tileGroup, tileValue);
+        return [[new Kong(tile)], [new Pair(tile), new Pair(tile)]];
     } else {
         throw new Error(`Hand is malformed. Found quantity not between 0 and 4 for ${tileGroup} ${tileValue}: ${quantity}`);
     }

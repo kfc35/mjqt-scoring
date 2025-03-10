@@ -24,11 +24,7 @@ export class HonorTileValueQuantityMemo {
     }
 
     getQuantity(htv: HonorTileValue): number {
-        const quantity = this._memo.get(htv)
-        if (!quantity) {
-            throw new Error(`Memo has undefined value for HonorTileValue ${htv}.`);
-        }
-        return quantity;
+        return this._memo.get(htv) ?? 0;
     }
 
     decreaseQuantity(htv: HonorTileValue, amtToDecrease: number): number {

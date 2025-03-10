@@ -12,7 +12,7 @@ import { thirteenOrphansAnalyzer, thirteenOrphanTiles } from "service/handAnalyz
 import { SuitedTileValue } from "model/tile/tileValue";
 describe('thirteenOrphansAnalyzer.ts', () => {
 
-    test.skip('meld based hand with a kong are not analyzed as a thirteen orphans hand', () => {
+    test('meld based hand with a kong are not analyzed as a thirteen orphans hand', () => {
         const hand = new Hand([ONE_BAMBOO, ONE_BAMBOO, ONE_BAMBOO, ONE_BAMBOO,
             NINE_CHARACTER, NINE_CHARACTER, NINE_CHARACTER,
             FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE,
@@ -26,7 +26,7 @@ describe('thirteenOrphansAnalyzer.ts', () => {
             expect(specialWinningHand.length).toBe(0);
     });
 
-    test.skip('meld based hand without a kong are not analyzed as a thirteen orphans hand', () => {
+    test('meld based hand without a kong are not analyzed as a thirteen orphans hand', () => {
         const hand = new Hand([ONE_BAMBOO, ONE_BAMBOO, ONE_BAMBOO,
             NINE_CHARACTER, NINE_CHARACTER, NINE_CHARACTER,
             FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE,
@@ -40,7 +40,7 @@ describe('thirteenOrphansAnalyzer.ts', () => {
             expect(specialWinningHand.length).toBe(0);
     });
 
-    test.skip('hands with more than one pair in orphans without missing any orphans are not analyzed as a thirteen orphans hand', () => {
+    test('hands with more than one pair in orphans without missing any orphans are not analyzed as a thirteen orphans hand', () => {
         const hand = new Hand([ONE_BAMBOO, ONE_BAMBOO, NINE_BAMBOO, NINE_BAMBOO,
             ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE,
             RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON,
@@ -52,7 +52,7 @@ describe('thirteenOrphansAnalyzer.ts', () => {
             expect(specialWinningHand.length).toBe(0);
     });
 
-    test.skip('hands with two orphan pairs and missing an orphan are not analyzed as a thirteen orphans hand', () => {
+    test('hands with two orphan pairs and missing an orphan are not analyzed as a thirteen orphans hand', () => {
         const hand = new Hand([ONE_BAMBOO, ONE_BAMBOO,
             ONE_CHARACTER, ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE,
             RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON,
@@ -64,7 +64,7 @@ describe('thirteenOrphansAnalyzer.ts', () => {
             expect(specialWinningHand.length).toBe(0);
     });
 
-    test.skip('hands with three of an orphan and missing an orphan are not analyzed as a thirteen orphans hand', () => {
+    test('hands with three of an orphan and missing an orphan are not analyzed as a thirteen orphans hand', () => {
         const hand = new Hand([ONE_BAMBOO, ONE_BAMBOO, ONE_BAMBOO,
             ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE,
             RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON,

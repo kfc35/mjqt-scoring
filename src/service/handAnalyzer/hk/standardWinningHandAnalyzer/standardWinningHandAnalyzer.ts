@@ -7,12 +7,12 @@ import { analyzeForFiveMeldsNoKnitted } from "service/handAnalyzer/base/standard
 export const analyzeForStandardWinningHands : HandAnalyzer<MeldBasedWinningHand> = (hand: Hand) => {
     // check for 7 pairs separately to simplify logic.
     const sevenPairsHand = analyzeForSevenPairs(hand);
-    if (sevenPairsHand) {
+    if (!!sevenPairsHand && sevenPairsHand.length > 0) {
         return sevenPairsHand;
     }
 
     const regularWinningHands = analyzeForFiveMeldsNoKnitted(hand);
-    if (regularWinningHands) {
+    if (!!regularWinningHands && sevenPairsHand.length > 0) {
         return regularWinningHands;
     }
 

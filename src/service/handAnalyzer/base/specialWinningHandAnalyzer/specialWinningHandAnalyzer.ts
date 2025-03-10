@@ -6,7 +6,7 @@ import { thirteenOrphansAnalyzer } from "service/handAnalyzer/base/specialWinnin
 export const analyzeForSpecialWinningHands : HandAnalyzer<SpecialWinningHand> = (hand: Hand) => {
     // special winning hand
     const thirteenOrphansHand = thirteenOrphansAnalyzer(hand);
-    if (thirteenOrphansHand) {
+    if (!!thirteenOrphansHand && thirteenOrphansHand.length > 0) {
         return thirteenOrphansHand;
     }
     

@@ -34,7 +34,7 @@ function getUserSpecifiedSuitedMelds(userSpecifiedMelds: Meld[], tileGroup: Suit
     
     for (const meld of userSpecifiedMelds) {
         const firstTile = meld.getFirstTile();
-        if (meldIsChow(meld) && !meld.isKnitted && firstTile.group === tileGroup &&
+        if (meldIsChow(meld) && !meld.isKnitted() && firstTile.group === tileGroup &&
             quantityMap.hasEnoughQuantityForChows(firstTile.value, 1)) {
                 quantityMap.decreaseQuantityForChow(firstTile.value, 1);
                 userSpecifiedSuitedMelds.push(meld);
@@ -64,7 +64,9 @@ function getMeldsFromStartingSTV(tileGroup: SuitedTileGroup, startingSTV: Suited
             const chowCreator = chowsCreator(1);
             return createMeldsAndGetSubsequentMelds(tileGroup, startingSTV, quantityMemo, chowCreator);
         }
-        return []; // one lone tile that cannot be used in a meld.
+        
+        // one lone tile that cannot be used in a meld. skip over it but analyze the rest still.
+        return getMeldsFromStartingSTV(tileGroup, getNextSuitedTileValue(startingSTV), quantityMemo)
     }
     if (quantity === 2) {
         // can be a pair

@@ -4,12 +4,26 @@ import { Meld } from "model/meld/meld";
 import { Chow } from "model/meld/chow";
 import { Kong } from "model/meld/kong";
 import { Pair } from "model/meld/pair";
-import { ONE_BAMBOO, TWO_BAMBOO, THREE_BAMBOO, NINE_CIRCLE, RED_DRAGON, EAST_WIND, 
+import { ONE_BAMBOO, TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO, SEVEN_BAMBOO, NINE_CIRCLE, RED_DRAGON, EAST_WIND, 
     PLUM_GENTLEMAN, AUTUMN_SEASON, SPRING_SEASON, SOUTH_WIND } from "common/deck";
 import { analyzeForHonorMelds } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorMeldsAnalyzer";
 import { Pong } from "model/meld/pong";
 
 describe('honorMeldsAnalyzer.ts', () => {
+
+    test('returns list with empty list when no honor tiles', () => {
+        const hand = new Hand([ONE_BAMBOO, TWO_BAMBOO, THREE_BAMBOO, 
+                    TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO,
+                    THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO,
+                    SEVEN_BAMBOO, SEVEN_BAMBOO, SEVEN_BAMBOO,
+                    ONE_BAMBOO, ONE_BAMBOO,
+                    PLUM_GENTLEMAN, AUTUMN_SEASON, SPRING_SEASON], new MostRecentTileContext(ONE_BAMBOO, true), 
+                    []);
+
+        const melds = analyzeForHonorMelds(hand);
+
+        expect(melds).toStrictEqual([[]]);
+    });
 
     test('hand with multiple honors not in userSpecifiedMeld returns expected honor melds default not exposed', () => {
         const hand = new Hand([ONE_BAMBOO, TWO_BAMBOO, THREE_BAMBOO, 

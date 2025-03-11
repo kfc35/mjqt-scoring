@@ -174,10 +174,12 @@ describe('meldUtils.ts', () => {
 
         test('of one item nested list and empty list is the one item nested list', () => {
             expect(cartesianProduct([[new Pair(ONE_BAMBOO)]], [])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
+            expect(cartesianProduct([],[[new Pair(ONE_BAMBOO)]])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
         });
 
         test('of a list containing empty list and one item nested list is the one item nested list', () => {
             expect(cartesianProduct([[]], [[new Pair(ONE_BAMBOO)]])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
+            expect(cartesianProduct([[new Pair(ONE_BAMBOO)]], [[]])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
         });
 
         test('of two one item nested lists is a nested list of the two items', () => {

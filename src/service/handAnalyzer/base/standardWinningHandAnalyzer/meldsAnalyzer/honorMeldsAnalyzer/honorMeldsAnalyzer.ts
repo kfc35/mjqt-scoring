@@ -9,7 +9,6 @@ import { Pair } from "model/meld/pair";
 import { Pong } from "model/meld/pong";
 import { Kong } from "model/meld/kong";
 import { HonorTileValueQuantityMemo } from "service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/honorMeldsAnalyzer/honorTileValueQuantityMemo";
-import { cartesianProduct } from "common/meldUtils";
 
 /* This logic assumes that the hand does not consist of more than one pair */
 export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
@@ -19,9 +18,9 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     const dragonMelds = getHonorMelds(TileGroup.DRAGON, dragonTileValues, quantityMemo);
     const windMelds = getHonorMelds(TileGroup.WIND, windTileValues, quantityMemo);
     
-    const honorMelds: Meld[][] = cartesianProduct(cartesianProduct([userSpecifiedHonorMelds], dragonMelds), windMelds);
+    const honorMelds: Meld[] = [...userSpecifiedHonorMelds, ...dragonMelds, ...windMelds];
 
-    return honorMelds;
+    return [honorMelds];
 }
 
 function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: HonorTileValueQuantityMemo) {
@@ -38,33 +37,31 @@ function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: Ho
     return userSpecifiedHonorMelds.map(meld => meld.clone());
 }
 
-function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[][] {
-    let meldsToReturn : Meld[][] = [];
+function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[] {
+    let meldsToReturn : Meld[] = [];
     for (const tileValue of tileValues) {
         const quantity = quantityMemo.getQuantity(tileValue);
-        const honorMelds: Meld[][] | undefined = getHonorMeldsIfPossible(quantity, tileGroup, tileValue);
-        if (honorMelds && honorMelds[0]) {
-            const product = cartesianProduct(meldsToReturn, honorMelds);
-            meldsToReturn = product;
+        const honorMeld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);
+        if (honorMeld) {
+            meldsToReturn.push(honorMeld);
             quantityMemo.decreaseQuantity(tileValue, quantity);
         }
     }
     return meldsToReturn;
 }
 
-function getHonorMeldsIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld[][] | undefined {
+function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
     if (quantity < 2 && quantity >= 0) {
         // quantity === 0 is a no-op. 
         // quantity === 1 means the hand does not have a winning hand probably. Not a fatal error, just continue.
         return undefined; 
     /** default to not exposed for every non user specified meld. */
     } else if (quantity === 2) {
-        return [[new Pair(constructHonorTile(tileGroup, tileValue))]];
+        return new Pair(constructHonorTile(tileGroup, tileValue));
     } else if (quantity === 3) {
-        return [[new Pong(constructHonorTile(tileGroup, tileValue))]];
-    } else if (quantity === 4) { // either 1 kong or 2 pairs
-        const tile = constructHonorTile(tileGroup, tileValue);
-        return [[new Kong(tile)], [new Pair(tile), new Pair(tile)]];
+        return new Pong(constructHonorTile(tileGroup, tileValue));
+    } else if (quantity === 4) { // cannot be two pairs -- two pairs is checked by a separate analyzer.
+        return new Kong(constructHonorTile(tileGroup, tileValue));
     } else {
         throw new Error(`Hand is malformed. Found quantity not between 0 and 4 for ${tileGroup} ${tileValue}: ${quantity}`);
     }

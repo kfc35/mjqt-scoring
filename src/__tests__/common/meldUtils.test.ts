@@ -126,6 +126,10 @@ describe('meldUtils.ts', () => {
                 .toBe(false);
             });
         });
+
+        test('returns true when checking if empty set is subset', () => {
+            expect(meldsAreSubset([new Pong(ONE_BAMBOO)], [])).toBe(true);
+        });
     });
 
     describe('getIndexOfMeld', () => {

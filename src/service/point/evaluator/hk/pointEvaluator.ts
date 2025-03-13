@@ -28,7 +28,7 @@ export default function evaluateWinningHand(winningHand: WinningHand, winCtx: Wi
         pointPredicateIdToResultMap.set(PointPredicateID.CHICKEN_HAND, chickenHandResult);
 
         const pointPredicateIdsToIgnore = getPointPredicatesIdsToIgnoreFromResults([...pointPredicateIdToResultMap.values()], rootConfig);
-        const pointPPR: PointPredicateResult[] = [...pointPredicateIdToResultMap.values()].filter(result => !pointPredicateIdsToIgnore.has(result.pointPredicateId));
+        const pointPPR: PointPredicateResult[] = [...pointPredicateIdToResultMap.values()].filter(result => !pointPredicateIdsToIgnore.has(result.pointPredicateId) || !result.success);
         const points = pointPPR.map(ppr => rootConfig.getBaseConfiguration(ppr.pointPredicateId)?.points).reduce<number>((accum, pts) => addPoints(accum, pts, rootConfig), 0);
 
         return new PointEvaluation(winningHand, points, [...pointPredicateIdToResultMap.values()].sort((a, b) => sortByPoints(a, b, rootConfig)), pointPredicateIdsToIgnore);

@@ -12,7 +12,7 @@ export const analyzeForStandardWinningHands : HandAnalyzer<MeldBasedWinningHand>
     }
 
     const regularWinningHands = analyzeForFiveMeldsNoKnitted(hand);
-    if (!!regularWinningHands && sevenPairsHand.length > 0) {
+    if (!!regularWinningHands && regularWinningHands.length > 0) {
         return regularWinningHands;
     }
 

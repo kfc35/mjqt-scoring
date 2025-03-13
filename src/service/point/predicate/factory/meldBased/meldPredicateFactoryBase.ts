@@ -29,7 +29,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
         if (indicesSubsets.size > 1) {
             throw new Error('indicesSubsets.size > 1 is currently not supported.');
         }
-        const indicesSubset = getOnlyTruthyElement(indicesSubsets);
+        const indicesSubset = (indicesSubsets.size === 0 ? new Set<number>() : getOnlyTruthyElement(indicesSubsets));
         const meldsThatSatisfyPredicate = getMeldsSubsetFromIndicesSet(winningHand.melds, indicesSubset);
         
         if (!!minNumMatches && indicesSubset.size < minNumMatches) {
@@ -215,7 +215,7 @@ function checkMelds(meldIndexTuples: readonly [Meld, number][], meldChecker:(mel
 
 /** 
  * Returns a tuple of:
- *   0) the subsets indices from "melds" that have a 1:1 match in "meldsToMatch".
+ *   0) the subsets of indices from "melds" that have a 1:1 match in "meldsToMatch".
  *   1) a matchSuccessful array where, for each index in meldsToMatch, matchSuccessful[index] = true if there was a match for it.
  * Each "meldToMatch" will only match once with a meld in "melds" per subset, and vice versa per subset.
  * If you want to match the same meld multiple times, you must include a copy of that meld in "meldsToMatch".
@@ -236,6 +236,8 @@ function checkMelds(meldIndexTuples: readonly [Meld, number][], meldChecker:(mel
  * The resulting matching meld indices set will be [[0, 2], [0, 3], [1, 2], [1, 3]].
  * If you want to ensure one pair of A, one pair of B, and one pair of C exist with the same hand (meldsToMatch = [A, B, C]), you get: 
  * [[0,2,4], [0,2,5], [0,3,4], [0,3,5], [1,2,4], [1,2,5], [1,3,4], [1,3,5]].
+ * 
+ * If there are no matches, the first item in the tuple will be the empty set.
 */
 function getMatchingIndicesSubsets(melds: readonly Meld[], meldsToMatch: Meld[], ignoreExposed?: boolean): [Set<Set<number>>, boolean[]]  {
     let matchingIndicesSubsets: Set<Set<number>> = new Set();

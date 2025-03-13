@@ -13,15 +13,15 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
         if (!!hand.userSpecifiedMelds && !hand.userSpecifiedMelds.every(meld => meldIsPair(meld))) {
             return [];
         }
+        const pairs: Pair[] = hand.userSpecifiedMelds.map(meld => meld as Pair);
         if (hand.getQuantityPerUniqueTile().every(quantity => quantity % 2 === 0)) {
             const melds : Meld[] = [];
-            let winningPair : Pair | undefined = undefined;
             let winningMeldIndex : number = -1;
             for (const [quantity, tileArray] of hand.getQuantityToTileMap().entries()) {
                 if (quantity === 2) {
                     for (const tile of tileArray) {
                         if (isSuitedOrHonorTile(tile)) {
-                            const userSpecifiedPairs: Pair[] = hand.userSpecifiedMelds.filter(meld => meldIsPair(meld) && tile.equals(meld.getFirstTile()));
+                            const userSpecifiedPairs: Pair[] = pairs.filter(meld => tile.equals(meld.getFirstTile()));
                             if (userSpecifiedPairs.length > 1) {
                                 return [];
                             } else if (userSpecifiedPairs.length === 1) {
@@ -33,8 +33,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
                                     winningMeldIndex = melds.length - 1;
                                 }
                             } else if (hand.mostRecentTile().equals(tile)) {
-                                winningPair =  new Pair(tile, !hand.mostRecentTileIsSelfDrawn);
-                                melds.push(winningPair);
+                                melds.push(new Pair(tile, !hand.mostRecentTileIsSelfDrawn()));
                                 winningMeldIndex = melds.length - 1;
                             } else {
                                 melds.push(new Pair(tile));
@@ -48,7 +47,14 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
                         if (isSuitedOrHonorTile(tile)) {
                             const userSpecifiedPairs: Pair[] = hand.userSpecifiedMelds.filter(meld => meldIsPair(meld) && tile.equals(meld.getFirstTile()));
                             if (userSpecifiedPairs.length === 1) {
-                                return [];
+                                if (!userSpecifiedPairs[0]) {
+                                    throw new Error('undefined userSpecifiedPair, this should not happen.');
+                                }
+                                melds.push(userSpecifiedPairs[0].clone());
+                                if (hand.mostRecentTile().equals(tile)) {
+                                    winningMeldIndex = melds.length - 1;
+                                }
+                                melds.push(new Pair(tile));
                             } else if (userSpecifiedPairs.length === 2) {
                                 if (!userSpecifiedPairs[0] || !userSpecifiedPairs[1]) {
                                     throw new Error('undefined userSpecifiedPairs, this should not happen.');
@@ -59,8 +65,7 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
                                 }
                                 melds.push(userSpecifiedPairs[1].clone());
                             } else if (hand.mostRecentTile().equals(tile)) {
-                                winningPair = new Pair(tile, !hand.mostRecentTileIsSelfDrawn);
-                                melds.push(winningPair);
+                                melds.push(new Pair(tile, !hand.mostRecentTileIsSelfDrawn()));
                                 winningMeldIndex = melds.length - 1;
                                 melds.push(new Pair(tile));
                             } else {
@@ -71,12 +76,12 @@ function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
                     }
                 }
             }
-            if (!meldsNotNullAndCorrectLength(melds, 7) || !winningPair) {
+            if (!meldsNotNullAndCorrectLength(melds, 7) || winningMeldIndex === -1) {
                 return [];
             }
 
-            if (!!hand.userSpecifiedMelds && !meldsAreSubset(melds, hand.userSpecifiedMelds)) {
-                return []
+            if (hand.userSpecifiedMelds.length > 0 && !meldsAreSubset(melds, hand.userSpecifiedMelds)) {
+                return [];
             }
 
             return [new MeldBasedWinningHand(melds, winningMeldIndex, 

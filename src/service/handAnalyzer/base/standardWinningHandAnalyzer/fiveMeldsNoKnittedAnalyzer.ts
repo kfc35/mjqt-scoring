@@ -36,7 +36,8 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<MeldBasedWinningHand> =
         if (mostRecentTileUserSpecifiedMeld) { // If this meld exists, the last tile should always be placed in this meld.
             const indexOfMeld = getIndexOfMeld(melds, mostRecentTileUserSpecifiedMeld);
             if (!indexOfMeld) {
-                throw new Error('The mostRecentTileUserSpecifiedMeld is not in melds, which should not happen.');
+                throw new Error('The mostRecentTileUserSpecifiedMeld is not in melds, ' + 
+                    'which should not happen (userSpecifiedMelds already checked as subset of melds).');
             }
             return [new MeldBasedWinningHand(melds, indexOfMeld, hand.mostRecentTile(), hand.flowerTiles)]
         }

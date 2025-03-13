@@ -1,11 +1,21 @@
 import { FIVE_BAMBOO, FOUR_BAMBOO, ONE_BAMBOO, THREE_BAMBOO, SIX_CIRCLE, SEVEN_CIRCLE, EIGHT_CIRCLE, RED_DRAGON, NINE_CIRCLE, GREEN_DRAGON, TWO_BAMBOO, ONE_CIRCLE, TWO_CIRCLE } from "common/deck";
-import { cartesianProduct, getAllIndicesSet, getIndexOfMeld, getMeldAtIndex, getMeldsSubsetFromIndicesSet, meldHasTile, meldsAreSubset, meldsHasOnePair, meldsNotNullAndCorrectLength, meldsNumKongs, meldsNumTiles, meldToFlatTiles } from "common/meldUtils";
+import { cartesianProduct, getAllIndicesSet, getIndexOfMeld, getMeldAtIndex, getMeldsSubsetFromIndicesSet, meldHasTile, meldsAreSubset, meldsHasOnePair, meldsNotNull, meldsNotNullAndCorrectLength, meldsNumKongs, meldsNumTiles, meldToFlatTiles } from "common/meldUtils";
 import { Chow } from "model/meld/chow";
 import { Kong } from "model/meld/kong";
 import { Pair } from "model/meld/pair";
 import { Pong } from "model/meld/pong";
 
 describe('meldUtils.ts', () => {
+
+    describe('meldsNotNull', () => {
+        test('returns true when melds is empty', () => {
+            expect(meldsNotNull([])).toBe(true);
+        });
+
+        test('returns true when all melds are not null and not undefined', () => {
+            expect(meldsNotNull([new Pong(ONE_BAMBOO), new Pong(THREE_BAMBOO)])).toBe(true);
+        });
+    });
     describe('meldsNotNullAndCorrectLength', () => {
         test('returns false when melds is not correct length', () => {
             expect(meldsNotNullAndCorrectLength([new Pong(ONE_BAMBOO), new Pong(THREE_BAMBOO)], 3))
@@ -116,6 +126,10 @@ describe('meldUtils.ts', () => {
                 .toBe(false);
             });
         });
+
+        test('returns true when checking if empty set is subset', () => {
+            expect(meldsAreSubset([new Pong(ONE_BAMBOO)], [])).toBe(true);
+        });
     });
 
     describe('getIndexOfMeld', () => {
@@ -164,10 +178,12 @@ describe('meldUtils.ts', () => {
 
         test('of one item nested list and empty list is the one item nested list', () => {
             expect(cartesianProduct([[new Pair(ONE_BAMBOO)]], [])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
+            expect(cartesianProduct([],[[new Pair(ONE_BAMBOO)]])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
         });
 
         test('of a list containing empty list and one item nested list is the one item nested list', () => {
             expect(cartesianProduct([[]], [[new Pair(ONE_BAMBOO)]])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
+            expect(cartesianProduct([[new Pair(ONE_BAMBOO)]], [[]])).toStrictEqual([[new Pair(ONE_BAMBOO)]]);
         });
 
         test('of two one item nested lists is a nested list of the two items', () => {

@@ -18,7 +18,7 @@ export class Pair extends Meld {
         if (isSuitedTile(tile)) { // in order to separate Suited and Honor tiles
             super([tile.clone(), tile.clone()], MeldType.PAIR, exposed);
         } else {
-            super([tile.clone(), tile.clone()], MeldType.KONG, exposed);
+            super([tile.clone(), tile.clone()], MeldType.PAIR, exposed);
         }
     }
 

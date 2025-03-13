@@ -7,12 +7,12 @@ export type HandAnalyzer<T extends WinningHand> = (hand: Hand) => T[]
 
 export const analyzeHandForWinningHands : HandAnalyzer<WinningHand> = (hand: Hand) => {
     const specialWinningHands = analyzeForSpecialWinningHands(hand);
-    if (specialWinningHands.length !== 0) {
+    if (specialWinningHands.length > 0) {
         return specialWinningHands;
     }
 
     const standardWinningHands = analyzeForStandardWinningHands(hand);
-    if (standardWinningHands.length !== 0) {
+    if (standardWinningHands.length > 0) {
         return standardWinningHands;
     }
 

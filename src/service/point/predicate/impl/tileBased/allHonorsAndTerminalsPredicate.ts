@@ -52,7 +52,7 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
     }
     const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
         .tilesThatFailPredicate(nonTerminalTiles);
-    if (!!missingAnyOf) {
+    if (!!missingAnyOf && missingAnyOf.length > 0) {
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(missingAnyOf));
     }
 

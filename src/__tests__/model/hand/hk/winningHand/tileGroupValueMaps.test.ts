@@ -77,24 +77,20 @@ describe('tileGroupValueMaps.ts', () => {
             expect(maps.getTilesForSuitedTileValue(SuitedTileValue.NINE)).toStrictEqual([]);
 
             expect(maps.getTilesForTileGroups(new Set([TileGroup.BAMBOO, TileGroup.CHARACTER])))
-            .toEqual(expect.arrayContaining([[FIVE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO, SIX_BAMBOO, SEVEN_BAMBOO], 
+            .toStrictEqual(([[FIVE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO, SIX_BAMBOO, SEVEN_BAMBOO], 
                 [SEVEN_CHARACTER, THREE_CHARACTER]]));
-            expect(maps.getTilesForTileGroups(new Set([TileGroup.BAMBOO, TileGroup.CHARACTER])).length).toBe(2);
 
             expect(maps.getTilesForTileGroups(new Set([TileGroup.WIND, TileGroup.CIRCLE])))
-            .toEqual(expect.arrayContaining([[WEST_WIND, WEST_WIND, EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND],
+            .toStrictEqual([[WEST_WIND, WEST_WIND, EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND],
                 [SIX_CIRCLE, TWO_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE]
-            ]));
-            expect(maps.getTilesForTileGroups(new Set([TileGroup.CIRCLE, TileGroup.WIND])).length).toBe(2);
+            ]);
                 
             expect(maps.getTilesForTileValues(new Set([WindTileValue.EAST, SuitedTileValue.NINE, SuitedTileValue.FIVE])))
-            .toEqual(expect.arrayContaining([[EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND], [], [FIVE_BAMBOO, FIVE_BAMBOO]]));
-            expect(maps.getTilesForTileValues(new Set([WindTileValue.EAST, SuitedTileValue.NINE, SuitedTileValue.FIVE])).length).toBe(3);
+            .toStrictEqual([[EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND], [], [FIVE_BAMBOO, FIVE_BAMBOO]]);
 
             expect(maps.getTilesForTileValues(new Set([SuitedTileValue.ONE]))).toStrictEqual([[]]);
             expect(maps.getTilesForTileValues(new Set([SuitedTileValue.SIX, SuitedTileValue.EIGHT])))
-            .toEqual(expect.arrayContaining([[SIX_CIRCLE, SIX_BAMBOO], [EIGHT_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE]]));
-            expect(maps.getTilesForTileValues(new Set([SuitedTileValue.SIX, SuitedTileValue.EIGHT])).length).toBe(2);
+            .toStrictEqual([[SIX_CIRCLE, SIX_BAMBOO], [EIGHT_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE]]);
         });
     });
 
@@ -155,24 +151,20 @@ describe('tileGroupValueMaps.ts', () => {
             expect(maps.getTilesForSuitedTileValue(SuitedTileValue.NINE)).toStrictEqual([]);
 
             expect(maps.getTilesForTileGroups(new Set([TileGroup.BAMBOO, TileGroup.CHARACTER])))
-            .toEqual(expect.arrayContaining([[FIVE_BAMBOO, FIVE_BAMBOO, SIX_BAMBOO, SEVEN_BAMBOO, FOUR_BAMBOO], 
-                [SEVEN_CHARACTER, THREE_CHARACTER]]));
-            expect(maps.getTilesForTileGroups(new Set([TileGroup.BAMBOO, TileGroup.CHARACTER])).length).toBe(2);
+            .toStrictEqual([[FIVE_BAMBOO, FIVE_BAMBOO, SIX_BAMBOO, SEVEN_BAMBOO, FOUR_BAMBOO], 
+                [SEVEN_CHARACTER, THREE_CHARACTER]]);
 
             expect(maps.getTilesForTileGroups(new Set([TileGroup.WIND, TileGroup.CIRCLE])))
-            .toEqual(expect.arrayContaining([[WEST_WIND, WEST_WIND, EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND],
+            .toStrictEqual([[WEST_WIND, WEST_WIND, EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND],
                 [SIX_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE, TWO_CIRCLE]
-            ]));
-            expect(maps.getTilesForTileGroups(new Set([TileGroup.CIRCLE, TileGroup.WIND])).length).toBe(2);
+            ]);
                 
             expect(maps.getTilesForTileValues(new Set([WindTileValue.EAST, SuitedTileValue.NINE, SuitedTileValue.FIVE])))
-            .toEqual(expect.arrayContaining([[EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND], [], [FIVE_BAMBOO, FIVE_BAMBOO]]));
-            expect(maps.getTilesForTileValues(new Set([WindTileValue.EAST, SuitedTileValue.NINE, SuitedTileValue.FIVE])).length).toBe(3);
+            .toStrictEqual([[EAST_WIND, EAST_WIND, EAST_WIND, EAST_WIND], [], [FIVE_BAMBOO, FIVE_BAMBOO]]);
 
             expect(maps.getTilesForTileValues(new Set([SuitedTileValue.ONE]))).toStrictEqual([[]]);
             expect(maps.getTilesForTileValues(new Set([SuitedTileValue.SIX, SuitedTileValue.EIGHT])))
-            .toEqual(expect.arrayContaining([[SIX_CIRCLE, SIX_BAMBOO], [EIGHT_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE]]));
-            expect(maps.getTilesForTileValues(new Set([SuitedTileValue.SIX, SuitedTileValue.EIGHT])).length).toBe(2);
+            .toStrictEqual([[SIX_CIRCLE, SIX_BAMBOO], [EIGHT_CIRCLE, EIGHT_CIRCLE, EIGHT_CIRCLE]]);
         });
     });
 });

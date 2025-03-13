@@ -18,10 +18,7 @@ export const analyzeForHonorMelds : MeldsAnalyzer = (hand: Hand) => {
     const dragonMelds = getHonorMelds(TileGroup.DRAGON, dragonTileValues, quantityMemo);
     const windMelds = getHonorMelds(TileGroup.WIND, windTileValues, quantityMemo);
     
-    const honorMelds: Meld[] = [];
-    honorMelds.push(...userSpecifiedHonorMelds);
-    honorMelds.push(...dragonMelds);
-    honorMelds.push(...windMelds);
+    const honorMelds: Meld[] = [...userSpecifiedHonorMelds, ...dragonMelds, ...windMelds];
 
     return [honorMelds];
 }
@@ -33,7 +30,7 @@ function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: Ho
         const firstTile = meld.getFirstTile();
         if (isHonorTile(firstTile) && quantityMemo.getQuantity(firstTile.value) >= meld.tiles.length) {
             quantityMemo.decreaseQuantity(firstTile.value, meld.tiles.length);
-            userSpecifiedMelds.push(meld);
+            userSpecifiedHonorMelds.push(meld);
         }
     };
 
@@ -41,16 +38,16 @@ function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: Ho
 }
 
 function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[] {
-    const melds : Meld[] = [];
+    let meldsToReturn : Meld[] = [];
     for (const tileValue of tileValues) {
         const quantity = quantityMemo.getQuantity(tileValue);
-        const meld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);
-        if (meld) {
-            melds.push(meld);
-            quantityMemo.decreaseQuantity(tileValue, meld.tiles.length);
+        const honorMeld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);
+        if (honorMeld) {
+            meldsToReturn.push(honorMeld);
+            quantityMemo.decreaseQuantity(tileValue, quantity);
         }
     }
-    return melds;
+    return meldsToReturn;
 }
 
 function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, tileValue: HonorTileValue) : Meld | undefined {
@@ -63,7 +60,7 @@ function getHonorMeldIfPossible(quantity: number, tileGroup: HonorTileGroup, til
         return new Pair(constructHonorTile(tileGroup, tileValue));
     } else if (quantity === 3) {
         return new Pong(constructHonorTile(tileGroup, tileValue));
-    } else if (quantity === 4) {
+    } else if (quantity === 4) { // cannot be two pairs -- two pairs is checked by a separate analyzer.
         return new Kong(constructHonorTile(tileGroup, tileValue));
     } else {
         throw new Error(`Hand is malformed. Found quantity not between 0 and 4 for ${tileGroup} ${tileValue}: ${quantity}`);

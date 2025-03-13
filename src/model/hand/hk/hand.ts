@@ -61,6 +61,9 @@ export class Hand {
         const tileToQuantity : TileToQuantityMap = new TileToQuantityMap(tiles);
 
         if (userSpecifiedMelds && userSpecifiedMelds.length > 0) {
+            if (!userSpecifiedMelds.every(meld => !!meld)) {
+                throw new Error('every meld in userSpecifiedMelds must not be null or undefined');
+            }
             const meldTiles = meldToFlatTiles(userSpecifiedMelds);
             const meldTileToQuantity = new TileToQuantityMap(meldTiles);
             for (const tile of meldTiles) {

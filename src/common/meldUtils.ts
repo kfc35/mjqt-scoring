@@ -4,8 +4,12 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";
 
+export function meldsNotNull(melds: readonly Meld[]) {
+    return (melds && melds.every(meld => !!meld));
+}
+
 export function meldsNotNullAndCorrectLength(melds: readonly Meld[], length: number): boolean {
-    return (melds && melds.every(meld => !!meld) && melds.length === length);
+    return meldsNotNull(melds) && melds.length === length;
 }
 
 export function meldsHasOnePair(melds: readonly Meld[]): boolean {

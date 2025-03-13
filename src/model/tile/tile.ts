@@ -38,7 +38,7 @@ export abstract class Tile {
     }
 
     toString(): string {
-        const valueStr = (isSuitedTileValue(this._value) ? suitedTileEnumKeys[this._value.valueOf()] : this._value.valueOf());
+        const valueStr = (isSuitedTileValue(this._value) ? suitedTileEnumKeys[this._value.valueOf() - 1] : this._value.valueOf());
         return `${valueStr}_${this._group.valueOf()}`
     }
     

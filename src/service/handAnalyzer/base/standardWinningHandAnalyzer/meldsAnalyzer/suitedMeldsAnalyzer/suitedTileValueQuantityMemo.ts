@@ -8,7 +8,7 @@ export class SuitedTileValueQuantityMemo {
     constructor(hand: Hand, tileGroup: SuitedTileGroup);
     constructor(toBeCopied: SuitedTileValueQuantityMemo); 
     constructor(handOrToBeCopied: Hand | SuitedTileValueQuantityMemo, tileGroup?: SuitedTileGroup) {
-        if (handOrToBeCopied instanceof Hand && tileGroup) {
+        if (handOrToBeCopied instanceof Hand && !!tileGroup) {
             this._memo = [];
             const tileValueQuantityMap = handOrToBeCopied.getQuantitiesForTileGroup(tileGroup)
             for (const suitedTileValue of [...suitedTileValues].sort((stv1, stv2) => stv1.valueOf() - stv2.valueOf())) {
@@ -17,13 +17,14 @@ export class SuitedTileValueQuantityMemo {
             }
         } else if (handOrToBeCopied instanceof SuitedTileValueQuantityMemo) {
             this._memo = [...handOrToBeCopied.memo];
+        } else {
+            throw new Error('Invalid constructor arguments for SuitedTileValueQuantityMemo.');
         }
-        throw new Error('Invalid constructor arguments for SuitedTileValueQuantityMemo.');
     }
 
     getQuantity(stv: SuitedTileValue): number {
         const quantity = this._memo[stv.valueOf() - 1]
-        if (!quantity) {
+        if (quantity === undefined) {
             throw new Error(`Memo has undefined value for SuitedTileValue ${stv}.`);
         }
         return quantity;
@@ -56,7 +57,8 @@ export class SuitedTileValueQuantityMemo {
         if (this.getQuantity(startingSTV) < numChows || this.getQuantity(nextSTV) < numChows || 
             this.getQuantity(twoAfterSTV) < numChows) {
                 throw new Error(`Insufficient quantity of Suited Tile Values ${startingSTV} (${this.getQuantity(startingSTV)}), 
-                ${nextSTV} (${this.getQuantity(nextSTV)}), and ${twoAfterSTV} (${this.getQuantity(twoAfterSTV)}).`);
+                ${nextSTV} (${this.getQuantity(nextSTV)}), and ${twoAfterSTV} (${this.getQuantity(twoAfterSTV)}). 
+                Check for quantities via hasEnoughQuantityForChows before invoking.`);
         }
 
         return [[startingSTV, this.decreaseQuantity(startingSTV, numChows)], 

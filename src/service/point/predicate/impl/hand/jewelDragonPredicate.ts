@@ -64,10 +64,10 @@ export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, me
         tileDetail.tilesThatAreMissingToSatisfyPredicate([[constructHonorTile(TileGroup.DRAGON, givenDragonTileValue)]]);
         missingTilesAnyOf.push([constructHonorTile(TileGroup.DRAGON, givenDragonTileValue)]);
     }
-    if (!!failedTiles) {
+    if (!!failedTiles && failedTiles.length > 0) {
         tileDetail.tilesThatFailPredicate(failedTiles);
     }
-    if (!!missingTilesAnyOf) {
+    if (!!missingTilesAnyOf && missingTilesAnyOf.length > 0) {
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(missingTilesAnyOf);
     }
     return new PointPredicateFailureResult.Builder()

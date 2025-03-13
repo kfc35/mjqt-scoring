@@ -93,16 +93,18 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
             missingTilesAnyOf.push(extraTileCandidates);
         }
 
-        if (!!failingTiles || !!missingTiles || !!missingTilesAnyOf) {
+        if ((!!failingTiles && failingTiles.length > 0) || 
+            (!!missingTiles && missingTiles.length > 0) || 
+            (!!missingTilesAnyOf && missingTilesAnyOf.length > 0)) {
             const failureBuilder = new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES);
             const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
-            if (!!failingTiles) {
+            if (!!failingTiles && failingTiles.length > 0) {
                 tileDetail.tilesThatFailPredicate(failingTiles);
             }
-            if (!!missingTiles) {
+            if (!!missingTiles && missingTiles.length > 0) {
                 tileDetail.tilesThatAreMissingToSatisfyPredicate(missingTiles);
             }
-            if (!!missingTilesAnyOf) {
+            if (!!missingTilesAnyOf&& missingTilesAnyOf.length > 0) {
                 tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(missingTilesAnyOf);
             }
 

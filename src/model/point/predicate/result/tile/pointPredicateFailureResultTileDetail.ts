@@ -32,6 +32,22 @@ export class PointPredicateFailureResultTileDetail {
         this._tilesThatAreMissingAnyOfToSatisfyPredicate = tilesThatAreMissingAnyOfToSatisfyPredicate;
     }
 
+    get tilesThatPartiallySatisfyPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
+        return this._tilesThatPartiallySatisfyPredicate;
+    }
+
+    get tilesThatFailPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
+        return this._tilesThatFailPredicate;
+    }
+
+    get tilesThatAreMissingToSatisfyPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
+        return this._tilesThatAreMissingToSatisfyPredicate;
+    }
+
+    get tilesThatAreMissingAnyOfToSatisfyPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
+        return this._tilesThatAreMissingAnyOfToSatisfyPredicate;
+    }
+
     static Builder = class {
         _tilesThatPartiallySatisfyPredicate: Tile[][] = [];
 

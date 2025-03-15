@@ -8,6 +8,10 @@ export class PointPredicateSuccessResultTileDetail {
         this._tilesThatSatisfyPredicate = tilesThatSatisfyPredicate;
     }
 
+    get tilesThatSatisfyPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
+        return this._tilesThatSatisfyPredicate;
+    }
+
     static Builder = class {
         _tilesThatSatisfyPredicate: Tile[][] = [];
 

@@ -32,11 +32,11 @@ export class PointPredicateResult {
             if (!result.success) {
                 const otherResults = [...results];
                 otherResults.splice(index, 1);
-                return new PointPredicateResult(`(${andPointPredicateId})`, false, [result, ...otherResults]);
+                return new PointPredicateResult(`${andPointPredicateId}`, false, [result, ...otherResults]);
             }
         }
         // all success, results have better detail on success/failure tiles
-        return new PointPredicateResult(`(${andPointPredicateId})`, true, [...results]);
+        return new PointPredicateResult(`${andPointPredicateId}`, true, [...results]);
     }
 
     static or(newPointPredicateId?: string, ...results: PointPredicateResult[]) {
@@ -45,7 +45,7 @@ export class PointPredicateResult {
             if (result.success) {
                 const otherResults = [...results];
                 otherResults.splice(index, 1);
-                return new PointPredicateResult(`(${orPointPredicateId})`, true, [result, ... otherResults]);
+                return new PointPredicateResult(`${orPointPredicateId}`, true, [result, ... otherResults]);
             }
         }
         return new PointPredicateResult(orPointPredicateId, false, [...results]);

@@ -28,3 +28,11 @@ export function evaluateHand(hand: Hand, winCtx: WinContext, roundCtx: RoundCont
     }
     return pointEvaluations.sort()[0];
 }
+
+export function evaluateWinningHandForPointEval(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
+    if (!rootConfig) {
+        rootConfig = defaultRootPointPredicateConfiguration;
+    }
+    
+    return evaluateWinningHand(winningHand, winCtx, roundCtx, rootConfig);
+}

@@ -3,6 +3,7 @@ import { RootPointPredicateConfiguration } from "model/point/configuration/root/
 import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { calculateChickenHandResultFromResults } from "service/point/predicate/impl/chicken/chickenHandPredicate";
+import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 
 describe('chickenHandPredicate.ts', () => {
     describe('calculateChickenHandResultFromResults', () => {
@@ -20,6 +21,7 @@ describe('chickenHandPredicate.ts', () => {
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
+            expect(result.pointPredicateId).toBe(PointPredicateID.CHICKEN_HAND);
             expect(result.success).toBe(false);
         });
 
@@ -31,6 +33,7 @@ describe('chickenHandPredicate.ts', () => {
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
+            expect(result.pointPredicateId).toBe(PointPredicateID.CHICKEN_HAND);
             expect(result.success).toBe(true);
         });
 
@@ -42,6 +45,7 @@ describe('chickenHandPredicate.ts', () => {
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
+            expect(result.pointPredicateId).toBe(PointPredicateID.CHICKEN_HAND);
             expect(result.success).toBe(true);
         });
 
@@ -53,6 +57,7 @@ describe('chickenHandPredicate.ts', () => {
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
+            expect(result.pointPredicateId).toBe(PointPredicateID.CHICKEN_HAND);
             expect(result.success).toBe(true);
         });
     });

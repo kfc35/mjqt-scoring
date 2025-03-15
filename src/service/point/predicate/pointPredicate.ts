@@ -28,10 +28,10 @@ export function predicateAnd<T extends WinningHand>(newPointPredicateId?: string
             }
         }
         if (hasFailure) {
-            return new PointPredicateResult(`(${andPointPredicateId})`, false, sortedResults);
+            return new PointPredicateResult(`${andPointPredicateId}`, false, sortedResults);
         }
         // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
-        return new PointPredicateResult(`(${andPointPredicateId})`, true, results);
+        return new PointPredicateResult(`${andPointPredicateId}`, true, results);
     }
 }
 
@@ -50,9 +50,9 @@ export function predicateOr<T extends WinningHand>(newPointPredicateId?: string,
             }
         }
         if (hasSuccess) {
-            return new PointPredicateResult(`(${orPointPredicateId})`, true, sortedResults);
+            return new PointPredicateResult(`${orPointPredicateId}`, true, sortedResults);
         }
         // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
-        return new PointPredicateResult(`(${orPointPredicateId})`, false, sortedResults);
+        return new PointPredicateResult(`${orPointPredicateId}`, false, sortedResults);
     }
 }

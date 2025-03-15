@@ -94,7 +94,7 @@ const allCharacterAndRedDragonSubPredicate : PointPredicate<MeldBasedWinningHand
             TileGroup.CHARACTER, DragonTileValue.RED);
     };
 const rubyDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.JADE_DRAGON, 
+    predicateAnd(PointPredicateID.RUBY_DRAGON, 
         allCharacterAndRedDragonSubPredicate, 
         onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
@@ -106,7 +106,7 @@ const allCircleAndWhiteDragonSubPredicate : PointPredicate<MeldBasedWinningHand>
             TileGroup.CIRCLE, DragonTileValue.WHITE);
     };
 const pearlDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
-    predicateAnd(PointPredicateID.JADE_DRAGON, 
+    predicateAnd(PointPredicateID.PEARL_DRAGON, 
         allCircleAndWhiteDragonSubPredicate, 
         onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,

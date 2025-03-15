@@ -9,7 +9,7 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 
 function allOneSuitAndHonorsPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set(), honorTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
-    return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT,
+    return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT_AND_HONORS,
         handContainsOneSuitSubPredicate(winningHand, suitedTileIndicesSet),
         handContainsHonorsSubPredicate(winningHand, honorTileIndicesSet)
     );

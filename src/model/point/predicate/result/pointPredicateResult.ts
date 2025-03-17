@@ -1,7 +1,7 @@
 export class PointPredicateResult {
     protected _pointPredicateId: string;
     protected _success: boolean;
-    protected _subPredicateResults: PointPredicateResult[];
+    protected _idToSubPredicateResult: Map<string, PointPredicateResult>;
 
     constructor(pointPredicateId: string, 
         success: boolean,
@@ -11,7 +11,11 @@ export class PointPredicateResult {
         }
         this._pointPredicateId = pointPredicateId;
         this._success = success;
-        this._subPredicateResults = subPredicateResults ?? [];
+        this._idToSubPredicateResult = new Map();
+        if (subPredicateResults) {
+            subPredicateResults.map(result => [result.pointPredicateId, result] as [string, PointPredicateResult])
+                .forEach(([k, v]) => this._idToSubPredicateResult.set(k, v));
+        }
     }
 
     get pointPredicateId(): string {
@@ -23,7 +27,15 @@ export class PointPredicateResult {
     }
 
     get subPredicateResults(): PointPredicateResult[] {
-        return this._subPredicateResults;
+        return [...this._idToSubPredicateResult.values()];
+    }
+
+    getSubPredicateResult(pointPredicateId: string) {
+        return this._idToSubPredicateResult.get(pointPredicateId);
+    }
+
+    get idToSubPredicateResult(): ReadonlyMap<string, PointPredicateResult> {
+        return this,this._idToSubPredicateResult;
     }
 
     static and(newPointPredicateId?: string, ...results: PointPredicateResult[]) {

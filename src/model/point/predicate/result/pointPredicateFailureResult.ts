@@ -2,7 +2,7 @@ import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/res
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
-export class PointPredicateFailureResult extends PointPredicateResult{
+export class PointPredicateFailureResult extends PointPredicateResult {
     private _meldDetail: PointPredicateFailureResultMeldDetail | undefined;
     private _tileDetail: PointPredicateFailureResultTileDetail | undefined;
 

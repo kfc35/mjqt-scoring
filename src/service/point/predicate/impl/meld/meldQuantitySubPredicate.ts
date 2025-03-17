@@ -1,10 +1,14 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { createChowQuantityPredicate } from "service/point/predicate/factory/meldBased/chowPredicateFactory";
-import { createPongOrKongQuantityPredicate } from "service/point/predicate/factory/meldBased/pongOrKongPredicateFactory";
-import { createKongQuantityPredicate } from "service/point/predicate/factory/meldBased/kongPredicateFactory";
+import { createFilteredMeldsCheckerSuccessesQuantityPredicate } from "../../factory/meldBased/meldPredicateFactoryBase";
+import { meldIsPair } from "model/meld/pair";
+import { meldIsChow } from "model/meld/chow";
+import { meldIsKong } from "model/meld/kong";
 
-export const containsFourChowsSubPredicate: PointPredicate<MeldBasedWinningHand> = createChowQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CHOWS, 4);
-export const containsFourKongsSubPredicate: PointPredicate<MeldBasedWinningHand> = createKongQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS, 4);
-export const containsFourPongsKongsSubPredicate: PointPredicate<MeldBasedWinningHand> = createPongOrKongQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_PONGS_AND_KONGS, 4);
+export const containsFourChowsSubPredicate: PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CHOWS, 
+        meld => !meldIsPair(meld), melds => melds.length === 4, meld => meldIsChow(meld));
+export const containsFourKongsSubPredicate: PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS, 
+    meld => !meldIsPair(meld), melds => melds.length === 4, meld => meldIsKong(meld));
+export const containsFourPongsKongsSubPredicate: PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_PONGS_AND_KONGS, 
+    meld => !meldIsPair(meld), melds => melds.length === 4, meld => meldIsKong(meld));

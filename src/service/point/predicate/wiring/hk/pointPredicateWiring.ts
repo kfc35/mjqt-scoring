@@ -26,6 +26,8 @@ function createPointPredicateBaseWiring(): Map<string, PointPredicate<WinningHan
     const winConditionPointPredicateWiring = createWinConditionPointPredicateWiring();
     winConditionPointPredicateWiring.forEach((val, key) => pointPredicateWiring.set(key, val));
 
+    // There is no wiring for chicken hand because it is not calculated like other Point Predicates.
+
     return pointPredicateWiring;
 }
 

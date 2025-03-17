@@ -1,11 +1,11 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { Pong, meldIsPong } from "model/meld/pong";
-import { Kong, meldIsKong } from "model/meld/kong";
+import { Pong } from "model/meld/pong";
+import { Kong } from "model/meld/kong";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { maxQuantityPerNonFlowerTile } from "common/deck";
-import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
+import { createMeldsExistPredicateIgnoreExposed } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
 export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles: SuitedOrHonorTile[], 
     minNumPongsKongsToMatch: number, maxNumPongsKongsToMatch: number) : PointPredicate<MeldBasedWinningHand> {
@@ -34,8 +34,4 @@ export function createPongOrKongsExistPredicate(pointPredicateID : string, tiles
     
     return createMeldsExistPredicateIgnoreExposed(pointPredicateID, [...pongsToMatch, ...kongsToMatch], 
         minNumPongsKongsToMatch, maxNumPongsKongsToMatch);
-}
-
-export function createPongOrKongQuantityPredicate(pointPredicateID : string, minNumPongOrKongs: number, maxNumPongOrKongs: number | undefined = minNumPongOrKongs) : PointPredicate<MeldBasedWinningHand> {
-    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meld => meldIsPong(meld) || meldIsKong(meld), minNumPongOrKongs, maxNumPongOrKongs);
 }

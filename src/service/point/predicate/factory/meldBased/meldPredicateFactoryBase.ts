@@ -81,7 +81,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
         throw new Error(`numMinMeldsPass ${numMinMeldsPass} must be greater than numMaxMeldsPass ${numMaxMeldsPass}`);
     }
     return (winningHand : MeldBasedWinningHand) => {
-        const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(winningHand.melds.map((meld, index) => [meld, index]), meldChecker);
+        const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(winningHand.melds.map((meld, index) => [meld, index]), winningHand, meldChecker);
         if (!numMinMeldsPass && !numMaxMeldsPass && failedMelds.length > 0) {
             return new PointPredicateFailureResult.Builder()
                 .pointPredicateId(pointPredicateID)
@@ -147,8 +147,8 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
  * The PointPredicate succeeds if meldsChecker returns true, and filteredMeldChecker returns true for every meld that has passed the filter. */
 export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
     meldFilter: (meld: Meld) => boolean = () => true,
-    meldsChecker: (melds: Meld[]) => boolean,
-    filteredMeldChecker: (meld: Meld) => boolean) : PointPredicate<MeldBasedWinningHand> {
+    meldsChecker: (melds: Meld[], winningHand: MeldBasedWinningHand) => boolean,
+    filteredMeldChecker: (meld: Meld, winningHand: MeldBasedWinningHand) => boolean) : PointPredicate<MeldBasedWinningHand> {
     return (winningHand : MeldBasedWinningHand) => {
         const filteredMelds: [Meld, number][] = [];
         for (const [index, meld] of winningHand.melds.entries()) {
@@ -157,8 +157,8 @@ export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredic
             }
         }
 
-        if (meldsChecker(filteredMelds.map(([meld,]) => meld))) {
-            const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(filteredMelds, filteredMeldChecker);
+        if (meldsChecker(filteredMelds.map(([meld,]) => meld), winningHand)) {
+            const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(filteredMelds, winningHand, filteredMeldChecker);
             if (failedMelds.length === 0) {
                 return new PointPredicateSingleSuccessResult.Builder()
                 .pointPredicateId(pointPredicateID)
@@ -196,13 +196,15 @@ export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredic
     }
 }
 
-function checkMelds(meldIndexTuples: readonly [Meld, number][], meldChecker:(meld: Meld) => boolean): [Meld[], Meld[], Set<number>, Set<number>] {
+function checkMelds(meldIndexTuples: readonly [Meld, number][], 
+    winningHand: MeldBasedWinningHand, 
+    meldChecker:(meld: Meld, winningHand: MeldBasedWinningHand) => boolean): [Meld[], Meld[], Set<number>, Set<number>] {
     const successMelds : Meld[] = [];
     const failedMelds : Meld[] = [];
     const passingIndices: Set<number> = new Set();
     const failingIndices: Set<number> = new Set();
     for (const [meld, index] of meldIndexTuples) {
-        if (meldChecker(meld)) {
+        if (meldChecker(meld, winningHand)) {
             successMelds.push(meld);
             passingIndices.add(index);
         } else {

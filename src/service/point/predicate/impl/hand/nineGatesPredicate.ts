@@ -8,7 +8,7 @@ import { partitionTilesByGroup } from "common/tileUtils";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
-import { containsFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
+import { atLeastNumMeldsMinusOneAreConcealedSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
@@ -19,6 +19,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { meldToFlatTiles } from "common/meldUtils";
 import { isHonorTile } from "model/tile/group/honorTile";
+import { ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate } from "./lastTileSubPredicate";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
@@ -128,6 +129,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
 const nineGatesMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.NINE_GATES,
         sufficientTileQuantitiesNineGatesSubPredicate,
-        containsFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld
+        atLeastNumMeldsMinusOneAreConcealedSubPredicate,
+        ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate,
         onePairSubPredicate);
 export const NINE_GATES_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.NINE_GATES, nineGatesMeldBasedPredicate);

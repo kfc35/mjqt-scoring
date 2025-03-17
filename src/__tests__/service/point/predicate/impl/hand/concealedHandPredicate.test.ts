@@ -14,7 +14,7 @@ import { SEVEN_CHARACTER, EIGHT_CIRCLE, THREE_BAMBOO, FIVE_CHARACTER, THREE_CHAR
     EIGHT_CHARACTER, NINE_CIRCLE, ONE_BAMBOO, NINE_BAMBOO, EAST_WIND, WEST_WIND,
     NINE_CHARACTER, NORTH_WIND, SOUTH_WIND, RED_DRAGON, WHITE_DRAGON, GREEN_DRAGON
  } from "common/deck";
-import { CONCEALED_HAND_PREDICATE, SELF_TRIPLETS_PREDICATE } from "service/point/predicate/impl/hand/concealedHandPredicate";
+import { CONCEALED_HAND_PREDICATE, FULLY_CONCEALED_PREDICATE, SELF_TRIPLETS_PREDICATE } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import type { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 import { Chow } from "model/meld/chow";
@@ -166,37 +166,54 @@ describe('concealedHandPredicate.ts', () => {
             });
 
             test('unexposed hand won via discard on pair returns true', () => {
-                const unexposedPongsHand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
                     new Pair(EIGHT_CIRCLE, true), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER), 
                     new Pong(THREE_CHARACTER)], 
                     1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
 
-                const result = CONCEALED_HAND_PREDICATE(unexposedPongsHand, basicWinContext, basicRoundContext, rootConfig);
+                const result = CONCEALED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(true);
-                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS) as PointPredicateSingleSuccessResult;
+                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
                 expect(fourConcealedMeldsResult.success).toBe(true);
                 expect(fourConcealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
-                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
                 expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
             });
 
             test('unexposed hand won via discard on non pair returns false', () => {
-                const unexposedPongsHand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
                     new Pair(EIGHT_CIRCLE), new Pong(THREE_BAMBOO, true), new Pong(FIVE_CHARACTER), 
                     new Pong(THREE_CHARACTER)], 
                     2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
 
-                const result = CONCEALED_HAND_PREDICATE(unexposedPongsHand, basicWinContext, basicRoundContext, rootConfig);
+                const result = CONCEALED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(false);
-                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS) as PointPredicateSingleSuccessResult;
-                expect(fourConcealedMeldsResult.success).toBe(true);
-                expect(fourConcealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 1, 3, 4]));
-                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(concealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 1, 3, 4]));
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
                 expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBe(false);
+            });
+
+            test('hand won via self draw but with one previously exposed meld returns false', () => {
+                const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                    new Pair(EIGHT_CIRCLE), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER, true), 
+                    new Pong(THREE_CHARACTER)], 
+                    2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+                const result = CONCEALED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+
+                expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
+                expect(result.success).toBe(false);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(concealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 1, 2, 4]));
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
             });
 
             test('hand with more than one exposed meld returns false', () => {
@@ -209,9 +226,9 @@ describe('concealedHandPredicate.ts', () => {
 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(false);
-                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS) as PointPredicateFailureResult;
-                expect(fourConcealedMeldsResult.success).toBe(false);
-                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateFailureResult;
+                expect(concealedMeldsResult.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
                 expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
             });
         });
@@ -231,10 +248,10 @@ describe('concealedHandPredicate.ts', () => {
 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(true);
-                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS) as PointPredicateSingleSuccessResult;
-                expect(fourConcealedMeldsResult.success).toBe(true);
-                expect(fourConcealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
-                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(concealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
                 expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBeUndefined();
             });
 
@@ -248,10 +265,10 @@ describe('concealedHandPredicate.ts', () => {
 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(true);
-                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS) as PointPredicateSingleSuccessResult;
-                expect(fourConcealedMeldsResult.success).toBe(true);
-                expect(fourConcealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 1, 3, 4]));
-                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(concealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 1, 3, 4]));
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
                 expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBeUndefined();
             });
 
@@ -265,15 +282,42 @@ describe('concealedHandPredicate.ts', () => {
 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(false);
-                const fourConcealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_MELDS) as PointPredicateFailureResult;
-                expect(fourConcealedMeldsResult.success).toBe(false);
-                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateFailureResult;
+                expect(concealedMeldsResult.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
                 expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)?.success).toBeUndefined();
+            });
+
+            test('hand won via self draw but with one previously exposed meld returns false', () => {
+                const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                    new Pair(EIGHT_CIRCLE), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER, true), 
+                    new Pong(THREE_CHARACTER)], 
+                    2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+                const result = CONCEALED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+
+                expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
+                expect(result.success).toBe(false);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(concealedMeldsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 1, 2, 4]));
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(false);
             });
         });
 
         describe('special hand', () => {
-            test('special hand returns true', () => {
+            test('special hand with self drawn returns true', () => {
+                const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                    EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                    0, EAST_WIND, false, true, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+                
+                const result = CONCEALED_HAND_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+                
+                expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
+                expect(result.success).toBe(true);
+            });
+
+            test('special hand without self drawn returns true', () => {
                 const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
                     EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
                     0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
@@ -282,6 +326,92 @@ describe('concealedHandPredicate.ts', () => {
                 
                 expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
                 expect(result.success).toBe(true);
+            });
+        });
+    });
+
+    describe('Fully Concealed Hand Predicate', () => {
+        test('unexposed hand won via discard on pair returns false', () => {
+            const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                new Pair(EIGHT_CIRCLE, true), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER), 
+                new Pong(THREE_CHARACTER)], 
+                1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = FULLY_CONCEALED_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.FULLY_CONCEALED_HAND);
+            expect(result.success).toBe(false);
+            const concealed = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_MELDS_ARE_CONCEALED) as PointPredicateFailureResult;
+            expect(concealed.success).toBe(false);
+            expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(false);
+        });
+
+        test('unexposed hand won via self draw on pair returns true', () => {
+            const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                new Pair(EIGHT_CIRCLE), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER), 
+                new Pong(THREE_CHARACTER)], 
+                1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = FULLY_CONCEALED_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.FULLY_CONCEALED_HAND);
+            expect(result.success).toBe(true);
+            const concealed = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_MELDS_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+            expect(concealed.success).toBe(true);
+            expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+        });
+
+        test('exposed hand won via self draw returns false', () => {
+            const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                new Pair(EIGHT_CIRCLE), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER, true), 
+                new Pong(THREE_CHARACTER)], 
+                2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = FULLY_CONCEALED_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.FULLY_CONCEALED_HAND);
+            expect(result.success).toBe(false);
+            const concealed = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_MELDS_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+            expect(concealed.success).toBe(false);
+            expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+        });
+
+        test('unexposed hand won via self draw on non pair returns true', () => {
+            const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER), 
+                new Pair(EIGHT_CIRCLE), new Pong(THREE_BAMBOO), new Pong(FIVE_CHARACTER), 
+                new Pong(THREE_CHARACTER)], 
+                2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = FULLY_CONCEALED_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.FULLY_CONCEALED_HAND);
+            expect(result.success).toBe(true);
+            const concealed = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_MELDS_ARE_CONCEALED) as PointPredicateSingleSuccessResult;
+            expect(concealed.success).toBe(true);
+            expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+        });
+
+        describe('special hand', () => {
+            test('special hand with self drawn returns true', () => {
+                const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                    EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                    0, EAST_WIND, false, true, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+                
+                const result = FULLY_CONCEALED_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+                
+                expect(result.pointPredicateId).toBe(PointPredicateID.FULLY_CONCEALED_HAND);
+                expect(result.success).toBe(true);
+            });
+
+            test('special hand without self drawn returns false', () => {
+                const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                    EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                    0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+                
+                const result = FULLY_CONCEALED_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+                
+                expect(result.pointPredicateId).toBe(PointPredicateID.FULLY_CONCEALED_HAND);
+                expect(result.success).toBe(false);
             });
         });
     });

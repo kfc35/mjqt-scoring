@@ -44,7 +44,7 @@ const concealedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.CONCEALED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR)) {
             return predicateAnd(PointPredicateID.CONCEALED_HAND,
-                containsFourConcealedNonPairMeldsSubPredicate,
+                containsFourConcealedMeldsSubPredicate,
                 onePairSubPredicate,
                 ifLastTileWasDiscardThenItCompletedPairSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         } else { // last discarded tile can complete any meld

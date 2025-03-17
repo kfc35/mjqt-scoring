@@ -12,7 +12,7 @@ import { Pong } from "model/meld/pong";
 import { Kong } from "model/meld/kong";
 import { Chow } from "model/meld/chow";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import type { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 
 describe('lastTileSubPredicate.ts', () => {
     const basicWinContext = new WinContext.Builder().build();

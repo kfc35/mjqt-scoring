@@ -13,8 +13,8 @@ import { EIGHT_BAMBOO, FIVE_BAMBOO, FOUR_BAMBOO, GREEN_DRAGON, NINE_BAMBOO, THRE
     AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, ONE_CIRCLE, TWO_CHARACTER, RED_DRAGON, EIGHT_CHARACTER,
     THREE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, FOUR_CHARACTER, FIVE_CHARACTER, TWO_CIRCLE,
     WHITE_DRAGON, NINE_CIRCLE, THREE_CIRCLE, EIGHT_CIRCLE, FOUR_CIRCLE, FIVE_CIRCLE, ONE_CHARACTER } from "common/deck";
-import type { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
-import type { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 
 describe('jewelDragonPredicate.ts', () => {
     const basicWinContext = new WinContext.Builder().build();

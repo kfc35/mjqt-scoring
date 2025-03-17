@@ -40,6 +40,7 @@ export class MeldBasedWinningHand implements WinningHand {
         if (this._melds.length === 7 && this._melds.filter(meld => meld.exposed).length > 1) {
             throw new Error("a seven pairs winning hand cannot have more than one meld be exposed.");
         }
+
         // assert melds of size 5 have only one pair
         if (this._melds.length === 5 && this._melds.filter(meld => meldIsPair(meld)).length !== 1) {
             throw new Error("melds of length 5 must have exactly one pair.");

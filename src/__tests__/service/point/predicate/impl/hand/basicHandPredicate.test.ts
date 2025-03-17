@@ -5,19 +5,20 @@ import { RootPointPredicateConfiguration } from "model/point/configuration/root/
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { Pair } from "model/meld/pair";
 import { AUTUMN_SEASON, BAMBOO_GENTLEMAN, CHRYSANTHEMUM_GENTLEMAN, EAST_WIND, EIGHT_CHARACTER, EIGHT_CIRCLE, 
-    FIVE_CHARACTER, FOUR_BAMBOO, GREEN_DRAGON, NINE_BAMBOO, NINE_CHARACTER, NINE_CIRCLE, 
-    NORTH_WIND, ONE_BAMBOO, ONE_CHARACTER, ONE_CIRCLE, RED_DRAGON, SEVEN_CHARACTER, 
+    FIVE_CHARACTER, FOUR_BAMBOO, FOUR_CHARACTER, GREEN_DRAGON, NINE_BAMBOO, NINE_CHARACTER, NINE_CIRCLE, 
+    NORTH_WIND, ONE_BAMBOO, ONE_CHARACTER, ONE_CIRCLE, ORCHID_GENTLEMAN, RED_DRAGON, SEVEN_CHARACTER, 
     SIX_CHARACTER, SOUTH_WIND, THREE_BAMBOO, THREE_CHARACTER, THREE_CIRCLE, TWO_BAMBOO, 
     TWO_CHARACTER, WEST_WIND, WHITE_DRAGON } from "common/deck";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 import { Chow } from "model/meld/chow";
 import { Pong } from "model/meld/pong";
-import { ALL_CHOWS_PREDICATE, ALL_KONGS_PREDICATE, ALL_PONGS_AND_KONGS_PREDICATE, SEVEN_PAIRS_PREDICATE } from "service/point/predicate/impl/hand/basicHandPredicate";
+import { ALL_CHOWS_PREDICATE, ALL_KONGS_PREDICATE, ALL_PONGS_AND_KONGS_PREDICATE, COMMON_HAND_PREDICATE, SEVEN_PAIRS_PREDICATE } from "service/point/predicate/impl/hand/basicHandPredicate";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { Kong } from "model/meld/kong";
+import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 
 describe('basicHandPredicate.ts', () => {
     const basicWinContext = new WinContext.Builder().build();
@@ -244,6 +245,299 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
             expect(result.success).toBe(false);
             expect(result instanceof PointPredicateFailureResult).toBe(true);
+        });
+    });
+
+    describe('common hand predicate', () => {
+        describe('requiring valueless pair', () => {
+
+            beforeEach(() => {
+                rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.COMMON_HAND_MUST_HAVE_VALUELESS_PAIR, true);
+            });
+            
+            test('all chows multi-suit hand with no flowers, valueless honor pair returns true', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(true);
+
+                const moreThanOneSuitResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT) as PointPredicateSingleSuccessResult;
+                expect(moreThanOneSuitResult.success).toBe(true);
+                expect(moreThanOneSuitResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
+            });
+
+            test('all chows one-suit hand with no flowers, valueless same suit pair returns false due to suit failure', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(ONE_CHARACTER), new Chow([FOUR_CHARACTER, FIVE_CHARACTER, SIX_CHARACTER]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, FIVE_CHARACTER, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(true);
+
+                const moreThanOneSuitResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT) as PointPredicateFailureResult;
+                expect(moreThanOneSuitResult.success).toBe(false);
+            });
+
+            test('all chows one suit hand with no flowers, valueless honor pair returns false due to suit failure', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([FOUR_CHARACTER, FIVE_CHARACTER, SIX_CHARACTER]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, FIVE_CHARACTER, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(true);
+
+                const moreThanOneSuitResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT) as PointPredicateFailureResult;
+                expect(moreThanOneSuitResult.success).toBe(false);
+            });
+
+            test('all chows multi-suit hand with flowers, with valueless pair returns false due to flowers', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, [ORCHID_GENTLEMAN]);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+
+            test('all chows multi-suit hand with no flowers, with valueless pair, but won by discard returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO], true), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+
+            test('all chows multi-suit hand with no flowers, with valued pair returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(EAST_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+
+            test('multi-suit meld based hand with pongs/kongs, no flowers, valueless pair returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(EIGHT_CIRCLE), 
+                    new Kong(THREE_CIRCLE), new Pong(NORTH_WIND), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    3, NORTH_WIND, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_VALUELESS_PAIR)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+    
+            test('special hand returns false', () => {
+                const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                    EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                    0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+    
+                const result = COMMON_HAND_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result instanceof PointPredicateFailureResult).toBe(true);
+            });
+        });
+        describe('not requiring valueless pair', () => {
+            beforeEach(() => {
+                rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.COMMON_HAND_MUST_HAVE_VALUELESS_PAIR, false);
+            });
+
+            test('all chows multi-suit hand with no flowers, valueless honor pair returns true', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+
+                const moreThanOneSuitResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT) as PointPredicateSingleSuccessResult;
+                expect(moreThanOneSuitResult.success).toBe(true);
+                expect(moreThanOneSuitResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
+            });
+
+            test('all chows one-suit hand with no flowers, valueless same suit pair returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(ONE_CHARACTER), new Chow([FOUR_CHARACTER, FIVE_CHARACTER, SIX_CHARACTER]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, FIVE_CHARACTER, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+
+                const moreThanOneSuitResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT) as PointPredicateFailureResult;
+                expect(moreThanOneSuitResult.success).toBe(false);
+            });
+
+            test('all chows one suit hand with no flowers, valueless honor pair returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([FOUR_CHARACTER, FIVE_CHARACTER, SIX_CHARACTER]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, FIVE_CHARACTER, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+
+                const moreThanOneSuitResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT) as PointPredicateFailureResult;
+                expect(moreThanOneSuitResult.success).toBe(false);
+            });
+
+            test('all chows multi-suit hand with flowers, with valueless pair returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, [ORCHID_GENTLEMAN]);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+
+            test('all chows multi-suit hand with no flowers, with valueless pair, but won by discard returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(SOUTH_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO], true), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+
+            test('all chows multi-suit hand with no flowers, with valued pair returns true', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                    new Pair(EAST_WIND), new Chow([TWO_BAMBOO, THREE_BAMBOO, FOUR_BAMBOO]), 
+                    new Chow([FIVE_CHARACTER, SIX_CHARACTER, SEVEN_CHARACTER], true), 
+                    new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    2, TWO_BAMBOO, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+
+            test('regular multi-suit meld based hand with no flowers, valueless pair returns false', () => {
+                const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(EIGHT_CIRCLE), 
+                    new Kong(THREE_CIRCLE), new Pong(NORTH_WIND), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                    3, NORTH_WIND, []);
+    
+                const result = COMMON_HAND_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.ALL_CHOWS)?.success).toBe(false);
+                expect(result.getSubPredicateResult(PointPredicateID.NO_GENTLEMEN_OR_SEASONS)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SELF_DRAW)?.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)?.success).toBe(true);
+            });
+    
+            test('special hand returns false', () => {
+                const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                    EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                    0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+    
+                const result = COMMON_HAND_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+    
+                expect(result.pointPredicateId).toBe(PointPredicateID.COMMON_HAND);
+                expect(result.success).toBe(false);
+                expect(result instanceof PointPredicateFailureResult).toBe(true);
+            });
         });
     });
 });

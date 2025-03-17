@@ -37,13 +37,14 @@ const commonHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.COMMON_HAND_MUST_HAVE_VALUELESS_PAIR)) { 
             return predicateAnd(PointPredicateID.COMMON_HAND, 
-                allChowsMeldBasedPredicate, 
+                ALL_CHOWS_PREDICATE, // do we want to flatten this?
                 handContainsMoreThanOneSuitMeldBasedPredicate,
                 NO_GENTLEMEN_OR_SEASONS_PREDICATE,
                 SELF_DRAW_PREDICATE,
                 valuelessPairSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         }
         return predicateAnd(PointPredicateID.COMMON_HAND, 
+            ALL_CHOWS_PREDICATE, // do we want to flatten this?
             allChowsMeldBasedPredicate, 
             handContainsMoreThanOneSuitMeldBasedPredicate,
             NO_GENTLEMEN_OR_SEASONS_PREDICATE,

@@ -31,12 +31,156 @@ describe('meldedHandPredicate.ts', () => {
                     rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR, true);
                     rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR, true);
                 });
+
+                test('melded hand with win via discard for pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE, true), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)?.success).toBe(true);
+                });
+
+                test('melded hand won via self draw on pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)?.success).toBe(true);
+                });
+        
+                test('melded hand won via discard but not completing pair returns false',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)?.success).toBe(false);
+                });
+        
+                test('hand won via discard on pair but other melds not fully exposed returns false',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE, true), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)?.success).toBe(true);
+                });
+        
+                test('special hand returns false', () => {
+                    const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                        EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                        0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+                
+                    const result = MELDED_HAND_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+                
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result instanceof PointPredicateFailureResult).toBe(true);
+                });
             });
 
             describe('Last Discarded Tile Must Complete Pair = false', () => {
                 beforeEach(() => {
                     rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR, true);
                     rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR, false);
+                });
+
+                test('melded hand with win via discard for pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE, true), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
+                });
+
+                test('melded hand won via self draw on pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
+                });
+        
+                test('melded hand won via discard but not completing pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
+                });
+        
+                test('hand won via discard on pair but other melds not fully exposed returns false',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE, true), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)?.success).toBe(true);
+                });
+        
+                test('special hand returns false', () => {
+                    const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                        EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                        0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+                
+                    const result = MELDED_HAND_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+                
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result instanceof PointPredicateFailureResult).toBe(true);
                 });
             });
         });
@@ -129,6 +273,78 @@ describe('meldedHandPredicate.ts', () => {
                 beforeEach(() => {
                     rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.MELDED_HAND_ALLOW_SELF_DRAW_TO_COMPLETE_PAIR, false);
                     rootConfig.pointPredicateLogicConfiguration.setOptionValue(PointPredicateLogicOption.MELDED_HAND_LAST_DISCARDED_TILE_MUST_COMPLETE_PAIR, false);
+                });
+
+                test('melded hand with win via discard for pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE, true), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW)?.success).toBe(true);
+                });
+
+                test('melded hand won via self draw on pair returns false',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW)?.success).toBe(false);
+                });
+        
+                test('melded hand won via discard but not completing pair returns true',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER, true)], 
+                            2, THREE_BAMBOO, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW)?.success).toBe(true);
+                });
+        
+                test('hand won via discard on pair but other melds not fully exposed returns false',  () => {
+                    const hand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                            new Pair(EIGHT_CIRCLE, true), new Chow([THREE_BAMBOO, FOUR_BAMBOO, FIVE_BAMBOO], true), new Kong(FIVE_CHARACTER, true), 
+                            new Pong(THREE_CHARACTER)], 
+                            1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+        
+                    const result = MELDED_HAND_PREDICATE(hand, basicWinContext, basicRoundContext, rootConfig);
+        
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED)?.success).toBe(false);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_NOT_SELF_DRAW)?.success).toBe(true);
+                });
+        
+                test('special hand returns false', () => {
+                    const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                        EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                        0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+                
+                    const result = MELDED_HAND_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+                
+                    expect(result.pointPredicateId).toBe(PointPredicateID.MELDED_HAND);
+                    expect(result.success).toBe(false);
+                    expect(result instanceof PointPredicateFailureResult).toBe(true);
                 });
             });
         });

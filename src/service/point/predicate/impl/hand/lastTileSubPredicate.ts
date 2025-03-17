@@ -75,7 +75,7 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
         } else if (!standardWinningHand.isSelfDrawn()) { // winning tile is not self drawn
             // TODO is this confusing to have it be success?
             return new PointPredicateSingleSuccessResult.Builder()
-                .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
+                .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
                 .tileDetail(
                     new PointPredicateSuccessResultTileDetail.Builder()
                     .tilesThatSatisfyPredicate([[standardWinningHand.winningTile]])

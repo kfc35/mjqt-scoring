@@ -8,7 +8,6 @@ import { ALL_PONGS_AND_KONGS_PREDICATE } from "service/point/predicate/impl/hand
 import { GREEN_DRAGON_PONG_KONG_PREDICATE, RED_DRAGON_PONG_KONG_PREDICATE, WHITE_DRAGON_PONG_KONG_PREDICATE } from "service/point/predicate/impl/meld/dragonPongPredicate";
 import { TileGroup } from "model/tile/tileGroup";
 import { DragonTileValue } from "model/tile/tileValue";
-import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { getSuitedTilesForSuitedTileGroup } from "common/deck";
 import { getOnlyTruthyElement, consolidateSets } from "common/generic/setUtils";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
@@ -84,7 +83,6 @@ const allBambooAndGreenDragonSubPredicate : PointPredicate<MeldBasedWinningHand>
 const jadeDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.JADE_DRAGON, 
         allBambooAndGreenDragonSubPredicate,
-        onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         GREEN_DRAGON_PONG_KONG_PREDICATE);
 
@@ -96,7 +94,6 @@ const allCharacterAndRedDragonSubPredicate : PointPredicate<MeldBasedWinningHand
 const rubyDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.RUBY_DRAGON, 
         allCharacterAndRedDragonSubPredicate, 
-        onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         RED_DRAGON_PONG_KONG_PREDICATE);
 
@@ -108,7 +105,6 @@ const allCircleAndWhiteDragonSubPredicate : PointPredicate<MeldBasedWinningHand>
 const pearlDragonMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.PEARL_DRAGON, 
         allCircleAndWhiteDragonSubPredicate, 
-        onePairSubPredicate, 
         ALL_PONGS_AND_KONGS_PREDICATE,
         WHITE_DRAGON_PONG_KONG_PREDICATE);
 

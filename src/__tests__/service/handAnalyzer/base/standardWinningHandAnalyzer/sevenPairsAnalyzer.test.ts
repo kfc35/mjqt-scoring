@@ -58,7 +58,7 @@ describe('sevenPairsAnalyzer.ts', () => {
             WHITE_DRAGON, WHITE_DRAGON,
             SUMMER_SEASON, ORCHID_GENTLEMAN
             ], new MostRecentTileContext(NINE_CHARACTER, new Pair(NINE_CHARACTER, true)), 
-            [new Pair(ONE_CIRCLE, true), new Pair(THREE_BAMBOO, true), new Pair(NINE_CHARACTER, true)]);
+            [new Pair(ONE_CIRCLE), new Pair(THREE_BAMBOO), new Pair(NINE_CHARACTER, true)]);
 
             const winningHands = analyzeForSevenPairs(hand);
 
@@ -66,7 +66,7 @@ describe('sevenPairsAnalyzer.ts', () => {
             const winningHand = winningHands[0];
             expect(winningHand?.melds[winningHand?.meldWithWinningTileIndex])
                 .toStrictEqual(new Pair(NINE_CHARACTER, true));
-            expect(new Set(winningHand?.melds)).toStrictEqual(new Set([new Pair(ONE_CIRCLE, true), new Pair(THREE_BAMBOO, true), 
+            expect(new Set(winningHand?.melds)).toStrictEqual(new Set([new Pair(ONE_CIRCLE), new Pair(THREE_BAMBOO), 
                 new Pair(NINE_CHARACTER, true), new Pair(NINE_CHARACTER, false), new Pair(WEST_WIND, false),
                 new Pair(WEST_WIND, false), new Pair(WHITE_DRAGON, false)
             ]));

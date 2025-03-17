@@ -69,6 +69,15 @@ describe('meldBasedWinningHand.ts', () => {
             expect(() => {new MeldBasedWinningHand(meldList, 1, RED_DRAGON, flowerTiles);}).toThrow();
         });
 
+        test('throws when 7 pairs winning hand has more than one exposed pair', () => {
+            const meldList = [new Pair(ONE_BAMBOO), new Pair(TWO_BAMBOO), new Pair(THREE_BAMBOO, true),
+                new Pair(FOUR_BAMBOO, true), new Pair(FIVE_BAMBOO), new Pair(SIX_BAMBOO), new Pair(SEVEN_BAMBOO)
+            ];
+            const flowerTiles = [SUMMER_SEASON, AUTUMN_SEASON];
+
+            expect(() => {new MeldBasedWinningHand(meldList, 2, THREE_BAMBOO, flowerTiles);}).toThrow();
+        });
+
         test('valid 7 pairs winning hand has correct fields set', () => {
             const meldList = [new Pair(ONE_BAMBOO), new Pair(TWO_BAMBOO), new Pair(THREE_BAMBOO, true),
                 new Pair(FOUR_BAMBOO), new Pair(FIVE_BAMBOO), new Pair(SIX_BAMBOO), new Pair(SEVEN_BAMBOO)

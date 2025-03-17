@@ -7,16 +7,17 @@ import { Pair } from "model/meld/pair";
 import { AUTUMN_SEASON, BAMBOO_GENTLEMAN, CHRYSANTHEMUM_GENTLEMAN, EAST_WIND, EIGHT_CHARACTER, EIGHT_CIRCLE, 
     FIVE_CHARACTER, FOUR_BAMBOO, GREEN_DRAGON, NINE_BAMBOO, NINE_CHARACTER, NINE_CIRCLE, 
     NORTH_WIND, ONE_BAMBOO, ONE_CHARACTER, ONE_CIRCLE, RED_DRAGON, SEVEN_CHARACTER, 
-    SIX_CHARACTER, SOUTH_WIND, THREE_BAMBOO, THREE_CHARACTER, TWO_BAMBOO, 
+    SIX_CHARACTER, SOUTH_WIND, THREE_BAMBOO, THREE_CHARACTER, THREE_CIRCLE, TWO_BAMBOO, 
     TWO_CHARACTER, WEST_WIND, WHITE_DRAGON } from "common/deck";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 import { Chow } from "model/meld/chow";
 import { Pong } from "model/meld/pong";
-import { ALL_CHOWS_PREDICATE, SEVEN_PAIRS_PREDICATE } from "service/point/predicate/impl/hand/basicHandPredicate";
+import { ALL_CHOWS_PREDICATE, ALL_KONGS_PREDICATE, ALL_PONGS_AND_KONGS_PREDICATE, SEVEN_PAIRS_PREDICATE } from "service/point/predicate/impl/hand/basicHandPredicate";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
+import { Kong } from "model/meld/kong";
 
 describe('basicHandPredicate.ts', () => {
     const basicWinContext = new WinContext.Builder().build();
@@ -101,9 +102,9 @@ describe('basicHandPredicate.ts', () => {
 
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_CHOWS);
             expect(result.success).toBe(false);
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
             const fourChowsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CHOWS) as PointPredicateFailureResult;
             expect(fourChowsResult.success).toBe(false);
-            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
             expect(fourChowsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([0, 4]));
             expect(fourChowsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
                 new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])]);
@@ -119,6 +120,128 @@ describe('basicHandPredicate.ts', () => {
             const result = ALL_CHOWS_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
 
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_CHOWS);
+            expect(result.success).toBe(false);
+            expect(result instanceof PointPredicateFailureResult).toBe(true);
+        });
+    });
+
+    describe('all pongs kongs predicate', () => {
+        test('all pongs kongs hand returns true', () => {
+            const regularHand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                new Pair(EIGHT_CIRCLE), new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true), 
+                new Pong(THREE_CHARACTER)], 
+                0, SEVEN_CHARACTER, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = ALL_PONGS_AND_KONGS_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_PONGS_AND_KONGS);
+            expect(result.success).toBe(true);
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+            const fourPongsKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_PONGS_AND_KONGS) as PointPredicateSingleSuccessResult;
+            expect(fourPongsKongsResult.success).toBe(true);
+            expect(fourPongsKongsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
+            expect(fourPongsKongsResult.meldDetail?.meldsThatSatisfyPredicate).toStrictEqual([new Pong(SEVEN_CHARACTER, true), 
+                new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true), new Pong(THREE_CHARACTER)]);
+        });
+
+        test('regular meld based hand with chows returns false', () => {
+            const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(EIGHT_CIRCLE), 
+                new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                2, THREE_CHARACTER, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = ALL_PONGS_AND_KONGS_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_PONGS_AND_KONGS);
+            expect(result.success).toBe(false);
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+            const fourPongsKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_PONGS_AND_KONGS) as PointPredicateFailureResult;
+            expect(fourPongsKongsResult.success).toBe(false);
+            expect(fourPongsKongsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([2, 3]));
+            expect(fourPongsKongsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true)]);
+            expect(fourPongsKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 4]));
+            expect(fourPongsKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])]);
+        });
+
+        test('special hand returns false', () => {
+            const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+
+            const result = ALL_PONGS_AND_KONGS_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_PONGS_AND_KONGS);
+            expect(result.success).toBe(false);
+            expect(result instanceof PointPredicateFailureResult).toBe(true);
+        });
+    });
+
+    describe('all kongs predicate', () => {
+        test('all kongs hand returns true', () => {
+            const regularHand = new MeldBasedWinningHand([new Kong(SEVEN_CHARACTER, true), 
+                new Pair(EIGHT_CIRCLE), new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true), 
+                new Kong(THREE_CHARACTER)], 
+                1, EIGHT_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = ALL_KONGS_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
+            expect(result.success).toBe(true);
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS)?.success).toBe(true);
+            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS) as PointPredicateSingleSuccessResult;
+            expect(fourKongsResult.success).toBe(true);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
+            expect(fourKongsResult.meldDetail?.meldsThatSatisfyPredicate).toStrictEqual([new Kong(SEVEN_CHARACTER, true), 
+                new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true), new Kong(THREE_CHARACTER)]);
+        });
+
+        test('all pongs kongs hand returns false', () => {
+            const regularHand = new MeldBasedWinningHand([new Pong(SEVEN_CHARACTER, true), 
+                new Pair(EIGHT_CIRCLE), new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true), 
+                new Pong(THREE_CHARACTER)], 
+                4, THREE_CHARACTER, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = ALL_KONGS_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
+            expect(result.success).toBe(false);
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS) as PointPredicateFailureResult;
+            expect(fourKongsResult.success).toBe(false);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([2, 3]));
+            expect(fourKongsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true)]);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 4]));
+            expect(fourKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Pong(SEVEN_CHARACTER, true),  
+                new Pong(THREE_CHARACTER)]);
+        });
+
+        test('regular meld based hand with chows returns false', () => {
+            const regularHand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(EIGHT_CIRCLE), 
+                new Kong(THREE_CIRCLE), new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
+                3, NORTH_WIND, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
+
+            const result = ALL_KONGS_PREDICATE(regularHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
+            expect(result.success).toBe(false);
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
+            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS) as PointPredicateFailureResult;
+            expect(fourKongsResult.success).toBe(false);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([2]));
+            expect(fourKongsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Kong(THREE_CIRCLE)]);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 3, 4]));
+            expect(fourKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+                new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])]);
+        });
+
+        test('special hand returns false', () => {
+            const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
+                EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
+                0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
+
+            const result = ALL_KONGS_PREDICATE(specialHand, basicWinContext, basicRoundContext, rootConfig);
+
+            expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
             expect(result.success).toBe(false);
             expect(result instanceof PointPredicateFailureResult).toBe(true);
         });

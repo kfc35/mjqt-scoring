@@ -44,6 +44,18 @@ describe('specialWinningHand.ts', () => {
             expect(() => {new SpecialWinningHand(tilesList, 1, GREEN_DRAGON, false, true, [PLUM_GENTLEMAN, PLUM_GENTLEMAN], SpecialWinningHandType.CUSTOM);}).toThrow();
         });
 
+        test('tiles with winning tile index invalid throws', () => {
+            const tilesList = [[ONE_BAMBOO, NINE_BAMBOO, ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE, 
+                EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, WHITE_DRAGON], [GREEN_DRAGON, GREEN_DRAGON]];
+            const flowerTiles = [WINTER_SEASON];
+            const winningTileIsPartOfPair = true;
+            const isSelfDrawn = true;
+
+            expect( () => {new SpecialWinningHand(
+                tilesList, 3, GREEN_DRAGON, winningTileIsPartOfPair, isSelfDrawn, 
+                flowerTiles, SpecialWinningHandType.THIRTEEN_ORPHANS);}).toThrow();
+        });
+
         test('13 Orphans has correct fields set', () => {
             const tilesList = [[ONE_BAMBOO, NINE_BAMBOO, ONE_CHARACTER, NINE_CHARACTER, ONE_CIRCLE, NINE_CIRCLE, 
                 EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, WHITE_DRAGON], [GREEN_DRAGON, GREEN_DRAGON]];

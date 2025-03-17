@@ -31,6 +31,9 @@ export class SpecialWinningHand implements WinningHand {
         assertTilesNotNullAndCorrectLength(unwrappedTiles, handMinLengthWithoutFlowers, handMinLengthWithoutFlowers);
         assertTilesSuitedOrHonor(unwrappedTiles);
         assertEachTileHasQuantityLTEMaxPerTile(unwrappedTiles);
+        if (tilesIndexWithWinningTile < 0 || tilesIndexWithWinningTile >= tiles.length) {
+            throw new Error(`tilesIndexWithWinningTile must be between 0 and ${tiles.length - 1}`);
+        }
         const tilesWithWinningTile = tiles[tilesIndexWithWinningTile];
         if (!tilesWithWinningTile) {
             throw new Error(`tiles at tilesIndexWithWinningTile (${tilesIndexWithWinningTile}) must be defined`);

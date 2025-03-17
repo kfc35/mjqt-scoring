@@ -1,5 +1,6 @@
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { Meld } from "model/meld/meld";
+import { meldIsKong } from "model/meld/kong";
 import { type FlowerTile } from "model/tile/group/flowerTile";
 import { assertTilesFlower, tilesUnique, assertEachTileHasQuantityLTEMaxPerTile, assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor } from "common/tileUtils";
 import { getMeldAtIndex, meldHasTile, meldToFlatTiles } from "common/meldUtils";
@@ -25,6 +26,9 @@ export class MeldBasedWinningHand implements WinningHand {
         assertTilesNotNullAndCorrectLength(tiles, handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers);
         assertTilesSuitedOrHonor(tiles);
         assertEachTileHasQuantityLTEMaxPerTile(tiles);
+        if (meldWithWinningTileIndex < 0 || meldWithWinningTileIndex >= melds.length) {
+            throw new Error(`meldWithWinningTileIndex must be between 0 and ${melds.length - 1}`);
+        }
         this._melds = melds;
         if (this._melds.length !== 5 && this._melds.length !== 7) {
             throw new Error("melds must be of length 5 or 7");
@@ -42,6 +46,9 @@ export class MeldBasedWinningHand implements WinningHand {
         const meldWithWinningTile = getMeldAtIndex(melds, meldWithWinningTileIndex);
         if (!meldHasTile(meldWithWinningTile, winningTile)) {
             throw new Error("winningTile must be in meldWithWinningTile");
+        }
+        if (meldIsKong(meldWithWinningTile)) {
+            throw new Error("The meld with a winning tile cannot be a kong");
         }
         this._meldWithWinningTile = meldWithWinningTile;
         this._winningTile = winningTile;

@@ -11,9 +11,11 @@ import { Pair } from "model/meld/pair";
 import { Chow } from "model/meld/chow";
 import { Pong } from "model/meld/pong";
 import { Kong } from "model/meld/kong";
-import { atLeastNumMeldsMinusOneAreChowsSubPredicate, atLeastNumMeldsMinusOneAreKongsSubPredicate, atLeastNumMeldsMinusOneArePongsKongsSubPredicate } from "service/point/predicate/impl/meld/meldQuantitySubPredicate";
-import type { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
-import type { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { atLeastNumMeldsMinusOneAreChowsSubPredicate, 
+    atLeastNumMeldsMinusOneAreKongsSubPredicate, 
+    atLeastNumMeldsMinusOneArePongsKongsSubPredicate } from "service/point/predicate/impl/meld/meldQuantitySubPredicate";
+import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 
 describe('meldQuantitySubPredicate.ts', () => {
     const basicWinContext = new WinContext.Builder().build();

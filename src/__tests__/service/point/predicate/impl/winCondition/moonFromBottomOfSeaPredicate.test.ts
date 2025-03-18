@@ -134,6 +134,4 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_ONE_CIRCLE)?.success).toBe(false);
         });
     });
-
-    
 });

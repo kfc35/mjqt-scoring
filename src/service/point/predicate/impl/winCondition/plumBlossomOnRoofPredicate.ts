@@ -19,7 +19,7 @@ import { PointPredicateFailureResultTileDetail } from "model/point/predicate/res
 
 const winningTileIsFiveCircleSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
-        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_ONE_CIRCLE, 
+        return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_FIVE_CIRCLE, 
             FIVE_CIRCLE.equals(standardWinningHand.winningTile), 
             new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[standardWinningHand.winningTile]]).build(), 
             new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[standardWinningHand.winningTile]])
@@ -66,4 +66,5 @@ const plumBlossomOnRoofMeldBasedPredicate : PointPredicate<MeldBasedWinningHand>
     predicateAnd(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, winningTileIsFiveCircleSubPredicate, 
         winningMeldIsFourFiveSixCircleChowSubPredicate, replacementPredicate
     );
+
 export const PLUM_BLOSSOM_ON_ROOF_PREDICATE = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.PLUM_BLOSSOM_ON_THE_ROOF, plumBlossomOnRoofMeldBasedPredicate);

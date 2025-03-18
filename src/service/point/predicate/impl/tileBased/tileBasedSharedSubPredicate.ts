@@ -9,25 +9,33 @@ import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/res
 import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { partitionTilesByGroup } from "common/tileUtils";
+import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
+import { consolidateSets } from "common/generic/setUtils";
 
-export function handContainsHonorsSubPredicate(winningHand: WinningHand, honorTileIndicesSet: Set<number> = new Set()) : PointPredicateResult {
+export function handContainsHonorsSubPredicate(winningHand: WinningHand) : PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
     const honorTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
     if (honorTileGroups.size > 0) {
-        return new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
-            .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
-                    .meldIndicesThatSatisfyPredicate(honorTileIndicesSet)
-                    .build()
-            )
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
                     .tilesThatSatisfyPredicate(honorTiles)
                     .build()
+            );
+        if (winningHand instanceof MeldBasedWinningHand) {
+            const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
+            const honorTileIndices = consolidateSets([...honorTileGroups.values()]
+                .map(tileGroup => winningHand.tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
+            resultBuilder.meldDetail(
+                new PointPredicateSuccessResultMeldDetail.Builder()
+                    .meldIndicesThatSatisfyPredicate(honorTileIndices)
+                    .build()
             )
-            .build();
+        }
+        
+        return resultBuilder.build();
     } else {
         return new PointPredicateFailureResult.Builder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
@@ -40,24 +48,29 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand, honorTi
     }
 }
 
-export function handContainsOneSuitSubPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
+export function handContainsOneSuitSubPredicate(winningHand: WinningHand): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
     if (suitedTileGroups.size === 1) {
-        return new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
-            .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
-                    .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)
-                    .build()
-            )
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
+            );
+        if (winningHand instanceof MeldBasedWinningHand) {
+            const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
+            const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()]
+                .map(tileGroup => winningHand.tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
+            resultBuilder.meldDetail(
+                new PointPredicateSuccessResultMeldDetail.Builder()
+                    .meldIndicesThatSatisfyPredicate(suitedTileIndices)
+                    .build()
             )
-            .build();
+        }
+        return resultBuilder.build();
     } else if (suitedTileGroups.size > 1) {
         return new PointPredicateFailureResult.Builder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
@@ -79,24 +92,29 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand, suited
     }
 }
 
-export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
+export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand): PointPredicateResult {
      const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
     if (suitedTileGroups.size > 1) {
-        return new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
-            .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
-                    .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)
-                    .build()
-            )
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
+            );
+        if (winningHand instanceof MeldBasedWinningHand) {
+            const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
+            const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()]
+                .map(tileGroup => winningHand.tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
+            resultBuilder.meldDetail(
+                new PointPredicateSuccessResultMeldDetail.Builder()
+                    .meldIndicesThatSatisfyPredicate(suitedTileIndices)
+                    .build()
             )
-            .build();
+        }
+        return resultBuilder.build();
     } else if (suitedTileGroups.size === 1) {
         return new PointPredicateFailureResult.Builder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)

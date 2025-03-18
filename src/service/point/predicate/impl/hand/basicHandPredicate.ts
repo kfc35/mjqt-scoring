@@ -13,7 +13,6 @@ import { RoundContext } from "model/roundContext/roundContext";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 import { handContainsMoreThanOneSuitSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
-import { consolidateSets } from "common/generic/setUtils";
 import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/basicWinConditionPredicate";
 
 const sevenPairsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
@@ -25,25 +24,19 @@ const allPongsKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
 const allKongsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.ALL_KONGS, onePairSubPredicate, atLeastNumMeldsMinusOneAreKongsSubPredicate);
 
-const handContainsMoreThanOneSuitMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = (meldBasedWinningHand: MeldBasedWinningHand) => {
-    const tileGroupValueMaps = meldBasedWinningHand.tileGroupValueMaps;
-    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
-    const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
-    return handContainsMoreThanOneSuitSubPredicate(meldBasedWinningHand, suitedTileIndices);
-};
 const commonHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand, winCtx: WinContext, roundCtx: RoundContext, config: RootPointPredicateConfiguration) => {
         if (config.pointPredicateLogicConfiguration.getOptionValue(PointPredicateLogicOption.COMMON_HAND_MUST_HAVE_VALUELESS_PAIR)) { 
             return predicateAnd(PointPredicateID.COMMON_HAND, 
                 allChowsMeldBasedPredicate, // do we want to flatten this?
-                handContainsMoreThanOneSuitMeldBasedPredicate,
+                handContainsMoreThanOneSuitSubPredicate,
                 NO_GENTLEMEN_OR_SEASONS_PREDICATE,
                 SELF_DRAW_PREDICATE,
                 valuelessPairSubPredicate)(meldBasedWinningHand, winCtx, roundCtx, config);
         }
         return predicateAnd(PointPredicateID.COMMON_HAND, 
             allChowsMeldBasedPredicate, 
-            handContainsMoreThanOneSuitMeldBasedPredicate,
+            handContainsMoreThanOneSuitSubPredicate,
             NO_GENTLEMEN_OR_SEASONS_PREDICATE,
             SELF_DRAW_PREDICATE)(meldBasedWinningHand, winCtx, roundCtx, config);
     }

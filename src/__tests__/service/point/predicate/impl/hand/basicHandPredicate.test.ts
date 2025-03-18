@@ -85,7 +85,7 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_CHOWS);
             expect(result.success).toBe(true);
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
-            const fourChowsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CHOWS) as PointPredicateSingleSuccessResult;
+            const fourChowsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CHOWS) as PointPredicateSingleSuccessResult;
             expect(fourChowsResult.success).toBe(true);
             expect(fourChowsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
             expect(fourChowsResult.meldDetail?.meldsThatSatisfyPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
@@ -104,13 +104,11 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_CHOWS);
             expect(result.success).toBe(false);
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
-            const fourChowsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CHOWS) as PointPredicateFailureResult;
+            const fourChowsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CHOWS) as PointPredicateFailureResult;
             expect(fourChowsResult.success).toBe(false);
-            expect(fourChowsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([0, 4]));
-            expect(fourChowsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
+            expect(fourChowsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 4]));
+            expect(fourChowsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
                 new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])]);
-            expect(fourChowsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([2, 3]));
-            expect(fourChowsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true)]);
         });
 
         test('special hand returns false', () => {
@@ -138,7 +136,7 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_PONGS_AND_KONGS);
             expect(result.success).toBe(true);
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
-            const fourPongsKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_PONGS_AND_KONGS) as PointPredicateSingleSuccessResult;
+            const fourPongsKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_PONGS_AND_KONGS) as PointPredicateSingleSuccessResult;
             expect(fourPongsKongsResult.success).toBe(true);
             expect(fourPongsKongsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
             expect(fourPongsKongsResult.meldDetail?.meldsThatSatisfyPredicate).toStrictEqual([new Pong(SEVEN_CHARACTER, true), 
@@ -155,13 +153,10 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_PONGS_AND_KONGS);
             expect(result.success).toBe(false);
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
-            const fourPongsKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_PONGS_AND_KONGS) as PointPredicateFailureResult;
+            const fourPongsKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_PONGS_AND_KONGS) as PointPredicateFailureResult;
             expect(fourPongsKongsResult.success).toBe(false);
-            expect(fourPongsKongsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([2, 3]));
-            expect(fourPongsKongsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true)]);
-            expect(fourPongsKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 4]));
-            expect(fourPongsKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
-                new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])]);
+            expect(fourPongsKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([2, 3]));
+            expect(fourPongsKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true)]);
         });
 
         test('special hand returns false', () => {
@@ -188,8 +183,8 @@ describe('basicHandPredicate.ts', () => {
 
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
             expect(result.success).toBe(true);
-            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS)?.success).toBe(true);
-            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS) as PointPredicateSingleSuccessResult;
+            expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_KONGS)?.success).toBe(true);
+            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_KONGS) as PointPredicateSingleSuccessResult;
             expect(fourKongsResult.success).toBe(true);
             expect(fourKongsResult.meldDetail?.meldIndicesThatSatisfyPredicate).toStrictEqual(new Set([0, 2, 3, 4]));
             expect(fourKongsResult.meldDetail?.meldsThatSatisfyPredicate).toStrictEqual([new Kong(SEVEN_CHARACTER, true), 
@@ -207,13 +202,10 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
             expect(result.success).toBe(false);
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
-            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS) as PointPredicateFailureResult;
+            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_KONGS) as PointPredicateFailureResult;
             expect(fourKongsResult.success).toBe(false);
-            expect(fourKongsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([2, 3]));
-            expect(fourKongsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true)]);
-            expect(fourKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 4]));
-            expect(fourKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Pong(SEVEN_CHARACTER, true),  
-                new Pong(THREE_CHARACTER)]);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([2, 3]));
+            expect(fourKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Kong(THREE_BAMBOO), new Kong(FIVE_CHARACTER, true)]);
         });
 
         test('regular meld based hand with chows returns false', () => {
@@ -226,13 +218,10 @@ describe('basicHandPredicate.ts', () => {
             expect(result.pointPredicateId).toBe(PointPredicateID.ALL_KONGS);
             expect(result.success).toBe(false);
             expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_ONE_PAIR)?.success).toBe(true);
-            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_KONGS) as PointPredicateFailureResult;
+            const fourKongsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_KONGS) as PointPredicateFailureResult;
             expect(fourKongsResult.success).toBe(false);
-            expect(fourKongsResult.meldDetail?.meldIndicesThatPartiallySatisfyPredicate).toStrictEqual(new Set([2]));
-            expect(fourKongsResult.meldDetail?.meldsThatPartiallySatisfyPredicate).toStrictEqual([new Kong(THREE_CIRCLE)]);
-            expect(fourKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([0, 3, 4]));
-            expect(fourKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), 
-                new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])]);
+            expect(fourKongsResult.meldDetail?.meldIndicesThatFailPredicate).toStrictEqual(new Set([2]));
+            expect(fourKongsResult.meldDetail?.meldsThatFailPredicate).toStrictEqual([new Kong(THREE_CIRCLE)]);
         });
 
         test('special hand returns false', () => {

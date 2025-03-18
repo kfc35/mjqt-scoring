@@ -145,7 +145,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
  * Also evaluates filteredMeldChecker against each individual meld in the filtered list
  * By default, meldFilter includes all melds in the hand.
  * The PointPredicate succeeds if meldsChecker returns true, and filteredMeldChecker returns true for every meld that has passed the filter. */
-export function createFilteredMeldsCheckerSuccessesQuantityPredicate(pointPredicateID : string, 
+export function createFilteredMeldsCheckerPredicate(pointPredicateID : string, 
     meldFilter: (meld: Meld) => boolean = () => true,
     meldsChecker: (melds: Meld[], winningHand: MeldBasedWinningHand) => boolean,
     filteredMeldChecker: (meld: Meld, winningHand: MeldBasedWinningHand) => boolean) : PointPredicate<MeldBasedWinningHand> {

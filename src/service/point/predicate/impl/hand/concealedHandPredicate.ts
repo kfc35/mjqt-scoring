@@ -5,7 +5,7 @@ import { createPointPredicateRouter, createPointPredicateRouterWithAutoFailSpeci
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
-import { createFilteredMeldsCheckerSuccessesQuantityPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
+import { createFilteredMeldsCheckerPredicate, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
 import { meldIsKong } from "model/meld/kong";
 import { meldIsPong } from "model/meld/pong";
@@ -18,13 +18,13 @@ import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
-const containsFourConcealedPongsKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS_AND_KONGS, 
+const containsFourConcealedPongsKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS_AND_KONGS, 
     meld => !meldIsPair(meld), melds => melds.length === 4, meld => !meld.exposed && (meldIsKong(meld) || meldIsPong(meld)));
-const containsFourConcealedPongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS, 
+const containsFourConcealedPongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS, 
     meld => !meldIsPair(meld), melds => melds.length === 4, meld => !meld.exposed && meldIsPong(meld));
 const everyMeldIsConcealedSubPredicate : PointPredicate<MeldBasedWinningHand> = createMeldCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_ALL_MELDS_ARE_CONCEALED, 
     meld => !meld.exposed);
-export const atLeastNumMeldsMinusOneAreConcealedSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED, 
+export const atLeastNumMeldsMinusOneAreConcealedSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerPredicate(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED, 
     meld => !meld.exposed, (melds, winningHand) => melds.length >= winningHand.melds.length - 1, () => true);
 
 const selfTripletsMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 

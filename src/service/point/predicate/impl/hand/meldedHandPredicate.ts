@@ -7,7 +7,7 @@ import { RoundContext } from "model/roundContext/roundContext";
 import { notSelfDrawSubPredicate } from "service/point/predicate/impl/winCondition/basicWinConditionSubPredicate";
 import { lastTileCompletedPairSubPredicate, ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate,
     ifLastTileWasDiscardThenItCompletedPairSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
-import { createMeldCheckerSuccessesQuantityPredicate, createFilteredMeldsCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
+import { createMeldCheckerSuccessesQuantityPredicate, createFilteredMeldsCheckerPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 import { meldIsPair } from "model/meld/pair";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
@@ -16,7 +16,7 @@ import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/
 
 const everyMeldIsExposedSubPredicate : PointPredicate<MeldBasedWinningHand> = createMeldCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_ALL_MELDS_ARE_EXPOSED, 
     meld => meld.exposed);
-const allNonPairMeldsAreExposedSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED, 
+const allNonPairMeldsAreExposedSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerPredicate(PointPredicateID.SUBPREDICATE_ALL_NON_PAIR_MELDS_ARE_EXPOSED, 
     meld => !meldIsPair(meld), () => true, (meld) => meld.exposed);
 
 const meldedHandMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 

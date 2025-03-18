@@ -60,6 +60,24 @@ describe('meldBasedWinningHand.ts', () => {
             expect(() => {new MeldBasedWinningHand(meldList, 2, NINE_CHARACTER, flowerTiles);}).toThrow();
         });
 
+        test('throws when meld with winning tile at index provided does is a kong', () => {
+            const meldList = [new Pair(ONE_BAMBOO, false), new Kong(RED_DRAGON, true),
+                 new Chow([THREE_CHARACTER, FOUR_CHARACTER, FIVE_CHARACTER], true), 
+                 new Pong(FIVE_CHARACTER, false), new Pong(NINE_CHARACTER, true)]
+            const flowerTiles = [ORCHID_GENTLEMAN, SUMMER_SEASON];
+
+            expect(() => {new MeldBasedWinningHand(meldList, 1, RED_DRAGON, flowerTiles);}).toThrow();
+        });
+
+        test('throws when 7 pairs winning hand has more than one exposed pair', () => {
+            const meldList = [new Pair(ONE_BAMBOO), new Pair(TWO_BAMBOO), new Pair(THREE_BAMBOO, true),
+                new Pair(FOUR_BAMBOO, true), new Pair(FIVE_BAMBOO), new Pair(SIX_BAMBOO), new Pair(SEVEN_BAMBOO)
+            ];
+            const flowerTiles = [SUMMER_SEASON, AUTUMN_SEASON];
+
+            expect(() => {new MeldBasedWinningHand(meldList, 2, THREE_BAMBOO, flowerTiles);}).toThrow();
+        });
+
         test('valid 7 pairs winning hand has correct fields set', () => {
             const meldList = [new Pair(ONE_BAMBOO), new Pair(TWO_BAMBOO), new Pair(THREE_BAMBOO, true),
                 new Pair(FOUR_BAMBOO), new Pair(FIVE_BAMBOO), new Pair(SIX_BAMBOO), new Pair(SEVEN_BAMBOO)
@@ -88,7 +106,15 @@ describe('meldBasedWinningHand.ts', () => {
             expect(tgvm.getTilesForTileGroups(new Set([TileGroup.DRAGON]))).toStrictEqual([[]]);
         });
 
-        test
+        test('valid 5 melds based winning hand with invalid winning meld index throws', () => {
+            const meldList = [new Pair(ONE_BAMBOO, false), new Pong(RED_DRAGON, true),
+                 new Chow([THREE_CHARACTER, FOUR_CHARACTER, FIVE_CHARACTER], true), 
+                 new Pong(FIVE_CHARACTER, false), 
+                 new Pong(NINE_CHARACTER, true)]
+            const flowerTiles = [ORCHID_GENTLEMAN, BAMBOO_GENTLEMAN];
+
+            expect(() => {new MeldBasedWinningHand(meldList, 5, NINE_CHARACTER, flowerTiles);}).toThrow();
+        });
 
         test('valid 5 melds based winning hand with min length has correct fields set', () => {
             const meldList = [new Pair(ONE_BAMBOO, false), new Pong(RED_DRAGON, true),
@@ -153,18 +179,18 @@ describe('meldBasedWinningHand.ts', () => {
             const meldList = [new Pair(ONE_BAMBOO, false), new Kong(RED_DRAGON, true),
                  new Kong(TWO_CIRCLE, true), new Kong(FIVE_CHARACTER, false), new Kong(NINE_CHARACTER, true)]
 
-            const winningHand = new MeldBasedWinningHand(meldList, 3, FIVE_CHARACTER, []);
+            const winningHand = new MeldBasedWinningHand(meldList, 0, ONE_BAMBOO, []);
             
             expect(winningHand.tiles).toStrictEqual([[ONE_BAMBOO, ONE_BAMBOO], [RED_DRAGON, RED_DRAGON, RED_DRAGON, RED_DRAGON], 
                 [TWO_CIRCLE, TWO_CIRCLE, TWO_CIRCLE, TWO_CIRCLE], [FIVE_CHARACTER, FIVE_CHARACTER, FIVE_CHARACTER, FIVE_CHARACTER],
                 [NINE_CHARACTER, NINE_CHARACTER, NINE_CHARACTER, NINE_CHARACTER]
             ]);
             expect(winningHand.melds).toStrictEqual(meldList);
-            expect(winningHand.tilesIndexWithWinningTile).toBe(3);
-            expect(winningHand.meldWithWinningTile).toStrictEqual(new Kong(FIVE_CHARACTER, false));
-            expect(winningHand.meldWithWinningTileIndex).toStrictEqual(3);
-            expect(winningHand.winningTile).toStrictEqual(FIVE_CHARACTER);
-            expect(winningHand.winningTileIsPartOfPair).toBe(false);
+            expect(winningHand.tilesIndexWithWinningTile).toBe(0);
+            expect(winningHand.meldWithWinningTile).toStrictEqual(new Pair(ONE_BAMBOO, false));
+            expect(winningHand.meldWithWinningTileIndex).toStrictEqual(0);
+            expect(winningHand.winningTile).toStrictEqual(ONE_BAMBOO);
+            expect(winningHand.winningTileIsPartOfPair).toBe(true);
             expect(winningHand.flowerTiles).toStrictEqual([]);
             expect(winningHand.isSelfDrawn()).toBe(true);
 

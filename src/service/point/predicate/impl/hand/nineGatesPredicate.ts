@@ -8,8 +8,7 @@ import { partitionTilesByGroup } from "common/tileUtils";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
-import { containsFourConcealedMeldsSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
-import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
+import { atLeastNumMeldsMinusOneAreConcealedSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
@@ -19,6 +18,7 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { meldToFlatTiles } from "common/meldUtils";
 import { isHonorTile } from "model/tile/group/honorTile";
+import { ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate } from "./lastTileSubPredicate";
 
 const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
@@ -54,7 +54,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         const extraTile: SuitedTile[] = [];
         for (const stv of suitedTileValues) {
             const suitedTiles : SuitedTile[] = tileGroupValueMaps.getTilesForSuitedTileValue(stv);
-            if (!suitedTiles[0] || !suitedTiles.every(suitedTile => suitedTile)) {
+            if (suitedTiles.length > 0 && !suitedTiles[0] || !suitedTiles.every(suitedTile => suitedTile)) {
                 throw new Error(`suitedTiles has an undefined element, which should not happen.`);
             }
 
@@ -72,7 +72,10 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
             } else if (suitedTiles.length === minimumRequiredSuitedTileLength) {
                 tilesOrderedBySTV.push(suitedTiles);
             } else if (suitedTiles.length === (minimumRequiredSuitedTileLength + 1)) {
-                const suitedTile : SuitedTile = suitedTiles[0];
+                const suitedTile : SuitedTile | undefined = suitedTiles[0];
+                if (!suitedTile) {
+                    throw new Error(`suitedTiles has an undefined element, which should not happen.`);
+                }
                 extraTile.push(suitedTile);
                 tilesOrderedBySTV.push(suitedTiles);
             } else { //  minimumRequiredSuitedTileLength + 1 < suitedTiles.length, too many extra tiles
@@ -128,6 +131,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
 const nineGatesMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     predicateAnd(PointPredicateID.NINE_GATES,
         sufficientTileQuantitiesNineGatesSubPredicate,
-        containsFourConcealedMeldsSubPredicate, // winning tile can be discard and finish any meld
-        onePairSubPredicate);
+        // concealed hand, but last tile can always finish any meld (even if it conflicts with concealed hand logic option)
+        atLeastNumMeldsMinusOneAreConcealedSubPredicate,
+        ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate);
 export const NINE_GATES_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.NINE_GATES, nineGatesMeldBasedPredicate);

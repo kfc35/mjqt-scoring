@@ -211,7 +211,7 @@ describe('flowerPredicate.ts', () => {
 
         test('hand without all gentlemen and seasons returns false', () => {
             jest.spyOn(mockMeldBasedWinningHand, 'flowerTiles', 'get').mockReturnValue([BAMBOO_GENTLEMAN]);
-            jest.spyOn(mockSpecialWinningHand, 'flowerTiles', 'get').mockReturnValue([SUMMER_SEASON]);
+            jest.spyOn(mockSpecialWinningHand, 'flowerTiles', 'get').mockReturnValue([SPRING_SEASON, SUMMER_SEASON, AUTUMN_SEASON, WINTER_SEASON]);
 
             const meldBasedResult = ALL_GENTLEMEN_AND_SEASONS_PREDICATE(mockMeldBasedWinningHand, basicWinContext, basicRoundContext, rootConfig);
             const specialResult = ALL_GENTLEMEN_AND_SEASONS_PREDICATE(mockSpecialWinningHand, basicWinContext, basicRoundContext, rootConfig);
@@ -220,6 +220,10 @@ describe('flowerPredicate.ts', () => {
             expect(specialResult.pointPredicateId).toBe(PointPredicateID.ALL_GENTLEMAN_AND_SEASONS);
             expect(meldBasedResult.success).toBe(false);
             expect(specialResult.success).toBe(false);
+            expect(meldBasedResult.getSubPredicateResult(PointPredicateID.ALL_GENTLEMEN)?.success).toBe(false);
+            expect(meldBasedResult.getSubPredicateResult(PointPredicateID.ALL_SEASONS)?.success).toBe(false);
+            expect(specialResult.getSubPredicateResult(PointPredicateID.ALL_GENTLEMEN)?.success).toBe(false);
+            expect(specialResult.getSubPredicateResult(PointPredicateID.ALL_SEASONS)?.success).toBe(true);
         });
     });
 });

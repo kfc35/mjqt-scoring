@@ -1,5 +1,6 @@
 import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { Meld } from "model/meld/meld";
+import { meldIsKong } from "model/meld/kong";
 import { tilesDoesNotContainTile } from "common/tileUtils";
 
 export class MostRecentTileContext {
@@ -14,6 +15,9 @@ export class MostRecentTileContext {
         isSelfDrawnOrUserSpecifiedMeld: boolean | Meld) {
             this._tile = tile;
             if (isSelfDrawnOrUserSpecifiedMeld instanceof Meld) {
+                if (meldIsKong(isSelfDrawnOrUserSpecifiedMeld)) {
+                    throw new Error(`Your most recent tile cannot be specified to complete a Kong. Use the bonus tile after declaring a Kong to init MostRecentTileContext.`);
+                }
                 if (tilesDoesNotContainTile(isSelfDrawnOrUserSpecifiedMeld.tiles, tile)) {
                     throw new Error(`userSpecifiedMeld (${isSelfDrawnOrUserSpecifiedMeld}) must contain tile ${tile}`);
                 }

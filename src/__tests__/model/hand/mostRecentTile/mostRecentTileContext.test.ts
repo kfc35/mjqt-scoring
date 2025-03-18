@@ -4,6 +4,7 @@ import { CharacterTile } from "model/tile/group/characterTile";
 import { SuitedTileValue } from "model/tile/tileValue";
 import { Pong } from "model/meld/pong";
 import { Chow } from "model/meld/chow";
+import { Kong } from "model/meld/kong";
 
 describe('mostRecentTileContext.ts', () => {
     describe('constructor with isSelfDrawnFlag', () => {
@@ -24,6 +25,11 @@ describe('mostRecentTileContext.ts', () => {
         test('throws when meld does not contain tile', () => {
             expect(() => {new MostRecentTileContext(FIVE_CHARACTER, new Pong(SIX_CHARACTER))})
                 .toThrow();
+        });
+
+        test('throws when meld is a kong', () => {
+            expect(() => {new MostRecentTileContext(FIVE_CHARACTER, new Kong(SIX_CHARACTER))})
+            .toThrow();
         });
 
         test('has fields set as expected', () => {

@@ -1,11 +1,11 @@
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { Chow, meldIsChow } from "model/meld/chow";
+import { Chow } from "model/meld/chow";
 import { SuitedTile } from "model/tile/group/suitedTile";
 import { getNextSuitedTileValue } from "model/tile/tileValue";
 import { constructSuitedTile } from "model/tile/group/suitedTileConstructor";
 import { assertTilesHaveSameSuitedGroup } from "common/tileUtils";
-import { createMeldsExistPredicateIgnoreExposed, createMeldCheckerSuccessesQuantityPredicate } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
+import { createMeldsExistPredicateIgnoreExposed } from "service/point/predicate/factory/meldBased/meldPredicateFactoryBase";
 
 // Checks that all some of the given tile sequences exist as chows in a winning hand.
 export function createChowsExistPredicateFromSequences(pointPredicateID : string, 
@@ -65,8 +65,4 @@ export function createChowsExistPredicateFromTiles(pointPredicateID : string, ti
     }
 
     return createMeldsExistPredicateIgnoreExposed(pointPredicateID, chows, minNumChowsToMatch, maxNumChowsToMatch);
-}
-
-export function createChowQuantityPredicate(pointPredicateID : string, minNumChows: number, maxNumChows: number | undefined = minNumChows) : PointPredicate<MeldBasedWinningHand> {
-    return createMeldCheckerSuccessesQuantityPredicate(pointPredicateID, meldIsChow, minNumChows, maxNumChows);
 }

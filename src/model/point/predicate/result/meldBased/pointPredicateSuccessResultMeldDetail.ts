@@ -13,6 +13,14 @@ export class PointPredicateSuccessResultMeldDetail {
 
     }
 
+    get meldsThatSatisfyPredicate(): ReadonlyArray<Meld> {
+        return this._meldsThatSatisfyPredicate;
+    }
+
+    get meldIndicesThatSatisfyPredicate(): ReadonlySet<number> {
+        return this._meldIndicesThatSatisfyPredicate;
+    }
+
     static Builder = class {
         _meldsThatSatisfyPredicate: Meld[] = [];
         _meldIndicesThatSatisfyPredicate: Set<number> = new Set();

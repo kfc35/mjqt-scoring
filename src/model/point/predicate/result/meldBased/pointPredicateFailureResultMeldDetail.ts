@@ -22,6 +22,26 @@ export class PointPredicateFailureResultMeldDetail {
         this._meldsThatAreMissingToSatisfyPredicate = meldsThatAreMissingToSatisfyPredicate;
     }
 
+    get meldsThatPartiallySatisfyPredicate(): ReadonlyArray<Meld> {
+        return this._meldsThatPartiallySatisfyPredicate;
+    }
+
+    get meldIndicesThatPartiallySatisfyPredicate(): ReadonlySet<number> {
+        return this._meldIndicesThatPartiallySatisfyPredicate;
+    }
+
+    get meldsThatFailPredicate(): ReadonlyArray<Meld> {
+        return this._meldsThatFailPredicate;
+    }
+
+    get meldIndicesThatFailPredicate(): ReadonlySet<number> {
+        return this._meldIndicesThatFailPredicate;
+    }
+
+    get meldsThatAreMissingToSatisfyPredicate(): ReadonlyArray<Meld> {
+        return this._meldsThatAreMissingToSatisfyPredicate;
+    }
+
     static Builder = class {
         _meldsThatPartiallySatisfyPredicate: Meld[] = [];
         _meldIndicesThatPartiallySatisfyPredicate: Set<number> = new Set();

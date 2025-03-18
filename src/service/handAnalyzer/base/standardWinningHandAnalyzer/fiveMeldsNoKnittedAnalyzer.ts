@@ -7,6 +7,7 @@ import { analyzeForNonKnittedSuitedMelds } from "service/handAnalyzer/base/stand
 import { cartesianProduct, meldsHasOnePair, meldsNumKongs, meldsNumTiles, meldsAreSubset, meldToFlatTiles, meldHasTile, getIndexOfMeld } from "common/meldUtils";
 import { TileToQuantityMap } from "model/tile/quantityMap/tileQuantityMap";
 import { handMinLengthWithoutFlowers } from "model/hand/hk/handConstants";
+import { meldIsKong } from "model/meld/kong";
 
 export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<MeldBasedWinningHand> = (hand: Hand) => {
 
@@ -47,6 +48,11 @@ export const analyzeForFiveMeldsNoKnitted : HandAnalyzer<MeldBasedWinningHand> =
         return melds.map((meld, index) => {
             // if meld does not have the most recent tile, or the meld was previously exposed, this meld cannot accept the most recent tile.
             if (!meldHasTile(meld, hand.mostRecentTile()) || meld.exposed) {
+                return undefined;
+            }
+
+            // kongs can never be the receiver of the last tile
+            if (meldIsKong(meld)) {
                 return undefined;
             }
             

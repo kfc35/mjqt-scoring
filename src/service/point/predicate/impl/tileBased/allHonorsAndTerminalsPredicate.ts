@@ -17,7 +17,7 @@ import { createPointPredicateRouter } from "service/point/predicate/impl/util/po
 import { partitionTilesByGroup } from "common/tileUtils";
 import type { Tile } from "model/tile/tile";
 
-function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTerminalsIndicesSet: Set<number> = new Set()): PointPredicateResult {
+function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTerminalsIndicesSet?: Set<number>): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileValues = tileGroupValueMaps.getSuitedTileValues();
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
@@ -26,19 +26,21 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
         suitedTileValues.size > 0 && 
         honorTileGroups.size !== 0) {
         const terminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(suitedTileValues);
-        return new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
             .pointPredicateId(PointPredicateID.ALL_HONORS_AND_TERMINALS)
-            .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
-                    .meldIndicesThatSatisfyPredicate(honorsAndTerminalsIndicesSet)
-                    .build()
-            )
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
                     .tilesThatSatisfyPredicate([...terminalTiles, ...honorTiles])
                     .build()
-            )
-            .build();
+            );
+        if (honorsAndTerminalsIndicesSet) {
+            resultBuilder.meldDetail(
+                new PointPredicateSuccessResultMeldDetail.Builder()
+                    .meldIndicesThatSatisfyPredicate(honorsAndTerminalsIndicesSet)
+                    .build()
+            );
+        }
+        return resultBuilder.build();
     }
 
     const nonTerminalTileValues: Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !terminalSuitedTileValues.has(stv)));

@@ -1,9 +1,5 @@
-import { consolidateSets } from "common/generic/setUtils";
-import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
-import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
+import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { handContainsOneSuitSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
@@ -32,23 +28,6 @@ function handContainsNoHonorsSubPredicate(winningHand: WinningHand): PointPredic
     }
 }
 
-const allOneSuitMeldBasedPredicate: PointPredicate<MeldBasedWinningHand> = (meldBasedWinningHand: MeldBasedWinningHand) => {
-    const tileGroupValueMaps = meldBasedWinningHand.tileGroupValueMaps;
-    const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
-    const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
-    return allOneSuitPredicate(meldBasedWinningHand, suitedTileIndices);
-};
-
-const allOneSuitSpecialPredicate: PointPredicate<SpecialWinningHand> = (specialWinningHand: SpecialWinningHand) => {
-    return allOneSuitPredicate(specialWinningHand);
-};
-
-function allOneSuitPredicate(winningHand: WinningHand, wrappedSuitedTileIndicesSet: Set<number> = new Set()) : PointPredicateResult {
-    return PointPredicateResult.and(PointPredicateID.ALL_ONE_SUIT, 
-        handContainsOneSuitSubPredicate(winningHand, wrappedSuitedTileIndicesSet),
-        handContainsNoHonorsSubPredicate(winningHand)
-    );
-}
-
-export const ALL_ONE_SUIT_PREDICATE: PointPredicate<WinningHand> = createPointPredicateRouter(allOneSuitMeldBasedPredicate, allOneSuitSpecialPredicate);
+export const ALL_ONE_SUIT_PREDICATE: PointPredicate<WinningHand> = predicateAnd(PointPredicateID.ALL_ONE_SUIT, 
+    handContainsOneSuitSubPredicate, handContainsNoHonorsSubPredicate);
 

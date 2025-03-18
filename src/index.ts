@@ -26,6 +26,7 @@ export * from "model/point/configuration/logic/pointPredicateLogicOption";
 export * from "model/point/predicate/result/pointPredicateResult";
 export * from "model/point/predicate/result/pointPredicateFailureResult";
 export * from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+export * from "model/point/predicate/result/pointPredicateSubPredicateResultsType";
 export * from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 export * from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 export * from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";

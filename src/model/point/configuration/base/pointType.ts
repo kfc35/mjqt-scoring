@@ -14,3 +14,20 @@ export function convertToPointType(str: string): PointType | undefined {
     }
     return undefined;
 }
+
+export function pointTypeToNumber(pts: PointType | undefined, maxPoints: number): number {
+    if (pts === MAX_POINTS) {
+        return maxPoints;
+    }
+    return pts ?? 0;
+}
+
+export function addPoints(accum: number, pts: PointType | undefined, maxPoints: number): number {
+    if (pts === MAX_POINTS) {
+        return accum + maxPoints;
+    }
+    if (!!pts) {
+        return accum + pts;
+    }
+    return accum;
+}

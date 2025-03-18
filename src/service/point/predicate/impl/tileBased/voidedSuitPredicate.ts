@@ -15,25 +15,27 @@ import { createPointPredicateRouter } from "service/point/predicate/impl/util/po
 import { partitionTilesByGroup } from "common/tileUtils";
 import { SUITED_TILES } from "common/deck";
 
-function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet: Set<number> = new Set()): PointPredicateResult {
+function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet?: Set<number>): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
 
     if (suitedTileGroups.size == 2) {
-        return new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
             .pointPredicateId(PointPredicateID.VOIDED_SUIT)
-            .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
-                    .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)
-                    .build()
-            )
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
-            )
-            .build();
+            );
+        if (!!suitedTileIndicesSet) {
+            resultBuilder.meldDetail(
+                new PointPredicateSuccessResultMeldDetail.Builder()
+                    .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)
+                    .build()
+            );
+        }
+        return resultBuilder.build();
     }
     if (suitedTileGroups.size > 0) {
         return new PointPredicateFailureResult.Builder()

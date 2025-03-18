@@ -3,6 +3,7 @@ import { RoundContext } from "model/roundContext/roundContext";
 import { WinContext } from "model/winContext/winContext"
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult"
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
+import { SubPredicateResultsType } from "model/point/predicate/result/pointPredicateSubPredicateResultsType";
 
 /** 
  * PointPredicates apply to WinningHands and WinContext. 
@@ -28,10 +29,10 @@ export function predicateAnd<T extends WinningHand>(newPointPredicateId?: string
             }
         }
         if (hasFailure) {
-            return new PointPredicateResult(`${andPointPredicateId}`, false, sortedResults);
+            return new PointPredicateResult(`${andPointPredicateId}`, false, SubPredicateResultsType.AND, sortedResults);
         }
         // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
-        return new PointPredicateResult(`${andPointPredicateId}`, true, results);
+        return new PointPredicateResult(`${andPointPredicateId}`, true, SubPredicateResultsType.AND,results);
     }
 }
 
@@ -50,9 +51,9 @@ export function predicateOr<T extends WinningHand>(newPointPredicateId?: string,
             }
         }
         if (hasSuccess) {
-            return new PointPredicateResult(`${orPointPredicateId}`, true, sortedResults);
+            return new PointPredicateResult(`${orPointPredicateId}`, true, SubPredicateResultsType.OR,sortedResults);
         }
         // the "matching tiles" for the result is more accurately described in the list of results, so we set success and failure tiles to []
-        return new PointPredicateResult(`${orPointPredicateId}`, false, sortedResults);
+        return new PointPredicateResult(`${orPointPredicateId}`, false, SubPredicateResultsType.OR,sortedResults);
     }
 }

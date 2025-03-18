@@ -5,34 +5,41 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { analyzeHandForWinningHands } from "service/handAnalyzer/hk/handAnalyzer";
-import evaluateWinningHand from "service/point/evaluator/hk/pointEvaluator";
+import { evaluateWinningHand as evalWinningHand } from "service/point/evaluator/hk/pointEvaluator";
 import { PointEvaluation } from "model/point/evaluation/pointEvaluation";
 
-export function analyzeForWinningHands(hand: Hand) {
+export function analyzeForWinningHands(hand: Hand): WinningHand[] {
     return analyzeHandForWinningHands(hand);
 }
 
-export function evaluateHand(hand: Hand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
+export function evaluateHandForHighestPointEvaluation(hand: Hand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
     if (!rootConfig) {
         rootConfig = defaultRootPointPredicateConfiguration;
     }
 
     const winningHands: WinningHand[] = analyzeHandForWinningHands(hand);
-    if (!winningHands) {
+    if (!winningHands || winningHands.length === 0) {
         return undefined;
     }
 
-    const pointEvaluations: PointEvaluation[] = winningHands.map(winningHand => evaluateWinningHand(winningHand, winCtx, roundCtx, rootConfig));
-    if (!pointEvaluations) {
-        return undefined;
-    }
-    return pointEvaluations.sort()[0];
+    const pointEvaluations: PointEvaluation[] = winningHands.map(winningHand => evalWinningHand(winningHand, winCtx, roundCtx, rootConfig));
+    return pointEvaluations.sort(sortByPoints)[0];
 }
 
-export function evaluateWinningHandForPointEval(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
+export function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation {
     if (!rootConfig) {
         rootConfig = defaultRootPointPredicateConfiguration;
     }
     
-    return evaluateWinningHand(winningHand, winCtx, roundCtx, rootConfig);
+    return evalWinningHand(winningHand, winCtx, roundCtx, rootConfig);
+}
+
+function sortByPoints(peA: PointEvaluation, peB: PointEvaluation): number {
+    if (!peA) {
+        return -1;
+    }
+    if (!peB) {
+        return 1;
+    }
+    return peA.points < peB.points ? -1 : +1;
 }

@@ -10,7 +10,7 @@ import { pointPredicateWiring } from "service/point/predicate/wiring/hk/pointPre
 import { type PointType } from "model/point/configuration/base/pointType";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
-export default function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext,
+export function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext,
     rootConfig: RootPointPredicateConfiguration): PointEvaluation {
         const pointPredicateIdToResultMap: Map<string, PointPredicateResult> = new Map();
 

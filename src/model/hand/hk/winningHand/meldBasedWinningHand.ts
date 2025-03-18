@@ -8,6 +8,8 @@ import { type SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { handMinLengthWithoutFlowers, handMaxLengthWithoutFlowers } from "model/hand/hk/handConstants";
 import { meldIsPair } from "model/meld/pair";
 import { MeldBasedWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
+import { Hand } from "model/hand/hk/hand";
+import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 
 /** A MeldBasedWinningHand is a Hand that has been processed completely into finished melds.
  * A hand can have multiple MeldBasedWinningHands depending on the arrangement of the melds.
@@ -92,6 +94,11 @@ export class MeldBasedWinningHand implements WinningHand {
 
     isSelfDrawn() : boolean {
         return !this._meldWithWinningTile.exposed;
+    }
+
+    toHand(): Hand {
+        return new Hand(this.tiles.reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []), 
+            new MostRecentTileContext(this.winningTile, this.meldWithWinningTile), [...this._melds]);
     }
 
     /** Meld specific functions 8*/

@@ -17,6 +17,7 @@ import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPr
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+
 const containsFourConcealedPongsKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS_AND_KONGS, 
     meld => !meldIsPair(meld), melds => melds.length === 4, meld => !meld.exposed && (meldIsKong(meld) || meldIsPong(meld)));
 const containsFourConcealedPongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerSuccessesQuantityPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS, 

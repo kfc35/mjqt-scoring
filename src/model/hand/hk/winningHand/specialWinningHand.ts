@@ -6,6 +6,8 @@ import { assertTilesNotNullAndCorrectLength, assertTilesSuitedOrHonor, assertEac
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 import { SpecialWinningHandTileGroupValueMaps } from "model/hand/hk/winningHand/tileGroupValueMaps";
 import { tilesDoesNotContainTile } from "common/tileUtils";
+import { Hand } from "model/hand/hk/hand";
+import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 
 /** A SpecialWinningHand is a combination of tiles that does not fit the usual "meld" structure,
  * but still constitutes a win. Every tile besides the last tile MUST have been received via self draw. */
@@ -82,6 +84,11 @@ export class SpecialWinningHand implements WinningHand {
 
     isSelfDrawn() : boolean {
         return this._isSelfDrawn;
+    }
+
+    toHand() : Hand {
+        return new Hand(this._tiles.reduce<SuitedOrHonorTile[]>((accum, tiles) => accum.concat(tiles), []), 
+                    new MostRecentTileContext(this.winningTile, this.isSelfDrawn()));
     }
 
     get specialWinningHandType(): SpecialWinningHandType { 

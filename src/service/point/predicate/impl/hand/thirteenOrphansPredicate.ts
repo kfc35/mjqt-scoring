@@ -12,10 +12,12 @@ import { PointPredicateFailureResultTileDetail } from "model/point/predicate/res
 import { getAllIndicesSet } from "common/meldUtils";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
+import { thirteenOrphansAnalyzer } from "service/handAnalyzer/base/specialWinningHandAnalyzer/impl/thirteenOrphansAnalyzer";
 
 export const thirteenOrphansSpecialPredicate : PointPredicate<SpecialWinningHand> = 
     (specialWinningHand: SpecialWinningHand) => {
-        if (specialWinningHand.specialWinningHandType === SpecialWinningHandType.THIRTEEN_ORPHANS) {
+        if (specialWinningHand.specialWinningHandType === SpecialWinningHandType.THIRTEEN_ORPHANS && 
+            thirteenOrphansAnalyzer(specialWinningHand.toHand()).length > 0) {
             return new PointPredicateSingleSuccessResult.Builder()
                 .pointPredicateId(PointPredicateID.THIRTEEN_ORPHANS)
                 .tileDetail(

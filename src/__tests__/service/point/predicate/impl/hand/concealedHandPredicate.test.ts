@@ -341,11 +341,11 @@ describe('concealedHandPredicate.ts', () => {
 
                     const result = CONCEALED_HAND_PREDICATE(sevenPairs, basicWinContext, basicRoundContext, rootConfig);
 
-                    expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
-                    expect(result.success).toBe(true);
-                    const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateFailureResult;
-                    expect(concealedMeldsResult.success).toBe(true);
-                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
+                expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
+                expect(result.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateFailureResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
             });
 
             test('seven pairs hand won via self draw returns true', () => {
@@ -353,13 +353,13 @@ describe('concealedHandPredicate.ts', () => {
                     new Pair(NORTH_WIND), new Pair(ONE_CHARACTER), new Pair(WHITE_DRAGON), new Pair(FIVE_CHARACTER)], 
                     2, THREE_CHARACTER, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
 
-                    const result = CONCEALED_HAND_PREDICATE(sevenPairs, basicWinContext, basicRoundContext, rootConfig);
+                const result = CONCEALED_HAND_PREDICATE(sevenPairs, basicWinContext, basicRoundContext, rootConfig);
 
-                    expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
-                    expect(result.success).toBe(true);
-                    const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateFailureResult;
-                    expect(concealedMeldsResult.success).toBe(true);
-                    expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
+                expect(result.pointPredicateId).toBe(PointPredicateID.CONCEALED_HAND);
+                expect(result.success).toBe(true);
+                const concealedMeldsResult = result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_AT_LEAST_NUM_MELDS_MINUS_ONE_ARE_CONCEALED) as PointPredicateFailureResult;
+                expect(concealedMeldsResult.success).toBe(true);
+                expect(result.getSubPredicateResult(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)?.success).toBe(true);
             });
         });
 

@@ -1,0 +1,2 @@
+# do not include test files from src directory
+__tests__/

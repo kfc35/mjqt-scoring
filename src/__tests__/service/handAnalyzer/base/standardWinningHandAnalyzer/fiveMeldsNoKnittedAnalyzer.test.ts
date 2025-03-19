@@ -29,6 +29,10 @@ jest.mock('service/handAnalyzer/base/standardWinningHandAnalyzer/meldsAnalyzer/s
 const honorMeldsAnalyzerMock = jest.mocked(analyzeForHonorMelds);
 const suitedMeldsAnalyzerMock = jest.mocked(analyzeForNonKnittedSuitedMelds);
 
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
 describe('fiveMeldsNoKnittedAnalyzer.ts', () => {
 
     test('hand that does not have userSpecifiedMelds as a subset of the analyzed melds does not produce a winning hand', () => {

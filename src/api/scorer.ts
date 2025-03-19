@@ -23,7 +23,7 @@ export function evaluateHandForHighestPossiblePointEvaluation(hand: Hand, winCtx
     }
 
     const pointEvaluations: PointEvaluation[] = winningHands.map(winningHand => evaluate(winningHand, winCtx, roundCtx, rootConfig));
-    return pointEvaluations.sort(sortByPoints)[0];
+    return pointEvaluations.sort(sortByPointsDescending)[0];
 }
 
 export function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation {
@@ -34,12 +34,12 @@ export function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext
     return evaluate(winningHand, winCtx, roundCtx, rootConfig);
 }
 
-function sortByPoints(peA: PointEvaluation, peB: PointEvaluation): number {
+function sortByPointsDescending(peA: PointEvaluation, peB: PointEvaluation): number {
     if (!peA) {
         return -1;
     }
     if (!peB) {
         return 1;
     }
-    return peA.points < peB.points ? -1 : +1;
+    return peA.points < peB.points ? +1 : -1;
 }

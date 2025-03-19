@@ -9,8 +9,8 @@ import { analyzeForWinningHands, evaluateHandForHighestPossiblePointEvaluation, 
 import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 import { ONE_BAMBOO } from "common/deck";
 import { Pair } from "model/meld/pair";
-import * as pointEvaluator from "service/point/evaluator/hk/pointEvaluator";
-import * as handAnalyzer from "service/handAnalyzer/hk/handAnalyzer";
+import { evaluate } from "service/point/evaluator/hk/pointEvaluator";
+import { analyzeHandForWinningHands } from "service/handAnalyzer/hk/handAnalyzer";
 import { Pong } from "model/meld/pong";
 
 jest.mock('model/hand/hk/hand', () => {
@@ -49,6 +49,17 @@ jest.mock('model/point/evaluation/pointEvaluation', () => {
     };
 });
 
+jest.mock('service/handAnalyzer/hk/handAnalyzer', () => ({
+    __esModule: true,
+    analyzeHandForWinningHands: jest.fn(),
+}));
+jest.mock('service/point/evaluator/hk/pointEvaluator', () => ({
+    __esModule: true,
+    evaluate: jest.fn(),
+}));
+const analyzeHandForWinningHandsMock = jest.mocked(analyzeHandForWinningHands);
+const evaluateMock = jest.mocked(evaluate);
+
 beforeEach(() => {
     jest.clearAllMocks();
 });
@@ -66,44 +77,44 @@ describe('scorer.ts', () => {
     const mockPointEvalTwo = new PointEvaluation(mockWinningHand, 2, 0, [], new Set());
 
     test('evaluateHandForHighestPossiblePointEvaluation without any possible winning hands returns undefined', () => {
-        jest.spyOn(handAnalyzer, 'analyzeHandForWinningHands').mockReturnValue([]);
-        jest.spyOn(pointEvaluator, 'evaluate').mockReturnValue(mockPointEvalOne);
+        analyzeHandForWinningHandsMock.mockReturnValue([]);
+        evaluateMock.mockReturnValue(mockPointEvalOne);
 
         const evaluation = evaluateHandForHighestPossiblePointEvaluation(mockHand, winContext, roundContext, rootConfig);
 
-        expect(handAnalyzer.analyzeHandForWinningHands).toHaveBeenCalledWith(mockHand);
+        expect(analyzeHandForWinningHandsMock).toHaveBeenCalledWith(mockHand);
         expect(evaluation).toBeUndefined();
-        expect(pointEvaluator.evaluate).toHaveBeenCalledTimes(0);
+        expect(evaluateMock).toHaveBeenCalledTimes(0);
     });
 
     test('evaluateHandForHighestPossiblePointEvaluation without any possible winning hands returns undefined', () => {
-        jest.spyOn(handAnalyzer, 'analyzeHandForWinningHands').mockReturnValue([mockWinningHand, mockWinningHandTwo]);
-        jest.spyOn(pointEvaluator, 'evaluate').mockReturnValueOnce(mockPointEvalOne).mockReturnValueOnce(mockPointEvalTwo);
+        analyzeHandForWinningHandsMock.mockReturnValue([mockWinningHand, mockWinningHandTwo]);
+        evaluateMock.mockReturnValueOnce(mockPointEvalOne).mockReturnValueOnce(mockPointEvalTwo);
 
         const evaluation = evaluateHandForHighestPossiblePointEvaluation(mockHand, winContext, roundContext, rootConfig);
 
-        expect(handAnalyzer.analyzeHandForWinningHands).toHaveBeenCalledWith(mockHand);
+        expect(analyzeHandForWinningHandsMock).toHaveBeenCalledWith(mockHand);
         expect(evaluation).toBe(mockPointEvalTwo);
-        expect(pointEvaluator.evaluate).toHaveBeenCalledTimes(2);
-        expect(pointEvaluator.evaluate).toHaveBeenNthCalledWith(1, mockWinningHand, winContext, roundContext, rootConfig);
-        expect(pointEvaluator.evaluate).toHaveBeenNthCalledWith(2, mockWinningHandTwo, winContext, roundContext, rootConfig);
+        expect(evaluateMock).toHaveBeenCalledTimes(2);
+        expect(evaluateMock).toHaveBeenNthCalledWith(1, mockWinningHand, winContext, roundContext, rootConfig);
+        expect(evaluateMock).toHaveBeenNthCalledWith(2, mockWinningHandTwo, winContext, roundContext, rootConfig);
     });
 
     test('analyzeForWinningHands delegates correctly', () => {
-        jest.spyOn(handAnalyzer, 'analyzeHandForWinningHands').mockReturnValue([mockWinningHand]);
+        analyzeHandForWinningHandsMock.mockReturnValue([mockWinningHand]);
 
         const winningHands = analyzeForWinningHands(mockHand);
 
-        expect(handAnalyzer.analyzeHandForWinningHands).toHaveBeenCalledWith(mockHand);
+        expect(analyzeHandForWinningHandsMock).toHaveBeenCalledWith(mockHand);
         expect(winningHands).toStrictEqual([mockWinningHand]);
     });
 
     test('evaluateWinningHand delegates correctly', () => {
-        jest.spyOn(pointEvaluator, 'evaluate').mockReturnValue(mockPointEvalOne);
+        evaluateMock.mockReturnValue(mockPointEvalOne);
 
         const pointEval = evaluateWinningHand(mockWinningHand, winContext, roundContext, rootConfig);
 
-        expect(pointEvaluator.evaluate).toHaveBeenCalledWith(mockWinningHand, winContext, roundContext, rootConfig);
+        expect(evaluateMock).toHaveBeenCalledWith(mockWinningHand, winContext, roundContext, rootConfig);
         expect(pointEval).toBe(mockPointEvalOne);
     });
 });

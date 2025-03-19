@@ -18,14 +18,14 @@ export function createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId:
     if (flag) {
         const successResultBuilder = new PointPredicateSingleSuccessResult.Builder()
             .pointPredicateId(pointPredicateId);
-        if (!!successTileDetail) {
+        if (successTileDetail) {
             successResultBuilder.tileDetail(successTileDetail);
         }
         return successResultBuilder.build();
     }
     const failureResultBuilder = new PointPredicateFailureResult.Builder()
             .pointPredicateId(pointPredicateId);
-    if (!!failureTileDetail) {
+    if (failureTileDetail) {
         failureResultBuilder.tileDetail(failureTileDetail);
     }
     return failureResultBuilder.build();

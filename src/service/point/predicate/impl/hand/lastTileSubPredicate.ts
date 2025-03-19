@@ -134,8 +134,8 @@ export const ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate: Po
         const winningMeldIndexSet = new Set<number>([winningHand.meldWithWinningTileIndex]);
         const exposedMelds : Meld[] = winningHand.melds.filter(meld => meld.exposed);
         const exposedMeldsIndex : Set<number> = new Set(winningHand.melds.map((meld, index) => [meld,index] as [Meld, number])
-            .filter(([meld, _]) => meld.exposed)
-            .map(([_, index]) => index));
+            .filter(([meld, ]) => meld.exposed)
+            .map(([, index]) => index));
         if (exposedMelds.length === 1 && meldWithWinningTile.equals(exposedMelds[0], false)) {
             return new PointPredicateSingleSuccessResult.Builder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)

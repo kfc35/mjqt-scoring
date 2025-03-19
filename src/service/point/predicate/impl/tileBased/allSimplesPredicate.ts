@@ -31,7 +31,7 @@ function allSimplesPredicate(winningHand: WinningHand, simplesIndicesSet?: Set<n
                     .tilesThatSatisfyPredicate(simpleTiles)
                     .build()
             )
-        if (!!simplesIndicesSet) {
+        if (simplesIndicesSet) {
             resultBuilder.meldDetail(
                 new PointPredicateSuccessResultMeldDetail.Builder()
                     .meldIndicesThatSatisfyPredicate(simplesIndicesSet)

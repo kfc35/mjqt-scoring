@@ -17,7 +17,7 @@ import { PointPredicateFailureResultTileDetail } from "model/point/predicate/res
 jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
     return {
         MeldBasedWinningHand: jest.fn().mockImplementation(() => {
-            const ptype = Object.create(MeldBasedWinningHand.prototype);
+            const ptype = Object.create(MeldBasedWinningHand.prototype) as MeldBasedWinningHand;
             return Object.assign(ptype, 
             {
                 isSelfDrawn(): boolean {
@@ -35,7 +35,7 @@ jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
 jest.mock('model/hand/hk/winningHand/specialWinningHand', () => {
     return {
         SpecialWinningHand: jest.fn().mockImplementation(() => {
-            const ptype = Object.create(SpecialWinningHand.prototype);
+            const ptype = Object.create(SpecialWinningHand.prototype) as SpecialWinningHand;
             return Object.assign(ptype, 
             {
                 isSelfDrawn(): boolean {

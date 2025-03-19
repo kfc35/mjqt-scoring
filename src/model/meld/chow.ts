@@ -47,7 +47,7 @@ export class Chow extends Meld {
 
     override toString(): string {
         const exposedPrefix = (this._exposed ? "Exposed" : "Self-Drawn");
-        return `${exposedPrefix} Chow(${this._tiles[0]}, ${this._tiles[1]}, ${this._tiles[2]})`
+        return `${exposedPrefix} Chow(${this._tiles[0].toString()}, ${this._tiles[1].toString()}, ${this._tiles[2].toString()})`
     }
 }
 

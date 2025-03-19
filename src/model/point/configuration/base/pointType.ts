@@ -26,7 +26,7 @@ export function addPoints(accum: number, pts: PointType | undefined, maxPoints: 
     if (pts === MAX_POINTS) {
         return accum + maxPoints;
     }
-    if (!!pts) {
+    if (pts) {
         return accum + pts;
     }
     return accum;

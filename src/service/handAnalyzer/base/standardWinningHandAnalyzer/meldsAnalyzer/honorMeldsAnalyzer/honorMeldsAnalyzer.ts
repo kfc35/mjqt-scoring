@@ -32,13 +32,13 @@ function getUserSpecifiedHonorMelds(userSpecifiedMelds: Meld[], quantityMemo: Ho
             quantityMemo.decreaseQuantity(firstTile.value, meld.tiles.length);
             userSpecifiedHonorMelds.push(meld);
         }
-    };
+    }
 
     return userSpecifiedHonorMelds.map(meld => meld.clone());
 }
 
 function getHonorMelds(tileGroup: HonorTileGroup, tileValues: HonorTileValue[], quantityMemo: HonorTileValueQuantityMemo) : Meld[] {
-    let meldsToReturn : Meld[] = [];
+    const meldsToReturn : Meld[] = [];
     for (const tileValue of tileValues) {
         const quantity = quantityMemo.getQuantity(tileValue);
         const honorMeld: Meld | undefined = getHonorMeldIfPossible(quantity, tileGroup, tileValue);

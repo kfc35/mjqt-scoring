@@ -17,9 +17,9 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 
 jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
     return {
-        MeldBasedWinningHand: jest.fn().mockImplementation((_melds, _meldWithWinningTileIndex, _winningTile, inputFlowerTiles) => {
+        MeldBasedWinningHand: jest.fn().mockImplementation((_melds, _meldWithWinningTileIndex, _winningTile, inputFlowerTiles: FlowerTile[]) => {
             return {
-                get flowerTiles() {
+                get flowerTiles(): FlowerTile[] {
                     return inputFlowerTiles;
                 }
             }
@@ -29,10 +29,10 @@ jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
 
 jest.mock('model/hand/hk/winningHand/specialWinningHand', () => {
     return {
-        SpecialWinningHand: jest.fn().mockImplementation((_tiles, _tilesIndexWithWinningTile, _winningTile, _winningTileIsPartOfPair, _isSelfDraw, inputFlowerTIles) => {
+        SpecialWinningHand: jest.fn().mockImplementation((_tiles, _tilesIndexWithWinningTile, _winningTile, _winningTileIsPartOfPair, _isSelfDraw, inputFlowerTiles: FlowerTile[]) => {
             return {
-                get flowerTiles() {
-                    return inputFlowerTIles;
+                get flowerTiles(): FlowerTile[] {
+                    return inputFlowerTiles;
                 }
             }
         })

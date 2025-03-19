@@ -10,10 +10,10 @@ export const analyzeForSevenPairs = constructSevenPairsAnalyzer();
 
 function constructSevenPairsAnalyzer() : HandAnalyzer<MeldBasedWinningHand> {
     return (hand: Hand) => {
-        if (!!hand.userSpecifiedMelds && !hand.userSpecifiedMelds.every(meld => meldIsPair(meld))) {
+        if (!hand.userSpecifiedMelds.every(meld => meldIsPair(meld))) {
             return [];
         }
-        const pairs: Pair[] = hand.userSpecifiedMelds.map(meld => meld as Pair);
+        const pairs: Pair[] = hand.userSpecifiedMelds;
         if (hand.getQuantityPerUniqueTile().every(quantity => quantity % 2 === 0)) {
             const melds : Meld[] = [];
             let winningMeldIndex : number = -1;

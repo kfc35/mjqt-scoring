@@ -16,7 +16,7 @@ export function evaluate(winningHand: WinningHand, winCtx: WinContext, roundCtx:
         for (const [pointPredicateId, baseConfig] of rootConfig.pointPredicateIdToBaseConfiguration.entries()) {
             if (baseConfig && baseConfig.enabled) {
                 const predicate = pointPredicateWiring.get(pointPredicateId);
-                if (!!predicate) {
+                if (predicate) {
                     const result = predicate(winningHand, winCtx, roundCtx, rootConfig);
                     pointPredicateIdToResultMap.set(pointPredicateId, result);
                 }

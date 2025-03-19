@@ -65,4 +65,6 @@ export abstract class Meld {
     compareTo(otherMeld : Meld) : number {
         return this._tiles[0].compareTo(otherMeld._tiles[0]);
     }
+
+    abstract toString(): string ;
 }

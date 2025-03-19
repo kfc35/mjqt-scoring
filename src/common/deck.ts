@@ -96,16 +96,16 @@ export const SIMPLE_TILES = [TWO_BAMBOO, THREE_BAMBOO,
 ]
 
 export function getSuitedTilesForSuitedTileGroup(stg: SuitedTileGroup) {
-    if (stg === TileGroup.BAMBOO) {
-        return BAMBOO_TILES;
+    switch (stg) {
+        case TileGroup.BAMBOO:
+            return BAMBOO_TILES;
+        case TileGroup.CHARACTER:
+            return CHARACTER_TILES;
+        case TileGroup.CIRCLE:
+            return CIRCLE_TILES;
+        default:
+            throw new Error("Non exhaustive TileGroup Check");
     }
-    if (stg === TileGroup.CHARACTER) {
-        return CHARACTER_TILES;
-    }
-    if (stg === TileGroup.CIRCLE) {
-        return CIRCLE_TILES;
-    }
-    throw new Error(`Unsupported SuitedTileGroup ${stg}`);
 }
 
 export const GENTLEMEN_TILES = [PLUM_GENTLEMAN, ORCHID_GENTLEMAN, 

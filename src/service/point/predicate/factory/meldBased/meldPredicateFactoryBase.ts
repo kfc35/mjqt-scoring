@@ -187,8 +187,8 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
-                        .meldsThatFailPredicate(filteredMelds.map(([meld, _]) => meld))
-                        .meldIndicesThatFailPredicate(new Set(filteredMelds.map(([_, index]) => index)))
+                        .meldsThatFailPredicate(filteredMelds.map(([meld,]) => meld))
+                        .meldIndicesThatFailPredicate(new Set(filteredMelds.map(([, index]) => index)))
                         .build()
                 )
                 .build();

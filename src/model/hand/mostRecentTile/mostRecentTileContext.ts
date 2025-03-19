@@ -19,10 +19,10 @@ export class MostRecentTileContext {
                     throw new Error(`Your most recent tile cannot be specified to complete a Kong. Use the bonus tile after declaring a Kong to init MostRecentTileContext.`);
                 }
                 if (tilesDoesNotContainTile(isSelfDrawnOrUserSpecifiedMeld.tiles, tile)) {
-                    throw new Error(`userSpecifiedMeld (${isSelfDrawnOrUserSpecifiedMeld}) must contain tile ${tile}`);
+                    throw new Error(`userSpecifiedMeld (${isSelfDrawnOrUserSpecifiedMeld.toString()}) must contain tile ${tile.toString()}`);
                 }
                 this._userSpecifiedMeld = isSelfDrawnOrUserSpecifiedMeld;
-                this._isSelfDrawn = (!!this._userSpecifiedMeld ? !this._userSpecifiedMeld.exposed : false);
+                this._isSelfDrawn = (this._userSpecifiedMeld ? !this._userSpecifiedMeld.exposed : false);
             } else {
                 this._userSpecifiedMeld = undefined;
                 this._isSelfDrawn = isSelfDrawnOrUserSpecifiedMeld;
@@ -34,7 +34,7 @@ export class MostRecentTileContext {
     }
 
     get isSelfDrawn() : boolean {
-        return (!!this._userSpecifiedMeld ? !this._userSpecifiedMeld.exposed : this._isSelfDrawn);
+        return (this._userSpecifiedMeld ? !this._userSpecifiedMeld.exposed : this._isSelfDrawn);
     }
 
     get userSpecifiedMeld() : Meld | undefined {

@@ -28,7 +28,7 @@ function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet?: Se
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
             );
-        if (!!suitedTileIndicesSet) {
+        if (suitedTileIndicesSet) {
             resultBuilder.meldDetail(
                 new PointPredicateSuccessResultMeldDetail.Builder()
                     .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)

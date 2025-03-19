@@ -17,10 +17,10 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 
 jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
     return {
-        MeldBasedWinningHand: jest.fn().mockImplementation(() => {
+        MeldBasedWinningHand: jest.fn().mockImplementation((_melds, _meldWithWinningTileIndex, _winningTile, inputFlowerTiles) => {
             return {
                 get flowerTiles() {
-                    return undefined;
+                    return inputFlowerTiles;
                 }
             }
         })
@@ -29,10 +29,10 @@ jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
 
 jest.mock('model/hand/hk/winningHand/specialWinningHand', () => {
     return {
-        SpecialWinningHand: jest.fn().mockImplementation(() => {
+        SpecialWinningHand: jest.fn().mockImplementation((_tiles, _tilesIndexWithWinningTile, _winningTile, _winningTileIsPartOfPair, _isSelfDraw, inputFlowerTIles) => {
             return {
                 get flowerTiles() {
-                    return undefined;
+                    return inputFlowerTIles;
                 }
             }
         })
@@ -44,8 +44,8 @@ beforeEach(() => {
 });
 
 describe('flowerPredicate.ts', () => {
-    const mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, []);
-    const mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, [], SpecialWinningHandType.CUSTOM);
+    let mockMeldBasedWinningHand: MeldBasedWinningHand;
+    let mockSpecialWinningHand: SpecialWinningHand;
     
     const basicWinContext = new WinContext.Builder().build();
     const basicRoundContext = new RoundContext(WindDirection.WEST, WindDirection.EAST);
@@ -53,7 +53,7 @@ describe('flowerPredicate.ts', () => {
 
     function runMeldBasedSuccessTest(inputFlowerTiles: FlowerTile[], predicate: PointPredicate<WinningHand>, 
         expectedPointPredicateId: PointPredicateID, expectedTilesThatSatisfyPredicate: Tile[][]) {
-        jest.spyOn(mockMeldBasedWinningHand, 'flowerTiles', 'get').mockReturnValue(inputFlowerTiles);
+        mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, inputFlowerTiles);
 
         const meldBasedResult = predicate(mockMeldBasedWinningHand, basicWinContext, basicRoundContext, rootConfig);
         
@@ -66,7 +66,7 @@ describe('flowerPredicate.ts', () => {
 
     function runSpecialSuccessTest(inputFlowerTiles: FlowerTile[], predicate: PointPredicate<WinningHand>, 
         expectedPointPredicateId: PointPredicateID,expectedTilesThatSatisfyPredicate: Tile[][]) {
-        jest.spyOn(mockSpecialWinningHand, 'flowerTiles', 'get').mockReturnValue(inputFlowerTiles);
+        mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, inputFlowerTiles, SpecialWinningHandType.CUSTOM);
 
         const specialResult = predicate(mockSpecialWinningHand, basicWinContext, basicRoundContext, rootConfig);
         
@@ -79,8 +79,7 @@ describe('flowerPredicate.ts', () => {
 
     function runMeldBasedFailureTest(inputFlowerTiles: FlowerTile[], predicate: PointPredicate<WinningHand>, expectedPointPredicateId: PointPredicateID,
         expectedTilesThatFailPredicate: Tile[][], expectedTilesThatAreMissingToSatisfyPredicate: Tile[][]) {
-
-        jest.spyOn(mockMeldBasedWinningHand, 'flowerTiles', 'get').mockReturnValue(inputFlowerTiles);
+        mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, inputFlowerTiles);
 
         const meldBasedResult = predicate(mockMeldBasedWinningHand, basicWinContext, basicRoundContext, rootConfig);
 
@@ -94,8 +93,7 @@ describe('flowerPredicate.ts', () => {
 
     function runSpecialFailureTest(inputFlowerTiles: FlowerTile[], predicate: PointPredicate<WinningHand>, expectedPointPredicateId: PointPredicateID,
         expectedTilesThatFailPredicate: Tile[][], expectedTilesThatAreMissingToSatisfyPredicate: Tile[][]) {
-
-        jest.spyOn(mockSpecialWinningHand, 'flowerTiles', 'get').mockReturnValue(inputFlowerTiles);
+        mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, inputFlowerTiles, SpecialWinningHandType.CUSTOM);
 
         const specialResult = predicate(mockSpecialWinningHand, basicWinContext, basicRoundContext, rootConfig);
 
@@ -197,8 +195,9 @@ describe('flowerPredicate.ts', () => {
 
     describe('all gentlemen and season predicate', () => {
         test('hand with all gentlemen and seasons returns true', () => {
-            jest.spyOn(mockMeldBasedWinningHand, 'flowerTiles', 'get').mockReturnValue([...GENTLEMEN_TILES, ...SEASON_TILES]);
-            jest.spyOn(mockSpecialWinningHand, 'flowerTiles', 'get').mockReturnValue([...GENTLEMEN_TILES, ...SEASON_TILES]);
+            const inputFlowerTiles = [...GENTLEMEN_TILES, ...SEASON_TILES];
+            mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, inputFlowerTiles);
+            mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, inputFlowerTiles, SpecialWinningHandType.CUSTOM);
 
             const meldBasedResult = ALL_GENTLEMEN_AND_SEASONS_PREDICATE(mockMeldBasedWinningHand, basicWinContext, basicRoundContext, rootConfig);
             const specialResult = ALL_GENTLEMEN_AND_SEASONS_PREDICATE(mockSpecialWinningHand, basicWinContext, basicRoundContext, rootConfig);
@@ -210,8 +209,8 @@ describe('flowerPredicate.ts', () => {
         });
 
         test('hand without all gentlemen and seasons returns false', () => {
-            jest.spyOn(mockMeldBasedWinningHand, 'flowerTiles', 'get').mockReturnValue([BAMBOO_GENTLEMAN]);
-            jest.spyOn(mockSpecialWinningHand, 'flowerTiles', 'get').mockReturnValue([SPRING_SEASON, SUMMER_SEASON, AUTUMN_SEASON, WINTER_SEASON]);
+            mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, [BAMBOO_GENTLEMAN]);
+            mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, [SPRING_SEASON, SUMMER_SEASON, AUTUMN_SEASON, WINTER_SEASON], SpecialWinningHandType.CUSTOM);
 
             const meldBasedResult = ALL_GENTLEMEN_AND_SEASONS_PREDICATE(mockMeldBasedWinningHand, basicWinContext, basicRoundContext, rootConfig);
             const specialResult = ALL_GENTLEMEN_AND_SEASONS_PREDICATE(mockSpecialWinningHand, basicWinContext, basicRoundContext, rootConfig);

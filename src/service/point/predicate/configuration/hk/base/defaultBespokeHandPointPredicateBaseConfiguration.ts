@@ -25,5 +25,5 @@ export const defaultThirteenOrphansPointPredicateBaseConfiguration =
         .points(MAX_POINTS)
         .isBonus(false)
         .includedPointPredicatesGenerator(
-            () => new Set([PointPredicateID.CONCEALED_HAND]))
+            () => new Set([PointPredicateID.CONCEALED_HAND, PointPredicateID.ALL_HONORS_AND_TERMINALS]))
         .build();

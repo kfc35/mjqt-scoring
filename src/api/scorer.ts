@@ -5,14 +5,14 @@ import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { analyzeHandForWinningHands } from "service/handAnalyzer/hk/handAnalyzer";
-import { evaluateWinningHand as evalWinningHand } from "service/point/evaluator/hk/pointEvaluator";
+import { evaluate } from "service/point/evaluator/hk/pointEvaluator";
 import { PointEvaluation } from "model/point/evaluation/pointEvaluation";
 
 export function analyzeForWinningHands(hand: Hand): WinningHand[] {
     return analyzeHandForWinningHands(hand);
 }
 
-export function evaluateHandForHighestPointEvaluation(hand: Hand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
+export function evaluateHandForHighestPossiblePointEvaluation(hand: Hand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation | undefined {
     if (!rootConfig) {
         rootConfig = defaultRootPointPredicateConfiguration;
     }
@@ -22,8 +22,8 @@ export function evaluateHandForHighestPointEvaluation(hand: Hand, winCtx: WinCon
         return undefined;
     }
 
-    const pointEvaluations: PointEvaluation[] = winningHands.map(winningHand => evalWinningHand(winningHand, winCtx, roundCtx, rootConfig));
-    return pointEvaluations.sort(sortByPoints)[0];
+    const pointEvaluations: PointEvaluation[] = winningHands.map(winningHand => evaluate(winningHand, winCtx, roundCtx, rootConfig));
+    return pointEvaluations.sort(sortByPointsDescending)[0];
 }
 
 export function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext, roundCtx: RoundContext, rootConfig?: RootPointPredicateConfiguration): PointEvaluation {
@@ -31,15 +31,15 @@ export function evaluateWinningHand(winningHand: WinningHand, winCtx: WinContext
         rootConfig = defaultRootPointPredicateConfiguration;
     }
     
-    return evalWinningHand(winningHand, winCtx, roundCtx, rootConfig);
+    return evaluate(winningHand, winCtx, roundCtx, rootConfig);
 }
 
-function sortByPoints(peA: PointEvaluation, peB: PointEvaluation): number {
+function sortByPointsDescending(peA: PointEvaluation, peB: PointEvaluation): number {
     if (!peA) {
         return -1;
     }
     if (!peB) {
         return 1;
     }
-    return peA.points < peB.points ? -1 : +1;
+    return peA.points < peB.points ? +1 : -1;
 }

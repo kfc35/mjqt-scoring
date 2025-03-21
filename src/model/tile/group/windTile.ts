@@ -12,4 +12,8 @@ export class WindTile extends HonorTile {
     clone(): WindTile {
         return new WindTile(this._value);
     }
+
+    override get value(): WindTileValue {
+        return this._value;
+    }
 }

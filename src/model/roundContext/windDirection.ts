@@ -28,6 +28,23 @@ export function windDirectionToWindTile(windDirection: WindDirection) : WindTile
     }
 }
 
+export function windTileToWindDirection(windTile: WindTile) : WindDirection {
+    return windTileValueToWindDirection(windTile.value);
+}
+
+export function windTileValueToWindDirection(windTileValue: WindTileValue) : WindDirection {
+    switch (windTileValue) {
+        case WindTileValue.EAST:
+            return WindDirection.EAST;
+        case WindTileValue.SOUTH:
+            return WindDirection.SOUTH;
+        case WindTileValue.WEST:
+            return WindDirection.WEST;
+        case WindTileValue.NORTH:
+            return WindDirection.NORTH;
+    }
+}
+
 export function windDirectionToSeasonTile(windDirection: WindDirection) : SeasonTile {
     switch (windDirection) {
         case WindDirection.EAST:

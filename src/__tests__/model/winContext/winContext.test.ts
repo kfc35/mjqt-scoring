@@ -60,4 +60,74 @@ describe('winContext.ts Builder', () => {
 
         expect(winContext.winWithInitialHand).toBe(true);
     });
+
+    test('copies mostRecentTileIsLastOfItsKind correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().mostRecentTileIsLastOfItsKind(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.mostRecentTileIsLastOfItsKind).toBe(true);
+    });
+
+    test('copies winByRobbingAKong correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByRobbingAKong(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByRobbingAKong).toBe(true);
+    });
+
+    test('copies winByLastTileOnWall correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByLastTileOnWall(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByLastTileOnWall).toBe(true);
+    });
+
+    test('copies winByLastDiscardOfGame correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByLastDiscardOfGame(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByLastDiscardOfGame).toBe(true);
+    });
+
+    test('copies winByKongReplacement correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByKongReplacement).toBe(true);
+    });
+
+    test('copies winByFlowerReplacement correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByFlowerReplacement).toBe(true);
+    });
+
+    test('copies winByKongOnKongReplacement correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByKongOnKongReplacement).toBe(true);
+    });
+
+    test('copies winByFlowerOnFlowerReplacement correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByFlowerOnFlowerReplacement(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByFlowerOnFlowerReplacement).toBe(true);
+    });
+
+    test('copies winByMixedDoubleReplacement correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winByMixedDoubleReplacement(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winByMixedDoubleReplacement).toBe(true);
+    });
+
+    test('copies winWithInitialHand correctly from existing win context', () => {
+        const winContext = new WinContext.Builder().winWithInitialHand(true).build();
+        const winContextToTest = new WinContext.Builder().copyFrom(winContext).build();
+
+        expect(winContextToTest.winWithInitialHand).toBe(true);
+    });
 });

@@ -49,6 +49,20 @@ export class WinContext {
         _winByMixedDoubleReplacement: boolean = false;
         _winWithInitialHand: boolean = false;
 
+        copyFrom(winContext: WinContext) {
+            this._winByRobbingAKong = winContext.winByRobbingAKong;
+            this._mostRecentTileIsLastOfItsKind = winContext.mostRecentTileIsLastOfItsKind;
+            this._winByLastTileOnWall = winContext.winByLastTileOnWall;
+            this._winByLastDiscardOfGame = winContext.winByLastDiscardOfGame;
+            this._winByKongReplacement = winContext.winByKongReplacement;
+            this._winByFlowerReplacement = winContext.winByFlowerReplacement;
+            this._winByKongOnKongReplacement = winContext.winByKongOnKongReplacement;
+            this._winByFlowerOnFlowerReplacement = winContext.winByFlowerOnFlowerReplacement;
+            this._winByMixedDoubleReplacement = winContext.winByMixedDoubleReplacement;
+            this._winWithInitialHand = winContext.winWithInitialHand;
+            return this;
+        }
+
         winByRobbingAKong(winByRobbingAKong: boolean) {
             this._winByRobbingAKong = winByRobbingAKong;
             return this;

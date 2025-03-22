@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function createDefaultBasicWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -24,14 +24,14 @@ export default function createDefaultBasicWinConditionPointPredicateBaseConfigur
 
 /** default enabled */
 export const defaultSelfDrawPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultRobbingKongPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
@@ -40,7 +40,7 @@ export const defaultRobbingKongPredicateBaseConfiguration =
         .build();
 
 export const defaultWinByLastTilePredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
@@ -49,14 +49,14 @@ export const defaultWinByLastTilePredicateBaseConfiguration =
         .build();
 
 export const defaultWinByLastDiscardPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultWinByKongPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(2)
         .isBonus(false)
@@ -65,7 +65,7 @@ export const defaultWinByKongPredicateBaseConfiguration =
         .build();
 
 export const defaultWinByDoubleKongPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(9)
         .isBonus(false)
@@ -74,14 +74,14 @@ export const defaultWinByDoubleKongPredicateBaseConfiguration =
         .build();
 
 export const defaultEarthlyHandPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
         .build();
 
 export const defaultHeavenlyHandPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
@@ -90,7 +90,7 @@ export const defaultHeavenlyHandPredicateBaseConfiguration =
 
 /** default disabled */
 export const defaultWinByFlowerPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(2)
         .isBonus(false)
@@ -99,7 +99,7 @@ export const defaultWinByFlowerPredicateBaseConfiguration =
         .build();
 
 export const defaultWinByDoubleFlowerPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(9)
         .isBonus(false)
@@ -108,7 +108,7 @@ export const defaultWinByDoubleFlowerPredicateBaseConfiguration =
         .build();
 
 export const defaultWinByMixedDoubleReplacementPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(9)
         .isBonus(false)
@@ -117,7 +117,7 @@ export const defaultWinByMixedDoubleReplacementPredicateBaseConfiguration =
         .build();
 
 export const defaultLastOfItsKindPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(2)
         .isBonus(false)

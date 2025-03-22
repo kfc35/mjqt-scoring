@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function createDefaultConcealedOrMeldedHandBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -18,14 +18,14 @@ export default function createDefaultConcealedOrMeldedHandBasedPointPredicateBas
 
 /** default enabled */
 export const defaultConcealedHandPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultSelfTripletsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
@@ -35,7 +35,7 @@ export const defaultSelfTripletsPointPredicateBaseConfiguration =
 
 /** default disabled */
 export const defaultFullyConcealedHandPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(3)
         .isBonus(false)
@@ -44,14 +44,14 @@ export const defaultFullyConcealedHandPointPredicateBaseConfiguration =
         .build();
 
 export const defaultMeldedHandPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(3)
         .isBonus(false)
         .build();
 
 export const defaultFullyMeldedHandPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(6)
         .isBonus(false)

@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function createDefaultTileBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -19,7 +19,7 @@ export default function createDefaultTileBasedPointPredicateBaseConfigurationMap
 
 /** enabled by default */
 export const defaultAllHonorsAndTerminalsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
@@ -27,7 +27,7 @@ export const defaultAllHonorsAndTerminalsPointPredicateBaseConfiguration =
         .build();
 
 export const defaultAllOneSuitAndHonorsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(3)
         .isBonus(false)
@@ -35,14 +35,14 @@ export const defaultAllOneSuitAndHonorsPointPredicateBaseConfiguration =
 
 
 export const defaultAllOneSuitPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(6)
         .isBonus(false)
         .build();
 
 export const defaultAllHonorsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
@@ -52,7 +52,7 @@ export const defaultAllHonorsPointPredicateBaseConfiguration =
 
 
 export const defaultAllTerminalsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false).includedPointPredicatesGenerator(
@@ -61,14 +61,14 @@ export const defaultAllTerminalsPointPredicateBaseConfiguration =
 
 /** disabled by default */
 export const defaultAllSimplesPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultVoidedSuitPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(1)
         .isBonus(false)

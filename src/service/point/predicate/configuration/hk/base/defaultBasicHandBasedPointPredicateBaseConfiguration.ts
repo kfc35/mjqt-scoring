@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function createDefaultBasicHandBasedPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -17,21 +17,21 @@ export default function createDefaultBasicHandBasedPointPredicateBaseConfigurati
 
 /** default enabled */
 export const defaultChickenHandPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(0)
         .isBonus(false)
         .build();
 
 export const defaultAllChowsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultCommonHandPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(3)
         .isBonus(false)
@@ -40,21 +40,21 @@ export const defaultCommonHandPointPredicateBaseConfiguration =
         .build();
 
 export const defaultAllPongsKongsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(3)
         .isBonus(false)
         .build();
 
 export const defaultSevenPairsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(4)
         .isBonus(false)
         .build();
 
 export const defaultAllKongsPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)

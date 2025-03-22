@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function createDefaultJewelDragonHandPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -12,7 +12,7 @@ export default function createDefaultJewelDragonHandPointPredicateBaseConfigurat
     return map;
 }
 export const defaultJadeDragonPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
@@ -21,7 +21,7 @@ export const defaultJadeDragonPointPredicateBaseConfiguration =
         .build();
 
 export const defaultRubyDragonPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)
@@ -30,7 +30,7 @@ export const defaultRubyDragonPointPredicateBaseConfiguration =
         .build();
 
 export const defaultPearlDragonPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(MAX_POINTS)
         .isBonus(false)

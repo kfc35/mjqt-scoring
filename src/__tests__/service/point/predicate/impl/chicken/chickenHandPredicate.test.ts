@@ -1,4 +1,4 @@
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
@@ -17,7 +17,7 @@ describe('chickenHandPredicate.ts', () => {
             const inputResults = [new PointPredicateSingleSuccessResult("custom_ppid")];
             const rootConfig = new RootPointPredicateConfiguration(12);
             rootConfig.pointPredicateIdToBaseConfiguration.set("custom_ppid", 
-                new PointPredicateBaseConfiguration.Builder().enabled(true).isBonus(false).build());
+                new PointPredicateBaseConfigurationBuilder().enabled(true).isBonus(false).build());
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
@@ -29,7 +29,7 @@ describe('chickenHandPredicate.ts', () => {
             const inputResults = [new PointPredicateFailureResult("custom_ppid")];
             const rootConfig = new RootPointPredicateConfiguration(12);
             rootConfig.pointPredicateIdToBaseConfiguration.set("custom_ppid", 
-                new PointPredicateBaseConfiguration.Builder().enabled(true).isBonus(false).build());
+                new PointPredicateBaseConfigurationBuilder().enabled(true).isBonus(false).build());
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
@@ -41,7 +41,7 @@ describe('chickenHandPredicate.ts', () => {
             const inputResults = [new PointPredicateSingleSuccessResult("custom_ppid")];
             const rootConfig = new RootPointPredicateConfiguration(12);
             rootConfig.pointPredicateIdToBaseConfiguration.set("custom_ppid", 
-                new PointPredicateBaseConfiguration.Builder().enabled(true).isBonus(true).build());
+                new PointPredicateBaseConfigurationBuilder().enabled(true).isBonus(true).build());
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     
@@ -53,7 +53,7 @@ describe('chickenHandPredicate.ts', () => {
             const inputResults = [new PointPredicateSingleSuccessResult("custom_ppid")];
             const rootConfig = new RootPointPredicateConfiguration(12);
             rootConfig.pointPredicateIdToBaseConfiguration.set("custom_ppid", 
-                new PointPredicateBaseConfiguration.Builder().enabled(false).isBonus(true).build());
+                new PointPredicateBaseConfigurationBuilder().enabled(false).isBonus(true).build());
 
             const result = calculateChickenHandResultFromResults(inputResults, rootConfig);
     

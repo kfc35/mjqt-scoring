@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { MAX_POINTS } from "model/point/configuration/base/pointType";
 
 export default function createDefaultFlowerPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -20,28 +20,28 @@ export default function createDefaultFlowerPointPredicateBaseConfigurationMap():
 
 /* enabled by default */
 export const defaultNoGentlemenOrSeasonsBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultSeatGentlemanBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultSeatSeasonBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultAllGentlemenBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(2)
         .isBonus(false)
@@ -50,7 +50,7 @@ export const defaultAllGentlemenBaseConfiguration =
         .build();
 
 export const defaultAllSeasonsBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(2)
         .isBonus(false)
@@ -60,21 +60,21 @@ export const defaultAllSeasonsBaseConfiguration =
 
 /* disabled by default */
 export const defaultPrevailingGentlemanBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(1)
         .isBonus(false)
         .build();
     
 export const defaultPrevailingSeasonBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(1)
         .isBonus(false)
         .build();
 
 export const defaultAllGentlemenAndSeasonsBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(false)
         .points(MAX_POINTS)
         .isBonus(false)

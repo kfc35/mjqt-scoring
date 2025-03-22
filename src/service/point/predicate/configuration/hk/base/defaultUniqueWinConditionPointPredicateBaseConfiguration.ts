@@ -1,5 +1,5 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
-import { PointPredicateBaseConfiguration } from "model/point/configuration/base/pointPredicateBaseConfiguration";
+import { PointPredicateBaseConfiguration, PointPredicateBaseConfigurationBuilder } from "model/point/configuration/base/pointPredicateBaseConfiguration";
 import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 
 export default function createDefaultUniqueWinConditionPointPredicateBaseConfigurationMap(): Map<PointPredicateID, PointPredicateBaseConfiguration> {
@@ -12,7 +12,7 @@ export default function createDefaultUniqueWinConditionPointPredicateBaseConfigu
 
 /** default enabled */
 export const defaultPlumBlossomOnTheRoofPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(3)
         .isBonus(false)
@@ -22,7 +22,7 @@ export const defaultPlumBlossomOnTheRoofPointPredicateBaseConfiguration =
         .build();
 
 export const defaultMoonFromTheBottomOfTheSeaPointPredicateBaseConfiguration = 
-    new PointPredicateBaseConfiguration.Builder()
+    new PointPredicateBaseConfigurationBuilder()
         .enabled(true)
         .points(3)
         .isBonus(false)

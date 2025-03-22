@@ -49,39 +49,40 @@ export class PointPredicateBaseConfiguration {
         return this._includedPointPredicatesGenerator(logicConfig);
     }
 
-    static Builder = class {
-        _enabled: boolean = true;
-        _points: PointType = 0;
-        _isBonus: boolean = false;
-        _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> 
-            = () => new Set();
+    clone(): PointPredicateBaseConfiguration {
+        return new PointPredicateBaseConfiguration(this._enabled, this._points, this._isBonus, this._includedPointPredicatesGenerator);
+    }
+}
 
-        enabled(enabled: boolean): this {
-            this._enabled = enabled;
-            return this;
-        }
+export class PointPredicateBaseConfigurationBuilder {
+    
+    _enabled: boolean = true;
+    _points: PointType = 0;
+    _isBonus: boolean = false;
+    _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> 
+        = () => new Set();
 
-        points(points: PointType): this {
-            this._points = points;
-            return this;
-        }
-        
-        isBonus(isBonus: boolean): this {
-            this._isBonus = isBonus;
-            return this;
-        }
-
-        includedPointPredicatesGenerator(generator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> ): this {
-            this._includedPointPredicatesGenerator = generator;
-            return this;
-        }
-
-        build() : PointPredicateBaseConfiguration {
-            return new PointPredicateBaseConfiguration(this._enabled, this._points, this._isBonus, this._includedPointPredicatesGenerator);
-        }
+    enabled(enabled: boolean): this {
+        this._enabled = enabled;
+        return this;
     }
 
-    clone(): PointPredicateBaseConfiguration {
+    points(points: PointType): this {
+        this._points = points;
+        return this;
+    }
+    
+    isBonus(isBonus: boolean): this {
+        this._isBonus = isBonus;
+        return this;
+    }
+
+    includedPointPredicatesGenerator(generator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> ): this {
+        this._includedPointPredicatesGenerator = generator;
+        return this;
+    }
+
+    build() : PointPredicateBaseConfiguration {
         return new PointPredicateBaseConfiguration(this._enabled, this._points, this._isBonus, this._includedPointPredicatesGenerator);
     }
 }

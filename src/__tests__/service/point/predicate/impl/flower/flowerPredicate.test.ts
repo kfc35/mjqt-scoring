@@ -1,6 +1,6 @@
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 import { ALL_GENTLEMEN_AND_SEASONS_PREDICATE, ALL_GENTLEMEN_PREDICATE, ALL_SEASONS_PREDICATE, NO_GENTLEMEN_OR_SEASONS_PREDICATE, PREVAILING_GENTLEMAN_PREDICATE, PREVAILING_SEASON_PREDICATE, SEAT_GENTLEMAN_PREDICATE, SEAT_SEASON_PREDICATE } from "service/point/predicate/impl/flower/flowerPredicate";
@@ -47,7 +47,7 @@ describe('flowerPredicate.ts', () => {
     let mockMeldBasedWinningHand: MeldBasedWinningHand;
     let mockSpecialWinningHand: SpecialWinningHand;
     
-    const basicWinContext = new WinContext.Builder().build();
+    const basicWinContext = new WinContextBuilder().build();
     const basicRoundContext = new RoundContext(WindDirection.WEST, WindDirection.EAST);
     const rootConfig = new RootPointPredicateConfiguration(13);
 

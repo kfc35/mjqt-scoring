@@ -1,4 +1,4 @@
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
@@ -21,7 +21,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
 
     describe('meld based hand', () => {
         test('win by last tile on wall = true and last tile is one circle returns true', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(true).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
                             1, ONE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -35,7 +35,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
         });
 
         test('win by last tile on wall = false and last tile is one circle returns false', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(false).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(false).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
                             1, ONE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -49,7 +49,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
         });
 
         test('win by last tile on wall = true and last tile is not one circle returns false', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(true).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
                             2, THREE_CHARACTER, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -63,7 +63,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
         });
 
         test('win by last tile on wall = false and last tile is not one circle returns false', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(false).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(false).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([ONE_CHARACTER, TWO_CHARACTER, THREE_CHARACTER])], 
                             2, THREE_CHARACTER, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -79,7 +79,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
     
     describe('special hand', () => {
         test('win by last tile on wall = true and last tile is one circle returns true', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(true).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(true).build();
             const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
                             EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
                             1, ONE_CIRCLE, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
@@ -93,7 +93,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
         });
     
         test('win by last tile on wall = false and last tile is one circle returns false', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(false).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(false).build();
             const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
                             EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
                             1, ONE_CIRCLE, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
@@ -107,7 +107,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
         });
 
         test('win by last tile on wall = true and last tile is not one circle returns false', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(true).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(true).build();
             const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
                             EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
                             0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);
@@ -121,7 +121,7 @@ describe('moonFromBottomOfSeaPredicate.ts', () => {
         });
 
         test('win by last tile on wall = false and last tile is not one circle returns false', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(false).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(false).build();
             const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
                             EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
                             0, EAST_WIND, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);

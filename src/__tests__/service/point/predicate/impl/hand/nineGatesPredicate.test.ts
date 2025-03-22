@@ -1,4 +1,4 @@
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
@@ -20,7 +20,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { NINE_GATES_PREDICATE } from "service/point/predicate/impl/hand/nineGatesPredicate";
 
 describe('nineGatesPredicate.ts', () => {
-    const basicWinContext = new WinContext.Builder().build();
+    const basicWinContext = new WinContextBuilder().build();
     const basicRoundContext = new RoundContext(WindDirection.WEST, WindDirection.EAST);
     const rootConfig = new RootPointPredicateConfiguration(13);
 

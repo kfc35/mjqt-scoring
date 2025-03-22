@@ -1,4 +1,4 @@
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
@@ -27,7 +27,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongReplacement = true and last tile is 5 circle in 4 5 6 circle chow returns true', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -42,7 +42,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement = true and last tile is 5 circle in 4 5 6 circle chow returns true', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -57,7 +57,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByFlowerReplacement = true and last tile is 5 circle in 4 5 6 circle chow returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -72,7 +72,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('no win by replacement and last tile is 5 circle in 4 5 6 circle chow returns false', () => {
-            const winContext = new WinContext.Builder().build();
+            const winContext = new WinContextBuilder().build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -87,7 +87,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongReplacement = true and last tile is 6 circle in 4 5 6 circle chow returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, SIX_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -102,7 +102,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongReplacement = true and last tile is 5 circle in 5 6 7 circle chow returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FIVE_CIRCLE, SIX_CIRCLE, SEVEN_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -123,7 +123,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongReplacement = true and last tile is 5 circle in 4 5 6 circle chow returns true', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -138,7 +138,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement = true and last tile is 5 circle in 4 5 6 circle chow returns true', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -153,7 +153,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByFlowerReplacement = true and last tile is 5 circle in 4 5 6 circle chow returns false', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -168,7 +168,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('win by no replacement and last tile is 5 circle in 4 5 6 circle chow returns true', () => {
-            const winContext = new WinContext.Builder().build();
+            const winContext = new WinContextBuilder().build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -183,7 +183,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongReplacement = true and last tile is 6 circle in 4 5 6 circle chow returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])], 
                             4, SIX_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -198,7 +198,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
         });
 
         test('winByKongReplacement = true and last tile is 5 circle in 5 6 7 circle chow returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
             const hand = new MeldBasedWinningHand([new Chow([SEVEN_CHARACTER, EIGHT_CHARACTER, NINE_CHARACTER], true), new Pair(ONE_CIRCLE), 
                             new Pong(THREE_CHARACTER), new Pong(NORTH_WIND, true), new Chow([FIVE_CIRCLE, SIX_CIRCLE, SEVEN_CIRCLE])], 
                             4, FIVE_CIRCLE, [AUTUMN_SEASON, CHRYSANTHEMUM_GENTLEMAN, BAMBOO_GENTLEMAN]);
@@ -214,7 +214,7 @@ describe('plumBlossomOnRoofPredicate.ts', () => {
     });
 
     test('special hand returns false', () => {
-        const winContext = new WinContext.Builder().build();
+        const winContext = new WinContextBuilder().build();
         const specialHand = new SpecialWinningHand([[ONE_CHARACTER, NINE_CHARACTER, ONE_BAMBOO, NINE_BAMBOO, NINE_CIRCLE,
                         EAST_WIND, SOUTH_WIND, WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON], [ONE_CIRCLE, ONE_CIRCLE]], 
                         1, ONE_CIRCLE, false, false, [], SpecialWinningHandType.THIRTEEN_ORPHANS);

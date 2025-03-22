@@ -1,4 +1,4 @@
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
@@ -40,7 +40,7 @@ beforeEach(() => {
 describe('basicWinConditionSubPredicate.ts', () => {
     const mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, []);
     const mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, [], SpecialWinningHandType.CUSTOM);    
-    const basicWinContext = new WinContext.Builder().build();
+    const basicWinContext = new WinContextBuilder().build();
     const basicRoundContext = new RoundContext(WindDirection.WEST, WindDirection.EAST);
     const rootConfig = new RootPointPredicateConfiguration(13);
 

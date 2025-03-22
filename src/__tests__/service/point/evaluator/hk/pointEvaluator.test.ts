@@ -10,7 +10,7 @@ import { SEVEN_CHARACTER, EIGHT_CIRCLE, THREE_BAMBOO, FIVE_CHARACTER, THREE_CHAR
     WEST_WIND, NORTH_WIND, RED_DRAGON, GREEN_DRAGON, WHITE_DRAGON, TWO_CIRCLE, 
     THREE_CIRCLE, FOUR_CIRCLE, SEVEN_CIRCLE, SUMMER_SEASON, TWO_CHARACTER, FOUR_CHARACTER} from "common/deck";
 import { evaluate } from "service/point/evaluator/hk/pointEvaluator";
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { defaultRootPointPredicateConfiguration } from "service/point/predicate/configuration/hk/defaultRootPointPredicateConfiguration";
@@ -19,7 +19,7 @@ import { pointTypeToNumber } from "model/point/configuration/base/pointType";
 import { Chow } from "model/meld/chow";
 
 describe('pointEvaluator.ts', () => {
-    const winContext = new WinContext.Builder().build();
+    const winContext = new WinContextBuilder().build();
     const roundContext = new RoundContext(WindDirection.EAST, WindDirection.SOUTH);
     let rootConfig = defaultRootPointPredicateConfiguration.clone();
 

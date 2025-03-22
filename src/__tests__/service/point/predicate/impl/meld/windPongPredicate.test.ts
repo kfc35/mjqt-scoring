@@ -1,4 +1,4 @@
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
@@ -19,7 +19,7 @@ import { BIG_FOUR_WINDS_PREDICATE, PREVAILING_WIND_PONG_KONG_PREDICATE, SEAT_WIN
 import type { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 
 describe('windPongPredicate.ts', () => {
-    const basicWinContext = new WinContext.Builder().build();
+    const basicWinContext = new WinContextBuilder().build();
     const westPrevailingEastSeatRoundContext = new RoundContext(WindDirection.WEST, WindDirection.EAST);
     const rootConfig = new RootPointPredicateConfiguration(13);
 

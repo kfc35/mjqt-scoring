@@ -1,4 +1,4 @@
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
@@ -54,7 +54,7 @@ beforeEach(() => {
 describe('basicWinConditionSubPredicate.ts', () => {
     const mockMeldBasedWinningHand = new MeldBasedWinningHand([], 0, ONE_BAMBOO, []);
     const mockSpecialWinningHand = new SpecialWinningHand([], 0, ONE_BAMBOO, false, false, [], SpecialWinningHandType.CUSTOM);    
-    const basicWinContext = new WinContext.Builder().build();
+    const basicWinContext = new WinContextBuilder().build();
     const westPrevailingEastSeat = new RoundContext(WindDirection.WEST, WindDirection.EAST);
     const westPrevailingWestSeat = new RoundContext(WindDirection.WEST, WindDirection.WEST);
     const rootConfig = new RootPointPredicateConfiguration(13);
@@ -89,7 +89,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('last of its kind predicate', () => {
         test('mostRecentTileIsLastOfItsKind = true returns true', () => {
-            const winContext = new WinContext.Builder().mostRecentTileIsLastOfItsKind(true).build();
+            const winContext = new WinContextBuilder().mostRecentTileIsLastOfItsKind(true).build();
 
             const meldHandResult = LAST_OF_ITS_KIND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = LAST_OF_ITS_KIND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -101,7 +101,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('mostRecentTileIsLastOfItsKind = false returns false', () => {
-            const winContext = new WinContext.Builder().mostRecentTileIsLastOfItsKind(false).build();
+            const winContext = new WinContextBuilder().mostRecentTileIsLastOfItsKind(false).build();
 
             const meldHandResult = LAST_OF_ITS_KIND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = LAST_OF_ITS_KIND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -115,7 +115,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('robbing kong predicate', () => {
         test('winByRobbingAKong = true returns true', () => {
-            const winContext = new WinContext.Builder().winByRobbingAKong(true).build();
+            const winContext = new WinContextBuilder().winByRobbingAKong(true).build();
 
             const meldHandResult = ROBBING_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = ROBBING_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -127,7 +127,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByRobbingAKong = false returns false', () => {
-            const winContext = new WinContext.Builder().winByRobbingAKong(false).build();
+            const winContext = new WinContextBuilder().winByRobbingAKong(false).build();
 
             const meldHandResult = ROBBING_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = ROBBING_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -141,7 +141,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by last tile predicate', () => {
         test('winByLastTileOnWall = true returns true', () => {
-            const winContext = new WinContext.Builder().winByLastTileOnWall(true).build();
+            const winContext = new WinContextBuilder().winByLastTileOnWall(true).build();
 
             const meldHandResult = WIN_BY_LAST_TILE_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_LAST_TILE_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -153,7 +153,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByLastTileOnWall = false returns false', () => {
-            const winContext = new WinContext.Builder().winByRobbingAKong(false).build();
+            const winContext = new WinContextBuilder().winByRobbingAKong(false).build();
 
             const meldHandResult = WIN_BY_LAST_TILE_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_LAST_TILE_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -167,7 +167,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by last discard predicate', () => {
         test('winByLastDiscardOfGame = true returns true', () => {
-            const winContext = new WinContext.Builder().winByLastDiscardOfGame(true).build();
+            const winContext = new WinContextBuilder().winByLastDiscardOfGame(true).build();
 
             const meldHandResult = WIN_BY_LAST_DISCARD_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_LAST_DISCARD_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -179,7 +179,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByLastDiscardOfGame = false returns false', () => {
-            const winContext = new WinContext.Builder().winByLastDiscardOfGame(false).build();
+            const winContext = new WinContextBuilder().winByLastDiscardOfGame(false).build();
 
             const meldHandResult = WIN_BY_LAST_DISCARD_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_LAST_DISCARD_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -193,7 +193,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by kong predicate', () => {
         test('winByKongReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
 
             const meldHandResult = WIN_BY_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -205,7 +205,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(true).build();
 
             const meldHandResult = WIN_BY_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -217,7 +217,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByKongReplacement = false && winByKongOnKongReplacement returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(false).winByKongOnKongReplacement(false).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(false).winByKongOnKongReplacement(false).build();
 
             const meldHandResult = WIN_BY_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -231,7 +231,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by kong on kong predicate', () => {
         test('winByKongReplacement = true returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
 
             const meldHandResult = WIN_BY_DOUBLE_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_DOUBLE_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -243,7 +243,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(true).build();
 
             const meldHandResult = WIN_BY_DOUBLE_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_DOUBLE_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -255,7 +255,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement returns false', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(false).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(false).build();
 
             const meldHandResult = WIN_BY_DOUBLE_KONG_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_DOUBLE_KONG_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -269,7 +269,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by flower predicate', () => {
         test('winByFlowerReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(true).build();
 
             const meldHandResult = WIN_BY_FLOWER_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_FLOWER_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -281,7 +281,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerOnFlowerReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerOnFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerOnFlowerReplacement(true).build();
 
             const meldHandResult = WIN_BY_FLOWER_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_FLOWER_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -293,7 +293,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerReplacement = false && winByFlowerOnFlowerReplacement returns false', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(false).winByFlowerOnFlowerReplacement(false).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(false).winByFlowerOnFlowerReplacement(false).build();
 
             const meldHandResult = WIN_BY_FLOWER_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_FLOWER_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -307,7 +307,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by flower on flower predicate', () => {
         test('winByFlowerReplacement = true returns false', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(true).build();
 
             const meldHandResult = WIN_BY_DOUBLE_FLOWER_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_DOUBLE_FLOWER_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -319,7 +319,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerOnFlowerReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerOnFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerOnFlowerReplacement(true).build();
 
             const meldHandResult = WIN_BY_DOUBLE_FLOWER_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_DOUBLE_FLOWER_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -331,7 +331,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerOnFlowerReplacement returns false', () => {
-            const winContext = new WinContext.Builder().winByFlowerOnFlowerReplacement(false).build();
+            const winContext = new WinContextBuilder().winByFlowerOnFlowerReplacement(false).build();
 
             const meldHandResult = WIN_BY_DOUBLE_FLOWER_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_DOUBLE_FLOWER_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -345,7 +345,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('win by mixed double predicate', () => {
         test('winByMixedDoubleReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByMixedDoubleReplacement(true).build();
+            const winContext = new WinContextBuilder().winByMixedDoubleReplacement(true).build();
 
             const meldHandResult = WIN_BY_MIXED_DOUBLE_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_MIXED_DOUBLE_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -357,7 +357,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByMixedDoubleReplacement = false returns false', () => {
-            const winContext = new WinContext.Builder().winByMixedDoubleReplacement(false).build();
+            const winContext = new WinContextBuilder().winByMixedDoubleReplacement(false).build();
 
             const meldHandResult = WIN_BY_MIXED_DOUBLE_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = WIN_BY_MIXED_DOUBLE_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -372,7 +372,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
     describe('win by any replacement sub predicate', () => {
 
         test('winByKongReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
 
             const meldHandResult = winByAnyReplacementSubPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyReplacementSubPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -384,7 +384,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(true).build();
 
             const meldHandResult = winByAnyReplacementSubPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyReplacementSubPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -396,7 +396,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(true).build();
 
             const meldHandResult = winByAnyReplacementSubPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyReplacementSubPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -408,7 +408,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerOnFlowerReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerOnFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerOnFlowerReplacement(true).build();
 
             const meldHandResult = winByAnyReplacementSubPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyReplacementSubPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -420,7 +420,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByMixedDoubleReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByMixedDoubleReplacement(true).build();
+            const winContext = new WinContextBuilder().winByMixedDoubleReplacement(true).build();
 
             const meldHandResult = winByAnyReplacementSubPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyReplacementSubPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -435,7 +435,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
             'winByFlowerReplacement = false, winByFlowerOnFlowerReplacement = false, ' + 
             'winByMixedDoubleReplacement = false returns false', () => {
 
-            const winContext = new WinContext.Builder()
+            const winContext = new WinContextBuilder()
                 .winByKongReplacement(false)
                 .winByKongOnKongReplacement(false)
                 .winByFlowerReplacement(false)
@@ -456,7 +456,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
     describe('win by any double replacement sub predicate', () => {
 
         test('winByKongReplacement = true returns false', () => {
-            const winContext = new WinContext.Builder().winByKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongReplacement(true).build();
 
             const meldHandResult = winByAnyDoubleReplacementPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyDoubleReplacementPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -468,7 +468,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerReplacement = true returns false', () => {
-            const winContext = new WinContext.Builder().winByFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerReplacement(true).build();
 
             const meldHandResult = winByAnyDoubleReplacementPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyDoubleReplacementPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -480,7 +480,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByKongOnKongReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByKongOnKongReplacement(true).build();
+            const winContext = new WinContextBuilder().winByKongOnKongReplacement(true).build();
 
             const meldHandResult = winByAnyDoubleReplacementPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyDoubleReplacementPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -492,7 +492,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByFlowerOnFlowerReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByFlowerOnFlowerReplacement(true).build();
+            const winContext = new WinContextBuilder().winByFlowerOnFlowerReplacement(true).build();
 
             const meldHandResult = winByAnyDoubleReplacementPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyDoubleReplacementPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -504,7 +504,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winByMixedDoubleReplacement = true returns true', () => {
-            const winContext = new WinContext.Builder().winByMixedDoubleReplacement(true).build();
+            const winContext = new WinContextBuilder().winByMixedDoubleReplacement(true).build();
 
             const meldHandResult = winByAnyDoubleReplacementPredicate(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = winByAnyDoubleReplacementPredicate(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -518,7 +518,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         test('winByKongOnKongReplacement = false, winByFlowerOnFlowerReplacement = false, ' + 
             'winByMixedDoubleReplacement = false returns false', () => {
 
-            const winContext = new WinContext.Builder()
+            const winContext = new WinContextBuilder()
                 .winByKongOnKongReplacement(false)
                 .winByFlowerOnFlowerReplacement(false)
                 .winByMixedDoubleReplacement(false)
@@ -536,7 +536,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('earthly hand predicate', () => {
         test('winWithInitialHand = true and seat wind east returns true', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(true).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(true).build();
 
             const meldHandResult = EARTHLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = EARTHLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -554,7 +554,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winWithInitialHand = false and seat wind east returns false', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(false).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(false).build();
 
             const meldHandResult = EARTHLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = EARTHLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -570,7 +570,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winWithInitialHand = true and seat wind not east not returns false', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(true).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(true).build();
 
             const meldHandResult = EARTHLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingWestSeat, rootConfig);
             const specialHandResult = EARTHLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingWestSeat, rootConfig);
@@ -586,7 +586,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winWithInitialHand = false and seat wind not east not returns false', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(false).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(false).build();
 
             const meldHandResult = EARTHLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingWestSeat, rootConfig);
             const specialHandResult = EARTHLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingWestSeat, rootConfig);
@@ -604,7 +604,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
 
     describe('heavenly hand predicate', () => {
         test('winWithInitialHand = true and seat wind not east returns true', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(true).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(true).build();
 
             const meldHandResult = HEAVENLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingWestSeat, rootConfig);
             const specialHandResult = HEAVENLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingWestSeat, rootConfig);
@@ -622,7 +622,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winWithInitialHand = false and seat wind not east returns false', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(false).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(false).build();
 
             const meldHandResult = HEAVENLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingWestSeat, rootConfig);
             const specialHandResult = HEAVENLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingWestSeat, rootConfig);
@@ -638,7 +638,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winWithInitialHand = true and seat wind east returns false', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(true).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(true).build();
 
             const meldHandResult = HEAVENLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = HEAVENLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);
@@ -654,7 +654,7 @@ describe('basicWinConditionSubPredicate.ts', () => {
         });
 
         test('winWithInitialHand = false and seat wind east returns false', () => {
-            const winContext = new WinContext.Builder().winWithInitialHand(false).build();
+            const winContext = new WinContextBuilder().winWithInitialHand(false).build();
 
             const meldHandResult = HEAVENLY_HAND_PREDICATE(mockMeldBasedWinningHand, winContext, westPrevailingEastSeat, rootConfig);
             const specialHandResult = HEAVENLY_HAND_PREDICATE(mockSpecialWinningHand, winContext, westPrevailingEastSeat, rootConfig);

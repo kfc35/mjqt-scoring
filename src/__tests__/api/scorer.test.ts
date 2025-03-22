@@ -1,5 +1,5 @@
 import { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
-import { WinContext } from "model/winContext/winContext";
+import { WinContextBuilder } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { WindDirection } from "model/roundContext/windDirection";
 import { Hand } from "model/hand/hk/hand";
@@ -65,7 +65,7 @@ beforeEach(() => {
 });
 
 describe('scorer.ts', () => {
-    const winContext = new WinContext.Builder().build();
+    const winContext = new WinContextBuilder().build();
     const roundContext = new RoundContext(WindDirection.EAST, WindDirection.SOUTH);
     const rootConfig = new RootPointPredicateConfiguration(13);
 

@@ -17,6 +17,8 @@ export function evaluateHandForHighestPossiblePointEvaluation(hand: Hand, winCtx
         rootConfig = defaultRootPointPredicateConfiguration;
     }
 
+    // TODO if winCtx is declared as winning via kong(s) or flower(s) and the hand does not have the requisite amount of those,
+    // winningHand should be disqualified? have to check for this
     const winningHands: WinningHand[] = analyzeHandForWinningHands(hand);
     if (!winningHands || winningHands.length === 0) {
         return undefined;

@@ -25,12 +25,12 @@ export class PointPredicateSuccessResultMeldDetail {
         _meldsThatSatisfyPredicate: Meld[] = [];
         _meldIndicesThatSatisfyPredicate: Set<number> = new Set();
 
-        meldsThatSatisfyPredicate(meldsThatSatisfyPredicate: Meld[]) {
+        meldsThatSatisfyPredicate(meldsThatSatisfyPredicate: Meld[]): this {
             this._meldsThatSatisfyPredicate = meldsThatSatisfyPredicate;
             return this;
         }
 
-        meldIndicesThatSatisfyPredicate(meldIndicesThatSatisfyPredicate: Set<number>) {
+        meldIndicesThatSatisfyPredicate(meldIndicesThatSatisfyPredicate: Set<number>): this {
             this._meldIndicesThatSatisfyPredicate = meldIndicesThatSatisfyPredicate;
             return this;
         }

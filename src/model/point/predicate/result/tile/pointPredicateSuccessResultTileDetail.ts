@@ -15,7 +15,7 @@ export class PointPredicateSuccessResultTileDetail {
     static Builder = class {
         _tilesThatSatisfyPredicate: Tile[][] = [];
 
-        tilesThatSatisfyPredicate(tilesThatSatisfyPredicate: Tile[][]) {
+        tilesThatSatisfyPredicate(tilesThatSatisfyPredicate: Tile[][]): this {
             this._tilesThatSatisfyPredicate = tilesThatSatisfyPredicate;
             return this;
         }

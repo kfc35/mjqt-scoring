@@ -51,27 +51,27 @@ export class PointPredicateFailureResultMeldDetail {
         
         _meldsThatAreMissingToSatisfyPredicate: Meld[] = [];
 
-        meldsThatPartiallySatisfyPredicate(meldsThatPartiallySatisfyPredicate: Meld[]) {
+        meldsThatPartiallySatisfyPredicate(meldsThatPartiallySatisfyPredicate: Meld[]): this {
             this._meldsThatPartiallySatisfyPredicate = meldsThatPartiallySatisfyPredicate;
             return this;
         }
     
-        meldIndicesThatPartiallySatisfyPredicate(meldIndicesThatPartiallySatisfyPredicate: Set<number>) {
+        meldIndicesThatPartiallySatisfyPredicate(meldIndicesThatPartiallySatisfyPredicate: Set<number>): this {
             this._meldIndicesThatPartiallySatisfyPredicate = meldIndicesThatPartiallySatisfyPredicate;
             return this;
         }
     
-        meldsThatFailPredicate(meldsThatFailPredicate: Meld[]) {
+        meldsThatFailPredicate(meldsThatFailPredicate: Meld[]): this {
             this._meldsThatFailPredicate = meldsThatFailPredicate;
             return this;
         }
     
-        meldIndicesThatFailPredicate(meldIndicesThatFailPredicate: Set<number>) {
+        meldIndicesThatFailPredicate(meldIndicesThatFailPredicate: Set<number>): this {
             this._meldIndicesThatFailPredicate = meldIndicesThatFailPredicate;
             return this;
         }
 
-        meldsThatAreMissingToSatisfyPredicate(meldsThatAreMissingToSatisfyPredicate: Meld[]) {
+        meldsThatAreMissingToSatisfyPredicate(meldsThatAreMissingToSatisfyPredicate: Meld[]): this {
             this._meldsThatAreMissingToSatisfyPredicate = meldsThatAreMissingToSatisfyPredicate;
             return this;
         }

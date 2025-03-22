@@ -27,17 +27,17 @@ export class PointPredicateFailureResult extends PointPredicateResult {
         _meldDetail: PointPredicateFailureResultMeldDetail | undefined;
         _tileDetail: PointPredicateFailureResultTileDetail | undefined;
 
-        pointPredicateId(pointPredicateId: string) {
+        pointPredicateId(pointPredicateId: string): this {
             this._pointPredicateId = pointPredicateId;
             return this;
         }
 
-        meldDetail(meldDetail: PointPredicateFailureResultMeldDetail) {
+        meldDetail(meldDetail: PointPredicateFailureResultMeldDetail): this {
             this._meldDetail = meldDetail;
             return this;
         }
 
-        tileDetail(tileDetail: PointPredicateFailureResultTileDetail) {
+        tileDetail(tileDetail: PointPredicateFailureResultTileDetail): this {
             this._tileDetail = tileDetail;
             return this;
         }

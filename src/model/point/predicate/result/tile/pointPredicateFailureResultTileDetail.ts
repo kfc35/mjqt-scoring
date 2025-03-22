@@ -57,22 +57,22 @@ export class PointPredicateFailureResultTileDetail {
 
         _tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][] = [];
 
-        tilesThatPartiallySatisfyPredicate(tilesThatPartiallySatisfyPredicate: Tile[][]) {
+        tilesThatPartiallySatisfyPredicate(tilesThatPartiallySatisfyPredicate: Tile[][]): this {
             this._tilesThatPartiallySatisfyPredicate = tilesThatPartiallySatisfyPredicate;
             return this;
         }
 
-        tilesThatFailPredicate(tilesThatFailPredicate: Tile[][]) {
+        tilesThatFailPredicate(tilesThatFailPredicate: Tile[][]): this {
             this._tilesThatFailPredicate = tilesThatFailPredicate;
             return this;
         }
 
-        tilesThatAreMissingToSatisfyPredicate(tilesThatAreMissingToSatisfyPredicate: Tile[][]) {
+        tilesThatAreMissingToSatisfyPredicate(tilesThatAreMissingToSatisfyPredicate: Tile[][]): this {
             this._tilesThatAreMissingToSatisfyPredicate = tilesThatAreMissingToSatisfyPredicate;
             return this;
         }
 
-        tilesThatAreMissingAnyOfToSatisfyPredicate(tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][]) {
+        tilesThatAreMissingAnyOfToSatisfyPredicate(tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][]): this {
             this._tilesThatAreMissingAnyOfToSatisfyPredicate = tilesThatAreMissingAnyOfToSatisfyPredicate;
             return this;
         }

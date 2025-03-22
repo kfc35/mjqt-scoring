@@ -49,7 +49,7 @@ export class WinContext {
         _winByMixedDoubleReplacement: boolean = false;
         _winWithInitialHand: boolean = false;
 
-        copyFrom(winContext: WinContext) {
+        copyFrom(winContext: WinContext): this {
             this._winByRobbingAKong = winContext.winByRobbingAKong;
             this._mostRecentTileIsLastOfItsKind = winContext.mostRecentTileIsLastOfItsKind;
             this._winByLastTileOnWall = winContext.winByLastTileOnWall;
@@ -63,57 +63,57 @@ export class WinContext {
             return this;
         }
 
-        winByRobbingAKong(winByRobbingAKong: boolean) {
+        winByRobbingAKong(winByRobbingAKong: boolean): this {
             this._winByRobbingAKong = winByRobbingAKong;
             return this;
         }
 
-        mostRecentTileIsLastOfItsKind(mostRecentTileIsLastOfItsKind: boolean) {
+        mostRecentTileIsLastOfItsKind(mostRecentTileIsLastOfItsKind: boolean): this {
             this._mostRecentTileIsLastOfItsKind = mostRecentTileIsLastOfItsKind;
             return this;
         }
 
-        winByLastTileOnWall(winByLastTileOnWall: boolean) {
+        winByLastTileOnWall(winByLastTileOnWall: boolean): this {
             this._winByLastTileOnWall = winByLastTileOnWall;
             return this;
         }
 
-        winByLastDiscardOfGame(winByLastDiscardOfGame: boolean) {
+        winByLastDiscardOfGame(winByLastDiscardOfGame: boolean): this {
             this._winByLastDiscardOfGame = winByLastDiscardOfGame;
             return this;
         }
 
-        winByKongReplacement(winByKongReplacement: boolean) {
+        winByKongReplacement(winByKongReplacement: boolean): this {
             this._winByKongReplacement = winByKongReplacement;
             return this;
         }
 
-        winByFlowerReplacement(winByFlowerReplacement: boolean) {
+        winByFlowerReplacement(winByFlowerReplacement: boolean): this {
             this._winByFlowerReplacement = winByFlowerReplacement;
             return this;
         }
 
-        winByKongOnKongReplacement(winByKongOnKongReplacement: boolean) {
+        winByKongOnKongReplacement(winByKongOnKongReplacement: boolean): this {
             this._winByKongOnKongReplacement = winByKongOnKongReplacement;
             return this;
         }
 
-        winByFlowerOnFlowerReplacement(winByFlowerOnFlowerReplacement: boolean) {
+        winByFlowerOnFlowerReplacement(winByFlowerOnFlowerReplacement: boolean): this {
             this._winByFlowerOnFlowerReplacement = winByFlowerOnFlowerReplacement;
             return this;
         }
 
-        winByMixedDoubleReplacement(winByMixedDoubleReplacement: boolean) {
+        winByMixedDoubleReplacement(winByMixedDoubleReplacement: boolean): this {
             this._winByMixedDoubleReplacement = winByMixedDoubleReplacement;
             return this;
         }
 
-        winWithInitialHand(winWithInitialHand: boolean) {
+        winWithInitialHand(winWithInitialHand: boolean): this {
             this._winWithInitialHand = winWithInitialHand;
             return this;
         }
 
-        build() {
+        build(): WinContext {
             const winContext = new WinContext(
                 this._mostRecentTileIsLastOfItsKind, this._winByRobbingAKong, 
                 this._winByLastTileOnWall, this._winByLastDiscardOfGame,

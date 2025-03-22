@@ -56,22 +56,22 @@ export class PointPredicateBaseConfiguration {
         _includedPointPredicatesGenerator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> 
             = () => new Set();
 
-        enabled(enabled: boolean) {
+        enabled(enabled: boolean): this {
             this._enabled = enabled;
             return this;
         }
 
-        points(points: PointType) {
+        points(points: PointType): this {
             this._points = points;
             return this;
         }
         
-        isBonus(isBonus: boolean) {
+        isBonus(isBonus: boolean): this {
             this._isBonus = isBonus;
             return this;
         }
 
-        includedPointPredicatesGenerator(generator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> ) {
+        includedPointPredicatesGenerator(generator: (logicConfig: PointPredicateLogicConfiguration) => Set<string> ): this {
             this._includedPointPredicatesGenerator = generator;
             return this;
         }

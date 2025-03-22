@@ -1,7 +1,7 @@
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
@@ -23,7 +23,7 @@ export function createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId:
         }
         return successResultBuilder.build();
     }
-    const failureResultBuilder = new PointPredicateFailureResult.Builder()
+    const failureResultBuilder = new PointPredicateFailureResultBuilder()
             .pointPredicateId(pointPredicateId);
     if (failureTileDetail) {
         failureResultBuilder.tileDetail(failureTileDetail);

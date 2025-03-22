@@ -4,7 +4,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedTileValue } from "model/tile/tileValue";
 import { meldIsChow } from "model/meld/chow";
 import { Chow } from "model/meld/chow";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { Meld } from "model/meld/meld";
@@ -36,7 +36,7 @@ export const EDGE_WAIT_PREDICATE : PointPredicate<MeldBasedWinningHand> = (winni
 }
 
 function createEdgeWaitFailureResult(meld: Meld, tile?: Tile) : PointPredicateFailureResult {
-    const resultBuilder = new PointPredicateFailureResult.Builder()
+    const resultBuilder = new PointPredicateFailureResultBuilder()
         .pointPredicateId(PointPredicateID.EDGE_WAIT)
         .meldDetail(
             new PointPredicateFailureResultMeldDetail.Builder()

@@ -4,7 +4,7 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { PointPredicate, predicateAnd } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { handContainsHonorsSubPredicate } from "service/point/predicate/impl/tileBased/tileBasedSharedSubPredicate";
 
@@ -17,7 +17,7 @@ function handContainsNoSuitsSubPredicate(winningHand: WinningHand): PointPredica
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_NO_SUITS)
             .build();
     } else {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_NO_SUITS)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()

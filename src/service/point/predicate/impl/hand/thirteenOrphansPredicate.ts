@@ -6,7 +6,7 @@ import { thirteenOrphanTiles } from "service/handAnalyzer/base/specialWinningHan
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { getAllIndicesSet } from "common/meldUtils";
@@ -26,7 +26,7 @@ export const thirteenOrphansSpecialPredicate : PointPredicate<SpecialWinningHand
                     .build()
                 ).build();
         }
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.THIRTEEN_ORPHANS)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
@@ -38,7 +38,7 @@ export const thirteenOrphansSpecialPredicate : PointPredicate<SpecialWinningHand
 
 export const thirteenOrphansMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> = 
     (meldBasedWinningHand: MeldBasedWinningHand) => {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
         .pointPredicateId(PointPredicateID.THIRTEEN_ORPHANS)
         .meldDetail(
             new PointPredicateFailureResultMeldDetail.Builder()

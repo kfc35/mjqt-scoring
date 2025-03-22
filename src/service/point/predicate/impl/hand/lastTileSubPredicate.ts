@@ -5,7 +5,7 @@ import { Meld } from "model/meld/meld";
 import { meldIsPair } from "model/meld/pair";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
@@ -41,7 +41,7 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
                 )
                 .build();
         } else { // last tile was discard but winning meld is not a pair
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
             .meldDetail(
                 new PointPredicateFailureResultMeldDetail.Builder()
@@ -84,7 +84,7 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
                 )
                 .build();
         } else { // last tile was self drawn but winning meld is not a pair
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
             .meldDetail(
                 new PointPredicateFailureResultMeldDetail.Builder()
@@ -116,7 +116,7 @@ export const lastTileCompletedPairSubPredicate : PointPredicate<MeldBasedWinning
                 )
                 .build();
         } else {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)
             .meldDetail(
                 new PointPredicateFailureResultMeldDetail.Builder()
@@ -156,7 +156,7 @@ export const ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate: Po
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)
                 .build();
         } else { // there is only one exposed meld but it is not the meld with the winning tile
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)
             .meldDetail(
                 new PointPredicateFailureResultMeldDetail.Builder()

@@ -11,7 +11,7 @@ import { PointPredicateResult } from "model/point/predicate/result/pointPredicat
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { partitionTilesByGroup } from "common/tileUtils";
@@ -58,7 +58,7 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(missingAnyOf));
     }
 
-    return new PointPredicateFailureResult.Builder()
+    return new PointPredicateFailureResultBuilder()
         .pointPredicateId(PointPredicateID.ALL_HONORS_AND_TERMINALS)
         .tileDetail(tileDetail.build())
         .build();

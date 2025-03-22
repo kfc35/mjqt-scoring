@@ -21,31 +21,31 @@ export class PointPredicateFailureResult extends PointPredicateResult {
     get tileDetail(): PointPredicateFailureResultTileDetail | undefined {
         return this._tileDetail;
     }
+}
 
-    static Builder = class {
-        _pointPredicateId: string = "";
-        _meldDetail: PointPredicateFailureResultMeldDetail | undefined;
-        _tileDetail: PointPredicateFailureResultTileDetail | undefined;
+export class PointPredicateFailureResultBuilder {
+    _pointPredicateId: string = "";
+    _meldDetail: PointPredicateFailureResultMeldDetail | undefined;
+    _tileDetail: PointPredicateFailureResultTileDetail | undefined;
 
-        pointPredicateId(pointPredicateId: string): this {
-            this._pointPredicateId = pointPredicateId;
-            return this;
-        }
+    pointPredicateId(pointPredicateId: string): this {
+        this._pointPredicateId = pointPredicateId;
+        return this;
+    }
 
-        meldDetail(meldDetail: PointPredicateFailureResultMeldDetail): this {
-            this._meldDetail = meldDetail;
-            return this;
-        }
+    meldDetail(meldDetail: PointPredicateFailureResultMeldDetail): this {
+        this._meldDetail = meldDetail;
+        return this;
+    }
 
-        tileDetail(tileDetail: PointPredicateFailureResultTileDetail): this {
-            this._tileDetail = tileDetail;
-            return this;
-        }
+    tileDetail(tileDetail: PointPredicateFailureResultTileDetail): this {
+        this._tileDetail = tileDetail;
+        return this;
+    }
 
-        build(): PointPredicateFailureResult {
-            const successResult = new PointPredicateFailureResult(
-                this._pointPredicateId, this._meldDetail, this._tileDetail);
-            return successResult;
-        }
+    build(): PointPredicateFailureResult {
+        const successResult = new PointPredicateFailureResult(
+            this._pointPredicateId, this._meldDetail, this._tileDetail);
+        return successResult;
     }
 }

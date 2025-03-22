@@ -13,7 +13,7 @@ import { RoundContext } from "model/roundContext/roundContext";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
@@ -42,7 +42,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
                     .build()
                 ).build();
         } else {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_WINNING_TILE_MELD_IS_FOUR_FIVE_SIX_CIRCLE_CHOW)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()

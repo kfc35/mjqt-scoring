@@ -1,7 +1,7 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult"
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult"
 import type { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 
 /** For calculating chicken hand, as an exception, we work on point predicate results.
@@ -15,7 +15,7 @@ export const calculateChickenHandResultFromResults =
             .pointPredicateId(PointPredicateID.CHICKEN_HAND)
             .build();
         }
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             // we do not attach disqualifyingResults here since it would be redundant for the final payload.
             .pointPredicateId(PointPredicateID.CHICKEN_HAND)
             .build();

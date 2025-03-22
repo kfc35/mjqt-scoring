@@ -15,7 +15,7 @@ import { constructHonorTile } from "model/tile/group/honorTileConstructor";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import type { SuitedTileGroup } from "model/tile/group/suitedTile";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
@@ -69,7 +69,7 @@ export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, me
     if (!!missingTilesAnyOf && missingTilesAnyOf.length > 0) {
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(missingTilesAnyOf);
     }
-    return new PointPredicateFailureResult.Builder()
+    return new PointPredicateFailureResultBuilder()
         .pointPredicateId(pointPredicateId)
         .tileDetail(tileDetail.build())
         .build();

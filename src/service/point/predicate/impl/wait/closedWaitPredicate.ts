@@ -5,7 +5,7 @@ import { meldIsChow } from "model/meld/chow";
 import { Chow } from "model/meld/chow";
 import { Meld } from "model/meld/meld";
 import { Tile } from "model/tile/tile";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
@@ -30,7 +30,7 @@ export const CLOSED_WAIT_PREDICATE : PointPredicate<MeldBasedWinningHand> = (win
 }
 
 function createClosedWaitFailureResult(meld: Meld, tile?: Tile) : PointPredicateFailureResult {
-    const resultBuilder = new PointPredicateFailureResult.Builder()
+    const resultBuilder = new PointPredicateFailureResultBuilder()
         .pointPredicateId(PointPredicateID.CLOSED_WAIT)
         .meldDetail(
             new PointPredicateFailureResultMeldDetail.Builder()

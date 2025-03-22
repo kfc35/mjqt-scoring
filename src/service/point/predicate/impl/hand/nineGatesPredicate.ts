@@ -12,7 +12,7 @@ import { atLeastNumMeldsMinusOneAreConcealedSubPredicate } from "service/point/p
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
@@ -25,7 +25,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         const tileGroupValueMaps = standardWinningHand.tileGroupValueMaps;
         /* check that it is all one suit no honors */
         if (tileGroupValueMaps.getHonorTileGroups().size > 0) {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                     .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
                     .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
                         .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds).filter(tile => isHonorTile(tile))))
@@ -33,7 +33,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
                     ).build();
         }
         if (tileGroupValueMaps.getSuitedTileGroups().size > 1) {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                     .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
                     .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
                         .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds)))
@@ -99,7 +99,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         if ((!!failingTiles && failingTiles.length > 0) || 
             (!!missingTiles && missingTiles.length > 0) || 
             (!!missingTilesAnyOf && missingTilesAnyOf.length > 0)) {
-            const failureBuilder = new PointPredicateFailureResult.Builder().pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES);
+            const failureBuilder = new PointPredicateFailureResultBuilder().pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES);
             const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
             if (!!failingTiles && failingTiles.length > 0) {
                 tileDetail.tilesThatFailPredicate(failingTiles);

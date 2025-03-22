@@ -3,7 +3,7 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
@@ -34,7 +34,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
         
         if (!!minNumMatches && indicesSubset.size < minNumMatches) {
             const missingMelds: Meld[] = meldsToMatch.filter((_meld, index) => !meldsToMatchGotMatchSuccessfully[index]);
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
@@ -45,7 +45,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
                 )
                 .build();
         } else if (!!maxNumMatches && indicesSubset.size > maxNumMatches) {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
@@ -83,7 +83,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
     return (winningHand : MeldBasedWinningHand) => {
         const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(winningHand.melds.map((meld, index) => [meld, index]), winningHand, meldChecker);
         if (!numMinMeldsPass && !numMaxMeldsPass && failedMelds.length > 0) {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
@@ -107,7 +107,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
         }
 
         if ((!!numMinMeldsPass && successMelds.length < numMinMeldsPass)) {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
@@ -119,7 +119,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
                 )
                 .build();
         } else if ((!!numMaxMeldsPass && successMelds.length > numMaxMeldsPass)) {
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
@@ -170,7 +170,7 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
                 )
                 .build();
             } else {
-                return new PointPredicateFailureResult.Builder()
+                return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()
@@ -183,7 +183,7 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
                 .build();
             }
         } else { // the entire filtered melds array failed the largercheck
-            return new PointPredicateFailureResult.Builder()
+            return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateFailureResultMeldDetail.Builder()

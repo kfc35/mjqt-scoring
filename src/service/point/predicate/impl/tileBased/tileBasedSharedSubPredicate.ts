@@ -6,7 +6,7 @@ import { HONOR_TILES, SUITED_TILES } from "common/deck";
 import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateFailureResult } from "model/point/predicate/result/pointPredicateFailureResult";
+import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { partitionTilesByGroup } from "common/tileUtils";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
@@ -37,7 +37,7 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand) : Point
         
         return resultBuilder.build();
     } else {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
@@ -72,7 +72,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
         }
         return resultBuilder.build();
     } else if (suitedTileGroups.size > 1) {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
@@ -81,7 +81,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
             )
             .build();
     } else {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
@@ -116,7 +116,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
         }
         return resultBuilder.build();
     } else if (suitedTileGroups.size === 1) {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()
@@ -125,7 +125,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
             )
             .build();
     } else {
-        return new PointPredicateFailureResult.Builder()
+        return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
             .tileDetail(
                 new PointPredicateFailureResultTileDetail.Builder()

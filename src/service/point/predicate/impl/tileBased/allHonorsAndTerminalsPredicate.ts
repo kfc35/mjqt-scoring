@@ -8,7 +8,7 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { terminalSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
@@ -26,7 +26,7 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
         suitedTileValues.size > 0 && 
         honorTileGroups.size !== 0) {
         const terminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(suitedTileValues);
-        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.ALL_HONORS_AND_TERMINALS)
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()

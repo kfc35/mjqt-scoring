@@ -17,7 +17,7 @@ import type { SuitedTileGroup } from "model/tile/group/suitedTile";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
@@ -34,7 +34,7 @@ export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, me
         const suitedTileIndices = consolidateSets([...suitedTileGroups.values()].map(tileGroup => tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
         const honorTileIndices = consolidateSets([...honorTileValues.values()].map(tileValue => tileGroupValueMaps.getMeldIndicesForHonorTileValue(tileValue)));
         const indices = consolidateSets([suitedTileIndices, honorTileIndices]);
-        return new PointPredicateSingleSuccessResult.Builder()
+        return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(pointPredicateId)
             .meldDetail(
                 new PointPredicateSuccessResultMeldDetail.Builder()

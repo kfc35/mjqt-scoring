@@ -8,7 +8,7 @@ import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinning
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { ONE_BAMBOO, TWO_BAMBOO} from "common/deck";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResult, PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { createPointPredicateRouter, createPointPredicateRouterWithAutoFailSpecialPredicate, createPointPredicateRouterWithAutoSuccessSpecialPredicate, createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
@@ -110,7 +110,7 @@ describe('pointPredicateUtil.ts', () => {
                 mockWinContext.winByRobbingAKong;
                 mockRoundContext.prevailingWind;
                 mockRootConfig.maxPoints;
-                return new PointPredicateSingleSuccessResult.Builder().pointPredicateId(meldBasedPointPredicateId).build();
+                return new PointPredicateSingleSuccessResultBuilder().pointPredicateId(meldBasedPointPredicateId).build();
             };
 
         const specialPointPredicateId = 'point_predicate_util_special_id';
@@ -152,7 +152,7 @@ describe('pointPredicateUtil.ts', () => {
                 mockWinContext.winByRobbingAKong;
                 mockRoundContext.prevailingWind;
                 mockRootConfig.maxPoints;
-                return new PointPredicateSingleSuccessResult.Builder().pointPredicateId(meldBasedPointPredicateId).build();
+                return new PointPredicateSingleSuccessResultBuilder().pointPredicateId(meldBasedPointPredicateId).build();
             };
 
         const testPredicateId = 'point_predicate_util_argument_id';

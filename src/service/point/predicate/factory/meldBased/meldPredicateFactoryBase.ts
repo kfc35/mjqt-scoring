@@ -5,7 +5,7 @@ import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are between minNumMatches and maxNumMatches matches. 
@@ -56,7 +56,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
                 .build();
         }
 
-        return new PointPredicateSingleSuccessResult.Builder()
+        return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -95,7 +95,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
                 )
                 .build();
         } else if (!numMinMeldsPass && !numMaxMeldsPass) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -129,7 +129,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
                 )
                 .build();
         }
-        return new PointPredicateSingleSuccessResult.Builder()
+        return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -160,7 +160,7 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
         if (meldsChecker(filteredMelds.map(([meld,]) => meld), winningHand)) {
             const [successMelds, failedMelds, passingIndices, failingIndices] = checkMelds(filteredMelds, winningHand, filteredMeldChecker);
             if (failedMelds.length === 0) {
-                return new PointPredicateSingleSuccessResult.Builder()
+                return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()

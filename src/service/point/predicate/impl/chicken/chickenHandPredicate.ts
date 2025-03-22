@@ -1,6 +1,6 @@
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult"
 import type { RootPointPredicateConfiguration } from "model/point/configuration/root/rootPointPredicateConfiguration";
 
@@ -11,7 +11,7 @@ export const calculateChickenHandResultFromResults =
     (pointPredicateResults: PointPredicateResult[], rootConfig: RootPointPredicateConfiguration) => {
         const disqualifyingResults: PointPredicateResult[] = pointPredicateResults.filter(result => resultDisqualifiesChickenHand(result, rootConfig));
         if (disqualifyingResults.length === 0) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.CHICKEN_HAND)
             .build();
         }

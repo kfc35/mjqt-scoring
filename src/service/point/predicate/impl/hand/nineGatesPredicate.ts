@@ -9,7 +9,7 @@ import { predicateAnd } from "service/point/predicate/pointPredicate";
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
 import { atLeastNumMeldsMinusOneAreConcealedSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
@@ -114,7 +114,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
             return failureBuilder.tileDetail(tileDetail.build()).build();
         }
 
-        return new PointPredicateSingleSuccessResult.Builder()
+        return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
             .meldDetail(new PointPredicateSuccessResultMeldDetail.Builder()
                 .meldsThatSatisfyPredicate([...standardWinningHand.melds])

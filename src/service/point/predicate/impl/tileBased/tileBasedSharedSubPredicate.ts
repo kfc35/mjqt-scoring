@@ -3,7 +3,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { HONOR_TILES, SUITED_TILES } from "common/deck";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
@@ -17,7 +17,7 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand) : Point
     const honorTileGroups = tileGroupValueMaps.getHonorTileGroups();
     const honorTiles : SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(honorTileGroups);
     if (honorTileGroups.size > 0) {
-        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
@@ -53,7 +53,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
     if (suitedTileGroups.size === 1) {
-        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()
@@ -97,7 +97,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
     const suitedTileGroups = tileGroupValueMaps.getSuitedTileGroups();
     const tilesSepBySuit: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(suitedTileGroups);
     if (suitedTileGroups.size > 1) {
-        const resultBuilder = new PointPredicateSingleSuccessResult.Builder()
+        const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
             .tileDetail(
                 new PointPredicateSuccessResultTileDetail.Builder()

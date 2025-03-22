@@ -4,7 +4,7 @@ import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand
 import { SpecialWinningHandType } from "model/hand/hk/winningHand/specialWinningHandType";
 import { thirteenOrphanTiles } from "service/handAnalyzer/base/specialWinningHandAnalyzer/impl/thirteenOrphansAnalyzer";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
@@ -18,7 +18,7 @@ export const thirteenOrphansSpecialPredicate : PointPredicate<SpecialWinningHand
     (specialWinningHand: SpecialWinningHand) => {
         if (specialWinningHand.specialWinningHandType === SpecialWinningHandType.THIRTEEN_ORPHANS && 
             thirteenOrphansAnalyzer(specialWinningHand.toHand()).length > 0) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.THIRTEEN_ORPHANS)
                 .tileDetail(
                     new PointPredicateSuccessResultTileDetail.Builder()

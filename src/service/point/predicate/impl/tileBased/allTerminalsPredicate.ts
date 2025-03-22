@@ -8,7 +8,7 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { terminalSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
@@ -23,7 +23,7 @@ function allTerminalsPredicate(winningHand: WinningHand, terminalsIndicesSet: Se
         suitedTileValues.size > 0 && 
         tileGroupValueMaps.getHonorTileGroups().size === 0) {
         const terminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(suitedTileValues);
-        return new PointPredicateSingleSuccessResult.Builder()
+        return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.ALL_TERMINALS)
             .meldDetail(
                 new PointPredicateSuccessResultMeldDetail.Builder()

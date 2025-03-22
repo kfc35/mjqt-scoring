@@ -10,7 +10,7 @@ import { RootPointPredicateConfiguration } from "model/point/configuration/root/
 import { PointPredicateLogicOption } from "model/point/configuration/logic/pointPredicateLogicOption";
 import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
@@ -33,7 +33,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
         && winningTileMeld.tiles[0].equals(FOUR_CIRCLE) && winningTileMeld.tiles[1].equals(FIVE_CIRCLE) && 
         winningTileMeld.tiles[2].equals(SIX_CIRCLE);
         if (winningTileMeldIsFourFiveSixCircle) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_WINNING_TILE_MELD_IS_FOUR_FIVE_SIX_CIRCLE_CHOW)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()

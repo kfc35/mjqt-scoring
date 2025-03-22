@@ -1,5 +1,5 @@
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResult, PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
@@ -16,7 +16,7 @@ export function createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId:
     successTileDetail?: PointPredicateSuccessResultTileDetail,
     failureTileDetail?: PointPredicateFailureResultTileDetail): PointPredicateResult {
     if (flag) {
-        const successResultBuilder = new PointPredicateSingleSuccessResult.Builder()
+        const successResultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(pointPredicateId);
         if (successTileDetail) {
             successResultBuilder.tileDetail(successTileDetail);

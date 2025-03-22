@@ -21,31 +21,31 @@ export class PointPredicateSingleSuccessResult extends PointPredicateResult {
     get tileDetail(): PointPredicateSuccessResultTileDetail | undefined {
         return this._tileDetail;
     }
+}
 
-    static Builder = class {
-        _pointPredicateId: string = "";
-        _meldDetail: PointPredicateSuccessResultMeldDetail | undefined;
-        _tileDetail: PointPredicateSuccessResultTileDetail | undefined;
+export class PointPredicateSingleSuccessResultBuilder {
+    _pointPredicateId: string = "";
+    _meldDetail: PointPredicateSuccessResultMeldDetail | undefined;
+    _tileDetail: PointPredicateSuccessResultTileDetail | undefined;
 
-        pointPredicateId(pointPredicateId: string): this {
-            this._pointPredicateId = pointPredicateId;
-            return this;
-        }
+    pointPredicateId(pointPredicateId: string): this {
+        this._pointPredicateId = pointPredicateId;
+        return this;
+    }
 
-        meldDetail(meldDetail: PointPredicateSuccessResultMeldDetail): this {
-            this._meldDetail = meldDetail;
-            return this;
-        }
+    meldDetail(meldDetail: PointPredicateSuccessResultMeldDetail): this {
+        this._meldDetail = meldDetail;
+        return this;
+    }
 
-        tileDetail(tileDetail: PointPredicateSuccessResultTileDetail): this {
-            this._tileDetail = tileDetail;
-            return this;
-        }
+    tileDetail(tileDetail: PointPredicateSuccessResultTileDetail): this {
+        this._tileDetail = tileDetail;
+        return this;
+    }
 
-        build() : PointPredicateSingleSuccessResult {
-            const successResult = new PointPredicateSingleSuccessResult(
-                this._pointPredicateId, this._meldDetail, this._tileDetail);
-            return successResult;
-        }
+    build() : PointPredicateSingleSuccessResult {
+        const successResult = new PointPredicateSingleSuccessResult(
+            this._pointPredicateId, this._meldDetail, this._tileDetail);
+        return successResult;
     }
 }

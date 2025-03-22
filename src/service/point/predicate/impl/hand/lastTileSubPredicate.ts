@@ -3,7 +3,7 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { Meld } from "model/meld/meld";
 import { meldIsPair } from "model/meld/pair";
-import { PointPredicateSingleSuccessResult } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
+import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
@@ -16,7 +16,7 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
         const winningMeldIndexSet = new Set<number>();
         winningMeldIndexSet.add(standardWinningHand.meldWithWinningTileIndex);
         if (!standardWinningHand.isSelfDrawn() && meldIsPair(winningMeld)) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -32,7 +32,7 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
                 .build();
         } else if (standardWinningHand.isSelfDrawn()) { 
             // TODO is this confusing to have it be success?
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
                 .tileDetail(
                     new PointPredicateSuccessResultTileDetail.Builder()
@@ -59,7 +59,7 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
         const winningMeldIndexSet = new Set<number>();
         winningMeldIndexSet.add(standardWinningHand.meldWithWinningTileIndex);
         if (standardWinningHand.isSelfDrawn() && meldIsPair(winningMeld) ) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -75,7 +75,7 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
                 .build();
         } else if (!standardWinningHand.isSelfDrawn()) { // winning tile is not self drawn
             // TODO is this confusing to have it be success?
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
                 .tileDetail(
                     new PointPredicateSuccessResultTileDetail.Builder()
@@ -101,7 +101,7 @@ export const lastTileCompletedPairSubPredicate : PointPredicate<MeldBasedWinning
         const winningMeld: Meld = standardWinningHand.meldWithWinningTile;
         const winningMeldIndexSet = new Set<number>([standardWinningHand.meldWithWinningTileIndex]);
         if (meldIsPair(winningMeld)) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -137,7 +137,7 @@ export const ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate: Po
             .filter(([meld, ]) => meld.exposed)
             .map(([, index]) => index));
         if (exposedMelds.length === 1 && meldWithWinningTile.equals(exposedMelds[0], false)) {
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)
                 .meldDetail(
                     new PointPredicateSuccessResultMeldDetail.Builder()
@@ -152,7 +152,7 @@ export const ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate: Po
                 )
                 .build();
         } else if (exposedMelds.length !== 1) { 
-            return new PointPredicateSingleSuccessResult.Builder()
+            return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)
                 .build();
         } else { // there is only one exposed meld but it is not the meld with the winning tile

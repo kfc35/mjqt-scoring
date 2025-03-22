@@ -9,10 +9,10 @@ import { terminalSuitedTileValues, SuitedTileValue } from "model/tile/tileValue"
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { partitionTilesByGroup } from "common/tileUtils";
 
@@ -26,12 +26,12 @@ function allTerminalsPredicate(winningHand: WinningHand, terminalsIndicesSet: Se
         return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.ALL_TERMINALS)
             .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(terminalsIndicesSet)
                     .build()
             )
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate(terminalTiles)
                     .build()
             )
@@ -40,7 +40,7 @@ function allTerminalsPredicate(winningHand: WinningHand, terminalsIndicesSet: Se
     const honorTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(tileGroupValueMaps.getHonorTileGroups());
     const nonTerminalTileValues: Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !terminalSuitedTileValues.has(stv)));
     const nonTerminalTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonTerminalTileValues).filter(tiles => tiles.length > 0);
-    const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
+    const tileDetail = new PointPredicateFailureResultTileDetailBuilder()
             .tilesThatFailPredicate([...honorTiles, ...nonTerminalTiles]);
     if (([...suitedTileValues].filter(stv => terminalSuitedTileValues.has(stv))).length === 0) {
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(TERMINAL_TILES));

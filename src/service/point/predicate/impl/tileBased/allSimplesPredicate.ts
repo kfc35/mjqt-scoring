@@ -9,10 +9,10 @@ import { simpleSuitedTileValues, SuitedTileValue } from "model/tile/tileValue";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { partitionTilesByGroup } from "common/tileUtils";
 
@@ -27,13 +27,13 @@ function allSimplesPredicate(winningHand: WinningHand, simplesIndicesSet?: Set<n
         const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.ALL_SIMPLES)
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate(simpleTiles)
                     .build()
             )
         if (simplesIndicesSet) {
             resultBuilder.meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(simplesIndicesSet)
                     .build()
             )
@@ -44,7 +44,7 @@ function allSimplesPredicate(winningHand: WinningHand, simplesIndicesSet?: Set<n
     const honorTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileGroups(tileGroupValueMaps.getHonorTileGroups());
     const nonSimpleTileValues: Set<SuitedTileValue> = new Set([...suitedTileValues].filter(stv => !simpleSuitedTileValues.has(stv)));
     const nonSimpleTiles: SuitedOrHonorTile[][] = tileGroupValueMaps.getTilesForTileValues(nonSimpleTileValues).filter(tiles => tiles.length > 0);
-    const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
+    const tileDetail = new PointPredicateFailureResultTileDetailBuilder()
         .tilesThatFailPredicate([...honorTiles, ...nonSimpleTiles]);
     if (([...suitedTileValues].filter(stv => simpleSuitedTileValues.has(stv))).length === 0) {
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SIMPLE_TILES));

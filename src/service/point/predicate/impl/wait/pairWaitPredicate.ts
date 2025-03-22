@@ -3,14 +3,14 @@ import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinning
 import { MeldType } from "model/meld/meldType";
 import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateFailureResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 
 export const PAIR_WAIT_PREDICATE : PointPredicate<MeldBasedWinningHand> = (winningHand : MeldBasedWinningHand) => {
     if (winningHand.meldWithWinningTile.type !== MeldType.PAIR) {
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.PAIR_WAIT)
             .meldDetail(
-                new PointPredicateFailureResultMeldDetail.Builder()
+                new PointPredicateFailureResultMeldDetailBuilder()
                 .meldsThatFailPredicate([winningHand.meldWithWinningTile])
                 .build()
             )

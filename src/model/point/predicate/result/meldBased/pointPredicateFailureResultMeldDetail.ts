@@ -41,52 +41,52 @@ export class PointPredicateFailureResultMeldDetail {
     get meldsThatAreMissingToSatisfyPredicate(): ReadonlyArray<Meld> {
         return this._meldsThatAreMissingToSatisfyPredicate;
     }
+}
 
-    static Builder = class {
-        _meldsThatPartiallySatisfyPredicate: Meld[] = [];
-        _meldIndicesThatPartiallySatisfyPredicate: Set<number> = new Set();
+export class PointPredicateFailureResultMeldDetailBuilder {
+    _meldsThatPartiallySatisfyPredicate: Meld[] = [];
+    _meldIndicesThatPartiallySatisfyPredicate: Set<number> = new Set();
 
-        _meldsThatFailPredicate: Meld[] = [];
-        _meldIndicesThatFailPredicate: Set<number> = new Set();
-        
-        _meldsThatAreMissingToSatisfyPredicate: Meld[] = [];
-
-        meldsThatPartiallySatisfyPredicate(meldsThatPartiallySatisfyPredicate: Meld[]): this {
-            this._meldsThatPartiallySatisfyPredicate = meldsThatPartiallySatisfyPredicate;
-            return this;
-        }
+    _meldsThatFailPredicate: Meld[] = [];
+    _meldIndicesThatFailPredicate: Set<number> = new Set();
     
-        meldIndicesThatPartiallySatisfyPredicate(meldIndicesThatPartiallySatisfyPredicate: Set<number>): this {
-            this._meldIndicesThatPartiallySatisfyPredicate = meldIndicesThatPartiallySatisfyPredicate;
-            return this;
-        }
-    
-        meldsThatFailPredicate(meldsThatFailPredicate: Meld[]): this {
-            this._meldsThatFailPredicate = meldsThatFailPredicate;
-            return this;
-        }
-    
-        meldIndicesThatFailPredicate(meldIndicesThatFailPredicate: Set<number>): this {
-            this._meldIndicesThatFailPredicate = meldIndicesThatFailPredicate;
-            return this;
-        }
+    _meldsThatAreMissingToSatisfyPredicate: Meld[] = [];
 
-        meldsThatAreMissingToSatisfyPredicate(meldsThatAreMissingToSatisfyPredicate: Meld[]): this {
-            this._meldsThatAreMissingToSatisfyPredicate = meldsThatAreMissingToSatisfyPredicate;
-            return this;
-        }
-    
-        build() : PointPredicateFailureResultMeldDetail {
-            const meldDetail = new PointPredicateFailureResultMeldDetail(
-                this._meldsThatPartiallySatisfyPredicate,
-                this._meldIndicesThatPartiallySatisfyPredicate,
+    meldsThatPartiallySatisfyPredicate(meldsThatPartiallySatisfyPredicate: Meld[]): this {
+        this._meldsThatPartiallySatisfyPredicate = meldsThatPartiallySatisfyPredicate;
+        return this;
+    }
 
-                this._meldsThatFailPredicate, 
-                this._meldIndicesThatFailPredicate,
+    meldIndicesThatPartiallySatisfyPredicate(meldIndicesThatPartiallySatisfyPredicate: Set<number>): this {
+        this._meldIndicesThatPartiallySatisfyPredicate = meldIndicesThatPartiallySatisfyPredicate;
+        return this;
+    }
 
-                this._meldsThatAreMissingToSatisfyPredicate,
-            );
-            return meldDetail;
-        }
+    meldsThatFailPredicate(meldsThatFailPredicate: Meld[]): this {
+        this._meldsThatFailPredicate = meldsThatFailPredicate;
+        return this;
+    }
+
+    meldIndicesThatFailPredicate(meldIndicesThatFailPredicate: Set<number>): this {
+        this._meldIndicesThatFailPredicate = meldIndicesThatFailPredicate;
+        return this;
+    }
+
+    meldsThatAreMissingToSatisfyPredicate(meldsThatAreMissingToSatisfyPredicate: Meld[]): this {
+        this._meldsThatAreMissingToSatisfyPredicate = meldsThatAreMissingToSatisfyPredicate;
+        return this;
+    }
+
+    build() : PointPredicateFailureResultMeldDetail {
+        const meldDetail = new PointPredicateFailureResultMeldDetail(
+            this._meldsThatPartiallySatisfyPredicate,
+            this._meldIndicesThatPartiallySatisfyPredicate,
+
+            this._meldsThatFailPredicate, 
+            this._meldIndicesThatFailPredicate,
+
+            this._meldsThatAreMissingToSatisfyPredicate,
+        );
+        return meldDetail;
     }
 }

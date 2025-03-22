@@ -20,27 +20,27 @@ export class PointPredicateSuccessResultMeldDetail {
     get meldIndicesThatSatisfyPredicate(): ReadonlySet<number> {
         return this._meldIndicesThatSatisfyPredicate;
     }
+}
 
-    static Builder = class {
-        _meldsThatSatisfyPredicate: Meld[] = [];
-        _meldIndicesThatSatisfyPredicate: Set<number> = new Set();
+export class PointPredicateSuccessResultMeldDetailBuilder {
+    _meldsThatSatisfyPredicate: Meld[] = [];
+    _meldIndicesThatSatisfyPredicate: Set<number> = new Set();
 
-        meldsThatSatisfyPredicate(meldsThatSatisfyPredicate: Meld[]): this {
-            this._meldsThatSatisfyPredicate = meldsThatSatisfyPredicate;
-            return this;
-        }
+    meldsThatSatisfyPredicate(meldsThatSatisfyPredicate: Meld[]): this {
+        this._meldsThatSatisfyPredicate = meldsThatSatisfyPredicate;
+        return this;
+    }
 
-        meldIndicesThatSatisfyPredicate(meldIndicesThatSatisfyPredicate: Set<number>): this {
-            this._meldIndicesThatSatisfyPredicate = meldIndicesThatSatisfyPredicate;
-            return this;
-        }
+    meldIndicesThatSatisfyPredicate(meldIndicesThatSatisfyPredicate: Set<number>): this {
+        this._meldIndicesThatSatisfyPredicate = meldIndicesThatSatisfyPredicate;
+        return this;
+    }
 
-        build() : PointPredicateSuccessResultMeldDetail {
-            const meldDetail = new PointPredicateSuccessResultMeldDetail(
-                this._meldsThatSatisfyPredicate, 
-                this._meldIndicesThatSatisfyPredicate
-            );
-            return meldDetail;
-        }
+    build() : PointPredicateSuccessResultMeldDetail {
+        const meldDetail = new PointPredicateSuccessResultMeldDetail(
+            this._meldsThatSatisfyPredicate, 
+            this._meldIndicesThatSatisfyPredicate
+        );
+        return meldDetail;
     }
 }

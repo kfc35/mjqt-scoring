@@ -11,8 +11,8 @@ import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateSingleSuccessResult, PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
 import { createPointPredicateRouter, createPointPredicateRouterWithAutoFailSpecialPredicate, createPointPredicateRouterWithAutoSuccessSpecialPredicate, createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 jest.mock('model/hand/hk/winningHand/meldBasedWinningHand', () => {
     return {
@@ -220,8 +220,8 @@ describe('pointPredicateUtil.ts', () => {
 
     describe('createPPResultBasedOnBooleanFlagWithTileDetail', () => {
         const pointPredicateId = 'test_id';
-        const successTileDetail = new PointPredicateSuccessResultTileDetail.Builder().build();
-        const failureTileDetail = new PointPredicateFailureResultTileDetail.Builder().build();
+        const successTileDetail = new PointPredicateSuccessResultTileDetailBuilder().build();
+        const failureTileDetail = new PointPredicateFailureResultTileDetailBuilder().build();
 
         test('flag is true returns success result', () => {
             const result = createPPResultBasedOnBooleanFlagWithTileDetail(pointPredicateId, true, successTileDetail, failureTileDetail);

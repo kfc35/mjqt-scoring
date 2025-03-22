@@ -4,10 +4,10 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { Meld } from "model/meld/meld";
 import { meldIsPair } from "model/meld/pair";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 
 export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicate<MeldBasedWinningHand> = 
@@ -19,13 +19,13 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldsThatSatisfyPredicate([winningMeld])
                     .meldIndicesThatSatisfyPredicate(winningMeldIndexSet)
                     .build()
                 )
                 .tileDetail(
-                    new PointPredicateSuccessResultTileDetail.Builder()
+                    new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([[standardWinningHand.winningTile]])
                     .build()
                 )
@@ -35,7 +35,7 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
                 .tileDetail(
-                    new PointPredicateSuccessResultTileDetail.Builder()
+                    new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([[standardWinningHand.winningTile]])
                     .build()
                 )
@@ -44,7 +44,7 @@ export const ifLastTileWasDiscardThenItCompletedPairSubPredicate : PointPredicat
             return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_DISCARD_THEN_IT_COMPLETED_PAIR)
             .meldDetail(
-                new PointPredicateFailureResultMeldDetail.Builder()
+                new PointPredicateFailureResultMeldDetailBuilder()
                 .meldsThatFailPredicate([winningMeld])
                 .meldIndicesThatFailPredicate(winningMeldIndexSet)
                 .build()
@@ -62,13 +62,13 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldsThatSatisfyPredicate([winningMeld])
                     .meldIndicesThatSatisfyPredicate(winningMeldIndexSet)
                     .build()
                 )
                 .tileDetail(
-                    new PointPredicateSuccessResultTileDetail.Builder()
+                    new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([[standardWinningHand.winningTile]])
                     .build()
                 )
@@ -78,7 +78,7 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
                 .tileDetail(
-                    new PointPredicateSuccessResultTileDetail.Builder()
+                    new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([[standardWinningHand.winningTile]])
                     .build()
                 )
@@ -87,7 +87,7 @@ export const ifLastTileWasSelfDrawnThenItCompletedPairSubPredicate : PointPredic
             return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_LAST_TILE_WAS_SELF_DRAWN_THEN_IT_COMPLETED_PAIR)
             .meldDetail(
-                new PointPredicateFailureResultMeldDetail.Builder()
+                new PointPredicateFailureResultMeldDetailBuilder()
                 .meldsThatFailPredicate([winningMeld])
                 .meldIndicesThatFailPredicate(winningMeldIndexSet)
                 .build()
@@ -104,13 +104,13 @@ export const lastTileCompletedPairSubPredicate : PointPredicate<MeldBasedWinning
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldsThatSatisfyPredicate([winningMeld])
                     .meldIndicesThatSatisfyPredicate(winningMeldIndexSet)
                     .build()
                 )
                 .tileDetail(
-                    new PointPredicateSuccessResultTileDetail.Builder()
+                    new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([[standardWinningHand.winningTile]])
                     .build()
                 )
@@ -119,7 +119,7 @@ export const lastTileCompletedPairSubPredicate : PointPredicate<MeldBasedWinning
             return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_LAST_TILE_COMPLETED_PAIR)
             .meldDetail(
-                new PointPredicateFailureResultMeldDetail.Builder()
+                new PointPredicateFailureResultMeldDetailBuilder()
                 .meldsThatFailPredicate([winningMeld])
                 .meldIndicesThatFailPredicate(winningMeldIndexSet)
                 .build()
@@ -140,13 +140,13 @@ export const ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate: Po
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldsThatSatisfyPredicate([meldWithWinningTile])
                     .meldIndicesThatSatisfyPredicate(winningMeldIndexSet)
                     .build()
                 )
                 .tileDetail(
-                    new PointPredicateSuccessResultTileDetail.Builder()
+                    new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([[winningHand.winningTile]])
                     .build()
                 )
@@ -159,7 +159,7 @@ export const ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate: Po
             return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_IF_THERE_IS_ONLY_ONE_EXPOSED_MELD_THEN_IT_IS_MELD_WITH_LAST_TILE)
             .meldDetail(
-                new PointPredicateFailureResultMeldDetail.Builder()
+                new PointPredicateFailureResultMeldDetailBuilder()
                 .meldsThatFailPredicate(getMeldsSubsetFromIndicesSet(winningHand.melds, exposedMeldsIndex))
                 .meldIndicesThatFailPredicate(exposedMeldsIndex)
                 .build()

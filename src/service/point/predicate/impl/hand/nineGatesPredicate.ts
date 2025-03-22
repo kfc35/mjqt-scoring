@@ -10,10 +10,10 @@ import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getAllIndicesSet } from "common/meldUtils";
 import { atLeastNumMeldsMinusOneAreConcealedSubPredicate } from "service/point/predicate/impl/hand/concealedHandPredicate";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { WinningHand } from "model/hand/hk/winningHand/winningHand";
 import { createPointPredicateRouterWithAutoFailSpecialPredicate } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { meldToFlatTiles } from "common/meldUtils";
@@ -27,7 +27,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         if (tileGroupValueMaps.getHonorTileGroups().size > 0) {
             return new PointPredicateFailureResultBuilder()
                     .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
-                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                    .tileDetail(new PointPredicateFailureResultTileDetailBuilder()
                         .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds).filter(tile => isHonorTile(tile))))
                         .build()
                     ).build();
@@ -35,7 +35,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
         if (tileGroupValueMaps.getSuitedTileGroups().size > 1) {
             return new PointPredicateFailureResultBuilder()
                     .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
-                    .tileDetail(new PointPredicateFailureResultTileDetail.Builder()
+                    .tileDetail(new PointPredicateFailureResultTileDetailBuilder()
                         .tilesThatFailPredicate(partitionTilesByGroup(meldToFlatTiles(standardWinningHand.melds)))
                         .build()
                     ).build();
@@ -100,7 +100,7 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
             (!!missingTiles && missingTiles.length > 0) || 
             (!!missingTilesAnyOf && missingTilesAnyOf.length > 0)) {
             const failureBuilder = new PointPredicateFailureResultBuilder().pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES);
-            const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
+            const tileDetail = new PointPredicateFailureResultTileDetailBuilder();
             if (!!failingTiles && failingTiles.length > 0) {
                 tileDetail.tilesThatFailPredicate(failingTiles);
             }
@@ -116,12 +116,12 @@ const sufficientTileQuantitiesNineGatesSubPredicate : PointPredicate<MeldBasedWi
 
         return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_ALL_ONE_SUIT_WITH_SUFFICIENT_TILE_QUANTITIES_FOR_NINE_GATES)
-            .meldDetail(new PointPredicateSuccessResultMeldDetail.Builder()
+            .meldDetail(new PointPredicateSuccessResultMeldDetailBuilder()
                 .meldsThatSatisfyPredicate([...standardWinningHand.melds])
                 .meldIndicesThatSatisfyPredicate(getAllIndicesSet(standardWinningHand.melds))
                 .build()
             )
-            .tileDetail(new PointPredicateSuccessResultTileDetail.Builder()
+            .tileDetail(new PointPredicateSuccessResultTileDetailBuilder()
                 .tilesThatSatisfyPredicate([...tilesOrderedBySTV, extraTile])
                 .build()
             )

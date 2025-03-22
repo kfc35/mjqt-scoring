@@ -11,18 +11,18 @@ import { PointPredicateLogicOption } from "model/point/configuration/logic/point
 import { WinContext } from "model/winContext/winContext";
 import { RoundContext } from "model/roundContext/roundContext";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 const winningTileIsFiveCircleSubPredicate : PointPredicate<MeldBasedWinningHand> = 
     (standardWinningHand: MeldBasedWinningHand) => {
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_FIVE_CIRCLE, 
             FIVE_CIRCLE.equals(standardWinningHand.winningTile), 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[standardWinningHand.winningTile]]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[standardWinningHand.winningTile]])
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[standardWinningHand.winningTile]]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatFailPredicate([[standardWinningHand.winningTile]])
                 .tilesThatAreMissingToSatisfyPredicate([[FIVE_CIRCLE]]).build());
     }
 
@@ -36,7 +36,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_WINNING_TILE_MELD_IS_FOUR_FIVE_SIX_CIRCLE_CHOW)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldsThatSatisfyPredicate([winningTileMeld])
                     .meldIndicesThatSatisfyPredicate(new Set([standardWinningHand.meldWithWinningTileIndex]))
                     .build()
@@ -45,7 +45,7 @@ const winningMeldIsFourFiveSixCircleChowSubPredicate : PointPredicate<MeldBasedW
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(PointPredicateID.SUBPREDICATE_WINNING_TILE_MELD_IS_FOUR_FIVE_SIX_CIRCLE_CHOW)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                     .meldsThatFailPredicate([winningTileMeld])
                     .meldIndicesThatFailPredicate(new Set([standardWinningHand.meldWithWinningTileIndex]))
                     .meldsThatAreMissingToSatisfyPredicate([new Chow([FOUR_CIRCLE, FIVE_CIRCLE, SIX_CIRCLE])])

@@ -15,8 +15,8 @@ import { SELF_DRAW_PREDICATE } from "service/point/predicate/impl/winCondition/b
 import { ifLastTileWasDiscardThenItCompletedPairSubPredicate, ifThereIsOnlyOneExposedMeldThenItIsMeldWithLastTileSubPredicate } from "service/point/predicate/impl/hand/lastTileSubPredicate";
 import { onePairSubPredicate } from "service/point/predicate/impl/meld/pairSubPredicates";
 import { SpecialWinningHand } from "model/hand/hk/winningHand/specialWinningHand";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
 const containsFourConcealedPongsKongsSubPredicate : PointPredicate<MeldBasedWinningHand> = createFilteredMeldsCheckerPredicate(PointPredicateID.SUBPREDICATE_CONTAINS_FOUR_CONCEALED_PONGS_AND_KONGS, 
     meld => !meldIsPair(meld), melds => melds.length === 4, meld => !meld.exposed && (meldIsKong(meld) || meldIsPong(meld)));
@@ -63,8 +63,8 @@ const fullyConcealedMeldBasedPredicate : PointPredicate<MeldBasedWinningHand> =
 const fullyConcealedSpecialHandPredicate : PointPredicate<SpecialWinningHand> = 
     (specialWinningHand: SpecialWinningHand) => {
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.FULLY_CONCEALED_HAND, specialWinningHand.isSelfDrawn(), 
-                    new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[specialWinningHand.winningTile]]).build(), 
-                    new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[specialWinningHand.winningTile]]).build());
+                    new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[specialWinningHand.winningTile]]).build(), 
+                    new PointPredicateFailureResultTileDetailBuilder().tilesThatFailPredicate([[specialWinningHand.winningTile]]).build());
     }
 
 export const SELF_TRIPLETS_PREDICATE : PointPredicate<WinningHand> = createPointPredicateRouterWithAutoFailSpecialPredicate(PointPredicateID.SELF_TRIPLETS, selfTripletsMeldBasedPredicate);

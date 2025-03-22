@@ -9,10 +9,10 @@ import { terminalSuitedTileValues, SuitedTileValue } from "model/tile/tileValue"
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { partitionTilesByGroup } from "common/tileUtils";
 import type { Tile } from "model/tile/tile";
@@ -29,13 +29,13 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
         const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.ALL_HONORS_AND_TERMINALS)
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([...terminalTiles, ...honorTiles])
                     .build()
             );
         if (honorsAndTerminalsIndicesSet) {
             resultBuilder.meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(honorsAndTerminalsIndicesSet)
                     .build()
             );
@@ -52,7 +52,7 @@ function allHonorsAndTerminalsPredicate(winningHand: WinningHand, honorsAndTermi
     if (([...suitedTileValues].filter(stv => terminalSuitedTileValues.has(stv))).length === 0) {
         missingAnyOf.push(...TERMINAL_TILES);
     }
-    const tileDetail = new PointPredicateFailureResultTileDetail.Builder()
+    const tileDetail = new PointPredicateFailureResultTileDetailBuilder()
         .tilesThatFailPredicate(nonTerminalTiles);
     if (!!missingAnyOf && missingAnyOf.length > 0) {
         tileDetail.tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(missingAnyOf));

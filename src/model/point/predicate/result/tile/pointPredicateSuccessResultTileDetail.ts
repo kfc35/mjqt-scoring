@@ -11,20 +11,20 @@ export class PointPredicateSuccessResultTileDetail {
     get tilesThatSatisfyPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
         return this._tilesThatSatisfyPredicate;
     }
+}
 
-    static Builder = class {
-        _tilesThatSatisfyPredicate: Tile[][] = [];
+export class PointPredicateSuccessResultTileDetailBuilder {
+    _tilesThatSatisfyPredicate: Tile[][] = [];
 
-        tilesThatSatisfyPredicate(tilesThatSatisfyPredicate: Tile[][]): this {
-            this._tilesThatSatisfyPredicate = tilesThatSatisfyPredicate;
-            return this;
-        }
+    tilesThatSatisfyPredicate(tilesThatSatisfyPredicate: Tile[][]): this {
+        this._tilesThatSatisfyPredicate = tilesThatSatisfyPredicate;
+        return this;
+    }
 
-        build(): PointPredicateSuccessResultTileDetail {
-            const tileDetail = new PointPredicateSuccessResultTileDetail(
-                this._tilesThatSatisfyPredicate
-            );
-            return tileDetail;
-        }
+    build(): PointPredicateSuccessResultTileDetail {
+        const tileDetail = new PointPredicateSuccessResultTileDetail(
+            this._tilesThatSatisfyPredicate
+        );
+        return tileDetail;
     }
 }

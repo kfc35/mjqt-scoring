@@ -5,15 +5,15 @@ import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/pr
 import { ONE_CIRCLE } from "common/deck";
 import { WIN_BY_LAST_TILE_PREDICATE } from "service/point/predicate/impl/winCondition/basicWinConditionPredicate";
 import { predicateAnd } from "service/point/predicate/pointPredicate";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 const winningTileIsOneCircleSubPredicate : PointPredicate<WinningHand> = 
     (winningHand: WinningHand) => {
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SUBPREDICATE_WINNING_TILE_IS_ONE_CIRCLE, 
             ONE_CIRCLE.equals(winningHand.winningTile), 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[winningHand.winningTile]]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate([[winningHand.winningTile]])
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[winningHand.winningTile]]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatFailPredicate([[winningHand.winningTile]])
                 .tilesThatAreMissingToSatisfyPredicate([[ONE_CIRCLE]]).build());
     }
 

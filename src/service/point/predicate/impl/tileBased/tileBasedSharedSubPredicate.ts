@@ -4,10 +4,10 @@ import { PointPredicateResult } from "model/point/predicate/result/pointPredicat
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { HONOR_TILES, SUITED_TILES } from "common/deck";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { partitionTilesByGroup } from "common/tileUtils";
 import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinningHand";
 import { consolidateSets } from "common/generic/setUtils";
@@ -20,7 +20,7 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand) : Point
         const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate(honorTiles)
                     .build()
             );
@@ -29,7 +29,7 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand) : Point
             const honorTileIndices = consolidateSets([...honorTileGroups.values()]
                 .map(tileGroup => winningHand.tileGroupValueMaps.getMeldIndicesForHonorTileGroup(tileGroup)));
             resultBuilder.meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(honorTileIndices)
                     .build()
             )
@@ -40,7 +40,7 @@ export function handContainsHonorsSubPredicate(winningHand: WinningHand) : Point
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_HONORS)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(HONOR_TILES))
                     .build()
             )
@@ -56,7 +56,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
         const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
             );
@@ -65,7 +65,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
             const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()]
                 .map(tileGroup => winningHand.tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
             resultBuilder.meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(suitedTileIndices)
                     .build()
             )
@@ -75,7 +75,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatFailPredicate(tilesSepBySuit)
                     .build()
             )
@@ -84,7 +84,7 @@ export function handContainsOneSuitSubPredicate(winningHand: WinningHand): Point
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_ONE_SUIT)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
                     .build()
             )
@@ -100,7 +100,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
         const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
             );
@@ -109,7 +109,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
             const suitedTileIndices: Set<number> = consolidateSets([...suitedTileGroups.values()]
                 .map(tileGroup => winningHand.tileGroupValueMaps.getMeldIndicesForSuitedTileGroup(tileGroup)));
             resultBuilder.meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(suitedTileIndices)
                     .build()
             )
@@ -119,7 +119,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatFailPredicate(tilesSepBySuit)
                     .build()
             )
@@ -128,7 +128,7 @@ export function handContainsMoreThanOneSuitSubPredicate(winningHand: WinningHand
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_MORE_THAN_ONE_SUIT)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
                     .build()
             )

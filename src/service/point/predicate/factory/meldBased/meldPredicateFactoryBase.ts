@@ -4,9 +4,9 @@ import { MeldBasedWinningHand } from "model/hand/hk/winningHand/meldBasedWinning
 import { getOnlyTruthyElement } from "common/generic/setUtils";
 import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateFailureResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 
 /* Evaluates whether the winning hand has each meld in meldsToMatch. The PointPredicate succeeds if there are between minNumMatches and maxNumMatches matches. 
    If both minNumMatches and maxNumMatches are undefined, meldsToMatch must all be found in the winning hand */
@@ -37,7 +37,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatPartiallySatisfyPredicate(meldsThatSatisfyPredicate)
                         .meldIndicesThatPartiallySatisfyPredicate(indicesSubset)
                         .meldsThatAreMissingToSatisfyPredicate(missingMelds)
@@ -48,7 +48,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatFailPredicate(meldsThatSatisfyPredicate)
                         .meldIndicesThatFailPredicate(indicesSubset)
                         .build()
@@ -59,7 +59,7 @@ export function createMeldsExistPredicateIgnoreExposed(pointPredicateID : string
         return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                         .meldsThatSatisfyPredicate(meldsThatSatisfyPredicate)
                         .meldIndicesThatSatisfyPredicate(indicesSubset)
                         .build()
@@ -86,7 +86,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatPartiallySatisfyPredicate(successMelds)
                         .meldIndicesThatPartiallySatisfyPredicate(passingIndices)
                         .meldsThatFailPredicate(failedMelds)
@@ -98,7 +98,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
             return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                         .meldsThatSatisfyPredicate(successMelds)
                         .meldIndicesThatSatisfyPredicate(passingIndices)
                         .build()
@@ -110,7 +110,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatPartiallySatisfyPredicate(successMelds)
                         .meldIndicesThatPartiallySatisfyPredicate(passingIndices)
                         .meldsThatFailPredicate(failedMelds)
@@ -122,7 +122,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatFailPredicate(successMelds) 
                         .meldIndicesThatFailPredicate(passingIndices)
                         .build()
@@ -132,7 +132,7 @@ export function createMeldCheckerSuccessesQuantityPredicate(pointPredicateID : s
         return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                         .meldsThatSatisfyPredicate(successMelds)
                         .meldIndicesThatSatisfyPredicate(passingIndices)
                         .build()
@@ -163,7 +163,7 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
                 return new PointPredicateSingleSuccessResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateSuccessResultMeldDetail.Builder()
+                    new PointPredicateSuccessResultMeldDetailBuilder()
                         .meldsThatSatisfyPredicate(successMelds)
                         .meldIndicesThatSatisfyPredicate(passingIndices)
                         .build()
@@ -173,7 +173,7 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
                 return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatPartiallySatisfyPredicate(successMelds)
                         .meldIndicesThatPartiallySatisfyPredicate(passingIndices)
                         .meldsThatFailPredicate(failedMelds)
@@ -186,7 +186,7 @@ export function createFilteredMeldsCheckerPredicate(pointPredicateID : string,
             return new PointPredicateFailureResultBuilder()
                 .pointPredicateId(pointPredicateID)
                 .meldDetail(
-                    new PointPredicateFailureResultMeldDetail.Builder()
+                    new PointPredicateFailureResultMeldDetailBuilder()
                         .meldsThatFailPredicate(filteredMelds.map(([meld,]) => meld))
                         .meldIndicesThatFailPredicate(new Set(filteredMelds.map(([, index]) => index)))
                         .build()

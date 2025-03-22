@@ -14,12 +14,12 @@ import { getMeldsSubsetFromIndicesSet } from "common/meldUtils";
 import { constructHonorTile } from "model/tile/group/honorTileConstructor";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import type { SuitedTileGroup } from "model/tile/group/suitedTile";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
 
 export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, meldBasedWinningHand: MeldBasedWinningHand,
     givenSuitedTileGroup: SuitedTileGroup, givenDragonTileValue: DragonTileValue): PointPredicateResult {
@@ -37,20 +37,20 @@ export function allGivenSuitAndGivenDragonPredicate(pointPredicateId: string, me
         return new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(pointPredicateId)
             .meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldsThatSatisfyPredicate(getMeldsSubsetFromIndicesSet(meldBasedWinningHand.melds, indices))
                     .meldIndicesThatSatisfyPredicate(indices)
                     .build()
             )
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate([...suitedTilesSepBySuit, ...honorTilesSepbyValue])
                     .build()
             )
             .build();
     }
 
-    const tileDetail = new PointPredicateFailureResultTileDetail.Builder();
+    const tileDetail = new PointPredicateFailureResultTileDetailBuilder();
     const failedTiles: SuitedOrHonorTile[][] = [];
     const missingTilesAnyOf: SuitedOrHonorTile[][] = [];
     if (suitedTileGroups.size > 1) {

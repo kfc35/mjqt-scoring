@@ -7,8 +7,8 @@ import { createPPResultBasedOnBooleanFlagWithTileDetail } from "service/point/pr
 import { FlowerTile } from "model/tile/group/flowerTile";
 import { GENTLEMEN_TILES, SEASON_TILES } from "common/deck";
 import { tilesDoesNotContainTile } from "common/tileUtils";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { partitionTilesByGroup } from "common/tileUtils";
 
 export const SEAT_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 
@@ -16,8 +16,8 @@ export const SEAT_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> =
         const gentlemanTileToFind = roundCtx.getSeatWindAsGentlemanTile();
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SEAT_GENTLEMAN, 
             filterFlowerTiles(winningHand.flowerTiles, [gentlemanTileToFind]).length > 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[gentlemanTileToFind]]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate([[gentlemanTileToFind]]).build());
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[gentlemanTileToFind]]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingToSatisfyPredicate([[gentlemanTileToFind]]).build());
     }
 
 export const SEAT_SEASON_PREDICATE : PointPredicate<WinningHand> = 
@@ -25,8 +25,8 @@ export const SEAT_SEASON_PREDICATE : PointPredicate<WinningHand> =
         const seasonTileToFind = roundCtx.getSeatWindAsSeasonTile();
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.SEAT_SEASON, 
             filterFlowerTiles(winningHand.flowerTiles, [seasonTileToFind]).length > 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[seasonTileToFind]]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate([[seasonTileToFind]]).build());
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[seasonTileToFind]]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingToSatisfyPredicate([[seasonTileToFind]]).build());
     }
 
 export const PREVAILING_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> = 
@@ -34,8 +34,8 @@ export const PREVAILING_GENTLEMAN_PREDICATE : PointPredicate<WinningHand> =
         const gentlemanTileToFind = roundCtx.getPrevailingWindAsGentlemanTile();
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.PREVAILING_GENTLEMAN, 
             filterFlowerTiles(winningHand.flowerTiles, [gentlemanTileToFind]).length > 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[gentlemanTileToFind]]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate([[gentlemanTileToFind]]).build());
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[gentlemanTileToFind]]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingToSatisfyPredicate([[gentlemanTileToFind]]).build());
     }
 
 export const PREVAILING_SEASON_PREDICATE : PointPredicate<WinningHand> = 
@@ -43,8 +43,8 @@ export const PREVAILING_SEASON_PREDICATE : PointPredicate<WinningHand> =
         const seasonTileToFind = roundCtx.getPrevailingWindAsSeasonTile();
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.PREVAILING_SEASON, 
             filterFlowerTiles(winningHand.flowerTiles, [seasonTileToFind]).length > 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([[seasonTileToFind]]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate([[seasonTileToFind]]).build());
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([[seasonTileToFind]]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingToSatisfyPredicate([[seasonTileToFind]]).build());
     }
 
 /** This needs to be re-done to a multi success result detail when implementing international rules.
@@ -53,8 +53,8 @@ export const ANY_GENTLEMAN_OR_SEASON_PREDICATE : PointPredicate<WinningHand> =
         const gentlemenAndSeasons = filterFlowerTiles(winningHand.flowerTiles, [...GENTLEMEN_TILES, ...SEASON_TILES]);
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.ANY_GENTLEMAN_OR_SEASON, 
             gentlemenAndSeasons.length > 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([gentlemenAndSeasons]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingAnyOfToSatisfyPredicate([FLOWER_TILES]).build());
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([gentlemenAndSeasons]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingAnyOfToSatisfyPredicate([FLOWER_TILES]).build());
     }
 **/
 
@@ -63,8 +63,8 @@ export const ALL_GENTLEMEN_PREDICATE : PointPredicate<WinningHand> =
         const gentlemen = filterFlowerTiles(winningHand.flowerTiles, GENTLEMEN_TILES);
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.ALL_GENTLEMEN, 
             gentlemen.length === GENTLEMEN_TILES.length, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([gentlemen]).build(),
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate(
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([gentlemen]).build(),
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingToSatisfyPredicate(
                 [GENTLEMEN_TILES.filter(tile => tilesDoesNotContainTile(gentlemen, tile))]).build());
     }
 
@@ -73,8 +73,8 @@ export const ALL_SEASONS_PREDICATE : PointPredicate<WinningHand> =
         const seasons = filterFlowerTiles(winningHand.flowerTiles, SEASON_TILES);
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.ALL_SEASONS, 
             seasons.length === SEASON_TILES.length, 
-            new PointPredicateSuccessResultTileDetail.Builder().tilesThatSatisfyPredicate([seasons]).build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatAreMissingToSatisfyPredicate(
+            new PointPredicateSuccessResultTileDetailBuilder().tilesThatSatisfyPredicate([seasons]).build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatAreMissingToSatisfyPredicate(
                 [SEASON_TILES.filter(tile => tilesDoesNotContainTile(seasons, tile))]).build());
     }
 
@@ -86,8 +86,8 @@ export const NO_GENTLEMEN_OR_SEASONS_PREDICATE : PointPredicate<WinningHand> =
         const gentlemenAndSeasons = filterFlowerTiles(winningHand.flowerTiles, [...GENTLEMEN_TILES, ...SEASON_TILES]);
         return createPPResultBasedOnBooleanFlagWithTileDetail(PointPredicateID.NO_GENTLEMEN_OR_SEASONS, 
             gentlemenAndSeasons.length === 0, 
-            new PointPredicateSuccessResultTileDetail.Builder().build(), 
-            new PointPredicateFailureResultTileDetail.Builder().tilesThatFailPredicate(partitionTilesByGroup(gentlemenAndSeasons)).build());
+            new PointPredicateSuccessResultTileDetailBuilder().build(), 
+            new PointPredicateFailureResultTileDetailBuilder().tilesThatFailPredicate(partitionTilesByGroup(gentlemenAndSeasons)).build());
     }
 
 function filterFlowerTiles(flowerTiles: FlowerTile[], tilesToKeep: FlowerTile[]): FlowerTile[] {

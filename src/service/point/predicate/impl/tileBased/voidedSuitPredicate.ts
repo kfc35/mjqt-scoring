@@ -7,10 +7,10 @@ import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { PointPredicate } from "service/point/predicate/pointPredicate";
 import { PointPredicateResult } from "model/point/predicate/result/pointPredicateResult";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateSuccessResultTileDetail } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
-import { PointPredicateSuccessResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
+import { PointPredicateSuccessResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateSuccessResultTileDetail";
+import { PointPredicateSuccessResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateSuccessResultMeldDetail";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { createPointPredicateRouter } from "service/point/predicate/impl/util/pointPredicateUtil";
 import { partitionTilesByGroup } from "common/tileUtils";
 import { SUITED_TILES } from "common/deck";
@@ -24,13 +24,13 @@ function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet?: Se
         const resultBuilder = new PointPredicateSingleSuccessResultBuilder()
             .pointPredicateId(PointPredicateID.VOIDED_SUIT)
             .tileDetail(
-                new PointPredicateSuccessResultTileDetail.Builder()
+                new PointPredicateSuccessResultTileDetailBuilder()
                     .tilesThatSatisfyPredicate(tilesSepBySuit)
                     .build()
             );
         if (suitedTileIndicesSet) {
             resultBuilder.meldDetail(
-                new PointPredicateSuccessResultMeldDetail.Builder()
+                new PointPredicateSuccessResultMeldDetailBuilder()
                     .meldIndicesThatSatisfyPredicate(suitedTileIndicesSet)
                     .build()
             );
@@ -41,7 +41,7 @@ function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet?: Se
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.VOIDED_SUIT)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatFailPredicate(tilesSepBySuit)
                     .build()
             )
@@ -50,7 +50,7 @@ function voidedSuitPredicate(winningHand: WinningHand, suitedTileIndicesSet?: Se
     return new PointPredicateFailureResultBuilder()
         .pointPredicateId(PointPredicateID.VOIDED_SUIT)
         .tileDetail(
-            new PointPredicateFailureResultTileDetail.Builder()
+            new PointPredicateFailureResultTileDetailBuilder()
                 .tilesThatAreMissingAnyOfToSatisfyPredicate(partitionTilesByGroup(SUITED_TILES))
                 .build()
         )

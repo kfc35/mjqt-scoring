@@ -6,7 +6,7 @@ import { PointPredicateID } from "model/point/predicate/pointPredicateID";
 import { SuitedOrHonorTile } from "model/tile/group/suitedOrHonorTile";
 import { PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
 import { PointPredicateSingleSuccessResultBuilder } from "model/point/predicate/result/pointPredicateSingleSuccessResult";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 
 function handContainsNoHonorsSubPredicate(winningHand: WinningHand): PointPredicateResult {
     const tileGroupValueMaps = winningHand.tileGroupValueMaps;
@@ -20,7 +20,7 @@ function handContainsNoHonorsSubPredicate(winningHand: WinningHand): PointPredic
         return new PointPredicateFailureResultBuilder()
             .pointPredicateId(PointPredicateID.SUBPREDICATE_HAND_CONTAINS_NO_HONORS)
             .tileDetail(
-                new PointPredicateFailureResultTileDetail.Builder()
+                new PointPredicateFailureResultTileDetailBuilder()
                     .tilesThatFailPredicate(honorTiles)
                     .build()
             )

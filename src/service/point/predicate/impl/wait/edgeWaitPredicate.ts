@@ -5,8 +5,8 @@ import { SuitedTileValue } from "model/tile/tileValue";
 import { meldIsChow } from "model/meld/chow";
 import { Chow } from "model/meld/chow";
 import { PointPredicateFailureResult, PointPredicateFailureResultBuilder } from "model/point/predicate/result/pointPredicateFailureResult";
-import { PointPredicateFailureResultMeldDetail } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
-import { PointPredicateFailureResultTileDetail } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
+import { PointPredicateFailureResultMeldDetailBuilder } from "model/point/predicate/result/meldBased/pointPredicateFailureResultMeldDetail";
+import { PointPredicateFailureResultTileDetailBuilder } from "model/point/predicate/result/tile/pointPredicateFailureResultTileDetail";
 import { Meld } from "model/meld/meld";
 import { Tile } from "model/tile/tile";
 
@@ -39,7 +39,7 @@ function createEdgeWaitFailureResult(meld: Meld, tile?: Tile) : PointPredicateFa
     const resultBuilder = new PointPredicateFailureResultBuilder()
         .pointPredicateId(PointPredicateID.EDGE_WAIT)
         .meldDetail(
-            new PointPredicateFailureResultMeldDetail.Builder()
+            new PointPredicateFailureResultMeldDetailBuilder()
             .meldsThatFailPredicate([meld])
             .build()
         );
@@ -48,7 +48,7 @@ function createEdgeWaitFailureResult(meld: Meld, tile?: Tile) : PointPredicateFa
     }
     return resultBuilder
         .tileDetail(
-            new PointPredicateFailureResultTileDetail.Builder()
+            new PointPredicateFailureResultTileDetailBuilder()
             .tilesThatFailPredicate([[tile]])
             .build()
         )

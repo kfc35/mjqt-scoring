@@ -47,44 +47,44 @@ export class PointPredicateFailureResultTileDetail {
     get tilesThatAreMissingAnyOfToSatisfyPredicate(): ReadonlyArray<ReadonlyArray<Tile>> {
         return this._tilesThatAreMissingAnyOfToSatisfyPredicate;
     }
+}
 
-    static Builder = class {
-        _tilesThatPartiallySatisfyPredicate: Tile[][] = [];
+export class PointPredicateFailureResultTileDetailBuilder {
+    _tilesThatPartiallySatisfyPredicate: Tile[][] = [];
 
-        _tilesThatFailPredicate: Tile[][] = [];
-        
-        _tilesThatAreMissingToSatisfyPredicate: Tile[][] = [];
-
-        _tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][] = [];
-
-        tilesThatPartiallySatisfyPredicate(tilesThatPartiallySatisfyPredicate: Tile[][]): this {
-            this._tilesThatPartiallySatisfyPredicate = tilesThatPartiallySatisfyPredicate;
-            return this;
-        }
-
-        tilesThatFailPredicate(tilesThatFailPredicate: Tile[][]): this {
-            this._tilesThatFailPredicate = tilesThatFailPredicate;
-            return this;
-        }
-
-        tilesThatAreMissingToSatisfyPredicate(tilesThatAreMissingToSatisfyPredicate: Tile[][]): this {
-            this._tilesThatAreMissingToSatisfyPredicate = tilesThatAreMissingToSatisfyPredicate;
-            return this;
-        }
-
-        tilesThatAreMissingAnyOfToSatisfyPredicate(tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][]): this {
-            this._tilesThatAreMissingAnyOfToSatisfyPredicate = tilesThatAreMissingAnyOfToSatisfyPredicate;
-            return this;
-        }
+    _tilesThatFailPredicate: Tile[][] = [];
     
-        build(): PointPredicateFailureResultTileDetail {
-            const tileDetail = new PointPredicateFailureResultTileDetail(
-                this._tilesThatPartiallySatisfyPredicate,
-                this._tilesThatFailPredicate,
-                this._tilesThatAreMissingToSatisfyPredicate,
-                this._tilesThatAreMissingAnyOfToSatisfyPredicate
-            );
-            return tileDetail;
-        }
+    _tilesThatAreMissingToSatisfyPredicate: Tile[][] = [];
+
+    _tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][] = [];
+
+    tilesThatPartiallySatisfyPredicate(tilesThatPartiallySatisfyPredicate: Tile[][]): this {
+        this._tilesThatPartiallySatisfyPredicate = tilesThatPartiallySatisfyPredicate;
+        return this;
+    }
+
+    tilesThatFailPredicate(tilesThatFailPredicate: Tile[][]): this {
+        this._tilesThatFailPredicate = tilesThatFailPredicate;
+        return this;
+    }
+
+    tilesThatAreMissingToSatisfyPredicate(tilesThatAreMissingToSatisfyPredicate: Tile[][]): this {
+        this._tilesThatAreMissingToSatisfyPredicate = tilesThatAreMissingToSatisfyPredicate;
+        return this;
+    }
+
+    tilesThatAreMissingAnyOfToSatisfyPredicate(tilesThatAreMissingAnyOfToSatisfyPredicate: Tile[][]): this {
+        this._tilesThatAreMissingAnyOfToSatisfyPredicate = tilesThatAreMissingAnyOfToSatisfyPredicate;
+        return this;
+    }
+
+    build(): PointPredicateFailureResultTileDetail {
+        const tileDetail = new PointPredicateFailureResultTileDetail(
+            this._tilesThatPartiallySatisfyPredicate,
+            this._tilesThatFailPredicate,
+            this._tilesThatAreMissingToSatisfyPredicate,
+            this._tilesThatAreMissingAnyOfToSatisfyPredicate
+        );
+        return tileDetail;
     }
 }

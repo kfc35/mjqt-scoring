@@ -10,6 +10,7 @@ import { type TileValue } from "model/tile/tileValue";
 import { Meld } from "model/meld/meld";
 import { meldExistsInMelds, meldToFlatTiles } from "common/meldUtils";
 import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
+import { meldIsPair } from "model/meld/pair";
 
 /** A Hand is an unsorted collection of Mahjong Tiles.
  * It represents an instance when it is the player's turn.
@@ -63,6 +64,9 @@ export class Hand {
         if (userSpecifiedMelds && userSpecifiedMelds.length > 0) {
             if (!userSpecifiedMelds.every(meld => !!meld)) {
                 throw new Error('every meld in userSpecifiedMelds must not be null or undefined');
+            }
+            if (userSpecifiedMelds.filter(meld => meldIsPair(meld) && meld.exposed).length > 1) {
+                throw new Error('A hand cannot have more than one exposed pair.');
             }
             const meldTiles = meldToFlatTiles(userSpecifiedMelds);
             const meldTileToQuantity = new TileToQuantityMap(meldTiles);

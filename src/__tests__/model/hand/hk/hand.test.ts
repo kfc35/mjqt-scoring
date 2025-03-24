@@ -1,4 +1,5 @@
 import { AUTUMN_SEASON, EAST_WIND, EIGHT_CHARACTER, FIVE_BAMBOO, FIVE_CHARACTER, 
+    FIVE_CIRCLE, 
     FOUR_BAMBOO, FOUR_CHARACTER, NINE_CIRCLE, ONE_BAMBOO, 
     PLUM_GENTLEMAN, RED_DRAGON, SEVEN_CHARACTER, SIX_BAMBOO, 
     SIX_CHARACTER, SPRING_SEASON, THREE_BAMBOO, 
@@ -7,6 +8,7 @@ import { Hand } from "model/hand/hk/hand";
 import { MostRecentTileContext } from "model/hand/mostRecentTile/mostRecentTileContext";
 import { Chow } from "model/meld/chow";
 import { Kong } from "model/meld/kong";
+import { Pair } from "model/meld/pair";
 import { TileGroup } from "model/tile/tileGroup";
 import { SuitedTileValue } from "model/tile/tileValue";
 
@@ -143,6 +145,16 @@ describe('hand.ts', () => {
                     PLUM_GENTLEMAN, AUTUMN_SEASON, SPRING_SEASON
                 ], new MostRecentTileContext(TWO_BAMBOO, new Chow([THREE_BAMBOO, ONE_BAMBOO, TWO_BAMBOO], false)), 
                 [new Kong(NINE_CIRCLE, true)])}).toThrow();
+            });
+
+            test('throws when there is more than one exposed pair', () => {
+                expect(() => {new Hand([ONE_BAMBOO, ONE_BAMBOO, TWO_BAMBOO, TWO_BAMBOO, 
+                    THREE_CHARACTER, THREE_CHARACTER, FIVE_CHARACTER, FIVE_CIRCLE,
+                    NINE_CIRCLE, NINE_CIRCLE, NINE_CIRCLE, NINE_CIRCLE,
+                    EAST_WIND, EAST_WIND,
+                    PLUM_GENTLEMAN, AUTUMN_SEASON, SPRING_SEASON
+                ], new MostRecentTileContext(TWO_BAMBOO, new Pair(TWO_BAMBOO, false)),
+                [new Pair(TWO_BAMBOO, false), new Pair(ONE_BAMBOO, true), new Pair(NINE_CIRCLE, true)]);}).toThrow();
             });
 
             test('valid hand has correct values for fields', () => {

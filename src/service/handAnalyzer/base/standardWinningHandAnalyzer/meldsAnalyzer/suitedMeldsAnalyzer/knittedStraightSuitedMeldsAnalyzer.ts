@@ -66,7 +66,7 @@ function getKnittedStraight(hand: Hand, firstSuitedTileGroup: SuitedTileGroup, s
         // Ensure the chows have the correct exposed flag if it has a match in userSpecifiedMelds
         if (meldExistsInMeldsIgnoreExposed(hand.userSpecifiedMelds, knittedChow)) {
             const indexOfMeld = getIndexOfMeldIgnoreExposed(hand.userSpecifiedMelds, knittedChow);
-            const matchingMeld = (!indexOfMeld ? undefined : hand.userSpecifiedMelds[indexOfMeld]);
+            const matchingMeld = (indexOfMeld === undefined ? undefined : hand.userSpecifiedMelds[indexOfMeld]);
             if (matchingMeld) {
                 knittedStraight.push(matchingMeld.clone());
             } else {
